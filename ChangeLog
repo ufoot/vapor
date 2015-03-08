@@ -1,5 +1,10 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
+	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go: Switch to
+	develop branch with version bump
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
 	* AUTHORS, COPYING, Makefile.dep, Makefile.in, NEWS, README,
 	configure.ac, dep.sh, get.sh, indent.sh,
 	src/ufoot.org/vapor/vpbuild/doc.go,

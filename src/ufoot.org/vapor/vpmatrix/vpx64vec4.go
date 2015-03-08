@@ -28,6 +28,8 @@ import (
 // Can be used in 3D matrix transformations.
 type X64Vec4 [4]vpnumber.X64
 
+// Add adds operand to the vector.
+// It modifies it, and returns a pointer on it.
 func (vec *X64Vec4) Add(op *X64Vec4) *X64Vec4 {
 	for i, v := range op {
 		vec[i] += v
@@ -36,6 +38,8 @@ func (vec *X64Vec4) Add(op *X64Vec4) *X64Vec4 {
 	return vec
 }
 
+// Sub substracts operand from the vector.
+// It modifies it, and returns a pointer on it.
 func (vec *X64Vec4) Sub(op *X64Vec4) *X64Vec4 {
 	for i, v := range op {
 		vec[i] -= v
@@ -44,6 +48,8 @@ func (vec *X64Vec4) Sub(op *X64Vec4) *X64Vec4 {
 	return vec
 }
 
+// MulScale multiplies all values of the vector by factor.
+// It modifies it, and returns a pointer on it.
 func (vec *X64Vec4) MulScale(factor vpnumber.X64) *X64Vec4 {
 	for i, v := range vec {
 		vec[i] = vpnumber.X64Mul(vec[i], v)
@@ -52,6 +58,8 @@ func (vec *X64Vec4) MulScale(factor vpnumber.X64) *X64Vec4 {
 	return vec
 }
 
+// DivScale divides all values of the vector by factor.
+// It modifies it, and returns a pointer on it.
 func (vec *X64Vec4) DivScale(factor vpnumber.X64) *X64Vec4 {
 	for i, v := range vec {
 		vec[i] = vpnumber.X64Div(vec[i], v)
@@ -60,6 +68,9 @@ func (vec *X64Vec4) DivScale(factor vpnumber.X64) *X64Vec4 {
 	return vec
 }
 
+// SumSq returns the sum of the squares of all values.
+// It is used to calculate length, it is faster than the complete
+// length calculation, as it does not perform a square root.
 func (vec *X64Vec4) SumSq() vpnumber.X64 {
 	var sq vpnumber.X64
 
@@ -70,10 +81,13 @@ func (vec *X64Vec4) SumSq() vpnumber.X64 {
 	return sq
 }
 
+// Length returns the length of the vector.
 func (vec *X64Vec4) Length() vpnumber.X64 {
 	return vpnumber.F64ToX64(math.Sqrt(vpnumber.X64ToF64(vec.SumSq())))
 }
 
+// Normalize scales the vector so that its length is 1.
+// It modifies it, and returns a pointer on it.
 func (vec *X64Vec4) Normalize() *X64Vec4 {
 	vec.DivScale(vec.Length())
 

@@ -81,10 +81,13 @@ func (vec *X32Vec2) SumSq() vpnumber.X32 {
 	return sq
 }
 
+// Length returns the length of the vector.
 func (vec *X32Vec2) Length() vpnumber.X32 {
 	return vpnumber.F64ToX32(math.Sqrt(vpnumber.X32ToF64(vec.SumSq())))
 }
 
+// Normalize scales the vector so that its length is 1.
+// It modifies it, and returns a pointer on it.
 func (vec *X32Vec2) Normalize() *X32Vec2 {
 	vec.DivScale(vec.Length())
 

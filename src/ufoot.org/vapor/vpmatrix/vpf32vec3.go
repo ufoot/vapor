@@ -28,6 +28,8 @@ import (
 // Can hold the values of a point in space.
 type F32Vec3 [3]float32
 
+// Add adds operand to the vector.
+// It modifies it, and returns a pointer on it.
 func (vec *F32Vec3) Add(op *F32Vec3) *F32Vec3 {
 	for i, v := range op {
 		vec[i] += v
@@ -36,6 +38,8 @@ func (vec *F32Vec3) Add(op *F32Vec3) *F32Vec3 {
 	return vec
 }
 
+// Sub substracts operand from the vector.
+// It modifies it, and returns a pointer on it.
 func (vec *F32Vec3) Sub(op *F32Vec3) *F32Vec3 {
 	for i, v := range op {
 		vec[i] -= v
@@ -44,6 +48,8 @@ func (vec *F32Vec3) Sub(op *F32Vec3) *F32Vec3 {
 	return vec
 }
 
+// MulScale multiplies all values of the vector by factor.
+// It modifies it, and returns a pointer on it.
 func (vec *F32Vec3) MulScale(factor float32) *F32Vec3 {
 	for i, v := range vec {
 		vec[i] = v * factor
@@ -52,6 +58,8 @@ func (vec *F32Vec3) MulScale(factor float32) *F32Vec3 {
 	return vec
 }
 
+// DivScale divides all values of the vector by factor.
+// It modifies it, and returns a pointer on it.
 func (vec *F32Vec3) DivScale(factor float32) *F32Vec3 {
 	for i, v := range vec {
 		vec[i] = vpnumber.F32Div(vec[i], v)
@@ -60,6 +68,9 @@ func (vec *F32Vec3) DivScale(factor float32) *F32Vec3 {
 	return vec
 }
 
+// SumSq returns the sum of the squares of all values.
+// It is used to calculate length, it is faster than the complete
+// length calculation, as it does not perform a square root.
 func (vec *F32Vec3) SumSq() float32 {
 	var sq float32
 
@@ -70,10 +81,13 @@ func (vec *F32Vec3) SumSq() float32 {
 	return sq
 }
 
+// Length returns the length of the vector.
 func (vec *F32Vec3) Length() float32 {
 	return float32(math.Sqrt(float64(vec.SumSq())))
 }
 
+// Normalize scales the vector so that its length is 1.
+// It modifies it, and returns a pointer on it.
 func (vec *F32Vec3) Normalize() *F32Vec3 {
 	vec.DivScale(vec.Length())
 

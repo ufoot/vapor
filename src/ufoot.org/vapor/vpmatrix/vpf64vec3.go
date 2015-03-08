@@ -81,10 +81,13 @@ func (vec *F64Vec3) SumSq() float64 {
 	return sq
 }
 
+// Length returns the length of the vector.
 func (vec *F64Vec3) Length() float64 {
 	return math.Sqrt(vec.SumSq())
 }
 
+// Normalize scales the vector so that its length is 1.
+// It modifies it, and returns a pointer on it.
 func (vec *F64Vec3) Normalize() *F64Vec3 {
 	vec.DivScale(vec.Length())
 
