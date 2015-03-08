@@ -94,6 +94,8 @@ func (vec *F32Vec4) Normalize() *F32Vec4 {
 	return vec
 }
 
+// F32Vec4Add adds two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func F32Vec4Add(veca, vecb *F32Vec4) *F32Vec4 {
 	var ret F32Vec4 = *veca
 
@@ -102,6 +104,8 @@ func F32Vec4Add(veca, vecb *F32Vec4) *F32Vec4 {
 	return &ret
 }
 
+// F32Vec4Sub substracts vector b from vector a.
+// Args are left untouched, a pointer on a new object is returned.
 func F32Vec4Sub(veca, vecb *F32Vec4) *F32Vec4 {
 	var ret F32Vec4 = *veca
 
@@ -110,6 +114,8 @@ func F32Vec4Sub(veca, vecb *F32Vec4) *F32Vec4 {
 	return &ret
 }
 
+// F32Vec4MulScale multiplies all values of a vector by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
 func F32Vec4MulScale(vec *F32Vec4, factor float32) *F32Vec4 {
 	var ret F32Vec4 = *vec
 
@@ -118,6 +124,8 @@ func F32Vec4MulScale(vec *F32Vec4, factor float32) *F32Vec4 {
 	return &ret
 }
 
+// F32Vec4DivScale divides all values of a vector by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
 func F32Vec4DivScale(vec *F32Vec4, factor float32) *F32Vec4 {
 	var ret F32Vec4 = *vec
 
@@ -126,14 +134,20 @@ func F32Vec4DivScale(vec *F32Vec4, factor float32) *F32Vec4 {
 	return &ret
 }
 
+// F32Vec4SumSq returns the sum of the squares of all values.
+// It is used to calculate length, it is faster than the complete
+// length calculation, as it does not perform a square root.
 func F32Vec4SumSq(vec *F32Vec4) float32 {
 	return vec.SumSq()
 }
 
+// F32Vec4Length returns the length of a vector.
 func F32Vec4Length(vec *F32Vec4) float32 {
 	return vec.Length()
 }
 
+// F32Vec4Normalize scales a vector so that its length is 1.
+// Arg is left untouched, a pointer on a new object is returned.
 func F32Vec4Normalize(vec *F32Vec4) *F32Vec4 {
 	var ret F32Vec4 = *vec
 

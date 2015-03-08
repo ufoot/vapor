@@ -24,7 +24,7 @@ import (
 	"ufoot.org/vapor/vpnumber"
 )
 
-// F64Vec2 is a vector containing 4 float64 values.
+// F64Vec4 is a vector containing 4 float64 values.
 // Can be used in 3D matrix transformations.
 type F64Vec4 [4]float64
 
@@ -94,6 +94,8 @@ func (vec *F64Vec4) Normalize() *F64Vec4 {
 	return vec
 }
 
+// F64Vec4Add adds two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func F64Vec4Add(veca, vecb *F64Vec4) *F64Vec4 {
 	var ret F64Vec4 = *veca
 
@@ -102,6 +104,8 @@ func F64Vec4Add(veca, vecb *F64Vec4) *F64Vec4 {
 	return &ret
 }
 
+// F64Vec4Sub substracts vector b from vector a.
+// Args are left untouched, a pointer on a new object is returned.
 func F64Vec4Sub(veca, vecb *F64Vec4) *F64Vec4 {
 	var ret F64Vec4 = *veca
 
@@ -110,6 +114,8 @@ func F64Vec4Sub(veca, vecb *F64Vec4) *F64Vec4 {
 	return &ret
 }
 
+// F64Vec4MulScale multiplies all values of a vector by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
 func F64Vec4MulScale(vec *F64Vec4, factor float64) *F64Vec4 {
 	var ret F64Vec4 = *vec
 
@@ -118,6 +124,8 @@ func F64Vec4MulScale(vec *F64Vec4, factor float64) *F64Vec4 {
 	return &ret
 }
 
+// F64Vec4DivScale divides all values of a vector by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
 func F64Vec4DivScale(vec *F64Vec4, factor float64) *F64Vec4 {
 	var ret F64Vec4 = *vec
 
@@ -126,14 +134,20 @@ func F64Vec4DivScale(vec *F64Vec4, factor float64) *F64Vec4 {
 	return &ret
 }
 
-func F64Vec4Sq(vec *F64Vec4) float64 {
+// F64Vec4SumSq returns the sum of the squares of all values.
+// It is used to calculate length, it is faster than the complete
+// length calculation, as it does not perform a square root.
+func F64Vec4SumSq(vec *F64Vec4) float64 {
 	return vec.SumSq()
 }
 
+// F64Vec4Length returns the length of a vector.
 func F64Vec4Length(vec *F64Vec4) float64 {
 	return vec.Length()
 }
 
+// F64Vec4Normalize scales a vector so that its length is 1.
+// Arg is left untouched, a pointer on a new object is returned.
 func F64Vec4Normalize(vec *F64Vec4) *F64Vec4 {
 	var ret F64Vec4 = *vec
 

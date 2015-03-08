@@ -94,6 +94,8 @@ func (vec *X32Vec2) Normalize() *X32Vec2 {
 	return vec
 }
 
+// X32Vec2Add adds two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func X32Vec2Add(veca, vecb *X32Vec2) *X32Vec2 {
 	var ret X32Vec2 = *veca
 
@@ -102,6 +104,8 @@ func X32Vec2Add(veca, vecb *X32Vec2) *X32Vec2 {
 	return &ret
 }
 
+// X32Vec2Sub substracts vector b from vector a.
+// Args are left untouched, a pointer on a new object is returned.
 func X32Vec2Sub(veca, vecb *X32Vec2) *X32Vec2 {
 	var ret X32Vec2 = *veca
 
@@ -110,6 +114,8 @@ func X32Vec2Sub(veca, vecb *X32Vec2) *X32Vec2 {
 	return &ret
 }
 
+// X32Vec2MulScale multiplies all values of a vector by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
 func X32Vec2MulScale(vec *X32Vec2, factor vpnumber.X32) *X32Vec2 {
 	var ret X32Vec2 = *vec
 
@@ -118,6 +124,8 @@ func X32Vec2MulScale(vec *X32Vec2, factor vpnumber.X32) *X32Vec2 {
 	return &ret
 }
 
+// X32Vec2DivScale divides all values of a vector by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
 func X32Vec2DivScale(vec *X32Vec2, factor vpnumber.X32) *X32Vec2 {
 	var ret X32Vec2 = *vec
 
@@ -126,14 +134,20 @@ func X32Vec2DivScale(vec *X32Vec2, factor vpnumber.X32) *X32Vec2 {
 	return &ret
 }
 
+// X32Vec2SumSq returns the sum of the squares of all values.
+// It is used to calculate length, it is faster than the complete
+// length calculation, as it does not perform a square root.
 func X32Vec2SumSq(vec *X32Vec2) vpnumber.X32 {
 	return vec.SumSq()
 }
 
+// X32Vec2Length returns the length of a vector.
 func X32Vec2Length(vec *X32Vec2) vpnumber.X32 {
 	return vec.Length()
 }
 
+// X32Vec2Normalize scales a vector so that its length is 1.
+// Arg is left untouched, a pointer on a new object is returned.
 func X32Vec2Normalize(vec *X32Vec2) *X32Vec2 {
 	var ret X32Vec2 = *vec
 

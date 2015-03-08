@@ -94,6 +94,8 @@ func (vec *F64Vec3) Normalize() *F64Vec3 {
 	return vec
 }
 
+// F64Vec3Add adds two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func F64Vec3Add(veca, vecb *F64Vec3) *F64Vec3 {
 	var ret F64Vec3 = *veca
 
@@ -102,6 +104,8 @@ func F64Vec3Add(veca, vecb *F64Vec3) *F64Vec3 {
 	return &ret
 }
 
+// F64Vec3Sub substracts vector b from vector a.
+// Args are left untouched, a pointer on a new object is returned.
 func F64Vec3Sub(veca, vecb *F64Vec3) *F64Vec3 {
 	var ret F64Vec3 = *veca
 
@@ -110,6 +114,8 @@ func F64Vec3Sub(veca, vecb *F64Vec3) *F64Vec3 {
 	return &ret
 }
 
+// F64Vec3MulScale multiplies all values of a vector by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
 func F64Vec3MulScale(vec *F64Vec3, factor float64) *F64Vec3 {
 	var ret F64Vec3 = *vec
 
@@ -118,6 +124,8 @@ func F64Vec3MulScale(vec *F64Vec3, factor float64) *F64Vec3 {
 	return &ret
 }
 
+// F64Vec3DivScale divides all values of a vector by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
 func F64Vec3DivScale(vec *F64Vec3, factor float64) *F64Vec3 {
 	var ret F64Vec3 = *vec
 
@@ -126,14 +134,20 @@ func F64Vec3DivScale(vec *F64Vec3, factor float64) *F64Vec3 {
 	return &ret
 }
 
-func F64Vec3Sq(vec *F64Vec3) float64 {
+// F64Vec3SumSq returns the sum of the squares of all values.
+// It is used to calculate length, it is faster than the complete
+// length calculation, as it does not perform a square root.
+func F64Vec3SumSq(vec *F64Vec3) float64 {
 	return vec.SumSq()
 }
 
+// F64Vec3Length returns the length of a vector.
 func F64Vec3Length(vec *F64Vec3) float64 {
 	return vec.Length()
 }
 
+// F64Vec3Normalize scales a vector so that its length is 1.
+// Arg is left untouched, a pointer on a new object is returned.
 func F64Vec3Normalize(vec *F64Vec3) *F64Vec3 {
 	var ret F64Vec3 = *vec
 
