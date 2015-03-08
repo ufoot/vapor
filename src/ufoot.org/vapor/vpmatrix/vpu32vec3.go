@@ -28,3 +28,22 @@ func U32Vec3New(i1, i2, i3 uint32) *U32Vec3 {
 	return &U32Vec3{i1, i2, i3}
 }
 
+// Add adds operand to the vector.
+// It modifies it, and returns a pouinter on it.
+func (vec *U32Vec3) Add(op *U32Vec3) *U32Vec3 {
+	for i, v := range op {
+		vec[i] += v
+	}
+
+	return vec
+}
+
+// U32Vec3Add adds two vectors.
+// Args are left untouched, a pouinter on a new object is returned.
+func U32Vec3Add(veca, vecb *U32Vec3) *U32Vec3 {
+	var ret = *veca
+
+	_ = ret.Add(vecb)
+
+	return &ret
+}

@@ -19,31 +19,32 @@
 
 package vpmatrix
 
-// U64Vec2 is a vector containing 2 uint64 values.
-// Can hold the values of a pouint in a plane.
-type U64Vec2 [2]uint64
+import (
+	"testing"
+)
 
-// U64Vec2New creates a new vector containing 2 uint64 values.
-func U64Vec2New(i1, i2 uint64) *U64Vec2 {
-	return &U64Vec2{i1, i2}
-}
+func TestI32Vec3Math(t *testing.T) {
+	const i1 = 0
+	const i2 = -4
+	const i3 = 42
 
-// Add adds operand to the vector.
-// It modifies it, and returns a pouinter on it.
-func (vec *U64Vec2) Add(op *U64Vec2) *U64Vec2 {
-	for i, v := range op {
-		vec[i] += v
+	const i5 = -10
+	const i6 = 1000
+	const i7 = 222
+
+	var v1, v2, v3, v4 *I32Vec3
+
+	v1 = I32Vec3New(i1, i2, i3)
+	v2 = I32Vec3New(i5, i6, i7)
+	v3 = I32Vec3Add(v1, v2)
+	v4 = I32Vec3New(i1+i5, i2+i6, i3+i7)
+	if *v3 != *v4 {
+		t.Error("Add error")
 	}
 
-	return vec
-}
-
-// U64Vec2Add adds two vectors.
-// Args are left untouched, a pouinter on a new object is returned.
-func U64Vec2Add(veca, vecb *U64Vec2) *U64Vec2 {
-	var ret = *veca
-
-	_ = ret.Add(vecb)
-
-	return &ret
+	v3 = I32Vec3Sub(v1, v2)
+	v4 = I32Vec3New(i1-i5, i2-i6, i3-i7)
+	if *v3 != *v4 {
+		t.Error("Sub error")
+	}
 }

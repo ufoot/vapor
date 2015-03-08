@@ -1,5 +1,22 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
+	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec4.go: Added basic
+	implementations of int32 and uint32 vectors
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
 	* Makefile.dep, configure.ac,
 	src/ufoot.org/vapor/vpbuild/vpversion.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32vec2_test.go,

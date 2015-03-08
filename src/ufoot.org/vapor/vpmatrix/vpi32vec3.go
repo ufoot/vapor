@@ -67,4 +67,3 @@ func I32Vec3Sub(veca, vecb *I32Vec3) *I32Vec3 {
 
 	return &ret
 }
-

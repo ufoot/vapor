@@ -27,3 +27,23 @@ type U64Vec3 [3]uint64
 func U64Vec3New(i1, i2, i3 uint64) *U64Vec3 {
 	return &U64Vec3{i1, i2, i3}
 }
+
+// Add adds operand to the vector.
+// It modifies it, and returns a pouinter on it.
+func (vec *U64Vec3) Add(op *U64Vec3) *U64Vec3 {
+	for i, v := range op {
+		vec[i] += v
+	}
+
+	return vec
+}
+
+// U64Vec3Add adds two vectors.
+// Args are left untouched, a pouinter on a new object is returned.
+func U64Vec3Add(veca, vecb *U64Vec3) *U64Vec3 {
+	var ret = *veca
+
+	_ = ret.Add(vecb)
+
+	return &ret
+}
