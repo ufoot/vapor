@@ -103,7 +103,7 @@ calc_branch () {
 }
 
 calc_commits () {
-    if [ "x${VERSION_BRANCH}" = "xmaster" ] ; then
+    if [ "x${VERSION_BRANCH}" = "x" ] ; then
 	SRC_GO=$(ls -d src/ufoot.org/vapor/vp* | grep -v "vapor/vpbuild" | sort | tr "\n" " ")
 	VERSION_COMMITS=$(git log --oneline --color=never -- ${SRC_GO} | wc -l)
     else

@@ -1,5 +1,12 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
+	* Makefile.dep, configure.ac,
+	src/ufoot.org/vapor/vpbuild/vpversion.go, stamp.sh: Updated stamp
+	script so that it does not cause gratuitious useless version bump
+	commits.
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
 	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go: Bump
 	version for master release
 
