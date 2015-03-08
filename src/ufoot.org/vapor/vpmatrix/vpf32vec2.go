@@ -33,6 +33,61 @@ func F32Vec2New(f1, f2 float32) *F32Vec2 {
 	return &F32Vec2{f1, f2}
 }
 
+// ToI32 converts the vector to an int32 vector.
+func (vec *F32Vec2) ToI32() *I32Vec2 {
+	var ret I32Vec2
+
+	for i, v := range vec {
+		ret[i] = int32(v)
+	}
+
+	return &ret
+}
+
+// ToI64 converts the vector to an int64 vector.
+func (vec *F32Vec2) ToI64() *I64Vec2 {
+	var ret I64Vec2
+
+	for i, v := range vec {
+		ret[i] = int64(v)
+	}
+
+	return &ret
+}
+
+// ToX32 converts the vector to a fixed point number vector on 32 bits.
+func (vec *F32Vec2) ToX32() *X32Vec2 {
+	var ret X32Vec2
+
+	for i, v := range vec {
+		ret[i] = vpnumber.F32ToX32(v)
+	}
+
+	return &ret
+}
+
+// ToX64 converts the vector to a fixed point number vector on 64 bits.
+func (vec *F32Vec2) ToX64() *X64Vec2 {
+	var ret X64Vec2
+
+	for i, v := range vec {
+		ret[i] = vpnumber.F32ToX64(v)
+	}
+
+	return &ret
+}
+
+// ToF64 converts the vector to a float64 vector.
+func (vec *F32Vec2) ToF64() *F64Vec2 {
+	var ret F64Vec2
+
+	for i, v := range vec {
+		ret[i] = float64(v)
+	}
+
+	return &ret
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *F32Vec2) Add(op *F32Vec2) *F32Vec2 {

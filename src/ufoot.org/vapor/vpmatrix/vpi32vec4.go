@@ -19,6 +19,10 @@
 
 package vpmatrix
 
+import (
+	"ufoot.org/vapor/vpnumber"
+)
+
 // I32Vec4 is a vector containing 4 int32 values.
 // Can hold the values of a point in a plane.
 type I32Vec4 [4]int32
@@ -26,6 +30,61 @@ type I32Vec4 [4]int32
 // I32Vec4New creates a new vector containing 4 int32 values.
 func I32Vec4New(i1, i2, i3, i4 int32) *I32Vec4 {
 	return &I32Vec4{i1, i2, i3, i4}
+}
+
+// ToI64 converts the vector to an int64 vector.
+func (vec *I32Vec4) ToI64() *I64Vec4 {
+	var ret I64Vec4
+
+	for i, v := range vec {
+		ret[i] = int64(v)
+	}
+
+	return &ret
+}
+
+// ToX32 converts the vector to a fixed point number vector on 32 bits.
+func (vec *I32Vec4) ToX32() *X32Vec4 {
+	var ret X32Vec4
+
+	for i, v := range vec {
+		ret[i] = vpnumber.I32ToX32(v)
+	}
+
+	return &ret
+}
+
+// ToX64 converts the vector to a fixed point number vector on 64 bits.
+func (vec *I32Vec4) ToX64() *X64Vec4 {
+	var ret X64Vec4
+
+	for i, v := range vec {
+		ret[i] = vpnumber.I32ToX64(v)
+	}
+
+	return &ret
+}
+
+// ToF32 converts the vector to a float32 vector.
+func (vec *I32Vec4) ToF32() *F32Vec4 {
+	var ret F32Vec4
+
+	for i, v := range vec {
+		ret[i] = float32(v)
+	}
+
+	return &ret
+}
+
+// ToF64 converts the vector to a float64 vector.
+func (vec *I32Vec4) ToF64() *F64Vec4 {
+	var ret F64Vec4
+
+	for i, v := range vec {
+		ret[i] = float64(v)
+	}
+
+	return &ret
 }
 
 // Add adds operand to the vector.

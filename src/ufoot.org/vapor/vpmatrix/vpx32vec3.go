@@ -33,6 +33,61 @@ func X32Vec3New(x1, x2, x3 vpnumber.X32) *X32Vec3 {
 	return &X32Vec3{x1, x2, x3}
 }
 
+// ToI32 converts the vector to an int32 vector.
+func (vec *X32Vec3) ToI32() *I32Vec3 {
+	var ret I32Vec3
+
+	for i, v := range vec {
+		ret[i] = vpnumber.X32ToI32(v)
+	}
+
+	return &ret
+}
+
+// ToI64 converts the vector to an int32 vector.
+func (vec *X32Vec3) ToI64() *I64Vec3 {
+	var ret I64Vec3
+
+	for i, v := range vec {
+		ret[i] = vpnumber.X32ToI64(v)
+	}
+
+	return &ret
+}
+
+// ToX64 converts the vector to a fixed point number vector on 64 bits.
+func (vec *X32Vec3) ToX64() *X64Vec3 {
+	var ret X64Vec3
+
+	for i, v := range vec {
+		ret[i] = vpnumber.X32ToX64(v)
+	}
+
+	return &ret
+}
+
+// ToF32 converts the vector to a float32 vector.
+func (vec *X32Vec3) ToF32() *F32Vec3 {
+	var ret F32Vec3
+
+	for i, v := range vec {
+		ret[i] = vpnumber.X32ToF32(v)
+	}
+
+	return &ret
+}
+
+// ToF64 converts the vector to a float64 vector.
+func (vec *X32Vec3) ToF64() *F64Vec3 {
+	var ret F64Vec3
+
+	for i, v := range vec {
+		ret[i] = vpnumber.X32ToF64(v)
+	}
+
+	return &ret
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *X32Vec3) Add(op *X32Vec3) *X32Vec3 {

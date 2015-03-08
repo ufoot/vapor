@@ -1,5 +1,26 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
+	* src/ufoot.org/vapor/vpmatrix/vpu32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec4_test.go: Removed unsigned
+	vector code, was suspected to bloat the rest for little use
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
+	* stamp.sh: Fixed stamp.sh, so that master revisions are correctly
+	generated
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
 	* Makefile.dep, configure.ac,
 	src/ufoot.org/vapor/vpbuild/vpversion.go, stamp.sh: Updated stamp
 	script so that it does not cause gratuitious useless version bump
