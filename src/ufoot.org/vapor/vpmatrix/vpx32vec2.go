@@ -20,8 +20,8 @@
 package vpmatrix
 
 import (
-	"math"
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpmath"
 )
 
 // X32Vec2 is a vector containing 2 fixed point 32 bit values.
@@ -88,7 +88,7 @@ func (vec *X32Vec2) SumSq() vpnumber.X32 {
 
 // Length returns the length of the vector.
 func (vec *X32Vec2) Length() vpnumber.X32 {
-	return vpnumber.F64ToX32(math.Sqrt(vpnumber.X32ToF64(vec.SumSq())))
+	return vpmath.X32Sqrt(vec.SumSq())
 }
 
 // Normalize scales the vector so that its length is 1.

@@ -20,8 +20,8 @@
 package vpmatrix
 
 import (
-	"math"
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpmath"
 )
 
 // X64Vec2 is a vector containing 2 fixed point 64 bit values.
@@ -88,7 +88,7 @@ func (vec *X64Vec2) SumSq() vpnumber.X64 {
 
 // Length returns the length of the vector.
 func (vec *X64Vec2) Length() vpnumber.X64 {
-	return vpnumber.F64ToX64(math.Sqrt(vpnumber.X64ToF64(vec.SumSq())))
+	return vpmath.X64Sqrt(vec.SumSq())
 }
 
 // Normalize scales the vector so that its length is 1.
