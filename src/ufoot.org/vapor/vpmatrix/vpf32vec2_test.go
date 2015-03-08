@@ -24,5 +24,7 @@ import (
 )
 
 func TestF32Vec2Math(t *testing.T) {
-	// todo...
+	v1:=F32Vec2New(1,2)
+	v2:=F32Vec2New(3,-5)
+	_=F32Vec2Add(v1,v2)	
 }

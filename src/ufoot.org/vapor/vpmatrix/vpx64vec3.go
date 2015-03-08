@@ -99,6 +99,17 @@ func (vec *X64Vec3) Normalize() *X64Vec3 {
 	return vec
 }
 
+// IsSimilar returns true if vectors are approximatively the same.
+// This is a workarround to ignore rounding errors.
+func (vec *X64Vec3) IsSimilar(op *X64Vec3) bool {
+	ret:=true
+	for i, v := range vec {
+		ret = ret && vpnumber.X64IsSimilar(v, op[i])
+	}
+	
+	return ret
+}
+
 // X64Vec3Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func X64Vec3Add(veca, vecb *X64Vec3) *X64Vec3 {
@@ -159,4 +170,10 @@ func X64Vec3Normalize(vec *X64Vec3) *X64Vec3 {
 	_ = ret.Normalize()
 
 	return &ret
+}
+
+// X64Vec3IsSimilar returns true if vectors are approximatively the same.
+// This is a workarround to ignore rounding errors.
+func X64Vec3IsSimilar(veca,vecb *X64Vec3) bool {
+	return veca.IsSimilar(vecb)
 }

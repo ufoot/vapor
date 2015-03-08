@@ -99,6 +99,17 @@ func (vec *F64Vec4) Normalize() *F64Vec4 {
 	return vec
 }
 
+// IsSimilar returns true if vectors are approximatively the same.
+// This is a workarround to ignore rounding errors.
+func (vec *F64Vec4) IsSimilar(op *F64Vec4) bool {
+	ret:=true
+	for i, v := range vec {
+		ret = ret && vpnumber.F64IsSimilar(v, op[i])
+	}
+	
+	return ret
+}
+
 // F64Vec4Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func F64Vec4Add(veca, vecb *F64Vec4) *F64Vec4 {
@@ -159,4 +170,10 @@ func F64Vec4Normalize(vec *F64Vec4) *F64Vec4 {
 	_ = ret.Normalize()
 
 	return &ret
+}
+
+// F64Vec4IsSimilar returns true if vectors are approximatively the same.
+// This is a workarround to ignore rounding errors.
+func F64Vec4IsSimilar(veca,vecb *F64Vec4) bool {
+	return veca.IsSimilar(vecb)
 }
