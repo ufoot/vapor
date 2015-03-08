@@ -20,8 +20,8 @@
 package vpmatrix
 
 import (
-	"ufoot.org/vapor/vpnumber"
 	"ufoot.org/vapor/vpmath"
+	"ufoot.org/vapor/vpnumber"
 )
 
 // X64Vec3 is a vector containing 3 fixed point 64 bit values.

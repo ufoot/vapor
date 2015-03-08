@@ -20,8 +20,8 @@
 package vpmatrix
 
 import (
-	"ufoot.org/vapor/vpnumber"
 	"ufoot.org/vapor/vpmath"
+	"ufoot.org/vapor/vpnumber"
 )
 
 // X32Vec2 is a vector containing 2 fixed point 32 bit values.

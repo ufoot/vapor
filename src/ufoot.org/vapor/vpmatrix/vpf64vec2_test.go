@@ -83,3 +83,19 @@ func TestF64Vec2Math(t *testing.T) {
 		t.Error("Normalize error", f)
 	}
 }
+
+func BenchmarkF64Vec2Add(b *testing.B) {
+	vec := F64Vec2New(vpnumber.F64Const1, vpnumber.F64Const1)
+
+	for i := 0; i < b.N; i++ {
+		_ = vec.Add(vec)
+	}
+}
+
+func BenchmarkF64Vec2Normalize(b *testing.B) {
+	vec := F64Vec2New(vpnumber.F64Const1, vpnumber.F64Const1)
+
+	for i := 0; i < b.N; i++ {
+		_ = vec.Normalize()
+	}
+}

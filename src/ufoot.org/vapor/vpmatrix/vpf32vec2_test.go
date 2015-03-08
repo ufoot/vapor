@@ -83,3 +83,19 @@ func TestF32Vec2Math(t *testing.T) {
 		t.Error("Normalize error", f)
 	}
 }
+
+func BenchmarkF32Vec2Add(b *testing.B) {
+	vec := F32Vec2New(vpnumber.F32Const1, vpnumber.F32Const1)
+
+	for i := 0; i < b.N; i++ {
+		_ = vec.Add(vec)
+	}
+}
+
+func BenchmarkF32Vec2Normalize(b *testing.B) {
+	vec := F32Vec2New(vpnumber.F32Const1, vpnumber.F32Const1)
+
+	for i := 0; i < b.N; i++ {
+		_ = vec.Normalize()
+	}
+}

@@ -1,5 +1,18 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
+	* Makefile.dep, configure.ac,
+	src/ufoot.org/vapor/vpbuild/vpversion.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec4.go: Removed usage of package
+	math within fixed-point vector funcs, which need to be 100%
+	predictable
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
 	* src/ufoot.org/vapor/vpmatrix/vpf64vec2_test.go,
 	src/ufoot.org/vapor/vpmatrix/vpf64vec3_test.go,
 	src/ufoot.org/vapor/vpmatrix/vpf64vec4_test.go: Added test suites
