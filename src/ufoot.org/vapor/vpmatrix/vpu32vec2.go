@@ -18,3 +18,13 @@
 // Contact author: ufoot@ufoot.org
 
 package vpmatrix
+
+// U32Vec2 is a vector containing 2 uint32 values.
+// Can hold the values of a pouint in a plane.
+type U32Vec2 [2]uint32
+
+// U32Vec2New creates a new vector containing 2 uint32 values.
+func U32Vec2New(i1, i2 uint32) *U32Vec2 {
+	return &U32Vec2{i1, i2}
+}
+

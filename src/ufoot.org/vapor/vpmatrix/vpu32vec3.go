@@ -18,3 +18,13 @@
 // Contact author: ufoot@ufoot.org
 
 package vpmatrix
+
+// U32Vec3 is a vector containing 3 uint32 values.
+// Can hold the values of a pouint in a plane.
+type U32Vec3 [3]uint32
+
+// U32Vec3New creates a new vector containing 3 uint32 values.
+func U32Vec3New(i1, i2, i3 uint32) *U32Vec3 {
+	return &U32Vec3{i1, i2, i3}
+}
+

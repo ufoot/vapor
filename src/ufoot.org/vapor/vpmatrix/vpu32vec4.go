@@ -18,3 +18,12 @@
 // Contact author: ufoot@ufoot.org
 
 package vpmatrix
+
+// U32Vec4 is a vector containing 4 uint32 values.
+// Can hold the values of a pouint in a plane.
+type U32Vec4 [4]uint32
+
+// U32Vec4New creates a new vector containing 4 uint32 values.
+func U32Vec4New(i1, i2, i3, i4 uint32) *U32Vec4 {
+	return &U32Vec4{i1, i2, i3, i4}
+}

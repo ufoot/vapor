@@ -18,3 +18,52 @@
 // Contact author: ufoot@ufoot.org
 
 package vpmatrix
+
+// I32Vec2 is a vector containing 2 int32 values.
+// Can hold the values of a point in a plane.
+type I32Vec2 [2]int32
+
+// I32Vec2New creates a new vector containing 2 int32 values.
+func I32Vec2New(i1, i2 int32) *I32Vec2 {
+	return &I32Vec2{i1, i2}
+}
+
+// Add adds operand to the vector.
+// It modifies it, and returns a pointer on it.
+func (vec *I32Vec2) Add(op *I32Vec2) *I32Vec2 {
+	for i, v := range op {
+		vec[i] += v
+	}
+
+	return vec
+}
+
+// Sub substracts operand from the vector.
+// It modifies it, and returns a pointer on it.
+func (vec *I32Vec2) Sub(op *I32Vec2) *I32Vec2 {
+	for i, v := range op {
+		vec[i] -= v
+	}
+
+	return vec
+}
+
+// I32Vec2Add adds two vectors.
+// Args are left untouched, a pointer on a new object is returned.
+func I32Vec2Add(veca, vecb *I32Vec2) *I32Vec2 {
+	var ret = *veca
+
+	_ = ret.Add(vecb)
+
+	return &ret
+}
+
+// I32Vec2Sub substracts vector b from vector a.
+// Args are left untouched, a pointer on a new object is returned.
+func I32Vec2Sub(veca, vecb *I32Vec2) *I32Vec2 {
+	var ret = *veca
+
+	_ = ret.Sub(vecb)
+
+	return &ret
+}

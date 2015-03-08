@@ -18,3 +18,13 @@
 // Contact author: ufoot@ufoot.org
 
 package vpmatrix
+
+// U64Vec4 is a vector containing 4 uint64 values.
+// Can hold the values of a pouint in a plane.
+type U64Vec4 [4]uint64
+
+// U64Vec4New creates a new vector containing 4 uint64 values.
+func U64Vec4New(i1, i2, i3, i4 uint64) *U64Vec4 {
+	return &U64Vec4{i1, i2, i3, i4}
+}
+

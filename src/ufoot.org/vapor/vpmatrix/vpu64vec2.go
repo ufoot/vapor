@@ -18,3 +18,13 @@
 // Contact author: ufoot@ufoot.org
 
 package vpmatrix
+
+// U64Vec2 is a vector containing 2 uint64 values.
+// Can hold the values of a pouint in a plane.
+type U64Vec2 [2]uint64
+
+// U64Vec2New creates a new vector containing 2 uint64 values.
+func U64Vec2New(i1, i2 uint64) *U64Vec2 {
+	return &U64Vec2{i1, i2}
+}
+

@@ -18,3 +18,52 @@
 // Contact author: ufoot@ufoot.org
 
 package vpmatrix
+
+// I64Vec4 is a vector containing 4 int64 values.
+// Can hold the values of a point in a plane.
+type I64Vec4 [4]int64
+
+// I64Vec4New creates a new vector containing 4 int64 values.
+func I64Vec4New(i1, i2, i3, i4 int64) *I64Vec4 {
+	return &I64Vec4{i1, i2, i3, i4}
+}
+
+// Add adds operand to the vector.
+// It modifies it, and returns a pointer on it.
+func (vec *I64Vec4) Add(op *I64Vec4) *I64Vec4 {
+	for i, v := range op {
+		vec[i] += v
+	}
+
+	return vec
+}
+
+// Sub substracts operand from the vector.
+// It modifies it, and returns a pointer on it.
+func (vec *I64Vec4) Sub(op *I64Vec4) *I64Vec4 {
+	for i, v := range op {
+		vec[i] -= v
+	}
+
+	return vec
+}
+
+// I64Vec4Add adds two vectors.
+// Args are left untouched, a pointer on a new object is returned.
+func I64Vec4Add(veca, vecb *I64Vec4) *I64Vec4 {
+	var ret = *veca
+
+	_ = ret.Add(vecb)
+
+	return &ret
+}
+
+// I64Vec4Sub substracts vector b from vector a.
+// Args are left untouched, a pointer on a new object is returned.
+func I64Vec4Sub(veca, vecb *I64Vec4) *I64Vec4 {
+	var ret = *veca
+
+	_ = ret.Sub(vecb)
+
+	return &ret
+}

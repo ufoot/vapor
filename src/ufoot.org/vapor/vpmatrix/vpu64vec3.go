@@ -18,3 +18,12 @@
 // Contact author: ufoot@ufoot.org
 
 package vpmatrix
+
+// U64Vec3 is a vector containing 3 uint64 values.
+// Can hold the values of a pouint in a plane.
+type U64Vec3 [3]uint64
+
+// U64Vec3New creates a new vector containing 3 uint64 values.
+func U64Vec3New(i1, i2, i3 uint64) *U64Vec3 {
+	return &U64Vec3{i1, i2, i3}
+}
