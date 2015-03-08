@@ -1,6 +1,8 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
-	* src/ufoot.org/vapor/vpmatrix/vpu32vec2_test.go,
+	* Makefile.dep, configure.ac,
+	src/ufoot.org/vapor/vpbuild/vpversion.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec2_test.go,
 	src/ufoot.org/vapor/vpmatrix/vpu32vec3_test.go,
 	src/ufoot.org/vapor/vpmatrix/vpu32vec4_test.go,
 	src/ufoot.org/vapor/vpmatrix/vpu64vec2_test.go,
