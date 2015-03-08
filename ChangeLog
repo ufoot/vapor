@@ -1,5 +1,10 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
+	* Makefile.dep, configure.ac,
+	src/ufoot.org/vapor/vpbuild/vpversion.go: Update version for master
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
 	* Makefile.dep, src/ufoot.org/vapor/vpmatrix/vpf32vec2.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32vec3.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32vec4.go,
