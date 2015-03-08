@@ -28,6 +28,11 @@ import (
 // Can hold the values of a point in a plane.
 type X64Vec2 [2]vpnumber.X64
 
+// X64Vec2New creates a new vector containing 2 fixed point 64 bit values.
+func X64Vec2New(x1, x2 vpnumber.X64) *X64Vec2 {
+	return &X64Vec2{x1, x2}
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *X64Vec2) Add(op *X64Vec2) *X64Vec2 {

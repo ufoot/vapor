@@ -28,6 +28,11 @@ import (
 // Can hold the values of a point in space.
 type X32Vec3 [3]vpnumber.X32
 
+// X32Vec3New creates a new vector containing 3 fixed point 32 bit values.
+func X32Vec3New(x1, x2, x3 vpnumber.X32) *X32Vec3 {
+	return &X32Vec3{x1, x2, x3}
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *X32Vec3) Add(op *X32Vec3) *X32Vec3 {

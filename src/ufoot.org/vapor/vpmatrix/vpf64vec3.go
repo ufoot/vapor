@@ -28,6 +28,11 @@ import (
 // Can hold the values of a point in space.
 type F64Vec3 [3]float64
 
+// F64Vec3New creates a new vector containing 3 float64 values.
+func F64Vec3New(f1, f2, f3 float64) *F64Vec3 {
+	return &F64Vec3{f1, f2, f3}
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *F64Vec3) Add(op *F64Vec3) *F64Vec3 {

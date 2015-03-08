@@ -28,6 +28,11 @@ import (
 // Can hold the values of a point in space.
 type X64Vec3 [3]vpnumber.X64
 
+// X64Vec3New creates a new vector containing 3 fixed point 64 bit values.
+func X64Vec3New(x1, x2, x3 vpnumber.X64) *X64Vec3 {
+	return &X64Vec3{x1, x2, x3}
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *X64Vec3) Add(op *X64Vec3) *X64Vec3 {

@@ -28,6 +28,11 @@ import (
 // Can hold the values of a point in a plane.
 type X32Vec2 [2]vpnumber.X32
 
+// X32Vec2New creates a new vector containing 2 fixed point 32 bit values.
+func X32Vec2New(x1, x2 vpnumber.X32) *X32Vec2 {
+	return &X32Vec2{x1, x2}
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *X32Vec2) Add(op *X32Vec2) *X32Vec2 {

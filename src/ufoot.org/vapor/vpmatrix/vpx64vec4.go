@@ -28,6 +28,11 @@ import (
 // Can be used in 3D matrix transformations.
 type X64Vec4 [4]vpnumber.X64
 
+// X64Vec4New creates a new vector containing 4 fixed point 64 bit values.
+func X64Vec4New(x1, x2, x3, x4 vpnumber.X64) *X64Vec4 {
+	return &X64Vec4{x1, x2, x3, x4}
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *X64Vec4) Add(op *X64Vec4) *X64Vec4 {

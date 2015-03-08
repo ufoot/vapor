@@ -28,6 +28,11 @@ import (
 // Can be used in 3D matrix transformations.
 type F64Vec4 [4]float64
 
+// F64Vec4New creates a new vector containing 4 float64 values.
+func F64Vec4New(f1, f2, f3, f4 float64) *F64Vec4 {
+	return &F64Vec4{f1, f2, f3, f4}
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *F64Vec4) Add(op *F64Vec4) *F64Vec4 {

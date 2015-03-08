@@ -28,6 +28,11 @@ import (
 // Can hold the values of a point in space.
 type F32Vec3 [3]float32
 
+// F32Vec3New creates a new vector containing 3 float32 values.
+func F32Vec3New(f1, f2, f3 float32) *F32Vec3 {
+	return &F32Vec3{f1, f2, f3}
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *F32Vec3) Add(op *F32Vec3) *F32Vec3 {

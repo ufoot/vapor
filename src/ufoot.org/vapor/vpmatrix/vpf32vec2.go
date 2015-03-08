@@ -28,6 +28,11 @@ import (
 // Can hold the values of a point in a plane.
 type F32Vec2 [2]float32
 
+// F32Vec2New creates a new vector containing 2 float32 values.
+func F32Vec2New(f1, f2 float32) *F32Vec2 {
+	return &F32Vec2{f1, f2}
+}
+
 // Add adds operand to the vector.
 // It modifies it, and returns a pointer on it.
 func (vec *F32Vec2) Add(op *F32Vec2) *F32Vec2 {
