@@ -92,11 +92,6 @@ git_changelog () {
     fi
 }
 
-calc_commits () {
-    SRC_GO=$(ls -d src/ufoot.org/vapor/vp* | grep -v "vapor/vpbuild" | sort | tr "\n" " ")
-    VERSION_COMMITS=$(git log --oneline --color=never -- ${SRC_GO} | wc -l)
-}
-
 calc_branch () {
     VERSION_BRANCH=$(git branch --color=never | grep "* " | cut -c 3- | sed "s/ //g")
     if [ "x${VERSION_BRANCH}" = "x" ] ; then
@@ -104,6 +99,15 @@ calc_branch () {
     fi
     if [ "x${VERSION_BRANCH}" = "xmaster" ] ; then
         VERSION_BRANCH=
+    fi
+}
+
+calc_commits () {
+    if [ "x${VERSION_BRANCH}" = "xmaster" ] ; then
+	SRC_GO=$(ls -d src/ufoot.org/vapor/vp* | grep -v "vapor/vpbuild" | sort | tr "\n" " ")
+	VERSION_COMMITS=$(git log --oneline --color=never -- ${SRC_GO} | wc -l)
+    else
+	VERSION_COMMITS=
     fi
 }
 
@@ -138,8 +142,8 @@ if [ x"$1" = "x" ] ; then
     find_vppackage_go
     git_check
     git_changelog
-    calc_commits
     calc_branch
+    calc_commits
     do_patch
 else
     usage

@@ -1,5 +1,10 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
+	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go: Bump
+	version for master release
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
 	* Makefile.dep, configure.ac,
 	src/ufoot.org/vapor/vpbuild/vpversion.go,
 	src/ufoot.org/vapor/vpmatrix/vpu32vec2_test.go,
