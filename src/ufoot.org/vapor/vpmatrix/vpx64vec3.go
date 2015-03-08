@@ -57,7 +57,7 @@ func (vec *X64Vec3) Sub(op *X64Vec3) *X64Vec3 {
 // It modifies it, and returns a pointer on it.
 func (vec *X64Vec3) MulScale(factor vpnumber.X64) *X64Vec3 {
 	for i, v := range vec {
-		vec[i] = vpnumber.X64Mul(vec[i], v)
+		vec[i] = vpnumber.X64Mul(v, factor)
 	}
 
 	return vec
@@ -67,7 +67,7 @@ func (vec *X64Vec3) MulScale(factor vpnumber.X64) *X64Vec3 {
 // It modifies it, and returns a pointer on it.
 func (vec *X64Vec3) DivScale(factor vpnumber.X64) *X64Vec3 {
 	for i, v := range vec {
-		vec[i] = vpnumber.X64Div(vec[i], v)
+		vec[i] = vpnumber.X64Div(v, factor)
 	}
 
 	return vec
@@ -102,11 +102,11 @@ func (vec *X64Vec3) Normalize() *X64Vec3 {
 // IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (vec *X64Vec3) IsSimilar(op *X64Vec3) bool {
-	ret:=true
+	ret := true
 	for i, v := range vec {
 		ret = ret && vpnumber.X64IsSimilar(v, op[i])
 	}
-	
+
 	return ret
 }
 
@@ -174,6 +174,6 @@ func X64Vec3Normalize(vec *X64Vec3) *X64Vec3 {
 
 // X64Vec3IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
-func X64Vec3IsSimilar(veca,vecb *X64Vec3) bool {
+func X64Vec3IsSimilar(veca, vecb *X64Vec3) bool {
 	return veca.IsSimilar(vecb)
 }

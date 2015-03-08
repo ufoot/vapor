@@ -67,7 +67,7 @@ func (vec *F32Vec4) MulScale(factor float32) *F32Vec4 {
 // It modifies it, and returns a pointer on it.
 func (vec *F32Vec4) DivScale(factor float32) *F32Vec4 {
 	for i, v := range vec {
-		vec[i] = vpnumber.F32Div(vec[i], v)
+		vec[i] = vpnumber.F32Div(v, factor)
 	}
 
 	return vec
@@ -102,11 +102,11 @@ func (vec *F32Vec4) Normalize() *F32Vec4 {
 // IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (vec *F32Vec4) IsSimilar(op *F32Vec4) bool {
-	ret:=true
+	ret := true
 	for i, v := range vec {
 		ret = ret && vpnumber.F32IsSimilar(v, op[i])
 	}
-	
+
 	return ret
 }
 
@@ -174,6 +174,6 @@ func F32Vec4Normalize(vec *F32Vec4) *F32Vec4 {
 
 // F32Vec4IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
-func F32Vec4IsSimilar(veca,vecb *F32Vec4) bool {
+func F32Vec4IsSimilar(veca, vecb *F32Vec4) bool {
 	return veca.IsSimilar(vecb)
 }

@@ -24,61 +24,63 @@ import (
 	"ufoot.org/vapor/vpnumber"
 )
 
-func TestF32Vec2Math(t *testing.T) {
+func TestF32Vec3Math(t *testing.T) {
 	const f1 = 3.0
 	const f2 = -4.0
+	const f3 = 1.0
 
 	const f5 = -4.5
 	const f6 = 6.0
+	const f7 = 2.0
 
 	const fmul = 10.0
-	const fsumsq = 25.0
-	const flength = 5.0
+	const fsumsq = 26.0
+	const flength = 5.099
 
-	var v1, v2, v3, v4 *F32Vec2
+	var v1, v2, v3, v4 *F32Vec3
 	var f float32
 
-	v1 = F32Vec2New(f1, f2)
-	if !F32Vec2IsSimilar(v1, v1) {
+	v1 = F32Vec3New(f1, f2, f3)
+	if !F32Vec3IsSimilar(v1, v1) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
-	v2 = F32Vec2New(f5, f6)
-	v3 = F32Vec2Add(v1, v2)
-	v4 = F32Vec2New(f1+f5, f2+f6)
-	if !F32Vec2IsSimilar(v3, v4) {
+	v2 = F32Vec3New(f5, f6, f7)
+	v3 = F32Vec3Add(v1, v2)
+	v4 = F32Vec3New(f1+f5, f2+f6, f3+f7)
+	if !F32Vec3IsSimilar(v3, v4) {
 		t.Error("Add error")
 	}
 
-	v3 = F32Vec2Sub(v1, v2)
-	v4 = F32Vec2New(f1-f5, f2-f6)
-	if !F32Vec2IsSimilar(v3, v4) {
+	v3 = F32Vec3Sub(v1, v2)
+	v4 = F32Vec3New(f1-f5, f2-f6, f3-f7)
+	if !F32Vec3IsSimilar(v3, v4) {
 		t.Error("Sub error")
 	}
 
-	v3 = F32Vec2MulScale(v1, fmul)
-	v4 = F32Vec2New(f1*fmul, f2*fmul)
-	if !F32Vec2IsSimilar(v3, v4) {
+	v3 = F32Vec3MulScale(v1, fmul)
+	v4 = F32Vec3New(f1*fmul, f2*fmul, f3*fmul)
+	if !F32Vec3IsSimilar(v3, v4) {
 		t.Error("MulScale error")
 	}
 
-	v3 = F32Vec2DivScale(v3, fmul)
-	if !F32Vec2IsSimilar(v3, v1) {
+	v3 = F32Vec3DivScale(v3, fmul)
+	if !F32Vec3IsSimilar(v3, v1) {
 		t.Error("DivScale error")
 	}
 
-	f = F32Vec2SumSq(v1)
+	f = F32Vec3SumSq(v1)
 	if !vpnumber.F32IsSimilar(f, fsumsq) {
 		t.Error("SumSq error", f, fsumsq)
 	}
 
-	f = F32Vec2Length(v1)
+	f = F32Vec3Length(v1)
 	if !vpnumber.F32IsSimilar(f, flength) {
 		t.Error("Length error", f, flength)
 	}
 
-	v3 = F32Vec2Normalize(v1)
-	f = F32Vec2Length(v3)
+	v3 = F32Vec3Normalize(v1)
+	f = F32Vec3Length(v3)
 	if f != vpnumber.F32Const1 {
 		t.Error("Normalize error", f)
 	}

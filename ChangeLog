@@ -1,5 +1,96 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
+	* src/ufoot.org/vapor/vpmatrix/vpf32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec4.go: Added IsSimilar funcs to
+	vectors within vpmatrix package
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
+	* src/ufoot.org/vapor/vpmatrix/vpf32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec4.go: Added New functions for
+	all vector types
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
+	* src/ufoot.org/vapor/vpmatrix/vpf32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec4.go: Replaced references to
+	vpmath to vpmatrix within vpmatrix module
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
+	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec4.go: Linting code in vpmatrix
+	package, removed useless explicit type definition
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
 	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32vec2.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32vec3.go,

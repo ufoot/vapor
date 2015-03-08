@@ -57,7 +57,7 @@ func (vec *X32Vec4) Sub(op *X32Vec4) *X32Vec4 {
 // It modifies it, and returns a pointer on it.
 func (vec *X32Vec4) MulScale(factor vpnumber.X32) *X32Vec4 {
 	for i, v := range vec {
-		vec[i] = vpnumber.X32Mul(vec[i], v)
+		vec[i] = vpnumber.X32Mul(v, factor)
 	}
 
 	return vec
@@ -67,7 +67,7 @@ func (vec *X32Vec4) MulScale(factor vpnumber.X32) *X32Vec4 {
 // It modifies it, and returns a pointer on it.
 func (vec *X32Vec4) DivScale(factor vpnumber.X32) *X32Vec4 {
 	for i, v := range vec {
-		vec[i] = vpnumber.X32Div(vec[i], v)
+		vec[i] = vpnumber.X32Div(v, factor)
 	}
 
 	return vec
@@ -102,11 +102,11 @@ func (vec *X32Vec4) Normalize() *X32Vec4 {
 // IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (vec *X32Vec4) IsSimilar(op *X32Vec4) bool {
-	ret:=true
+	ret := true
 	for i, v := range vec {
 		ret = ret && vpnumber.X32IsSimilar(v, op[i])
 	}
-	
+
 	return ret
 }
 
@@ -174,6 +174,6 @@ func X32Vec4Normalize(vec *X32Vec4) *X32Vec4 {
 
 // X32Vec4IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
-func X32Vec4IsSimilar(veca,vecb *X32Vec4) bool {
+func X32Vec4IsSimilar(veca, vecb *X32Vec4) bool {
 	return veca.IsSimilar(vecb)
 }
