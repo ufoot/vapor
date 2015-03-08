@@ -17,7 +17,7 @@
 // Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpmath
+package vpmatrix
 
 import (
 	"math"
