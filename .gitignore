@@ -1,0 +1,11 @@
+autom4te.cache
+configure
+config.log
+config.status
+Makefile
+bin
+pkg
+doc
+src/golang.org
+src/github.com
+*~
