@@ -97,7 +97,7 @@ func (vec *F32Vec4) Normalize() *F32Vec4 {
 // F32Vec4Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func F32Vec4Add(veca, vecb *F32Vec4) *F32Vec4 {
-	var ret F32Vec4 = *veca
+	var ret = *veca
 
 	_ = ret.Add(vecb)
 
@@ -107,7 +107,7 @@ func F32Vec4Add(veca, vecb *F32Vec4) *F32Vec4 {
 // F32Vec4Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
 func F32Vec4Sub(veca, vecb *F32Vec4) *F32Vec4 {
-	var ret F32Vec4 = *veca
+	var ret = *veca
 
 	_ = ret.Sub(vecb)
 
@@ -117,7 +117,7 @@ func F32Vec4Sub(veca, vecb *F32Vec4) *F32Vec4 {
 // F32Vec4MulScale multiplies all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
 func F32Vec4MulScale(vec *F32Vec4, factor float32) *F32Vec4 {
-	var ret F32Vec4 = *vec
+	var ret = *vec
 
 	_ = ret.MulScale(factor)
 
@@ -127,7 +127,7 @@ func F32Vec4MulScale(vec *F32Vec4, factor float32) *F32Vec4 {
 // F32Vec4DivScale divides all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
 func F32Vec4DivScale(vec *F32Vec4, factor float32) *F32Vec4 {
-	var ret F32Vec4 = *vec
+	var ret = *vec
 
 	_ = ret.DivScale(factor)
 
@@ -149,7 +149,7 @@ func F32Vec4Length(vec *F32Vec4) float32 {
 // F32Vec4Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
 func F32Vec4Normalize(vec *F32Vec4) *F32Vec4 {
-	var ret F32Vec4 = *vec
+	var ret = *vec
 
 	_ = ret.Normalize()
 

@@ -1,5 +1,22 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
+	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec4.go: Linting cde, added
+	comments on vector funcs
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
 	* src/ufoot.org/vapor/vpmatrix/vpf32vec2.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32vec3.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32vec4.go,

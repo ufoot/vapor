@@ -97,7 +97,7 @@ func (vec *X64Vec3) Normalize() *X64Vec3 {
 // X64Vec3Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func X64Vec3Add(veca, vecb *X64Vec3) *X64Vec3 {
-	var ret X64Vec3 = *veca
+	var ret = *veca
 
 	_ = ret.Add(vecb)
 
@@ -107,7 +107,7 @@ func X64Vec3Add(veca, vecb *X64Vec3) *X64Vec3 {
 // X64Vec3Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
 func X64Vec3Sub(veca, vecb *X64Vec3) *X64Vec3 {
-	var ret X64Vec3 = *veca
+	var ret = *veca
 
 	_ = ret.Sub(vecb)
 
@@ -117,7 +117,7 @@ func X64Vec3Sub(veca, vecb *X64Vec3) *X64Vec3 {
 // X64Vec3MulScale multiplies all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
 func X64Vec3MulScale(vec *X64Vec3, factor vpnumber.X64) *X64Vec3 {
-	var ret X64Vec3 = *vec
+	var ret = *vec
 
 	_ = ret.MulScale(factor)
 
@@ -127,7 +127,7 @@ func X64Vec3MulScale(vec *X64Vec3, factor vpnumber.X64) *X64Vec3 {
 // X64Vec3DivScale divides all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
 func X64Vec3DivScale(vec *X64Vec3, factor vpnumber.X64) *X64Vec3 {
-	var ret X64Vec3 = *vec
+	var ret = *vec
 
 	_ = ret.DivScale(factor)
 
@@ -149,7 +149,7 @@ func X64Vec3Length(vec *X64Vec3) vpnumber.X64 {
 // X64Vec3Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
 func X64Vec3Normalize(vec *X64Vec3) *X64Vec3 {
-	var ret X64Vec3 = *vec
+	var ret = *vec
 
 	_ = ret.Normalize()
 

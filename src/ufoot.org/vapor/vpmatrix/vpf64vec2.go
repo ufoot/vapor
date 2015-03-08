@@ -97,7 +97,7 @@ func (vec *F64Vec2) Normalize() *F64Vec2 {
 // F64Vec2Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func F64Vec2Add(veca, vecb *F64Vec2) *F64Vec2 {
-	var ret F64Vec2 = *veca
+	var ret = *veca
 
 	_ = ret.Add(vecb)
 
@@ -107,7 +107,7 @@ func F64Vec2Add(veca, vecb *F64Vec2) *F64Vec2 {
 // F64Vec2Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
 func F64Vec2Sub(veca, vecb *F64Vec2) *F64Vec2 {
-	var ret F64Vec2 = *veca
+	var ret = *veca
 
 	_ = ret.Sub(vecb)
 
@@ -117,7 +117,7 @@ func F64Vec2Sub(veca, vecb *F64Vec2) *F64Vec2 {
 // F64Vec2MulScale multiplies all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
 func F64Vec2MulScale(vec *F64Vec2, factor float64) *F64Vec2 {
-	var ret F64Vec2 = *vec
+	var ret = *vec
 
 	_ = ret.MulScale(factor)
 
@@ -127,7 +127,7 @@ func F64Vec2MulScale(vec *F64Vec2, factor float64) *F64Vec2 {
 // F64Vec2DivScale divides all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
 func F64Vec2DivScale(vec *F64Vec2, factor float64) *F64Vec2 {
-	var ret F64Vec2 = *vec
+	var ret = *vec
 
 	_ = ret.DivScale(factor)
 
@@ -149,7 +149,7 @@ func F64Vec2Length(vec *F64Vec2) float64 {
 // F64Vec2Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
 func F64Vec2Normalize(vec *F64Vec2) *F64Vec2 {
-	var ret F64Vec2 = *vec
+	var ret = *vec
 
 	_ = ret.Normalize()
 

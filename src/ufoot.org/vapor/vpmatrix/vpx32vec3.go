@@ -97,7 +97,7 @@ func (vec *X32Vec3) Normalize() *X32Vec3 {
 // X32Vec3Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func X32Vec3Add(veca, vecb *X32Vec3) *X32Vec3 {
-	var ret X32Vec3 = *veca
+	var ret = *veca
 
 	_ = ret.Add(vecb)
 
@@ -107,7 +107,7 @@ func X32Vec3Add(veca, vecb *X32Vec3) *X32Vec3 {
 // X32Vec3Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
 func X32Vec3Sub(veca, vecb *X32Vec3) *X32Vec3 {
-	var ret X32Vec3 = *veca
+	var ret = *veca
 
 	_ = ret.Sub(vecb)
 
@@ -117,7 +117,7 @@ func X32Vec3Sub(veca, vecb *X32Vec3) *X32Vec3 {
 // X32Vec3MulScale multiplies all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
 func X32Vec3MulScale(vec *X32Vec3, factor vpnumber.X32) *X32Vec3 {
-	var ret X32Vec3 = *vec
+	var ret = *vec
 
 	_ = ret.MulScale(factor)
 
@@ -127,7 +127,7 @@ func X32Vec3MulScale(vec *X32Vec3, factor vpnumber.X32) *X32Vec3 {
 // X32Vec3DivScale divides all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
 func X32Vec3DivScale(vec *X32Vec3, factor vpnumber.X32) *X32Vec3 {
-	var ret X32Vec3 = *vec
+	var ret = *vec
 
 	_ = ret.DivScale(factor)
 
@@ -149,7 +149,7 @@ func X32Vec3Length(vec *X32Vec3) vpnumber.X32 {
 // X32Vec3Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
 func X32Vec3Normalize(vec *X32Vec3) *X32Vec3 {
-	var ret X32Vec3 = *vec
+	var ret = *vec
 
 	_ = ret.Normalize()
 
