@@ -1,5 +1,34 @@
 2015-03-08  Christian Mauduit <ufoot@ufoot.org>
 
+	* src/ufoot.org/vapor/vpmatrix/vpu32vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec4_test.go: Added basic test
+	suite for unsigned integer vector implementation
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
+	* Makefile.dep, configure.ac,
+	src/ufoot.org/vapor/vpbuild/vpversion.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpu32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpu64vec4.go: Added basic tests for
+	unsigned and signed vector types
+
+2015-03-08  Christian Mauduit <ufoot@ufoot.org>
+
 	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go,
 	src/ufoot.org/vapor/vpmatrix/vpi32vec2.go,
 	src/ufoot.org/vapor/vpmatrix/vpi32vec3.go,
