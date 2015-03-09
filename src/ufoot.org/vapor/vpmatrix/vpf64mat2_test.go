@@ -104,4 +104,3 @@ func BenchmarkF64Mat2Add(b *testing.B) {
 		_ = mat.Add(mat)
 	}
 }
-

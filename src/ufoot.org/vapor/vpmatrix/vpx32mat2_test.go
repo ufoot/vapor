@@ -39,7 +39,7 @@ func TestX32Mat2Math(t *testing.T) {
 
 	var m1, m2, m3, m4 *X32Mat2
 
-	m1 = X32Mat2New(x11, x12,x21,x22)
+	m1 = X32Mat2New(x11, x12, x21, x22)
 	if !X32Mat2IsSimilar(m1, m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -69,21 +69,21 @@ func TestX32Mat2Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = X32Mat2New(x51, x52,x61,x62)
+	m2 = X32Mat2New(x51, x52, x61, x62)
 	m3 = X32Mat2Add(m1, m2)
-	m4 = X32Mat2New(x11+x51, x12+x52,x21+x61,x22+x62)
+	m4 = X32Mat2New(x11+x51, x12+x52, x21+x61, x22+x62)
 	if !X32Mat2IsSimilar(m3, m4) {
 		t.Error("Add error")
 	}
 
 	m3 = X32Mat2Sub(m1, m2)
-	m4 = X32Mat2New(x11-x51, x12-x52,x21-x61,x22-x62)
+	m4 = X32Mat2New(x11-x51, x12-x52, x21-x61, x22-x62)
 	if !X32Mat2IsSimilar(m3, m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = X32Mat2MulScale(m1, xmul)
-	m4 = X32Mat2New(vpnumber.X32Mul(x11, xmul), vpnumber.X32Mul(x12, xmul),vpnumber.X32Mul(x21, xmul), vpnumber.X32Mul(x22, xmul))
+	m4 = X32Mat2New(vpnumber.X32Mul(x11, xmul), vpnumber.X32Mul(x12, xmul), vpnumber.X32Mul(x21, xmul), vpnumber.X32Mul(x22, xmul))
 	if !X32Mat2IsSimilar(m3, m4) {
 		t.Error("MulScale error")
 	}
@@ -108,4 +108,3 @@ func BenchmarkX32Mat2Add(b *testing.B) {
 		_ = mat.Add(mat)
 	}
 }
-

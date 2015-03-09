@@ -49,7 +49,7 @@ func TestF32Mat3Math(t *testing.T) {
 
 	var m1, m2, m3, m4 *F32Mat3
 
-	m1 = F32Mat3New(f11, f12, f13,f21, f22, f23,f31, f32, f33)
+	m1 = F32Mat3New(f11, f12, f13, f21, f22, f23, f31, f32, f33)
 	if !F32Mat3IsSimilar(m1, m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -79,21 +79,21 @@ func TestF32Mat3Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = F32Mat3New(f51, f52,f53,f61, f62,f63,f71,f72,f73)
+	m2 = F32Mat3New(f51, f52, f53, f61, f62, f63, f71, f72, f73)
 	m3 = F32Mat3Add(m1, m2)
-	m4 = F32Mat3New(f11+f51,f12+f52,f13+f53, f21+f61,f22+f62,f23+f63, f31+f71,f32+f72,f33+f73)
+	m4 = F32Mat3New(f11+f51, f12+f52, f13+f53, f21+f61, f22+f62, f23+f63, f31+f71, f32+f72, f33+f73)
 	if !F32Mat3IsSimilar(m3, m4) {
 		t.Error("Add error")
 	}
 
 	m3 = F32Mat3Sub(m1, m2)
-	m4 = F32Mat3New(f11-f51,f12-f52,f13-f53, f21-f61,f22-f62,f23-f63, f31-f71,f32-f72,f33-f73)
+	m4 = F32Mat3New(f11-f51, f12-f52, f13-f53, f21-f61, f22-f62, f23-f63, f31-f71, f32-f72, f33-f73)
 	if !F32Mat3IsSimilar(m3, m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = F32Mat3MulScale(m1, fmul)
-	m4 = F32Mat3New(f11*fmul,f12*fmul,f13*fmul, f21*fmul, f22*fmul,f23*fmul,f31*fmul,f32*fmul,f33*fmul)
+	m4 = F32Mat3New(f11*fmul, f12*fmul, f13*fmul, f21*fmul, f22*fmul, f23*fmul, f31*fmul, f32*fmul, f33*fmul)
 	if !F32Mat3IsSimilar(m3, m4) {
 		t.Error("MulScale error")
 	}
@@ -112,7 +112,7 @@ func TestF32Mat3Math(t *testing.T) {
 }
 
 func BenchmarkF32Mat3Add(b *testing.B) {
-	mat := F32Mat3New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1,vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1,vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
+	mat := F32Mat3New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)

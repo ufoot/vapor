@@ -106,4 +106,3 @@ func BenchmarkX32Mat3Add(b *testing.B) {
 		_ = mat.Add(mat)
 	}
 }
-

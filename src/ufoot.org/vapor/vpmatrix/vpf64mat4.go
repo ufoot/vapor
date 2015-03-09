@@ -30,8 +30,8 @@ type F64Mat4 [16]float64
 // F64Mat4New creates a new matrix containing 4x4 float64 values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func F64Mat4New(f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16 float64) *F64Mat4 {
-	return &F64Mat4{f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16}
+func F64Mat4New(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16 float64) *F64Mat4 {
+	return &F64Mat4{f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16}
 }
 
 // ToI32 converts the matrix to an int32 matrix.

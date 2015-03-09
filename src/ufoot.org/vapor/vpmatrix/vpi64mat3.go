@@ -30,8 +30,8 @@ type I64Mat3 [9]int64
 // I64Mat3New creates a new matrix containing 3x3 int64 values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func I64Mat3New(i1,i2,i3,i4,i5,i6,i7,i8,i9 int64) *I64Mat3 {
-	return &I64Mat3{i1,i2,i3,i4,i5,i6,i7,i8,i9}
+func I64Mat3New(i1, i2, i3, i4, i5, i6, i7, i8, i9 int64) *I64Mat3 {
+	return &I64Mat3{i1, i2, i3, i4, i5, i6, i7, i8, i9}
 }
 
 // ToI32 converts the matrix to an int32 matrix.

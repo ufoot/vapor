@@ -30,8 +30,8 @@ type I32Mat2 [4]int32
 // I32Mat2New creates a new matrix containing 4x4 int32 values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func I32Mat2New(i1,i2,i3,i4 int32) *I32Mat2 {
-	return &I32Mat2{i1,i2,i3,i4}
+func I32Mat2New(i1, i2, i3, i4 int32) *I32Mat2 {
+	return &I32Mat2{i1, i2, i3, i4}
 }
 
 // ToI64 converts the matrix to an int64 matrix.

@@ -30,8 +30,8 @@ type X32Mat3 [9]vpnumber.X32
 // X32Mat3New creates a new matrix containing 3x3 fixed point 32 bit values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func X32Mat3New(x1,x2,x3,x4,x5,x6,x7,x8,x9 vpnumber.X32) *X32Mat3 {
-	return &X32Mat3{x1,x2,x3,x4,x5,x6,x7,x8,x9}
+func X32Mat3New(x1, x2, x3, x4, x5, x6, x7, x8, x9 vpnumber.X32) *X32Mat3 {
+	return &X32Mat3{x1, x2, x3, x4, x5, x6, x7, x8, x9}
 }
 
 // ToI32 converts the matrix to an int32 matrix.

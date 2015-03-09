@@ -30,8 +30,8 @@ type X64Mat2 [4]vpnumber.X64
 // X64Mat2New creates a new matrix containing 2x2 fixed point 64 bit values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func X64Mat2New(x1,x2,x3,x4 vpnumber.X64) *X64Mat2 {
-	return &X64Mat2{x1,x2,x3,x4}
+func X64Mat2New(x1, x2, x3, x4 vpnumber.X64) *X64Mat2 {
+	return &X64Mat2{x1, x2, x3, x4}
 }
 
 // ToI32 converts the matrix to an int32 matrix.

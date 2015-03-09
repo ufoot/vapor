@@ -39,7 +39,7 @@ func TestX64Mat4Math(t *testing.T) {
 
 	var m1, m2, m3, m4 *X64Mat4
 
-	m1 = X64Mat4New(x1,x2,x3,x4)
+	m1 = X64Mat4New(x1, x2, x3, x4)
 	if !X64Mat4IsSimilar(m1, m1) {
 		t.Error("IsSimilar does not detect equality")
 	}

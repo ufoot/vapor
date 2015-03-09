@@ -30,8 +30,8 @@ type X32Mat4 [16]vpnumber.X32
 // X32Mat4New creates a new matrix containing 4x4 fixed point 32 bit values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func X32Mat4New(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16 vpnumber.X32) *X32Mat4 {
-	return &X32Mat4{x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16}
+func X32Mat4New(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16 vpnumber.X32) *X32Mat4 {
+	return &X32Mat4{x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16}
 }
 
 // ToI32 converts the matrix to an int32 matrix.
