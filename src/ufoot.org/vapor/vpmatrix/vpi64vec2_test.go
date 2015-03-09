@@ -33,6 +33,32 @@ func TestI64Vec2Math(t *testing.T) {
 	var v1, v2, v3, v4 *I64Vec2
 
 	v1 = I64Vec2New(i1, i2)
+
+	v2=v1.ToI32().ToI64()
+	if *v1!=*v2 {
+		t.Error("I32 conversion error")
+	}	
+
+	v2=v1.ToX32().ToI64()
+	if *v1!=*v2 {
+		t.Error("X32 conversion error")
+	}	
+
+	v2=v1.ToX64().ToI64()
+	if *v1!=*v2 {
+		t.Error("X64 conversion error")
+	}	
+
+	v2=v1.ToF32().ToI64()
+	if *v1!=*v2 {
+		t.Error("F32 conversion error")
+	}	
+	
+	v2=v1.ToF64().ToI64()
+	if *v1!=*v2 {
+		t.Error("F64 conversion error")
+	}	
+	
 	v2 = I64Vec2New(i5, i6)
 	v3 = I64Vec2Add(v1, v2)
 	v4 = I64Vec2New(i1+i5, i2+i6)

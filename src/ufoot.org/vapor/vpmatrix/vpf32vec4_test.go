@@ -47,6 +47,31 @@ func TestF32Vec4Math(t *testing.T) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
+	v2=v1.ToI32().ToF32()
+	if !v1.IsSimilar(v2) {
+		t.Error("I32 conversion error")
+	}	
+
+	v2=v1.ToI64().ToF32()
+	if !v1.IsSimilar(v2) {
+		t.Error("I64 conversion error")
+	}	
+
+	v2=v1.ToX32().ToF32()
+	if !v1.IsSimilar(v2) {
+		t.Error("X32 conversion error")
+	}	
+
+	v2=v1.ToX64().ToF32()
+	if !v1.IsSimilar(v2) {
+		t.Error("X64 conversion error")
+	}	
+
+	v2=v1.ToF64().ToF32()
+	if !v1.IsSimilar(v2) {
+		t.Error("F64 conversion error")
+	}	
+	
 	v2 = F32Vec4New(f5, f6, f7, f8)
 	v3 = F32Vec4Add(v1, v2)
 	v4 = F32Vec4New(f1+f5, f2+f6, f3+f7, f4+f8)

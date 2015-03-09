@@ -45,6 +45,31 @@ func TestF64Vec3Math(t *testing.T) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
+	v2=v1.ToI32().ToF64()
+	if !v1.IsSimilar(v2) {
+		t.Error("I32 conversion error")
+	}	
+
+	v2=v1.ToI64().ToF64()
+	if !v1.IsSimilar(v2) {
+		t.Error("I64 conversion error")
+	}	
+
+	v2=v1.ToX32().ToF64()
+	if !v1.IsSimilar(v2) {
+		t.Error("X32 conversion error")
+	}	
+
+	v2=v1.ToX64().ToF64()
+	if !v1.IsSimilar(v2) {
+		t.Error("X64 conversion error")
+	}	
+
+	v2=v1.ToF32().ToF64()
+	if !v1.IsSimilar(v2) {
+		t.Error("F32 conversion error")
+	}	
+	
 	v2 = F64Vec3New(f5, f6, f7)
 	v3 = F64Vec3Add(v1, v2)
 	v4 = F64Vec3New(f1+f5, f2+f6, f3+f7)
