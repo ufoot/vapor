@@ -3,6 +3,7 @@ configure
 config.log
 config.status
 Makefile
+Makefile.dep
 bin
 pkg
 doc

@@ -52,7 +52,7 @@ clean:
 	rm -rf bin pkg doc
 
 distclean: clean
-	rm -rf autom4te.cache config.log config.status Makefile src/golang.org src/github.com
+	rm -rf autom4te.cache config.log config.status Makefile Makefile.dep src/golang.org src/github.com
 
 get:
 	./get.sh

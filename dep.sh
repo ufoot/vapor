@@ -32,14 +32,14 @@ for t in "" "check-" "bench-" "lint-" "devel-" "doc-" ; do
     echo >> Makefile.dep
 done
 
-echo "configure.ac: $(ls src/ufoot.org/vapor/vp*/*.go | sort | tr "\n" " ")" >> Makefile.dep
+echo "configure.ac: $(ls src/ufoot.org/vapor/vp*/*.go | sort -u | tr "\n" " ")" >> Makefile.dep
 echo "\tcd \$(VP_TOPSRCDIR) && ./dep.sh && ./stamp.sh" >> Makefile.dep
 echo >> Makefile.dep
 
-for i in $(ls -d src/ufoot.org/vapor/vp* | sort | tr "\n" " ") ; do
+for i in $(ls -d src/ufoot.org/vapor/vp* | sort -u | tr "\n" " ") ; do
     j=$(echo $i | sed "s/.*ufoot.org\/vapor\///")
     k=$(echo $i | sed "s/.*src\/ufoot\.org/ufoot.org/")
-    l=$(ls $i/*.go | sort | tr "\n" " ")
+    l=$(ls $i/*.go | sort -u | tr "\n" " ")
     echo ".PHONY: $j" >> Makefile.dep
     echo "$j: configure.ac $l" >> Makefile.dep
     echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go install $k" >> Makefile.dep
