@@ -27,9 +27,11 @@ import (
 // Can hold the values of a point in a plane.
 type I32Mat4 [16]int32
 
-// I32Mat4New creates a new matrix containing 4 int32 values.
-func I32Mat4New(i1, i2, i3, i4 int32) *I32Mat4 {
-	return &I32Mat4{i1, i2, i3, i4}
+// I32Mat4New creates a new matrix containing 4x4 int32 values.
+// The column-major (OpenGL notation) mode is used,
+// first elements fill first column.
+func I32Mat4New(i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16 int32) *I32Mat4 {
+	return &I32Mat4{i1,i2,i3,i4,i5,i6,i7,i8,i9,i10,i11,i12,i13,i14,i15,i16}
 }
 
 // ToI64 converts the matrix to an int64 matrix.

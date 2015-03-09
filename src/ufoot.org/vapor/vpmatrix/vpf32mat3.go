@@ -27,9 +27,11 @@ import (
 // Can hold the values of a point in space.
 type F32Mat3 [9]float32
 
-// F32Mat3New creates a new matrix containing 3 float32 values.
-func F32Mat3New(f1, f2, f3 float32) *F32Mat3 {
-	return &F32Mat3{f1, f2, f3}
+// F32Mat3New creates a new matrix containing 3x3 float32 values.
+// The column-major (OpenGL notation) mode is used,
+// first elements fill first column.
+func F32Mat3New(f1,f2,f3,f4,f5,f6,f7,f8,f9 float32) *F32Mat3 {
+	return &F32Mat3{f1,f2,f3,f4,f5,f6,f7,f8,f9}
 }
 
 // ToI32 converts the matrix to an int32 matrix.

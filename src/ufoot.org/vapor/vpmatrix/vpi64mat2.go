@@ -27,9 +27,11 @@ import (
 // Can hold the values of a point in a plane.
 type I64Mat2 [4]int64
 
-// I64Mat2New creates a new matrix containing 2 int64 values.
-func I64Mat2New(i1, i2 int64) *I64Mat2 {
-	return &I64Mat2{i1, i2}
+// I64Mat2New creates a new matrix containing 2x2 int64 values.
+// The column-major (OpenGL notation) mode is used,
+// first elements fill first column.
+func I64Mat2New(i1,i2,i3,i4 int64) *I64Mat2 {
+	return &I64Mat2{i1,i2,i3,i4}
 }
 
 // ToI32 converts the matrix to an int32 matrix.

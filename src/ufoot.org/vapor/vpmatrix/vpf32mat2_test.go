@@ -24,17 +24,21 @@ import (
 )
 
 func TestF32Mat2Math(t *testing.T) {
-	const f1 = 3.0
-	const f2 = -4.0
+	const f11 = 3.0
+	const f12 = 3.2
+	const f21 = -4.3
+	const f22 = -4.0
 
-	const f5 = -4.5
-	const f6 = 6.0
+	const f51 = -4.5
+	const f52 = -4.1
+	const f61 = 6.0
+	const f62 = 6.6
 
 	const fmul = 10.0
 
 	var m1, m2, m3, m4 *F32Mat2
 
-	m1 = F32Mat2New(f1, f2)
+	m1 = F32Mat2New(f11, f12,f21,f22)
 	if !F32Mat2IsSimilar(m1, m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -64,21 +68,21 @@ func TestF32Mat2Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = F32Mat2New(f5, f6)
+	m2 = F32Mat2New(f51, f52,f61,f62)
 	m3 = F32Mat2Add(m1, m2)
-	m4 = F32Mat2New(f1+f5, f2+f6)
+	m4 = F32Mat2New(f11+f51, f12+f52,f21+f61,f22+62)
 	if !F32Mat2IsSimilar(m3, m4) {
 		t.Error("Add error")
 	}
 
 	m3 = F32Mat2Sub(m1, m2)
-	m4 = F32Mat2New(f1-f5, f2-f6)
+	m4 = F32Mat2New(f11-f51, f12-f52,f21-f61,f22-f62)
 	if !F32Mat2IsSimilar(m3, m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = F32Mat2MulScale(m1, fmul)
-	m4 = F32Mat2New(f1*fmul, f2*fmul)
+	m4 = F32Mat2New(f11*fmul, f12*fmul,f21*fmul,f22*fmul)
 	if !F32Mat2IsSimilar(m3, m4) {
 		t.Error("MulScale error")
 	}
