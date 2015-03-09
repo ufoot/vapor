@@ -18,3 +18,168 @@
 // Contact author: ufoot@ufoot.org
 
 package vpmatrix
+
+import (
+	"ufoot.org/vapor/vpnumber"
+)
+
+// F32Mat4 is a matrix containing 4x4 float32 values.
+// Can be used in 3D matrix transformations.
+type F32Mat4 [16]float32
+
+// F32Mat4New creates a new matrix containing 4 float32 values.
+func F32Mat4New(f1, f2, f3, f4 float32) *F32Mat4 {
+	return &F32Mat4{f1, f2, f3, f4}
+}
+
+// ToI32 converts the matrix to an int32 matrix.
+func (mat *F32Mat4) ToI32() *I32Mat4 {
+	var ret I32Mat4
+
+	for i, v := range mat {
+		ret[i] = int32(v)
+	}
+
+	return &ret
+}
+
+// ToI64 converts the matrix to an int64 matrix.
+func (mat *F32Mat4) ToI64() *I64Mat4 {
+	var ret I64Mat4
+
+	for i, v := range mat {
+		ret[i] = int64(v)
+	}
+
+	return &ret
+}
+
+// ToX32 converts the matrix to a fixed point number matrix on 32 bits.
+func (mat *F32Mat4) ToX32() *X32Mat4 {
+	var ret X32Mat4
+
+	for i, v := range mat {
+		ret[i] = vpnumber.F32ToX32(v)
+	}
+
+	return &ret
+}
+
+// ToX64 converts the matrix to a fixed point number matrix on 64 bits.
+func (mat *F32Mat4) ToX64() *X64Mat4 {
+	var ret X64Mat4
+
+	for i, v := range mat {
+		ret[i] = vpnumber.F32ToX64(v)
+	}
+
+	return &ret
+}
+
+// ToF64 converts the matrix to a float64 matrix.
+func (mat *F32Mat4) ToF64() *F64Mat4 {
+	var ret F64Mat4
+
+	for i, v := range mat {
+		ret[i] = float64(v)
+	}
+
+	return &ret
+}
+
+// Add adds operand to the matrix.
+// It modifies it, and returns a pointer on it.
+func (mat *F32Mat4) Add(op *F32Mat4) *F32Mat4 {
+	for i, v := range op {
+		mat[i] += v
+	}
+
+	return mat
+}
+
+// Sub substracts operand from the matrix.
+// It modifies it, and returns a pointer on it.
+func (mat *F32Mat4) Sub(op *F32Mat4) *F32Mat4 {
+	for i, v := range op {
+		mat[i] -= v
+	}
+
+	return mat
+}
+
+// MulScale multiplies all values of the matrix by factor.
+// It modifies it, and returns a pointer on it.
+func (mat *F32Mat4) MulScale(factor float32) *F32Mat4 {
+	for i, v := range mat {
+		mat[i] = v * factor
+	}
+
+	return mat
+}
+
+// DivScale divides all values of the matrix by factor.
+// It modifies it, and returns a pointer on it.
+func (mat *F32Mat4) DivScale(factor float32) *F32Mat4 {
+	for i, v := range mat {
+		mat[i] = vpnumber.F32Div(v, factor)
+	}
+
+	return mat
+}
+
+// IsSimilar returns true if matrixs are approximatively the same.
+// This is a workarround to ignore rounding errors.
+func (mat *F32Mat4) IsSimilar(op *F32Mat4) bool {
+	ret := true
+	for i, v := range mat {
+		ret = ret && vpnumber.F32IsSimilar(v, op[i])
+	}
+
+	return ret
+}
+
+// F32Mat4Add adds two matrixs.
+// Args are left untouched, a pointer on a new object is returned.
+func F32Mat4Add(mata, matb *F32Mat4) *F32Mat4 {
+	var ret = *mata
+
+	_ = ret.Add(matb)
+
+	return &ret
+}
+
+// F32Mat4Sub substracts matrix b from matrix a.
+// Args are left untouched, a pointer on a new object is returned.
+func F32Mat4Sub(mata, matb *F32Mat4) *F32Mat4 {
+	var ret = *mata
+
+	_ = ret.Sub(matb)
+
+	return &ret
+}
+
+// F32Mat4MulScale multiplies all values of a matrix by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
+func F32Mat4MulScale(mat *F32Mat4, factor float32) *F32Mat4 {
+	var ret = *mat
+
+	_ = ret.MulScale(factor)
+
+	return &ret
+}
+
+// F32Mat4DivScale divides all values of a matrix by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
+func F32Mat4DivScale(mat *F32Mat4, factor float32) *F32Mat4 {
+	var ret = *mat
+
+	_ = ret.DivScale(factor)
+
+	return &ret
+}
+
+// F32Mat4IsSimilar returns true if matrixs are approximatively the same.
+// This is a workarround to ignore rounding errors.
+func F32Mat4IsSimilar(mata, matb *F32Mat4) bool {
+	return mata.IsSimilar(matb)
+}

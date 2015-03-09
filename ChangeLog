@@ -17,6 +17,28 @@
 	src/ufoot.org/vapor/vpmatrix/vpx32vec4_test.go,
 	src/ufoot.org/vapor/vpmatrix/vpx64vec2_test.go,
 	src/ufoot.org/vapor/vpmatrix/vpx64vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec4_test.go: Added div by 0 test
+	to all vector functions
+
+2015-03-09  Christian Mauduit <ufoot@ufoot.org>
+
+	* src/ufoot.org/vapor/vpmatrix/vpf32vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec3_test.go,
 	src/ufoot.org/vapor/vpmatrix/vpx64vec4_test.go: Added type
 	conversion tests for vectors
 
