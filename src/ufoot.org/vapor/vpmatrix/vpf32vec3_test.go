@@ -45,31 +45,31 @@ func TestF32Vec3Math(t *testing.T) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
-	v2=v1.ToI32().ToF32()
+	v2 = v1.ToI32().ToF32()
 	if !v1.IsSimilar(v2) {
 		t.Error("I32 conversion error")
-	}	
+	}
 
-	v2=v1.ToI64().ToF32()
+	v2 = v1.ToI64().ToF32()
 	if !v1.IsSimilar(v2) {
 		t.Error("I64 conversion error")
-	}	
+	}
 
-	v2=v1.ToX32().ToF32()
+	v2 = v1.ToX32().ToF32()
 	if !v1.IsSimilar(v2) {
 		t.Error("X32 conversion error")
-	}	
+	}
 
-	v2=v1.ToX64().ToF32()
+	v2 = v1.ToX64().ToF32()
 	if !v1.IsSimilar(v2) {
 		t.Error("X64 conversion error")
-	}	
+	}
 
-	v2=v1.ToF64().ToF32()
+	v2 = v1.ToF64().ToF32()
 	if !v1.IsSimilar(v2) {
 		t.Error("F64 conversion error")
-	}	
-	
+	}
+
 	v2 = F32Vec3New(f5, f6, f7)
 	v3 = F32Vec3Add(v1, v2)
 	v4 = F32Vec3New(f1+f5, f2+f6, f3+f7)
@@ -93,6 +93,13 @@ func TestF32Vec3Math(t *testing.T) {
 	if !F32Vec3IsSimilar(v3, v1) {
 		t.Error("DivScale error")
 	}
+
+	// Yes, div by 0 is valid, it should raise no error.
+	// The results are inconsistent, but no big deal.
+	// While it should theorically raise an error, the consequence
+	// it 3d math is usually : glitch in display. This is less
+	// disastrous than a floating point exception.
+	v3.DivScale(0)
 
 	f = F32Vec3SumSq(v1)
 	if !vpnumber.F32IsSimilar(f, fsumsq) {

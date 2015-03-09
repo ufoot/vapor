@@ -43,31 +43,31 @@ func TestX64Vec2Math(t *testing.T) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
-	v2=v1.ToI32().ToX64()
+	v2 = v1.ToI32().ToX64()
 	if !v1.IsSimilar(v2) {
 		t.Error("I32 conversion error")
-	}	
+	}
 
-	v2=v1.ToI64().ToX64()
+	v2 = v1.ToI64().ToX64()
 	if !v1.IsSimilar(v2) {
 		t.Error("I64 conversion error")
-	}	
+	}
 
-	v2=v1.ToX32().ToX64()
+	v2 = v1.ToX32().ToX64()
 	if !v1.IsSimilar(v2) {
 		t.Error("X32 conversion error")
-	}	
+	}
 
-	v2=v1.ToF32().ToX64()
+	v2 = v1.ToF32().ToX64()
 	if !v1.IsSimilar(v2) {
 		t.Error("F32 conversion error")
-	}	
-	
-	v2=v1.ToF64().ToX64()
+	}
+
+	v2 = v1.ToF64().ToX64()
 	if !v1.IsSimilar(v2) {
 		t.Error("F64 conversion error")
-	}	
-	
+	}
+
 	v2 = X64Vec2New(x5, x6)
 	v3 = X64Vec2Add(v1, v2)
 	v4 = X64Vec2New(x1+x5, x2+x6)
@@ -91,6 +91,13 @@ func TestX64Vec2Math(t *testing.T) {
 	if !X64Vec2IsSimilar(v3, v1) {
 		t.Error("DivScale error")
 	}
+
+	// Yes, div by 0 is valid, it should raise no error.
+	// The results are inconsistent, but no big deal.
+	// While it should theorically raise an error, the consequence
+	// it 3d math is usually : glitch in display. This is less
+	// disastrous than a floating point exception.
+	v3.DivScale(0)
 
 	x = X64Vec2SumSq(v1)
 	if !vpnumber.X64IsSimilar(x, xsumsq) {
