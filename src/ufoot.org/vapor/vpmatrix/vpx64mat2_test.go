@@ -25,17 +25,21 @@ import (
 )
 
 func TestX64Mat2Math(t *testing.T) {
-	var x1 = vpnumber.F64ToX64(3.0)
-	var x2 = vpnumber.F64ToX64(-4.0)
+	var x11 = vpnumber.F64ToX64(3.0)
+	var x12 = vpnumber.F64ToX64(-43.0)
+	var x21 = vpnumber.F64ToX64(31.0)
+	var x22 = vpnumber.F64ToX64(-12.0)
 
-	var x5 = vpnumber.F64ToX64(-4.5)
-	var x6 = vpnumber.F64ToX64(6.0)
+	var x51 = vpnumber.F64ToX64(-4.5)
+	var x52 = vpnumber.F64ToX64(60.0)
+	var x61 = vpnumber.F64ToX64(1.1)
+	var x62 = vpnumber.F64ToX64(-4.0)
 
 	var xmul = vpnumber.F64ToX64(10.0)
 
 	var m1, m2, m3, m4 *X64Mat2
 
-	m1 = X64Mat2New(x1, x2)
+	m1 = X64Mat2New(x11, x12, x21, x22)
 	if !X64Mat2IsSimilar(m1, m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -65,21 +69,21 @@ func TestX64Mat2Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = X64Mat2New(x5, x6)
+	m2 = X64Mat2New(x51, x52, x61, x62)
 	m3 = X64Mat2Add(m1, m2)
-	m4 = X64Mat2New(x1+x5, x2+x6)
+	m4 = X64Mat2New(x11+x51, x12+x52, x21+x61, x22+x62)
 	if !X64Mat2IsSimilar(m3, m4) {
 		t.Error("Add error")
 	}
 
 	m3 = X64Mat2Sub(m1, m2)
-	m4 = X64Mat2New(x1-x5, x2-x6)
+	m4 = X64Mat2New(x11-x51, x12-x52, x21-x61, x22-x62)
 	if !X64Mat2IsSimilar(m3, m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = X64Mat2MulScale(m1, xmul)
-	m4 = X64Mat2New(vpnumber.X64Mul(x1, xmul), vpnumber.X64Mul(x2, xmul))
+	m4 = X64Mat2New(vpnumber.X64Mul(x11, xmul), vpnumber.X64Mul(x12, xmul), vpnumber.X64Mul(x21, xmul), vpnumber.X64Mul(x22, xmul))
 	if !X64Mat2IsSimilar(m3, m4) {
 		t.Error("MulScale error")
 	}
@@ -98,7 +102,7 @@ func TestX64Mat2Math(t *testing.T) {
 }
 
 func BenchmarkX64Mat2Add(b *testing.B) {
-	mat := X64Mat2New(vpnumber.X64Const1, vpnumber.X64Const1)
+	mat := X64Mat2New(vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)

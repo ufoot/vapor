@@ -26,13 +26,13 @@ import (
 
 func TestX32Mat2Math(t *testing.T) {
 	var x11 = vpnumber.F32ToX32(3.0)
-	var x12 = vpnumber.F32ToX32(-43.0)
-	var x21 = vpnumber.F32ToX32(31.0)
+	var x12 = vpnumber.F32ToX32(-11.0)
+	var x21 = vpnumber.F32ToX32(9.0)
 	var x22 = vpnumber.F32ToX32(-12.0)
 
 	var x51 = vpnumber.F32ToX32(-4.5)
-	var x52 = vpnumber.F32ToX32(60.0)
-	var x62 = vpnumber.F32ToX32(1.1)
+	var x52 = vpnumber.F32ToX32(6.0)
+	var x61 = vpnumber.F32ToX32(1.1)
 	var x62 = vpnumber.F32ToX32(-4.0)
 
 	var xmul = vpnumber.F32ToX32(10.0)
@@ -102,7 +102,7 @@ func TestX32Mat2Math(t *testing.T) {
 }
 
 func BenchmarkX32Mat2Add(b *testing.B) {
-	mat := X32Mat2New(vpnumber.X32Const1, vpnumber.X32Const1)
+	mat := X32Mat2New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)

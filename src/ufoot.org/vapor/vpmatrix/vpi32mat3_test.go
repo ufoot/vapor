@@ -24,17 +24,29 @@ import (
 )
 
 func TestI32Mat3Math(t *testing.T) {
-	const i1 = 0
-	const i2 = -4
-	const i3 = 42
+	const i11 = 3
+	const i12 = 333
+	const i13 = 31
+	const i21 = -4
+	const i22 = -24
+	const i23 = -4
+	const i31 = 1
+	const i32 = 11
+	const i33 = 7
 
-	const i5 = -10
-	const i6 = 1000
-	const i7 = 222
+	const i51 = 9
+	const i52 = 12
+	const i53 = -4
+	const i61 = -123
+	const i62 = 12
+	const i63 = 3
+	const i71 = 2
+	const i72 = 2
+	const i73 = 1
 
 	var m1, m2, m3, m4 *I32Mat3
 
-	m1 = I32Mat3New(i1, i2, i3)
+	m1 = I32Mat3New(i11, i12, i13, i21, i22, i23, i31, i32, i33)
 
 	m2 = m1.ToI64().ToI32()
 	if *m1 != *m2 {
@@ -61,15 +73,15 @@ func TestI32Mat3Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = I32Mat3New(i5, i6, i7)
+	m2 = I32Mat3New(i51, i52, i53, i61, i62, i63, i71, i72, i73)
 	m3 = I32Mat3Add(m1, m2)
-	m4 = I32Mat3New(i1+i5, i2+i6, i3+i7)
+	m4 = I32Mat3New(i11+i51, i12+i52, i13+i53, i21+i61, i22+i62, i23+i63, i31+i71, i32+i72, i33+i73)
 	if *m3 != *m4 {
 		t.Error("Add error")
 	}
 
 	m3 = I32Mat3Sub(m1, m2)
-	m4 = I32Mat3New(i1-i5, i2-i6, i3-i7)
+	m4 = I32Mat3New(i11-i51, i12-i52, i13-i53, i21-i61, i22-i62, i23-i63, i31-i71, i32-i72, i33-i73)
 	if *m3 != *m4 {
 		t.Error("Sub error")
 	}

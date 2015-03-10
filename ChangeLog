@@ -1,5 +1,15 @@
 2015-03-10  Christian Mauduit <ufoot@ufoot.org>
 
+	* src/ufoot.org/vapor/vpmatrix/vpf32mat2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32mat4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat4_test.go: Fixed matrix basic
+	test suite
+
+2015-03-10  Christian Mauduit <ufoot@ufoot.org>
+
 	* src/ufoot.org/vapor/vpmatrix/vpf32mat2.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32mat2_test.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32mat3.go,

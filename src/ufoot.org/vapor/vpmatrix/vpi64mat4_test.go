@@ -24,19 +24,43 @@ import (
 )
 
 func TestI64Mat4Math(t *testing.T) {
-	const i1 = 0
-	const i2 = -4
-	const i3 = 42
-	const i4 = 10000
+	const i11 = 130
+	const i12 = 230
+	const i13 = 330
+	const i14 = 430
+	const i21 = -140
+	const i22 = -240
+	const i23 = -340
+	const i24 = -440
+	const i31 = 110
+	const i32 = 210
+	const i33 = 310
+	const i34 = 410
+	const i41 = 1100
+	const i42 = 2100
+	const i43 = 3100
+	const i44 = 4100
 
-	const i5 = -10
-	const i6 = 1000
-	const i7 = 222
-	const i8 = -1
+	const i51 = -6415
+	const i52 = -7425
+	const i53 = -8435
+	const i54 = -9445
+	const i61 = 664
+	const i62 = 763
+	const i63 = 862
+	const i64 = 961
+	const i71 = 624
+	const i72 = 723
+	const i73 = 822
+	const i74 = 921
+	const i81 = -63001
+	const i82 = -73002
+	const i83 = -83003
+	const i84 = -93004
 
 	var m1, m2, m3, m4 *I64Mat4
 
-	m1 = I64Mat4New(i1, i2, i3, i4)
+	m1 = I64Mat4New(i11, i12, i13, i14, i21, i22, i23, i24, i31, i32, i33, i34, i41, i42, i43, i44)
 
 	m2 = m1.ToI32().ToI64()
 	if *m1 != *m2 {
@@ -63,15 +87,15 @@ func TestI64Mat4Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = I64Mat4New(i5, i6, i7, i8)
+	m2 = I64Mat4New(i51, i52, i53, i54, i61, i62, i63, i64, i71, i72, i73, i74, i81, i82, i83, i84)
 	m3 = I64Mat4Add(m1, m2)
-	m4 = I64Mat4New(i1+i5, i2+i6, i3+i7, i4+i8)
+	m4 = I64Mat4New(i11+i51, i12+i52, i13+i53, i14+i54, i21+i61, i22+i62, i23+i63, i24+i64, i31+i71, i32+i72, i33+i73, i34+i74, i41+i81, i42+i82, i43+i83, i44+i84)
 	if *m3 != *m4 {
 		t.Error("Add error")
 	}
 
 	m3 = I64Mat4Sub(m1, m2)
-	m4 = I64Mat4New(i1-i5, i2-i6, i3-i7, i4-i8)
+	m4 = I64Mat4New(i11-i51, i12-i52, i13-i53, i14-i54, i21-i61, i22-i62, i23-i63, i24-i64, i31-i71, i32-i72, i33-i73, i34-i74, i41-i81, i42-i82, i43-i83, i44-i84)
 	if *m3 != *m4 {
 		t.Error("Sub error")
 	}

@@ -95,13 +95,13 @@ func TestF32Mat4Math(t *testing.T) {
 
 	m2 = F32Mat4New(f51, f52, f53, f54, f61, f62, f63, f64, f71, f72, f73, f74, f81, f82, f83, f84)
 	m3 = F32Mat4Add(m1, m2)
-	m4 = F32Mat4New(f11+f51, f12+f52, f13+f53, f14+f54, f21+f61, f22+f62, f23+f63, f24+f64, f21+f61, f32+f72, f33+f73, f34+f74, f31+f71, f42+f82, f43+f83, f44+f84)
+	m4 = F32Mat4New(f11+f51, f12+f52, f13+f53, f14+f54, f21+f61, f22+f62, f23+f63, f24+f64, f31+f71, f32+f72, f33+f73, f34+f74, f41+f81, f42+f82, f43+f83, f44+f84)
 	if !F32Mat4IsSimilar(m3, m4) {
 		t.Error("Add error")
 	}
 
 	m3 = F32Mat4Sub(m1, m2)
-	m4 = F32Mat4New(f11-f51, f12-f52, f13-f53, f14-f54, f21-f61, f22-f62, f23-f63, f24-f64, f21-f61, f32-f72, f33-f73, f34-f74, f31-f71, f42-f82, f43-f83, f44-f84)
+	m4 = F32Mat4New(f11-f51, f12-f52, f13-f53, f14-f54, f21-f61, f22-f62, f23-f63, f24-f64, f31-f71, f32-f72, f33-f73, f34-f74, f41-f81, f42-f82, f43-f83, f44-f84)
 	if !F32Mat4IsSimilar(m3, m4) {
 		t.Error("Sub error")
 	}

@@ -26,8 +26,8 @@ import (
 
 func TestF32Mat2Math(t *testing.T) {
 	const f11 = 3.0
-	const f12 = 3.2
-	const f21 = -4.3
+	const f12 = 3.0
+	const f21 = -8.0
 	const f22 = -4.0
 
 	const f51 = -4.5
@@ -71,7 +71,7 @@ func TestF32Mat2Math(t *testing.T) {
 
 	m2 = F32Mat2New(f51, f52, f61, f62)
 	m3 = F32Mat2Add(m1, m2)
-	m4 = F32Mat2New(f11+f51, f12+f52, f21+f61, f22+62)
+	m4 = F32Mat2New(f11+f51, f12+f52, f21+f61, f22+f62)
 	if !F32Mat2IsSimilar(m3, m4) {
 		t.Error("Add error")
 	}
