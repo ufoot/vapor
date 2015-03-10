@@ -21,6 +21,7 @@ package vpmatrix
 
 import (
 	"testing"
+	"ufoot.org/vapor/vpnumber"
 )
 
 func TestF32Mat2Math(t *testing.T) {
@@ -98,4 +99,12 @@ func TestF32Mat2Math(t *testing.T) {
 	// it 3d math is usually : glitch in display. This is less
 	// disastrous than a floating point exception.
 	m3.DivScale(0)
+}
+
+func BenchmarkF32Mat2Add(b *testing.B) {
+	mat := F32Mat2New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
+
+	for i := 0; i < b.N; i++ {
+		_ = mat.Add(mat)
+	}
 }
