@@ -17,6 +17,28 @@
 	src/ufoot.org/vapor/vpmatrix/vpx32mat4.go,
 	src/ufoot.org/vapor/vpmatrix/vpx64mat2.go,
 	src/ufoot.org/vapor/vpmatrix/vpx64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat4.go: Implemented matrices
+	composition
+
+2015-03-11  Christian Mauduit <ufoot@ufoot.org>
+
+	* src/ufoot.org/vapor/vpmatrix/vpf32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat3.go,
 	src/ufoot.org/vapor/vpmatrix/vpx64mat4.go: Added getters and setters
 	for matrices
 
