@@ -90,8 +90,8 @@ func (mat *X64Mat2) ToF64() *F64Mat2 {
 }
 
 // Set sets the value of the matrix for a given column and row.
-func (mat *X64Mat2) Set(col, row int, val vpnumber.X64){
-	mat[col*2+row]=val
+func (mat *X64Mat2) Set(col, row int, val vpnumber.X64) {
+	mat[col*2+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
@@ -135,6 +135,14 @@ func (mat *X64Mat2) DivScale(factor vpnumber.X64) *X64Mat2 {
 	for i, v := range mat {
 		mat[i] = vpnumber.X64Div(v, factor)
 	}
+
+	return mat
+}
+
+// MulComp multiplies the matrix by another matrix (composition).
+// It modifies the matrix, and returns a pointer on it.
+func (mat *X64Mat2) MulComp(op *X64Mat2) *X64Mat2 {
+	*mat = *X64Mat2MulComp(mat, op)
 
 	return mat
 }
@@ -194,4 +202,18 @@ func X64Mat2DivScale(mat *X64Mat2, factor vpnumber.X64) *X64Mat2 {
 // This is a workarround to ignore rounding errors.
 func X64Mat2IsSimilar(mata, matb *X64Mat2) bool {
 	return mata.IsSimilar(matb)
+}
+
+// MulComp multiplies two matrices (composition).
+// It modifies the matrix, and returns a pointer on it.
+func X64Mat2MulComp(a, b *X64Mat2) *X64Mat2 {
+	var ret X64Mat2
+
+	for c := 0; c < 2; c++ {
+		for r := 0; r < 2; r++ {
+			ret.Set(c, r, vpnumber.X64Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X64Mul(a.Get(1, r), b.Get(c, 1)))
+		}
+	}
+
+	return &ret
 }

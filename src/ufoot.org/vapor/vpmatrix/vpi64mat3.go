@@ -90,8 +90,8 @@ func (mat *I64Mat3) ToF64() *F64Mat3 {
 }
 
 // Set sets the value of the matrix for a given column and row.
-func (mat *I64Mat3) Set(col, row int, val int64){
-	mat[col*3+row]=val
+func (mat *I64Mat3) Set(col, row int, val int64) {
+	mat[col*3+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.

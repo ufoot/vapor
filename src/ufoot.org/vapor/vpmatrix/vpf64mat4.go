@@ -90,8 +90,8 @@ func (mat *F64Mat4) ToF32() *F32Mat4 {
 }
 
 // Set sets the value of the matrix for a given column and row.
-func (mat *F64Mat4) Set(col, row int, val float64){
-	mat[col*4+row]=val
+func (mat *F64Mat4) Set(col, row int, val float64) {
+	mat[col*4+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
@@ -135,6 +135,14 @@ func (mat *F64Mat4) DivScale(factor float64) *F64Mat4 {
 	for i, v := range mat {
 		mat[i] = vpnumber.F64Div(v, factor)
 	}
+
+	return mat
+}
+
+// MulComp multiplies the matrix by another matrix (composition).
+// It modifies the matrix, and returns a pointer on it.
+func (mat *F64Mat4) MulComp(op *F64Mat4) *F64Mat4 {
+	*mat = *F64Mat4MulComp(mat, op)
 
 	return mat
 }
@@ -194,4 +202,18 @@ func F64Mat4DivScale(mat *F64Mat4, factor float64) *F64Mat4 {
 // This is a workarround to ignore rounding errors.
 func F64Mat4IsSimilar(mata, matb *F64Mat4) bool {
 	return mata.IsSimilar(matb)
+}
+
+// MulComp multiplies two matrices (composition).
+// It modifies the matrix, and returns a pointer on it.
+func F64Mat4MulComp(a, b *F64Mat4) *F64Mat4 {
+	var ret F64Mat4
+
+	for c := 0; c < 4; c++ {
+		for r := 0; r < 4; r++ {
+			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1)+a.Get(2, r)*b.Get(c, 2)+a.Get(3, r)*b.Get(c, 3))
+		}
+	}
+
+	return &ret
 }
