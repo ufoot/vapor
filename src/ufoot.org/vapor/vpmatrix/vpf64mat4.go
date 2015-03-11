@@ -89,6 +89,16 @@ func (mat *F64Mat4) ToF32() *F32Mat4 {
 	return &ret
 }
 
+// Set sets the value of the matrix for a given column and row.
+func (mat *F64Mat4) Set(col, row int, val float64){
+	mat[col*4+row]=val
+}
+
+// Get gets the value of the matrix for a given column and row.
+func (mat *F64Mat4) Get(col, row int) float64 {
+	return mat[col*4+row]
+}
+
 // Add adds operand to the matrix.
 // It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat4) Add(op *F64Mat4) *F64Mat4 {

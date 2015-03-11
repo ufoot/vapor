@@ -1,3 +1,62 @@
+2015-03-11  Christian Mauduit <ufoot@ufoot.org>
+
+	* src/ufoot.org/vapor/vpmatrix/vpf32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32vec4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64vec4.go: Amended comments
+
+2015-03-10  Christian Mauduit <ufoot@ufoot.org>
+
+	* src/ufoot.org/vapor/vpmatrix/vpf32mat2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32mat4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32mat2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32mat3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi32mat4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64mat2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64mat3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpi64mat4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat4_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat2_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat3_test.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat4_test.go: Updated matrix test
+	suites
+
 2015-03-10  Christian Mauduit <ufoot@ufoot.org>
 
 	* src/ufoot.org/vapor/vpmatrix/vpf32mat2_test.go,

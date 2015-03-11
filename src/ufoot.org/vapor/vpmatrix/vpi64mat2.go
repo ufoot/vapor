@@ -89,6 +89,16 @@ func (mat *I64Mat2) ToF64() *F64Mat2 {
 	return &ret
 }
 
+// Set sets the value of the matrix for a given column and row.
+func (mat *I64Mat2) Set(col, row int, val int64){
+	mat[col*2+row]=val
+}
+
+// Get gets the value of the matrix for a given column and row.
+func (mat *I64Mat2) Get(col, row int) int64 {
+	return mat[col*2+row]
+}
+
 // Add adds operand to the matrix.
 // It modifies the matrix, and returns a pointer on it.
 func (mat *I64Mat2) Add(op *I64Mat2) *I64Mat2 {
