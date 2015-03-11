@@ -1,5 +1,10 @@
 2015-03-11  Christian Mauduit <ufoot@ufoot.org>
 
+	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go: Fixed
+	version for master branch
+
+2015-03-11  Christian Mauduit <ufoot@ufoot.org>
+
 	* src/ufoot.org/vapor/vpmatrix/vpf32mat2.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32mat3.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32mat4.go,
