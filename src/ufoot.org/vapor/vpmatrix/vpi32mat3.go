@@ -90,7 +90,7 @@ func (mat *I32Mat3) ToF64() *F64Mat3 {
 }
 
 // Add adds operand to the matrix.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *I32Mat3) Add(op *I32Mat3) *I32Mat3 {
 	for i, v := range op {
 		mat[i] += v
@@ -100,7 +100,7 @@ func (mat *I32Mat3) Add(op *I32Mat3) *I32Mat3 {
 }
 
 // Sub substracts operand from the matrix.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *I32Mat3) Sub(op *I32Mat3) *I32Mat3 {
 	for i, v := range op {
 		mat[i] -= v
@@ -109,7 +109,7 @@ func (mat *I32Mat3) Sub(op *I32Mat3) *I32Mat3 {
 	return mat
 }
 
-// I32Mat3Add adds two matrixs.
+// I32Mat3Add adds two matrices.
 // Args are left untouched, a pointer on a new object is returned.
 func I32Mat3Add(mata, matb *I32Mat3) *I32Mat3 {
 	var ret = *mata

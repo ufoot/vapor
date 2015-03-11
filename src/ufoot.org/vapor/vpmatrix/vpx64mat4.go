@@ -90,7 +90,7 @@ func (mat *X64Mat4) ToF64() *F64Mat4 {
 }
 
 // Add adds operand to the matrix.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *X64Mat4) Add(op *X64Mat4) *X64Mat4 {
 	for i, v := range op {
 		mat[i] += v
@@ -100,7 +100,7 @@ func (mat *X64Mat4) Add(op *X64Mat4) *X64Mat4 {
 }
 
 // Sub substracts operand from the matrix.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *X64Mat4) Sub(op *X64Mat4) *X64Mat4 {
 	for i, v := range op {
 		mat[i] -= v
@@ -110,7 +110,7 @@ func (mat *X64Mat4) Sub(op *X64Mat4) *X64Mat4 {
 }
 
 // MulScale multiplies all values of the matrix by factor.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *X64Mat4) MulScale(factor vpnumber.X64) *X64Mat4 {
 	for i, v := range mat {
 		mat[i] = vpnumber.X64Mul(v, factor)
@@ -120,7 +120,7 @@ func (mat *X64Mat4) MulScale(factor vpnumber.X64) *X64Mat4 {
 }
 
 // DivScale divides all values of the matrix by factor.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *X64Mat4) DivScale(factor vpnumber.X64) *X64Mat4 {
 	for i, v := range mat {
 		mat[i] = vpnumber.X64Div(v, factor)
@@ -129,7 +129,7 @@ func (mat *X64Mat4) DivScale(factor vpnumber.X64) *X64Mat4 {
 	return mat
 }
 
-// IsSimilar returns true if matrixs are approximatively the same.
+// IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (mat *X64Mat4) IsSimilar(op *X64Mat4) bool {
 	ret := true
@@ -140,7 +140,7 @@ func (mat *X64Mat4) IsSimilar(op *X64Mat4) bool {
 	return ret
 }
 
-// X64Mat4Add adds two matrixs.
+// X64Mat4Add adds two matrices.
 // Args are left untouched, a pointer on a new object is returned.
 func X64Mat4Add(mata, matb *X64Mat4) *X64Mat4 {
 	var ret = *mata
@@ -180,7 +180,7 @@ func X64Mat4DivScale(mat *X64Mat4, factor vpnumber.X64) *X64Mat4 {
 	return &ret
 }
 
-// X64Mat4IsSimilar returns true if matrixs are approximatively the same.
+// X64Mat4IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func X64Mat4IsSimilar(mata, matb *X64Mat4) bool {
 	return mata.IsSimilar(matb)

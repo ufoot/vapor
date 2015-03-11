@@ -90,7 +90,7 @@ func (mat *X32Mat2) ToF64() *F64Mat2 {
 }
 
 // Add adds operand to the matrix.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *X32Mat2) Add(op *X32Mat2) *X32Mat2 {
 	for i, v := range op {
 		mat[i] += v
@@ -100,7 +100,7 @@ func (mat *X32Mat2) Add(op *X32Mat2) *X32Mat2 {
 }
 
 // Sub substracts operand from the matrix.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *X32Mat2) Sub(op *X32Mat2) *X32Mat2 {
 	for i, v := range op {
 		mat[i] -= v
@@ -110,7 +110,7 @@ func (mat *X32Mat2) Sub(op *X32Mat2) *X32Mat2 {
 }
 
 // MulScale multiplies all values of the matrix by factor.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *X32Mat2) MulScale(factor vpnumber.X32) *X32Mat2 {
 	for i, v := range mat {
 		mat[i] = vpnumber.X32Mul(v, factor)
@@ -120,7 +120,7 @@ func (mat *X32Mat2) MulScale(factor vpnumber.X32) *X32Mat2 {
 }
 
 // DivScale divides all values of the matrix by factor.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *X32Mat2) DivScale(factor vpnumber.X32) *X32Mat2 {
 	for i, v := range mat {
 		mat[i] = vpnumber.X32Div(v, factor)
@@ -129,7 +129,7 @@ func (mat *X32Mat2) DivScale(factor vpnumber.X32) *X32Mat2 {
 	return mat
 }
 
-// IsSimilar returns true if matrixs are approximatively the same.
+// IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (mat *X32Mat2) IsSimilar(op *X32Mat2) bool {
 	ret := true
@@ -140,7 +140,7 @@ func (mat *X32Mat2) IsSimilar(op *X32Mat2) bool {
 	return ret
 }
 
-// X32Mat2Add adds two matrixs.
+// X32Mat2Add adds two matrices.
 // Args are left untouched, a pointer on a new object is returned.
 func X32Mat2Add(mata, matb *X32Mat2) *X32Mat2 {
 	var ret = *mata
@@ -180,7 +180,7 @@ func X32Mat2DivScale(mat *X32Mat2, factor vpnumber.X32) *X32Mat2 {
 	return &ret
 }
 
-// X32Mat2IsSimilar returns true if matrixs are approximatively the same.
+// X32Mat2IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func X32Mat2IsSimilar(mata, matb *X32Mat2) bool {
 	return mata.IsSimilar(matb)

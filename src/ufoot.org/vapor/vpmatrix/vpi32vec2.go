@@ -88,7 +88,7 @@ func (vec *I32Vec2) ToF64() *F64Vec2 {
 }
 
 // Add adds operand to the vector.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *I32Vec2) Add(op *I32Vec2) *I32Vec2 {
 	for i, v := range op {
 		vec[i] += v
@@ -98,7 +98,7 @@ func (vec *I32Vec2) Add(op *I32Vec2) *I32Vec2 {
 }
 
 // Sub substracts operand from the vector.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *I32Vec2) Sub(op *I32Vec2) *I32Vec2 {
 	for i, v := range op {
 		vec[i] -= v

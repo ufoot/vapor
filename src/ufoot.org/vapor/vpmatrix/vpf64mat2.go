@@ -90,7 +90,7 @@ func (mat *F64Mat2) ToF32() *F32Mat2 {
 }
 
 // Add adds operand to the matrix.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat2) Add(op *F64Mat2) *F64Mat2 {
 	for i, v := range op {
 		mat[i] += v
@@ -100,7 +100,7 @@ func (mat *F64Mat2) Add(op *F64Mat2) *F64Mat2 {
 }
 
 // Sub substracts operand from the matrix.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat2) Sub(op *F64Mat2) *F64Mat2 {
 	for i, v := range op {
 		mat[i] -= v
@@ -110,7 +110,7 @@ func (mat *F64Mat2) Sub(op *F64Mat2) *F64Mat2 {
 }
 
 // MulScale multiplies all values of the matrix by factor.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat2) MulScale(factor float64) *F64Mat2 {
 	for i, v := range mat {
 		mat[i] = v * factor
@@ -120,7 +120,7 @@ func (mat *F64Mat2) MulScale(factor float64) *F64Mat2 {
 }
 
 // DivScale divides all values of the matrix by factor.
-// It modifies it, and returns a pointer on it.
+// It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat2) DivScale(factor float64) *F64Mat2 {
 	for i, v := range mat {
 		mat[i] = vpnumber.F64Div(v, factor)
@@ -129,7 +129,7 @@ func (mat *F64Mat2) DivScale(factor float64) *F64Mat2 {
 	return mat
 }
 
-// IsSimilar returns true if matrixs are approximatively the same.
+// IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (mat *F64Mat2) IsSimilar(op *F64Mat2) bool {
 	ret := true
@@ -140,7 +140,7 @@ func (mat *F64Mat2) IsSimilar(op *F64Mat2) bool {
 	return ret
 }
 
-// F64Mat2Add adds two matrixs.
+// F64Mat2Add adds two matrices.
 // Args are left untouched, a pointer on a new object is returned.
 func F64Mat2Add(mata, matb *F64Mat2) *F64Mat2 {
 	var ret = *mata
@@ -180,7 +180,7 @@ func F64Mat2DivScale(mat *F64Mat2, factor float64) *F64Mat2 {
 	return &ret
 }
 
-// F64Mat2IsSimilar returns true if matrixs are approximatively the same.
+// F64Mat2IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func F64Mat2IsSimilar(mata, matb *F64Mat2) bool {
 	return mata.IsSimilar(matb)

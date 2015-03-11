@@ -89,7 +89,7 @@ func (vec *X32Vec3) ToF64() *F64Vec3 {
 }
 
 // Add adds operand to the vector.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *X32Vec3) Add(op *X32Vec3) *X32Vec3 {
 	for i, v := range op {
 		vec[i] += v
@@ -99,7 +99,7 @@ func (vec *X32Vec3) Add(op *X32Vec3) *X32Vec3 {
 }
 
 // Sub substracts operand from the vector.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *X32Vec3) Sub(op *X32Vec3) *X32Vec3 {
 	for i, v := range op {
 		vec[i] -= v
@@ -109,7 +109,7 @@ func (vec *X32Vec3) Sub(op *X32Vec3) *X32Vec3 {
 }
 
 // MulScale multiplies all values of the vector by factor.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *X32Vec3) MulScale(factor vpnumber.X32) *X32Vec3 {
 	for i, v := range vec {
 		vec[i] = vpnumber.X32Mul(v, factor)
@@ -119,7 +119,7 @@ func (vec *X32Vec3) MulScale(factor vpnumber.X32) *X32Vec3 {
 }
 
 // DivScale divides all values of the vector by factor.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *X32Vec3) DivScale(factor vpnumber.X32) *X32Vec3 {
 	for i, v := range vec {
 		vec[i] = vpnumber.X32Div(v, factor)
@@ -147,7 +147,7 @@ func (vec *X32Vec3) Length() vpnumber.X32 {
 }
 
 // Normalize scales the vector so that its length is 1.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *X32Vec3) Normalize() *X32Vec3 {
 	vec.DivScale(vec.Length())
 

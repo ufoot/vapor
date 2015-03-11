@@ -89,7 +89,7 @@ func (vec *F64Vec2) ToF32() *F32Vec2 {
 }
 
 // Add adds operand to the vector.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *F64Vec2) Add(op *F64Vec2) *F64Vec2 {
 	for i, v := range op {
 		vec[i] += v
@@ -99,7 +99,7 @@ func (vec *F64Vec2) Add(op *F64Vec2) *F64Vec2 {
 }
 
 // Sub substracts operand from the vector.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *F64Vec2) Sub(op *F64Vec2) *F64Vec2 {
 	for i, v := range op {
 		vec[i] -= v
@@ -109,7 +109,7 @@ func (vec *F64Vec2) Sub(op *F64Vec2) *F64Vec2 {
 }
 
 // MulScale multiplies all values of the vector by factor.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *F64Vec2) MulScale(factor float64) *F64Vec2 {
 	for i, v := range vec {
 		vec[i] = v * factor
@@ -119,7 +119,7 @@ func (vec *F64Vec2) MulScale(factor float64) *F64Vec2 {
 }
 
 // DivScale divides all values of the vector by factor.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *F64Vec2) DivScale(factor float64) *F64Vec2 {
 	for i, v := range vec {
 		vec[i] = vpnumber.F64Div(v, factor)
@@ -147,7 +147,7 @@ func (vec *F64Vec2) Length() float64 {
 }
 
 // Normalize scales the vector so that its length is 1.
-// It modifies it, and returns a pointer on it.
+// It modifies the vector, and returns a pointer on it.
 func (vec *F64Vec2) Normalize() *F64Vec2 {
 	vec.DivScale(vec.Length())
 
