@@ -1,3 +1,13 @@
+2015-03-12  Christian Mauduit <ufoot@ufoot.org>
+
+	* src/ufoot.org/vapor/vpmatrix/vpf32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat4.go: Added matrix * vector
+	funcs, for floats
+
 2015-03-11  Christian Mauduit <ufoot@ufoot.org>
 
 	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go: Version

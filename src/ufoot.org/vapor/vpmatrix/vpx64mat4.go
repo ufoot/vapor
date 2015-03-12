@@ -139,14 +139,6 @@ func (mat *X64Mat4) DivScale(factor vpnumber.X64) *X64Mat4 {
 	return mat
 }
 
-// MulComp multiplies the matrix by another matrix (composition).
-// It modifies the matrix, and returns a pointer on it.
-func (mat *X64Mat4) MulComp(op *X64Mat4) *X64Mat4 {
-	*mat = *X64Mat4MulComp(mat, op)
-
-	return mat
-}
-
 // IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (mat *X64Mat4) IsSimilar(op *X64Mat4) bool {
@@ -156,6 +148,46 @@ func (mat *X64Mat4) IsSimilar(op *X64Mat4) bool {
 	}
 
 	return ret
+}
+
+// MulComp multiplies the matrix by another matrix (composition).
+// It modifies the matrix, and returns a pointer on it.
+func (mat *X64Mat4) MulComp(op *X64Mat4) *X64Mat4 {
+	*mat = *X64Mat4MulComp(mat, op)
+
+	return mat
+}
+
+// MulCol performs a multiplication of a vector by a 4x4 matrix,
+// considering the vector is a column vector (matrix left, vector right).
+// It modifies the vector, and returns a pointer on it.
+func (mat *X64Mat4) MulVec(vec *X64Vec4) *X64Vec4 {
+	var ret X64Vec4
+	var i int
+
+	for i, _ = range vec {
+		ret[i] = vpnumber.X64Mul(mat.Get(0, i), vec[0]) + vpnumber.X64Mul(mat.Get(1, i), vec[1]) + vpnumber.X64Mul(mat.Get(2, i), vec[2]) + vpnumber.X64Mul(mat.Get(3, i), vec[3])
+	}
+
+	return &ret
+}
+
+// MulCol1 performs a multiplication of a vector by a 4x4 matrix,
+// considering the vector is a column vector (matrix left, vector right).
+// The last member of the vector is assumed to be 1, so in practice a
+// vector of length 3 (a point in space) is passed. This allow geometric
+// transformations such as rotations and translations to be accumulated
+// within the matrix and then performed at once.
+// It modifies the vector, and returns a pointer on it.
+func (mat *X64Mat4) MulVec1(vec *X64Vec3) *X64Vec3 {
+	var ret X64Vec3
+	var i int
+
+	for i, _ = range vec {
+		ret[i] = vpnumber.X64Mul(mat.Get(0, i), vec[0]) + vpnumber.X64Mul(mat.Get(1, i), vec[1]) + vpnumber.X64Mul(mat.Get(2, i), vec[2]) + mat.Get(3, i)
+	}
+
+	return &ret
 }
 
 // X64Mat4Add adds two matrices.
