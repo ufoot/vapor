@@ -158,12 +158,27 @@ func (mat *X32Mat2) MulComp(op *X32Mat2) *X32Mat2 {
 	return mat
 }
 
+// Det returns the matrix determinant.
+func (mat *X32Mat2) Det() vpnumber.X32 {
+	return vpnumber.X32Mul(mat.Get(0, 0), mat.Get(1, 1)) - vpnumber.X32Mul(mat.Get(0, 1), mat.Get(1, 0))
+}
+
+// Inv inverts the matrix.
+// Never fails (no division by zero error, never) but if the
+// matrix can't be inverted, result does not make sense.
+// It modifies the matrix, and returns a pointer on it.
+func (mat *X32Mat2) Inv() *X32Mat2 {
+	*mat = *X32Mat2Inv(mat)
+
+	return mat
+}
+
 // MulVec performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
 func (mat *X32Mat2) MulVec(vec *X32Vec2) *X32Vec2 {
 	var ret X32Vec2
 
-	for i:= range vec {
+	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1])
 	}
 
@@ -246,6 +261,24 @@ func X32Mat2MulComp(a, b *X32Mat2) *X32Mat2 {
 			ret.Set(c, r, vpnumber.X32Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X32Mul(a.Get(1, r), b.Get(c, 1)))
 		}
 	}
+
+	return &ret
+}
+
+// X32Mat2Inv inverts a matrix.
+// Never fails (no division by zero error, never) but if the
+// matrix can't be inverted, result does not make sense.
+// Args is left untouched, a pointer on a new object is returned.
+func X32Mat2Inv(mat *X32Mat2) *X32Mat2 {
+	ret := X32Mat2{
+		mat.Get(1, 1),
+		-mat.Get(1, 0),
+		-mat.Get(0, 1),
+		mat.Get(0, 0),
+	}
+
+	det := mat.Det()
+	mat.DivScale(det)
 
 	return &ret
 }

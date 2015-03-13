@@ -163,7 +163,7 @@ func (mat *X32Mat3) MulComp(op *X32Mat3) *X32Mat3 {
 func (mat *X32Mat3) MulVec(vec *X32Vec3) *X32Vec3 {
 	var ret X32Vec3
 
-	for i:= range vec {
+	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + vpnumber.X32Mul(mat.Get(2, i), vec[2])
 	}
 
@@ -179,7 +179,7 @@ func (mat *X32Mat3) MulVec(vec *X32Vec3) *X32Vec3 {
 func (mat *X32Mat3) MulVecPos(vec *X32Vec2) *X32Vec2 {
 	var ret X32Vec2
 
-	for i:= range vec {
+	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + mat.Get(2, i)
 	}
 
@@ -195,7 +195,7 @@ func (mat *X32Mat3) MulVecPos(vec *X32Vec2) *X32Vec2 {
 func (mat *X32Mat3) MulVecDir(vec *X32Vec2) *X32Vec2 {
 	var ret X32Vec2
 
-	for i:= range vec {
+	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1])
 	}
 

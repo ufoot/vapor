@@ -158,6 +158,21 @@ func (mat *F64Mat2) MulComp(op *F64Mat2) *F64Mat2 {
 	return mat
 }
 
+// Det returns the matrix determinant.
+func (mat *F64Mat2) Det() float64 {
+	return mat.Get(0, 0)*mat.Get(1, 1) - mat.Get(0, 1)*mat.Get(1, 0)
+}
+
+// Inv inverts the matrix.
+// Never fails (no division by zero error, never) but if the
+// matrix can't be inverted, result does not make sense.
+// It modifies the matrix, and returns a pointer on it.
+func (mat *F64Mat2) Inv() *F64Mat2 {
+	*mat = *F64Mat2Inv(mat)
+
+	return mat
+}
+
 // MulVec performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
 func (mat *F64Mat2) MulVec(vec *F64Vec2) *F64Vec2 {
@@ -246,6 +261,24 @@ func F64Mat2MulComp(a, b *F64Mat2) *F64Mat2 {
 			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1))
 		}
 	}
+
+	return &ret
+}
+
+// F64Mat2Inv inverts a matrix.
+// Never fails (no division by zero error, never) but if the
+// matrix can't be inverted, result does not make sense.
+// Args is left untouched, a pointer on a new object is returned.
+func F64Mat2Inv(mat *F64Mat2) *F64Mat2 {
+	ret := F64Mat2{
+		mat.Get(1, 1),
+		-mat.Get(1, 0),
+		-mat.Get(0, 1),
+		mat.Get(0, 0),
+	}
+
+	det := mat.Det()
+	mat.DivScale(det)
 
 	return &ret
 }
