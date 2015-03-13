@@ -1,6 +1,11 @@
 2015-03-13  Christian Mauduit <ufoot@ufoot.org>
 
 	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go: Fixed
+	version for develop branch.
+
+2015-03-13  Christian Mauduit <ufoot@ufoot.org>
+
+	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go: Fixed
 	version for master branch.
 
 2015-03-13  Christian Mauduit <ufoot@ufoot.org>
