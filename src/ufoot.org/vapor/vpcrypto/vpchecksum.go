@@ -45,29 +45,40 @@ func init() {
 	crc32_table = crc32.MakeTable(crc32.IEEE)
 }
 
-func ChecksumUToSN(checksum *big.Int, bits int) string {
-	var ret string
+func checksumUToBN(checksum *big.Int, bits int) []byte {
+	bytes:=bits>>3
+	ret := checksum.Bytes()
 
-	ret = hex.EncodeToString(checksum.Bytes())
-	for len(ret) < bits>>2 {
-		// performance killer but checksum rarely
-		// start by 0 so this is a fairly rare case
-		ret = "0" + ret
+	l:=len(ret)
+	switch {
+	case l==bytes:
+		return ret
+	case l>bytes:
+		return ret[0:bytes]
 	}
 
-	return ret[0 : bits>>2]
+	// l < bytes
+	ret2:=make([]byte, bytes)
+	for i:=range(ret) {
+		ret2[i+bytes-l]=ret[i]
+	}
+	return ret2
+}
+
+func checksumUToSN(checksum *big.Int, bits int) string {
+	return(hex.EncodeToString(checksumUToBN(checksum,bits)))
 }
 
 func ChecksumUToS512(checksum *big.Int) string {
-	return ChecksumUToSN(checksum, 512)
+	return checksumUToSN(checksum, 512)
 }
 
 func ChecksumUToS256(checksum *big.Int) string {
-	return ChecksumUToSN(checksum, 256)
+	return checksumUToSN(checksum, 256)
 }
 
 func ChecksumUToS128(checksum *big.Int) string {
-	return ChecksumUToSN(checksum, 128)
+	return checksumUToSN(checksum, 128)
 }
 
 func ChecksumUToS64(checksum uint64) string {
@@ -78,18 +89,12 @@ func ChecksumUToS32(checksum uint32) string {
 	return fmt.Sprintf("%08x", checksum)
 }
 
-func ChecksumSToUN(checksum string, bits int) (*big.Int, error) {
-	var buf []byte
+func checksumBToUN(checksum []byte, bits int) (*big.Int, error) {
 	var ret big.Int
-	var err error
-
-	if len(checksum) == bits>>2 {
-		buf, err = hex.DecodeString(checksum)
-		if err == nil {
-			ret.SetBytes(buf[0 : bits>>3])
-		} else {
-			return nil, vpsys.ErrorChain(err, "unable to decode checksum hex string")
-		}
+	bytes:=bits>>3
+	
+	if len(checksum) == bytes {
+		ret.SetBytes(checksum[0 : bytes])
 	} else {
 		return nil, errors.New("bad checksum size")
 	}
@@ -97,16 +102,34 @@ func ChecksumSToUN(checksum string, bits int) (*big.Int, error) {
 	return &ret, nil
 }
 
+func checksumSToUN(checksum string, bits int) (*big.Int, error) {
+	var buf []byte
+	var ret *big.Int
+	var err error
+
+	buf, err = hex.DecodeString(checksum)
+	if err!=nil {
+		return nil, vpsys.ErrorChain(err, "unable to decode checksum hex string")
+	}
+
+	ret,err=checksumBToUN(buf,bits)
+	if err!=nil {
+		return nil, vpsys.ErrorChain(err, "unable to get checksum bytes")
+	}
+
+	return ret, nil
+}
+
 func ChecksumSToU512(checksum string) (*big.Int, error) {
-	return ChecksumSToUN(checksum, 512)
+	return checksumSToUN(checksum, 512)
 }
 
 func ChecksumSToU256(checksum string) (*big.Int, error) {
-	return ChecksumSToUN(checksum, 256)
+	return checksumSToUN(checksum, 256)
 }
 
 func ChecksumSToU128(checksum string) (*big.Int, error) {
-	return ChecksumSToUN(checksum, 128)
+	return checksumSToUN(checksum, 128)
 }
 
 func ChecksumSToU64(checksum string) (uint64, error) {

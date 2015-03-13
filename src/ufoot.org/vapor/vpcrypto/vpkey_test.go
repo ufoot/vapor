@@ -23,16 +23,16 @@ import (
 	"testing"
 )
 
-func TestAsymExportImport(t *testing.T) {
-	var key1 *AsymKey
+func TestExportImport(t *testing.T) {
+	var key1 *Key
 	var buf1 []byte
 	var len1 int
-	var key2 *AsymKey
+	var key2 *Key
 	var buf2 []byte
 	var len2 int
 	var err error
 
-	key1, err = AsymNewKeyPair()
+	key1, err = NewKey()
 	if err != nil {
 		t.Error(err)
 	}
@@ -42,7 +42,7 @@ func TestAsymExportImport(t *testing.T) {
 	}
 	len1 = len(buf1)
 	t.Logf("len of exported key 1 is %d", len1)
-	key2, err = AsymImportPubKey(buf1)
+	key2, err = ImportPubKey(buf1)
 	if err != nil {
 		t.Error(err)
 	}
@@ -60,17 +60,17 @@ func TestAsymExportImport(t *testing.T) {
 	}
 }
 
-func TestAsymSig(t *testing.T) {
-	var key1 *AsymKey
+func TestSig(t *testing.T) {
+	var key1 *Key
 	var buf []byte
-	var key2 *AsymKey
+	var key2 *Key
 	var err error
 	var sig []byte
 	var content []byte
 	const content_str string = "foo bar"
 	var ok bool
 
-	key1, err = AsymNewKeyPair()
+	key1, err = NewKey()
 	if err != nil {
 		t.Error(err)
 	}
@@ -78,7 +78,7 @@ func TestAsymSig(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	key2, err = AsymImportPubKey(buf)
+	key2, err = ImportPubKey(buf)
 	if err != nil {
 		t.Error(err)
 	}
@@ -100,10 +100,10 @@ func TestAsymSig(t *testing.T) {
 	}
 }
 
-func TestAsymEnc(t *testing.T) {
-	var key1 *AsymKey
+func TestEnc(t *testing.T) {
+	var key1 *Key
 	var buf []byte
-	var key2 *AsymKey
+	var key2 *Key
 	var err error
 	var encrypted []byte
 	var decrypted []byte
@@ -111,7 +111,7 @@ func TestAsymEnc(t *testing.T) {
 	var content []byte
 	const content_str string = "foo bar"
 
-	key1, err = AsymNewKeyPair()
+	key1, err = NewKey()
 	if err != nil {
 		t.Error(err)
 	}
@@ -119,7 +119,7 @@ func TestAsymEnc(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	key2, err = AsymImportPubKey(buf)
+	key2, err = ImportPubKey(buf)
 	if err != nil {
 		t.Error(err)
 	}

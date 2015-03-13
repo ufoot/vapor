@@ -32,7 +32,7 @@ import (
 	"ufoot.org/vapor/vpsys"
 )
 
-type AsymKey struct {
+type Key struct {
 	entity *openpgp.Entity
 }
 
@@ -40,10 +40,10 @@ func init() {
 	_ = ripemd160.New()
 }
 
-func AsymNewKeyPair() (*AsymKey, error) {
+func NewKey() (*Key, error) {
 	var entity *openpgp.Entity
 	var err error
-	var key_pair AsymKey
+	var key_pair Key
 	var byte_writer bytes.Buffer
 
 	entity, err = openpgp.NewEntity("", "", "", nil)
@@ -61,7 +61,7 @@ func AsymNewKeyPair() (*AsymKey, error) {
 	return &key_pair, nil
 }
 
-func (key_pair AsymKey) ExportPub() ([]byte, error) {
+func (key_pair Key) ExportPub() ([]byte, error) {
 	var byte_writer bytes.Buffer
 	var err error
 	var pub_key []byte
@@ -76,11 +76,11 @@ func (key_pair AsymKey) ExportPub() ([]byte, error) {
 	return pub_key, nil
 }
 
-func AsymImportPubKey(key []byte) (*AsymKey, error) {
+func ImportPubKey(key []byte) (*Key, error) {
 	var byte_reader io.Reader
 	var packet_reader *packet.Reader
 	var err error
-	var pub_key AsymKey
+	var pub_key Key
 	var entity *openpgp.Entity
 
 	byte_reader = bytes.NewReader(key)
@@ -95,14 +95,14 @@ func AsymImportPubKey(key []byte) (*AsymKey, error) {
 	return &pub_key, nil
 }
 
-func (asym_key AsymKey) Sign(content []byte) ([]byte, error) {
+func (key Key) Sign(content []byte) ([]byte, error) {
 	var byte_writer bytes.Buffer
 	var byte_reader io.Reader
 	var sig []byte
 	var err error
 
 	byte_reader = bytes.NewReader(content)
-	err = openpgp.DetachSign(&byte_writer, asym_key.entity, byte_reader, nil)
+	err = openpgp.DetachSign(&byte_writer, key.entity, byte_reader, nil)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to sign content")
 	}
@@ -112,14 +112,14 @@ func (asym_key AsymKey) Sign(content []byte) ([]byte, error) {
 	return sig, nil
 }
 
-func (asym_key AsymKey) CheckSig(content []byte, sig []byte) (bool, error) {
+func (key Key) CheckSig(content []byte, sig []byte) (bool, error) {
 	var key_ring openpgp.EntityList
 	var err error
 	var byte_reader_content io.Reader
 	var byte_reader_sig io.Reader
 
 	key_ring = make([]*openpgp.Entity, 1)
-	key_ring[0] = asym_key.entity
+	key_ring[0] = key.entity
 
 	byte_reader_content = bytes.NewReader(content)
 	byte_reader_sig = bytes.NewReader(sig)
@@ -132,7 +132,7 @@ func (asym_key AsymKey) CheckSig(content []byte, sig []byte) (bool, error) {
 	return true, nil
 }
 
-func (asym_key AsymKey) Encrypt(content []byte) ([]byte, error) {
+func (key Key) Encrypt(content []byte) ([]byte, error) {
 	var key_ring openpgp.EntityList
 	var byte_writer bytes.Buffer
 	var err error
@@ -149,7 +149,7 @@ func (asym_key AsymKey) Encrypt(content []byte) ([]byte, error) {
 	hints.ModTime = time.Now()
 
 	key_ring = make([]*openpgp.Entity, 1)
-	key_ring[0] = asym_key.entity
+	key_ring[0] = key.entity
 
 	output, err = openpgp.Encrypt(&byte_writer, key_ring, nil, &hints, nil)
 	if err != nil {
@@ -165,7 +165,7 @@ func (asym_key AsymKey) Encrypt(content []byte) ([]byte, error) {
 	return ret, nil
 }
 
-func (asym_key AsymKey) Decrypt(content []byte) ([]byte, error) {
+func (key Key) Decrypt(content []byte) ([]byte, error) {
 	var key_ring openpgp.EntityList
 	var err error
 	var byte_reader io.Reader
@@ -174,7 +174,7 @@ func (asym_key AsymKey) Decrypt(content []byte) ([]byte, error) {
 	var ret []byte
 
 	key_ring = make([]*openpgp.Entity, 1)
-	key_ring[0] = asym_key.entity
+	key_ring[0] = key.entity
 
 	byte_reader = bytes.NewReader(content)
 	message_details, err = openpgp.ReadMessage(byte_reader, key_ring, nil, nil)
