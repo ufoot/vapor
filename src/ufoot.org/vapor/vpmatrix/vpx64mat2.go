@@ -158,29 +158,36 @@ func (mat *X64Mat2) MulComp(op *X64Mat2) *X64Mat2 {
 	return mat
 }
 
-// MulCol performs a multiplication of a vector by a 2x2 matrix,
+// MulVec performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-// It modifies the vector, and returns a pointer on it.
 func (mat *X64Mat2) MulVec(vec *X64Vec2) *X64Vec2 {
 	var ret X64Vec2
-	var i int
 
-	for i, _ = range vec {
+	for i:= range vec {
 		ret[i] = vpnumber.X64Mul(mat.Get(0, i), vec[0]) + vpnumber.X64Mul(mat.Get(1, i), vec[1])
 	}
 
 	return &ret
 }
 
-// MulCol1 performs a multiplication of a vector by a 2x2 matrix,
+// MulVecPos performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
 // The last member of the vector is assumed to be 1, so in practice a
-// vector of length 1 (here, a scalar) is passed. This allow geometric
+// position vector of length 1 (here, a scalar) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-// It modifies the vector, and returns a pointer on it.
-func (mat *X64Mat2) MulVec1(vec vpnumber.X64) vpnumber.X64 {
+func (mat *X64Mat2) MulVecPos(vec vpnumber.X64) vpnumber.X64 {
 	return vpnumber.X64Mul(mat.Get(0, 0), vec) + mat.Get(1, 0)
+}
+
+// MulVecDir performs a multiplication of a vector by a 2x2 matrix,
+// considering the vector is a column vector (matrix left, vector right).
+// The last member of the vector is assumed to be 0, so in practice a
+// direction vector of length 1 (here, a scalar) is passed. This allow geometric
+// transformations such as rotations to be accumulated
+// within the matrix and then performed at once.
+func (mat *X64Mat2) MulVecDir(vec vpnumber.X64) vpnumber.X64 {
+	return vpnumber.X64Mul(mat.Get(0, 0), vec)
 }
 
 // X64Mat2Add adds two matrices.
@@ -229,8 +236,8 @@ func X64Mat2IsSimilar(mata, matb *X64Mat2) bool {
 	return mata.IsSimilar(matb)
 }
 
-// MulComp multiplies two matrices (composition).
-// It modifies the matrix, and returns a pointer on it.
+// X64Mat2MulComp multiplies two matrices (composition).
+// Args are left untouched, a pointer on a new object is returned.
 func X64Mat2MulComp(a, b *X64Mat2) *X64Mat2 {
 	var ret X64Mat2
 
