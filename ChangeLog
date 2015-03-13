@@ -1,5 +1,17 @@
 2015-03-13  Christian Mauduit <ufoot@ufoot.org>
 
+	* src/ufoot.org/vapor/vpmatrix/vpf32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpf64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat4.go: Added inversion funcs for
+	2x2 matrices
+
+2015-03-13  Christian Mauduit <ufoot@ufoot.org>
+
 	* src/ufoot.org/vapor/vpmatrix/vpx32mat2.go,
 	src/ufoot.org/vapor/vpmatrix/vpx32mat3.go,
 	src/ufoot.org/vapor/vpmatrix/vpx32mat4.go,
