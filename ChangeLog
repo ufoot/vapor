@@ -1,5 +1,15 @@
 2015-03-12  Christian Mauduit <ufoot@ufoot.org>
 
+	* src/ufoot.org/vapor/vpmatrix/vpx32mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx32mat4.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat2.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat3.go,
+	src/ufoot.org/vapor/vpmatrix/vpx64mat4.go: Added matrix * vector
+	funcs, for fixed point numbers
+
+2015-03-12  Christian Mauduit <ufoot@ufoot.org>
+
 	* src/ufoot.org/vapor/vpmatrix/vpf32mat2.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32mat3.go,
 	src/ufoot.org/vapor/vpmatrix/vpf32mat4.go,

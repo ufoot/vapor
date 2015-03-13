@@ -158,33 +158,45 @@ func (mat *F32Mat3) MulComp(op *F32Mat3) *F32Mat3 {
 	return mat
 }
 
-// MulCol performs a multiplication of a vector by a 3x3 matrix,
+// MulVec performs a multiplication of a vector by a 3x3 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-// It modifies the vector, and returns a pointer on it.
 func (mat *F32Mat3) MulVec(vec *F32Vec3) *F32Vec3 {
 	var ret F32Vec3
-	var i int
 
-	for i, _ = range vec {
+	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2]
 	}
 
 	return &ret
 }
 
-// MulCol1 performs a multiplication of a vector by a 3x3 matrix,
+// MulVecPos performs a multiplication of a vector by a 3x3 matrix,
 // considering the vector is a column vector (matrix left, vector right).
 // The last member of the vector is assumed to be 1, so in practice a
-// vector of length 2 (a point in a plane) is passed. This allow geometric
+// position vector of length 2 (a point in a plane) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-// It modifies the vector, and returns a pointer on it.
-func (mat *F32Mat3) MulVec1(vec *F32Vec2) *F32Vec2 {
+func (mat *F32Mat3) MulVecPos(vec *F32Vec2) *F32Vec2 {
 	var ret F32Vec2
-	var i int
 
-	for i, _ = range vec {
+	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)
+	}
+
+	return &ret
+}
+
+// MulVecDir performs a multiplication of a vector by a 3x3 matrix,
+// considering the vector is a column vector (matrix left, vector right).
+// The last member of the vector is assumed to be 0, so in practice a
+// direction vector of length 2 (a point in a plane) is passed. This allow geometric
+// transformations such as rotations to be accumulated
+// within the matrix and then performed at once.
+func (mat *F32Mat3) MulVecDir(vec *F32Vec2) *F32Vec2 {
+	var ret F32Vec2
+
+	for i := range vec {
+		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1]
 	}
 
 	return &ret
@@ -236,8 +248,8 @@ func F32Mat3IsSimilar(mata, matb *F32Mat3) bool {
 	return mata.IsSimilar(matb)
 }
 
-// MulComp multiplies two matrices (composition).
-// It modifies the matrix, and returns a pointer on it.
+// F32Mat3MulComp multiplies two matrices (composition).
+// Args are left untouched, a pointer on a new object is returned.
 func F32Mat3MulComp(a, b *F32Mat3) *F32Mat3 {
 	var ret F32Mat3
 
