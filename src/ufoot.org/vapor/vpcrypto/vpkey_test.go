@@ -21,14 +21,19 @@ package vpcrypto
 
 import (
 	"testing"
+	"ufoot.org/vapor/vpsys"
 )
 
 var benchKey *Key
 var benchContent []byte
+var benchSig []byte
+var benchCrypted []byte
 
 func init() {
 	benchKey, _ = NewKey()
 	benchContent = make([]byte, 1500)
+	benchSig, _ = benchKey.Sign(benchContent)
+	benchCrypted, _ = benchKey.Encrypt(benchContent)
 }
 
 func TestExportImport(t *testing.T) {
@@ -156,20 +161,46 @@ func BenchmarkNewKey(b *testing.B) {
 	}
 }
 
-func BenchmarkSig(b *testing.B) {
-	var sig []byte
+func BenchmarkSign(b *testing.B) {
+	var err error
 
 	for i := 0; i < b.N; i++ {
-		sig, _ = benchKey.Sign(benchContent)
-		_, _ = benchKey.CheckSig(benchContent, sig)
+		_, err = benchKey.Sign(benchContent)
+		if err!=nil {
+			b.Error(vpsys.ErrorChain(err,"unable to sign"))
+		}
 	}
 }
 
-func BenchmarkEnc(b *testing.B) {
-	var crypted []byte
+func BenchmarkCheckSig(b *testing.B) {
+	var err error
 
 	for i := 0; i < b.N; i++ {
-		crypted, _ = benchKey.Encrypt(benchContent)
-		_, _ = benchKey.Decrypt(crypted)
+		_, err = benchKey.CheckSig(benchContent,benchSig)
+		if err!=nil {
+			b.Error(vpsys.ErrorChain(err,"unable to check sig"))
+		}
+	}
+}
+
+func BenchmarkEncrypt(b *testing.B) {
+	var err error
+	
+	for i := 0; i < b.N; i++ {
+		_, err = benchKey.Encrypt(benchContent)
+		if err!=nil {
+			b.Error(vpsys.ErrorChain(err,"unable to encrypt"))
+		}
+	}
+}
+
+func BenchmarkDecrypt(b *testing.B) {
+	var err error
+
+	for i := 0; i < b.N; i++ {
+		_, err = benchKey.Decrypt(benchCrypted)
+		if err!=nil {
+			b.Error(vpsys.ErrorChain(err,"unable to decrypt"))
+		}
 	}
 }
