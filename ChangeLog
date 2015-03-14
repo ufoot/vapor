@@ -1,5 +1,13 @@
 2015-03-14  Christian Mauduit <ufoot@ufoot.org>
 
+	* src/ufoot.org/vapor/vpcrypto/vpid.go,
+	src/ufoot.org/vapor/vpcrypto/vpid_test.go,
+	src/ufoot.org/vapor/vpcrypto/vprand_test.go,
+	src/ufoot.org/vapor/vpcrypto/vpzero_test.go: Added ID generation
+	funcs
+
+2015-03-14  Christian Mauduit <ufoot@ufoot.org>
+
 	* src/ufoot.org/vapor/vpcrypto/vpchecksum.go,
 	src/ufoot.org/vapor/vpcrypto/vpidrand.go,
 	src/ufoot.org/vapor/vpcrypto/vprand.go,
