@@ -1,5 +1,15 @@
 2015-03-14  Christian Mauduit <ufoot@ufoot.org>
 
+	* src/ufoot.org/vapor/vpcrypto/vpchecksum.go,
+	src/ufoot.org/vapor/vpcrypto/vpidrand.go,
+	src/ufoot.org/vapor/vpcrypto/vprand.go,
+	src/ufoot.org/vapor/vpcrypto/vprand_test.go,
+	src/ufoot.org/vapor/vpcrypto/vpzero.go,
+	src/ufoot.org/vapor/vpcrypto/vpzero_test.go: Added rand and check
+	zeroes funcs to crypto module
+
+2015-03-14  Christian Mauduit <ufoot@ufoot.org>
+
 	* src/ufoot.org/vapor/vpcrypto/vpkey_test.go: Added perf tests for
 	Key crypto code
 

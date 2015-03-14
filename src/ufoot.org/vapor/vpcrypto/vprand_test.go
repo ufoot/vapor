@@ -35,6 +35,8 @@ func TestRand512(t *testing.T) {
 	} else {
 		t.Errorf("rand512 out of range, is %d, should be between 0 and %d", i, l)
 	}
+	i = Rand512(r, nil).Int64()
+	t.Logf("rand512.Int64 n is %016x", i)
 }
 
 func TestRand256(t *testing.T) {
@@ -48,6 +50,8 @@ func TestRand256(t *testing.T) {
 	} else {
 		t.Errorf("rand256 out of range, is %d, should be between 0 and %d", i, l)
 	}
+	i = Rand256(r, nil).Int64()
+	t.Logf("rand256.Int64 n is %016x", i)
 }
 
 func TestRand128(t *testing.T) {
@@ -61,6 +65,8 @@ func TestRand128(t *testing.T) {
 	} else {
 		t.Errorf("rand128 out of range, is %d, should be between 0 and %d", i, l)
 	}
+	i = Rand128(r, nil).Int64()
+	t.Logf("rand128.Int64 n is %016x", i)
 }
 
 func TestRand64(t *testing.T) {

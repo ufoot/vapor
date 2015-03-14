@@ -39,7 +39,7 @@ func TestZeroesInBigInt(t *testing.T) {
 	i.SetUint64(0)
 	z = ZeroesInBigInt(i)
 	if z != 0 {
-		t.Errorf("bad zeroes in BigInt for 0, got %d, expected 0", 0, z)
+		t.Errorf("bad zeroes in BigInt for 0, got %d, expected 0", z)
 	} else {
 		t.Logf("zeroes in BigInt for 0 is 0")
 	}
