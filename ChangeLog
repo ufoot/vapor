@@ -1,5 +1,16 @@
 2015-03-13  Christian Mauduit <ufoot@ufoot.org>
 
+	* src/ufoot.org/vapor/vpcrypto/vpasym.go,
+	src/ufoot.org/vapor/vpcrypto/vpasym_test.go,
+	src/ufoot.org/vapor/vpcrypto/vpchecksum.go,
+	src/ufoot.org/vapor/vpcrypto/vpchecksum_test.go,
+	src/ufoot.org/vapor/vpcrypto/vpkey.go,
+	src/ufoot.org/vapor/vpcrypto/vpkey_test.go,
+	src/ufoot.org/vapor/vpcrypto/vprandom.go,
+	src/ufoot.org/vapor/vpcrypto/vprandom_test.go: Renaming crypto code
+
+2015-03-13  Christian Mauduit <ufoot@ufoot.org>
+
 	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go: Fixed
 	version for develop branch.
 

@@ -23,6 +23,14 @@ import (
 	"testing"
 )
 
+var benchKey *Key
+var benchContent []byte
+
+func init() {
+	benchKey, _ = NewKey()
+	benchContent = make([]byte, 1500)
+}
+
 func TestExportImport(t *testing.T) {
 	var key1 *Key
 	var buf1 []byte
@@ -139,5 +147,29 @@ func TestEnc(t *testing.T) {
 		t.Log("decrypted message is same as source")
 	} else {
 		t.Errorf("encryption/decryption problem, results differ \"%s\" vs \"%s\"", content_str, decrypted_str)
+	}
+}
+
+func BenchmarkNewKey(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_, _ = NewKey()
+	}
+}
+
+func BenchmarkSig(b *testing.B) {
+	var sig []byte
+
+	for i := 0; i < b.N; i++ {
+		sig, _ = benchKey.Sign(benchContent)
+		_, _ = benchKey.CheckSig(benchContent, sig)
+	}
+}
+
+func BenchmarkEnc(b *testing.B) {
+	var crypted []byte
+
+	for i := 0; i < b.N; i++ {
+		crypted, _ = benchKey.Encrypt(benchContent)
+		_, _ = benchKey.Decrypt(crypted)
 	}
 }
