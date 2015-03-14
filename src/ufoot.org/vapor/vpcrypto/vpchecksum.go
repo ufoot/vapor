@@ -27,7 +27,6 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"hash/crc32"
 	"hash/crc64"
 	"math/big"
@@ -39,206 +38,334 @@ const positiveMask32 = 0x7fffffff
 
 var crc32_table *crc32.Table
 var crc64_table *crc64.Table
+var big1 *big.Int
 
 func init() {
 	crc64_table = crc64.MakeTable(crc64.ECMA)
 	crc32_table = crc32.MakeTable(crc32.IEEE)
+	big1 = big.NewInt(1)
 }
 
-func checksumUToBN(checksum *big.Int, bits int) []byte {
-	bytes:=bits>>3
+func intToBytesN(checksum *big.Int, bits int) []byte {
+	bytes := bits >> 3
 	ret := checksum.Bytes()
 
-	l:=len(ret)
+	l := len(ret)
 	switch {
-	case l==bytes:
+	case l == bytes:
 		return ret
-	case l>bytes:
+	case l > bytes:
 		return ret[0:bytes]
 	}
 
 	// l < bytes
-	ret2:=make([]byte, bytes)
-	for i:=range(ret) {
-		ret2[i+bytes-l]=ret[i]
+	ret2 := make([]byte, bytes)
+	for i := range ret {
+		ret2[i+bytes-l] = ret[i]
 	}
 	return ret2
 }
 
-func checksumUToSN(checksum *big.Int, bits int) string {
-	return(hex.EncodeToString(checksumUToBN(checksum,bits)))
+func intToStringN(checksum *big.Int, bits int) string {
+	return bytesToStringN(intToBytesN(checksum, bits), bits)
 }
 
-func ChecksumUToS512(checksum *big.Int) string {
-	return checksumUToSN(checksum, 512)
-}
-
-func ChecksumUToS256(checksum *big.Int) string {
-	return checksumUToSN(checksum, 256)
-}
-
-func ChecksumUToS128(checksum *big.Int) string {
-	return checksumUToSN(checksum, 128)
-}
-
-func ChecksumUToS64(checksum uint64) string {
-	return fmt.Sprintf("%016x", checksum)
-}
-
-func ChecksumUToS32(checksum uint32) string {
-	return fmt.Sprintf("%08x", checksum)
-}
-
-func checksumBToUN(checksum []byte, bits int) (*big.Int, error) {
+func bytesToIntN(checksum []byte, bits int) (*big.Int, error) {
 	var ret big.Int
-	bytes:=bits>>3
-	
-	if len(checksum) == bytes {
-		ret.SetBytes(checksum[0 : bytes])
-	} else {
+	bytes := bits >> 3
+
+	if len(checksum) != bytes {
 		return nil, errors.New("bad checksum size")
 	}
+	ret.SetBytes(checksum[0:bytes])
 
 	return &ret, nil
 }
 
-func checksumSToUN(checksum string, bits int) (*big.Int, error) {
+func stringToIntN(checksum string, bits int) (*big.Int, error) {
 	var buf []byte
 	var ret *big.Int
 	var err error
 
-	buf, err = hex.DecodeString(checksum)
-	if err!=nil {
+	buf, err = stringToBytesN(checksum, bits)
+	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to decode checksum hex string")
 	}
 
-	ret,err=checksumBToUN(buf,bits)
-	if err!=nil {
+	ret, err = bytesToIntN(buf, bits)
+	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to get checksum bytes")
 	}
 
 	return ret, nil
 }
 
-func ChecksumSToU512(checksum string) (*big.Int, error) {
-	return checksumSToUN(checksum, 512)
-}
-
-func ChecksumSToU256(checksum string) (*big.Int, error) {
-	return checksumSToUN(checksum, 256)
-}
-
-func ChecksumSToU128(checksum string) (*big.Int, error) {
-	return checksumSToUN(checksum, 128)
-}
-
-func ChecksumSToU64(checksum string) (uint64, error) {
-	var n int
+func stringToBytesN(checksum string, bits int) ([]byte, error) {
+	var ret []byte
 	var err error
-	var ret uint64
 
-	n, err = fmt.Sscanf(checksum, "%16x", &ret)
+	if len(checksum) != bits>>2 {
+		return nil, errors.New("bad checksum size")
+	}
+	ret, err = hex.DecodeString(checksum)
 	if err != nil {
-		return 0, err
+		return nil, vpsys.ErrorChain(err, "unable to decode checksum hex string")
 	}
-	if n == 1 {
-		err = errors.New("too few elements")
-	}
+
 	return ret, nil
 }
 
-func ChecksumSToU32(checksum string) (uint32, error) {
-	var n int
-	var err error
-	var ret uint32
+func bytesToStringN(checksum []byte, bits int) string {
+	l := len(checksum)
+	bytes := bits >> 3
+	switch {
+	case l == bytes:
+		return hex.EncodeToString(checksum)
+	case l > bytes:
+		return hex.EncodeToString(checksum[0:bytes])
+	}
 
-	n, err = fmt.Sscanf(checksum, "%8x", &ret)
-	if err != nil {
-		return 0, err
+	// l < bytes
+	checksum2 := make([]byte, bytes)
+	for i := range checksum {
+		checksum2[i+bytes-l] = checksum[i]
 	}
-	if n == 1 {
-		err = errors.New("too few elements")
+	return hex.EncodeToString(checksum2)
+}
+
+func IntToBytes512(checksum *big.Int) []byte {
+	return intToBytesN(checksum, 512)
+}
+
+func IntToBytes256(checksum *big.Int) []byte {
+	return intToBytesN(checksum, 256)
+}
+
+func IntToBytes128(checksum *big.Int) []byte {
+	return intToBytesN(checksum, 128)
+}
+
+func IntToBytes64(checksum uint64) []byte {
+	ret := make([]byte, 8)
+	binary.BigEndian.PutUint64(ret, checksum)
+
+	return ret
+}
+
+func IntToBytes32(checksum uint32) []byte {
+	ret := make([]byte, 4)
+	binary.BigEndian.PutUint32(ret, checksum)
+
+	return ret
+}
+
+func IntToString512(checksum *big.Int) string {
+	return intToStringN(checksum, 512)
+}
+
+func IntToString256(checksum *big.Int) string {
+	return intToStringN(checksum, 256)
+}
+
+func IntToString128(checksum *big.Int) string {
+	return intToStringN(checksum, 128)
+}
+
+func IntToString64(checksum uint64) string {
+	return bytesToStringN(IntToBytes64(checksum), 64)
+}
+
+func IntToString32(checksum uint32) string {
+	return bytesToStringN(IntToBytes32(checksum), 32)
+}
+
+func BytesToInt512(checksum []byte) (*big.Int, error) {
+	return bytesToIntN(checksum, 512)
+}
+
+func BytesToInt256(checksum []byte) (*big.Int, error) {
+	return bytesToIntN(checksum, 256)
+}
+
+func BytesToInt128(checksum []byte) (*big.Int, error) {
+	return bytesToIntN(checksum, 128)
+}
+
+func BytesToInt64(checksum []byte) (uint64, error) {
+	if len(checksum) != 8 {
+		return 0, errors.New("bad checksum size")
 	}
+	ret := binary.BigEndian.Uint64(checksum)
+
 	return ret, nil
 }
 
-func PredictableRandomS512(seed string) string {
-	var ret string
-	var tmp big.Int
-
-	sum := sha512.Sum512([]byte(seed))
-	tmp.SetBytes(sum[0:])
-	ret = ChecksumUToS512(&tmp)
-
-	return ret
-}
-
-func PredictableRandomS256(seed string) string {
-	var ret string
-	var tmp big.Int
-
-	sum := sha256.Sum256([]byte(seed))
-	tmp.SetBytes(sum[0:])
-	ret = ChecksumUToS256(&tmp)
-
-	return ret
-}
-
-func PredictableRandomS128(seed string) string {
-	var ret string
-	var tmp big.Int
-
-	sum := sha1.Sum([]byte(seed))
-	tmp.SetBytes(sum[0:])
-	ret = ChecksumUToS128(&tmp)
-
-	return ret
-}
-
-func PredictableRandomS64(seed string) string {
-	var ret string
-
-	sum := md5.Sum([]byte(seed))
-	ret = hex.EncodeToString(sum[8:16])
-
-	return ret
-}
-
-func PredictableRandomS32(seed string) string {
-	var ret string
-
-	sum := md5.Sum([]byte(seed))
-	ret = hex.EncodeToString(sum[0:4])
-
-	return ret
-}
-
-func PredictableRandomU64(seed int64) uint64 {
-	buf := make([]byte, 8)
-
-	binary.LittleEndian.PutUint64(buf, uint64(seed))
-
-	return crc64.Checksum(buf, crc64_table)
-}
-
-func PredictableRandomU32(seed int32) uint32 {
-	buf := make([]byte, 4)
-
-	binary.LittleEndian.PutUint32(buf, uint32(seed))
-
-	return crc32.Checksum(buf, crc32_table)
-}
-
-func PredictableRandom64(seed int64, limit int64) (int64, error) {
-	if limit <= 2 {
-		return 0, errors.New(fmt.Sprintf("limit is %d, should be greater or equal to 2", limit))
+func BytesToInt32(checksum []byte) (uint32, error) {
+	if len(checksum) != 4 {
+		return 0, errors.New("bad checksum size")
 	}
-	return int64(PredictableRandomU64(seed)&positiveMask64) % limit, nil
+	ret := binary.BigEndian.Uint32(checksum)
+
+	return uint32(ret), nil
 }
 
-func PredictableRandom32(seed int32, limit int32) (int32, error) {
-	if limit <= 2 {
-		return 0, errors.New(fmt.Sprintf("limit is %d, should be greater or equal to 2", limit))
+func StringToInt512(checksum string) (*big.Int, error) {
+	return stringToIntN(checksum, 512)
+}
+
+func StringToInt256(checksum string) (*big.Int, error) {
+	return stringToIntN(checksum, 256)
+}
+
+func StringToInt128(checksum string) (*big.Int, error) {
+	return stringToIntN(checksum, 128)
+}
+
+func StringToInt64(checksum string) (uint64, error) {
+	bytes, err := stringToBytesN(checksum, 64)
+	if err != nil {
+		return 0, vpsys.ErrorChain(err, "can't convert string to bytes")
 	}
-	return int32(PredictableRandomU32(seed)&positiveMask32) % limit, nil
+	return BytesToInt64(bytes)
+}
+
+func StringToInt32(checksum string) (uint32, error) {
+	bytes, err := stringToBytesN(checksum, 32)
+	if err != nil {
+		return 0, vpsys.ErrorChain(err, "can't convert string to bytes")
+	}
+	return BytesToInt32(bytes)
+}
+
+func StringToBytes512(checksum string) ([]byte, error) {
+	return stringToBytesN(checksum, 512)
+}
+
+func StringToBytes256(checksum string) ([]byte, error) {
+	return stringToBytesN(checksum, 256)
+}
+
+func StringToBytes128(checksum string) ([]byte, error) {
+	return stringToBytesN(checksum, 128)
+}
+
+func StringToBytes64(checksum string) ([]byte, error) {
+	return stringToBytesN(checksum, 64)
+}
+
+func StringToBytes32(checksum string) ([]byte, error) {
+	return stringToBytesN(checksum, 32)
+}
+
+func BytesToString512(checksum []byte) string {
+	return bytesToStringN(checksum, 512)
+}
+
+func BytesToString256(checksum []byte) string {
+	return bytesToStringN(checksum, 256)
+}
+
+func BytesToString128(checksum []byte) string {
+	return bytesToStringN(checksum, 128)
+}
+
+func BytesToString64(checksum []byte) string {
+	return bytesToStringN(checksum, 64)
+}
+
+func BytesToString32(checksum []byte) string {
+	return bytesToStringN(checksum, 32)
+}
+
+func Checksum512(data []byte) []byte {
+	sum := sha512.Sum512(data)
+
+	return sum[0:64]
+}
+
+func Checksum256(data []byte) []byte {
+	sum := sha256.Sum256(data)
+
+	return sum[0:32]
+}
+
+func Checksum128(data []byte) []byte {
+	sum := sha1.Sum(data)
+
+	return sum[2:18]
+}
+
+func Checksum64(data []byte) []byte {
+	sum := md5.Sum(data)
+
+	return sum[8:16]
+}
+
+func Checksum32(data []byte) []byte {
+	sum := md5.Sum(data)
+
+	return sum[0:4]
+}
+
+func PseudoRand512(seed []byte, n *big.Int) *big.Int {
+	checksum, err := BytesToInt512(Checksum512(seed))
+
+	if err != nil {
+		return nil
+	}
+
+	if n.Cmp(big1) > 0 {
+		var ret big.Int
+		ret.Mod(checksum, n)
+		return &ret
+	}
+	return checksum
+}
+
+func PseudoRand256(seed []byte, n *big.Int) *big.Int {
+	checksum, err := BytesToInt256(Checksum256(seed))
+
+	if err != nil {
+		return nil
+	}
+
+	if n.Cmp(big1) > 0 {
+		var ret big.Int
+		ret.Mod(checksum, n)
+		return &ret
+	}
+	return checksum
+}
+
+func PseudoRand128(seed []byte, n *big.Int) *big.Int {
+	checksum, err := BytesToInt128(Checksum128(seed))
+
+	if err != nil {
+		return nil
+	}
+
+	if n.Cmp(big1) > 0 {
+		var ret big.Int
+		ret.Mod(checksum, n)
+		return &ret
+	}
+	return checksum
+}
+
+func PseudoRand64(seed, n uint64) uint64 {
+	checksum := crc64.Checksum(IntToBytes64(seed), crc64_table)
+
+	if n > 1 {
+		return checksum % n
+	}
+	return checksum
+}
+
+func PseudoRand32(seed, n uint32) uint32 {
+	checksum := crc32.Checksum(IntToBytes32(seed), crc32_table)
+
+	if n > 1 {
+		return checksum % n
+	}
+	return checksum
 }

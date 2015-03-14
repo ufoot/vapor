@@ -33,7 +33,7 @@ func NewIdRandSource() rand.Source {
 	var now time.Time
 
 	now = time.Now()
-	source_seed = PredictableRandomU64(int64(now.Year()) * int64(now.Month()) * int64(now.Day()) * int64(now.Hour()) * int64(now.Minute()) * int64(now.Second()) * int64(now.Nanosecond()))
+	source_seed = PseudoRand64(uint64(now.Year())*uint64(now.Month())*uint64(now.Day())*uint64(now.Hour())*uint64(now.Minute())*uint64(now.Second())*uint64(now.Nanosecond()), 0)
 	source = rand.NewSource(int64(source_seed))
 
 	return source

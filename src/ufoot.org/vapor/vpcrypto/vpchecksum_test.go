@@ -24,107 +24,167 @@ import (
 	"testing"
 )
 
-func TestChecksumConvert512(t *testing.T) {
-	const checksum_val int64 = 1
-	var checksum_int *big.Int
-	var checksum_str string
-	var err error
-
-	checksum_int = big.NewInt(checksum_val)
-	checksum_str = ChecksumUToS512(checksum_int)
-	t.Logf("checksum 512 = %s", checksum_str)
-	checksum_int, err = ChecksumSToU512(checksum_str)
+func TestConvert512(t *testing.T) {
+	checksum_int := big.NewInt(1)
+	checksum_bytes := IntToBytes512(checksum_int)
+	checksum_str := BytesToString512(checksum_bytes)
+	t.Logf("checksum 512 str = %s (len %d)", checksum_str, len(checksum_str))
+	checksum_int2, err := StringToInt512(checksum_str)
 	if err != nil {
-		t.Errorf("checksum 512 error %s", err.Error())
+		t.Error("string to int error", err)
 	}
-	if checksum_int.Int64() != checksum_val {
-		t.Errorf("checksum 512 mismatch %d", checksum_int.Int64())
+	if checksum_int.Cmp(checksum_int2) != 0 {
+		t.Error("checksum ints 512 differ")
+	}
+	checksum_str2 := IntToString512(checksum_int)
+	t.Logf("checksum 512 str2 = %s (len %d)", checksum_str2, len(checksum_str2))
+	if checksum_str != checksum_str2 {
+		t.Error("checksums strings 512 differ")
+	}
+	checksum_bytes2, err2 := StringToBytes512(checksum_str)
+	if err2 != nil {
+		t.Error("string to bytes error", err2)
+	}
+	checksum_int3, err3 := BytesToInt512(checksum_bytes2)
+	if err3 != nil {
+		t.Error("bytes to int error", err3)
+	}
+	if checksum_int.Cmp(checksum_int3) != 0 {
+		t.Error("checksum ints 512 differ")
 	}
 }
 
-func TestChecksumConvert256(t *testing.T) {
-	const checksum_val int64 = 1
-	var checksum_int *big.Int
-	var checksum_str string
-	var err error
-
-	checksum_int = big.NewInt(checksum_val)
-	checksum_str = ChecksumUToS256(checksum_int)
-	t.Logf("checksum 256 = %s", checksum_str)
-	checksum_int, err = ChecksumSToU256(checksum_str)
+func TestConvert256(t *testing.T) {
+	checksum_int := big.NewInt(1)
+	checksum_bytes := IntToBytes256(checksum_int)
+	checksum_str := BytesToString256(checksum_bytes)
+	t.Logf("checksum 256 str = %s (len %d)", checksum_str, len(checksum_str))
+	checksum_int2, err := StringToInt256(checksum_str)
 	if err != nil {
-		t.Errorf("checksum 256 error %s", err.Error())
+		t.Error("string to int error", err)
 	}
-	if checksum_int.Int64() != checksum_val {
-		t.Errorf("checksum 256 mismatch %d", checksum_int.Int64())
+	if checksum_int.Cmp(checksum_int2) != 0 {
+		t.Error("checksum ints 256 differ")
+	}
+	checksum_str2 := IntToString256(checksum_int)
+	t.Logf("checksum 256 str2 = %s (len %d)", checksum_str2, len(checksum_str2))
+	if checksum_str != checksum_str2 {
+		t.Error("checksums strings 256 differ")
+	}
+	checksum_bytes2, err2 := StringToBytes256(checksum_str)
+	if err2 != nil {
+		t.Error("string to bytes error", err2)
+	}
+	checksum_int3, err3 := BytesToInt256(checksum_bytes2)
+	if err3 != nil {
+		t.Error("bytes to int error", err3)
+	}
+	if checksum_int.Cmp(checksum_int3) != 0 {
+		t.Error("checksum ints 256 differ")
 	}
 }
 
-func TestChecksumConvert128(t *testing.T) {
-	const checksum_val int64 = 1
-	var checksum_int *big.Int
-	var checksum_str string
-	var err error
-
-	checksum_int = big.NewInt(checksum_val)
-	checksum_str = ChecksumUToS128(checksum_int)
-	t.Logf("checksum 128 = %s", checksum_str)
-	checksum_int, err = ChecksumSToU128(checksum_str)
+func TestConvert128(t *testing.T) {
+	checksum_int := big.NewInt(1)
+	checksum_bytes := IntToBytes128(checksum_int)
+	checksum_str := BytesToString128(checksum_bytes)
+	t.Logf("checksum 128 str = %s (len %d)", checksum_str, len(checksum_str))
+	checksum_int2, err := StringToInt128(checksum_str)
 	if err != nil {
-		t.Errorf("checksum 128 error %s", err.Error())
+		t.Error("string to int error", err)
 	}
-	if checksum_int.Int64() != checksum_val {
-		t.Errorf("checksum 128 mismatch %d", checksum_int.Int64())
+	if checksum_int.Cmp(checksum_int2) != 0 {
+		t.Error("checksum ints 128 differ")
+	}
+	checksum_str2 := IntToString128(checksum_int)
+	t.Logf("checksum 128 str2 = %s (len %d)", checksum_str2, len(checksum_str2))
+	if checksum_str != checksum_str2 {
+		t.Error("checksums strings 128 differ")
+	}
+	checksum_bytes2, err2 := StringToBytes128(checksum_str)
+	if err2 != nil {
+		t.Error("string to bytes error", err2)
+	}
+	checksum_int3, err3 := BytesToInt128(checksum_bytes2)
+	if err3 != nil {
+		t.Error("bytes to int error", err3)
+	}
+	if checksum_int.Cmp(checksum_int3) != 0 {
+		t.Error("checksum ints 128 differ")
 	}
 }
 
-func TestChecksumConvert64(t *testing.T) {
-	const checksum_val int64 = 1
-	var checksum_int uint64
-	var checksum_str string
-	var err error
-
-	checksum_int = uint64(checksum_val)
-	checksum_str = ChecksumUToS64(checksum_int)
-	t.Logf("checksum 64 = %s", checksum_str)
-	checksum_int, err = ChecksumSToU64(checksum_str)
+func TestConvert64(t *testing.T) {
+	checksum_int := uint64(1)
+	checksum_bytes := IntToBytes64(checksum_int)
+	checksum_str := BytesToString64(checksum_bytes)
+	t.Logf("checksum 64 str = %s (len %d)", checksum_str, len(checksum_str))
+	checksum_int2, err := StringToInt64(checksum_str)
 	if err != nil {
-		t.Errorf("checksum 64 error %s", err.Error())
+		t.Error("string to int error", err)
 	}
-	if int64(checksum_int) != checksum_val {
-		t.Errorf("checksum 64 mismatch %d", checksum_int)
+	if checksum_int != checksum_int2 {
+		t.Error("checksum ints 64 differ")
+	}
+	checksum_str2 := IntToString64(checksum_int)
+	t.Logf("checksum 64 str2 = %s (len %d)", checksum_str2, len(checksum_str2))
+	if checksum_str != checksum_str2 {
+		t.Error("checksums strings 64 differ")
+	}
+	checksum_bytes2, err2 := StringToBytes64(checksum_str)
+	if err2 != nil {
+		t.Error("string to bytes error", err2)
+	}
+	checksum_int3, err3 := BytesToInt64(checksum_bytes2)
+	if err3 != nil {
+		t.Error("bytes to int error", err3)
+	}
+	if checksum_int != checksum_int3 {
+		t.Error("checksum ints 64 differ")
 	}
 }
 
-func TestChecksumConvert32(t *testing.T) {
-	const checksum_val int64 = 1
-	var checksum_int uint32
-	var checksum_str string
-	var err error
-
-	checksum_int = uint32(checksum_val)
-	checksum_str = ChecksumUToS32(checksum_int)
-	t.Logf("checksum 32 = %s", checksum_str)
-	checksum_int, err = ChecksumSToU32(checksum_str)
+func TestConvert32(t *testing.T) {
+	checksum_int := uint32(1)
+	checksum_bytes := IntToBytes32(checksum_int)
+	checksum_str := BytesToString32(checksum_bytes)
+	t.Logf("checksum 32 str = %s (len %d)", checksum_str, len(checksum_str))
+	checksum_int2, err := StringToInt32(checksum_str)
 	if err != nil {
-		t.Errorf("checksum 32 error %s", err.Error())
+		t.Error("string to int error", err)
 	}
-	if int64(checksum_int) != checksum_val {
-		t.Errorf("checksum 32 mismatch %d", checksum_int)
+	if checksum_int != checksum_int2 {
+		t.Error("checksum ints 32 differ")
+	}
+	checksum_str2 := IntToString32(checksum_int)
+	t.Logf("checksum 32 str2 = %s (len %d)", checksum_str2, len(checksum_str2))
+	if checksum_str != checksum_str2 {
+		t.Error("checksums strings 32 differ")
+	}
+	checksum_bytes2, err2 := StringToBytes32(checksum_str)
+	if err2 != nil {
+		t.Error("string to bytes error", err2)
+	}
+	checksum_int3, err3 := BytesToInt32(checksum_bytes2)
+	if err3 != nil {
+		t.Error("bytes to int error", err3)
+	}
+	if checksum_int != checksum_int3 {
+		t.Error("checksum ints 32 differ")
 	}
 }
 
-func TestPredictableRandomS512(t *testing.T) {
+func TestChecksum512(t *testing.T) {
 	var rand512_n [10]string
 
-	const expected_rand512_n_0 string = "31bca02094eb78126a517b206a88c73cfa9ec6f704c7030d18212cace820f025f00bf0ea68dbf3f3a5436ca63b53bf7bf80ad8d5de7d8359d0b7fed9dbc3ab99"
-	const expected_rand512_n_9 string = "729831a37d87a90f7dc4816088fdcc01c9b6be0b02736a3d215486371df7224cc83c5cdcf8041c997f8c78011da4a075f632867e58782bbb615b15788898ca1b"
+	const expected_rand512_n_0 string = "f7fbba6e0636f890e56fbbf3283e524c6fa3204ae298382d624741d0dc6638326e282c41be5e4254d8820772c5518a2c5a8c0c7f7eda19594a7eb539453e1ed7"
+	const expected_rand512_n_9 string = "ce9933d84226e879fe45d36e778a8c8974cb4846a29192bde6a1ec895838959f802da42c7d92d7148efabdf1402b521191d8772a25adf632369ee9c25d348609"
 
 	for i, _ := range rand512_n {
 		if i == 0 {
-			rand512_n[i] = PredictableRandomS512("0")
+			rand512_n[i] = BytesToString512(Checksum512([]byte("foo")))
 		} else {
-			rand512_n[i] = PredictableRandomS512(rand512_n[i-1])
+			rand512_n[i] = BytesToString512(Checksum512([]byte(rand512_n[i-1])))
 		}
 	}
 
@@ -141,17 +201,17 @@ func TestPredictableRandomS512(t *testing.T) {
 	}
 }
 
-func TestPredictableRandomS256(t *testing.T) {
+func TestChecksum256(t *testing.T) {
 	var rand256_n [10]string
 
-	const expected_rand256_n_0 string = "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
-	const expected_rand256_n_9 string = "ae82b5a97107add16a053e09337a79516669a2dff9f56060956d221db13ba0c2"
+	const expected_rand256_n_0 string = "2c26b46b68ffc68ff99b453c1d30413413422d706483bfa0f98a5e886266e7ae"
+	const expected_rand256_n_9 string = "437ae920503271030b1f5d2d2c20ba10f85bb50ba088b61b2c570b902e9f100f"
 
 	for i, _ := range rand256_n {
 		if i == 0 {
-			rand256_n[i] = PredictableRandomS256("0")
+			rand256_n[i] = BytesToString256(Checksum256([]byte("foo")))
 		} else {
-			rand256_n[i] = PredictableRandomS256(rand256_n[i-1])
+			rand256_n[i] = BytesToString256(Checksum256([]byte(rand256_n[i-1])))
 		}
 	}
 
@@ -168,17 +228,17 @@ func TestPredictableRandomS256(t *testing.T) {
 	}
 }
 
-func TestPredictableRandomS128(t *testing.T) {
+func TestChecksum128(t *testing.T) {
 	var rand128_n [10]string
 
-	const expected_rand128_n_0 string = "b6589fc6ab0dc82cf12099d1c2d40ab9"
-	const expected_rand128_n_9 string = "97d04f6dbef880d28b547c1d4489f804"
+	const expected_rand128_n_0 string = "c7b5ea3f0fdbc95d0dd47f3c5bc275da"
+	const expected_rand128_n_9 string = "9b3fc706cc7f619d1c64c479c8d78c56"
 
 	for i, _ := range rand128_n {
 		if i == 0 {
-			rand128_n[i] = PredictableRandomS128("0")
+			rand128_n[i] = BytesToString128(Checksum128([]byte("foo")))
 		} else {
-			rand128_n[i] = PredictableRandomS128(rand128_n[i-1])
+			rand128_n[i] = BytesToString128(Checksum128([]byte(rand128_n[i-1])))
 		}
 	}
 
@@ -195,17 +255,17 @@ func TestPredictableRandomS128(t *testing.T) {
 	}
 }
 
-func TestPredictableRandomS64(t *testing.T) {
+func TestChecksum64(t *testing.T) {
 	var rand64_n [10]string
 
-	const expected_rand64_n_0 string = "66e7dff9f98764da"
-	const expected_rand64_n_9 string = "8c51fc19135d77d5"
+	const expected_rand64_n_0 string = "edef654fccc4a4d8"
+	const expected_rand64_n_9 string = "417827c81852366a"
 
 	for i, _ := range rand64_n {
 		if i == 0 {
-			rand64_n[i] = PredictableRandomS64("0")
+			rand64_n[i] = BytesToString64(Checksum64([]byte("foo")))
 		} else {
-			rand64_n[i] = PredictableRandomS64(rand64_n[i-1])
+			rand64_n[i] = BytesToString64(Checksum64([]byte(rand64_n[i-1])))
 		}
 	}
 
@@ -222,17 +282,17 @@ func TestPredictableRandomS64(t *testing.T) {
 	}
 }
 
-func TestPredictableRandomS32(t *testing.T) {
+func TestChecksum32(t *testing.T) {
 	var rand32_n [10]string
 
-	const expected_rand32_n_0 string = "cfcd2084"
-	const expected_rand32_n_9 string = "df702ed0"
+	const expected_rand32_n_0 string = "acbd18db"
+	const expected_rand32_n_9 string = "9d232ba4"
 
 	for i, _ := range rand32_n {
 		if i == 0 {
-			rand32_n[i] = PredictableRandomS32("0")
+			rand32_n[i] = BytesToString32(Checksum32([]byte("foo")))
 		} else {
-			rand32_n[i] = PredictableRandomS32(rand32_n[i-1])
+			rand32_n[i] = BytesToString32(Checksum32([]byte(rand32_n[i-1])))
 		}
 	}
 
@@ -249,179 +309,136 @@ func TestPredictableRandomS32(t *testing.T) {
 	}
 }
 
-func TestPredictableRandomU64(t *testing.T) {
-	var rand64_n [10]uint64
+func TestPseudoRand512(t *testing.T) {
+	limit := big.NewInt(1000)
+	const expected_n = 489
 
-	const expected_rand64_n_0 uint64 = 0xb66a73654282cac0
-	const expected_rand64_n_9 uint64 = 0x6e48c9ffaab595fc
-
-	for i, _ := range rand64_n {
-		if i == 0 {
-			rand64_n[i] = PredictableRandomU64(0)
-		} else {
-			rand64_n[i] = PredictableRandomU64(int64(rand64_n[i-1]))
-		}
+	n := PseudoRand512([]byte("bar"), limit).Int64()
+	if n != expected_n {
+		t.Errorf("n is %d, should be %d", n, expected_n)
 	}
-
-	for i, v := range rand64_n {
-		t.Logf("rand64_n[%d]=%016x", i, v)
-	}
-
-	if rand64_n[0] != expected_rand64_n_0 {
-		t.Errorf("rand64_n[0] is %016x, should be %016x", rand64_n[0], expected_rand64_n_0)
-	}
-
-	if rand64_n[9] != expected_rand64_n_9 {
-		t.Errorf("rand64_n[9] is %016x, should be %016x", rand64_n[9], expected_rand64_n_9)
-	}
+	_ = PseudoRand512([]byte(""), big.NewInt(0))
 }
 
-func TestPredictableRandomU32(t *testing.T) {
-	var rand32_n [10]uint32
+func TestPseudoRand256(t *testing.T) {
+	limit := big.NewInt(1000)
+	const expected_n = 929
 
-	const expected_rand32_n_0 uint32 = 0x2144df1c
-	const expected_rand32_n_9 uint32 = 0xe9ec3db1
-
-	for i, _ := range rand32_n {
-		if i == 0 {
-			rand32_n[i] = PredictableRandomU32(0)
-		} else {
-			rand32_n[i] = PredictableRandomU32(int32(rand32_n[i-1]))
-		}
+	n := PseudoRand256([]byte("bar"), limit).Int64()
+	if n != expected_n {
+		t.Errorf("n is %d, should be %d", n, expected_n)
 	}
-
-	for i, v := range rand32_n {
-		t.Logf("rand32_n[%d]=%08x", i, v)
-	}
-
-	if rand32_n[0] != expected_rand32_n_0 {
-		t.Errorf("rand32_n[0] is %08x, should be %08x", rand32_n[0], expected_rand32_n_0)
-	}
-
-	if rand32_n[9] != expected_rand32_n_9 {
-		t.Errorf("rand32_n[9] is %08x, should be %08x", rand32_n[9], expected_rand32_n_9)
-	}
+	_ = PseudoRand256([]byte(""), big.NewInt(0))
 }
 
-func TestPredictableRandom64(t *testing.T) {
-	var err error
-	var rand64 int64
+func TestPseudoRand128(t *testing.T) {
+	limit := big.NewInt(1000)
+	const expected_n = 472
 
-	const check64Seed int64 = 1
-	const check64Limit int64 = 1000000000000
-	const check64Result int64 = 608648394112
-
-	rand64, err = PredictableRandom64(check64Seed, check64Limit)
-
-	if err != nil {
-		t.Error("error generating number", err)
+	n := PseudoRand128([]byte("bar"), limit).Int64()
+	if n != expected_n {
+		t.Errorf("n is %d, should be %d", n, expected_n)
 	}
-
-	t.Logf("rand64=%d", rand64)
-	if rand64 != check64Result {
-		t.Errorf("rand64 is %d, should be %d", rand64, check64Result)
-	}
-
-	rand64, err = PredictableRandom64(check64Seed, 1)
-
-	if err != nil {
-		t.Log("an error has been raised because limit is <=2, this is normal... ", err)
-	} else {
-		t.Error("an error should have been generated for a call to random with limit<=2 ", err)
-	}
+	_ = PseudoRand128([]byte(""), big.NewInt(0))
 }
 
-func TestPredictableRandom32(t *testing.T) {
-	var err error
-	var rand32 int32
+func TestPseudoRand64(t *testing.T) {
+	const limit = 1000
+	const expected_n = 760
 
-	const check32Seed int32 = 1
-	const check32Limit int32 = 1000000
-	const check32Result int32 = 730553
-
-	rand32, err = PredictableRandom32(check32Seed, check32Limit)
-
-	if err != nil {
-		t.Error("error generating number", err)
+	n := PseudoRand64(123, limit)
+	if n != expected_n {
+		t.Errorf("n is %d, should be %d", n, expected_n)
 	}
-
-	t.Logf("rand32=%d", rand32)
-	if rand32 != check32Result {
-		t.Errorf("rand32 is %d, should be %d", rand32, check32Result)
-	}
-
-	rand32, err = PredictableRandom32(check32Seed, 1)
-
-	if err != nil {
-		t.Log("an error has been raised because limit is <=2, this is normal... ", err)
-	} else {
-		t.Error("an error should have been generated for a call to random with limit<=2 ", err)
-	}
+	_ = PseudoRand64(456, 0)
 }
 
-func BenchmarkChecksumConvert512(b *testing.B) {
-	const checksum_val int64 = 1
-	var checksum_int *big.Int
+func TestPseudoRand32(t *testing.T) {
+	const limit = 1000
+	const expected_n = 104
 
-	checksum_int = big.NewInt(checksum_val)
+	n := PseudoRand32(123, limit)
+	if n != expected_n {
+		t.Errorf("n is %d, should be %d", n, expected_n)
+	}
+	_ = PseudoRand32(456, 0)
+}
+
+func BenchmarkChecksum512(b *testing.B) {
+	data := make([]byte, 2048)
 
 	for i := 0; i < b.N; i++ {
-		checksum_int, _ = ChecksumSToU512(ChecksumUToS512(checksum_int))
+		_ = Checksum512(data)
 	}
 }
 
-func BenchmarkSRandom512(b *testing.B) {
-	var rand512 string
+func BenchmarkChecksum256(b *testing.B) {
+	data := make([]byte, 2048)
 
 	for i := 0; i < b.N; i++ {
-		rand512 = PredictableRandomS512(rand512)
+		_ = Checksum256(data)
 	}
 }
 
-func BenchmarkSRandom256(b *testing.B) {
-	var rand256 string
+func BenchmarkChecksum128(b *testing.B) {
+	data := make([]byte, 2048)
 
 	for i := 0; i < b.N; i++ {
-		rand256 = PredictableRandomS256(rand256)
+		_ = Checksum128(data)
 	}
 }
 
-func BenchmarkSRandom128(b *testing.B) {
-	var rand128 string
+func BenchmarkChecksum64(b *testing.B) {
+	data := make([]byte, 2048)
 
 	for i := 0; i < b.N; i++ {
-		rand128 = PredictableRandomS128(rand128)
+		_ = Checksum64(data)
 	}
 }
 
-func BenchmarkSRandom64(b *testing.B) {
-	var rand64 string
+func BenchmarkChecksum32(b *testing.B) {
+	data := make([]byte, 2048)
 
 	for i := 0; i < b.N; i++ {
-		rand64 = PredictableRandomS64(rand64)
+		_ = Checksum32(data)
 	}
 }
 
-func BenchmarkSRandom32(b *testing.B) {
-	var rand32 string
+func BenchmarkPseudoRand512(b *testing.B) {
+	data := make([]byte, 1024)
+	limit := big.NewInt(10000)
 
 	for i := 0; i < b.N; i++ {
-		rand32 = PredictableRandomS32(rand32)
+		_ = PseudoRand512(data, limit)
 	}
 }
 
-func BenchmarkURandom64(b *testing.B) {
-	var rand64 uint64
+func BenchmarkPseudoRand256(b *testing.B) {
+	data := make([]byte, 1024)
+	limit := big.NewInt(10000)
 
 	for i := 0; i < b.N; i++ {
-		rand64 = PredictableRandomU64(int64(rand64))
+		_ = PseudoRand256(data, limit)
 	}
 }
 
-func BenchmarkURandom32(b *testing.B) {
-	var rand32 uint32
+func BenchmarkPseudoRand128(b *testing.B) {
+	data := make([]byte, 1024)
+	limit := big.NewInt(10000)
 
 	for i := 0; i < b.N; i++ {
-		rand32 = PredictableRandomU32(int32(rand32))
+		_ = PseudoRand128(data, limit)
+	}
+}
+
+func BenchmarkPseudoRand64(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = PseudoRand64(1, 1000)
+	}
+}
+
+func BenchmarkPseudoRand32(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		_ = PseudoRand32(1, 1000)
 	}
 }
