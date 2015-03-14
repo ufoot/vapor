@@ -20,35 +20,47 @@
 package vpcrypto
 
 import (
-	"math/rand"
-	"time"
+	"math/big"
 )
 
-const ID_RAND_MASK_OR uint64 = 0x0400000000000000
-const ID_RAND_MASK_AND uint64 = 0x7fffffffffffffff
+func ZeroesInBigInt(i *big.Int) int {
+	n := i.BitLen()
+	var p int
 
-func NewIdRandSource() rand.Source {
-	var source_seed uint64
-	var source rand.Source
-	var now time.Time
+	for p = 0; p < n && i.Bit(p) == 0; p++ {
+	}
 
-	now = time.Now()
-	source_seed = PseudoRand64(uint64(now.Year())*uint64(now.Month())*uint64(now.Day())*uint64(now.Hour())*uint64(now.Minute())*uint64(now.Second())*uint64(now.Nanosecond()), 0)
-	source = rand.NewSource(int64(source_seed))
-
-	return source
+	return p
 }
 
-func NewIdRandSeed(source rand.Source) uint64 {
-	var seed uint64
+func ZeroesInBytes(data []byte) int {
+	var i big.Int
+	var p int
 
-	seed = uint64(source.Int63())
-	seed = seed | ID_RAND_MASK_OR
-	seed = seed & ID_RAND_MASK_AND
+	i.SetBytes(data)
+	n := i.BitLen()
+	for p = 0; p < n && i.Bit(p) == 0; p++ {
+	}
 
-	return seed
+	return p
 }
 
-func IdRandMask(raw uint64) uint64 {
-	return (raw | ID_RAND_MASK_OR) & ID_RAND_MASK_AND
+func ZeroesIn64(i uint64) int {
+	var p int
+
+	for p = 0; p < 64 && (i&1) == 0; p++ {
+		i >>= 1
+	}
+
+	return p
+}
+
+func ZeroesIn32(i uint32) int {
+	var p int
+
+	for p = 0; p < 32 && (i&1) == 0; p++ {
+		i >>= 1
+	}
+
+	return p
 }

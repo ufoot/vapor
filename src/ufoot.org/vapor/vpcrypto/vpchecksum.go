@@ -314,7 +314,7 @@ func PseudoRand512(seed []byte, n *big.Int) *big.Int {
 		return nil
 	}
 
-	if n.Cmp(big1) > 0 {
+	if n != nil && n.Cmp(big1) > 0 {
 		var ret big.Int
 		ret.Mod(checksum, n)
 		return &ret
@@ -329,7 +329,7 @@ func PseudoRand256(seed []byte, n *big.Int) *big.Int {
 		return nil
 	}
 
-	if n.Cmp(big1) > 0 {
+	if n != nil && n.Cmp(big1) > 0 {
 		var ret big.Int
 		ret.Mod(checksum, n)
 		return &ret
@@ -344,7 +344,7 @@ func PseudoRand128(seed []byte, n *big.Int) *big.Int {
 		return nil
 	}
 
-	if n.Cmp(big1) > 0 {
+	if n != nil && n.Cmp(big1) > 0 {
 		var ret big.Int
 		ret.Mod(checksum, n)
 		return &ret
