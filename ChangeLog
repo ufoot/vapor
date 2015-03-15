@@ -1,5 +1,10 @@
 2015-03-14  Christian Mauduit <ufoot@ufoot.org>
 
+	* src/ufoot.org/vapor/vpcrypto/vpkey_test.go: More detailed crypto
+	bench, separated sign/checksig and encrypt/decrypt
+
+2015-03-14  Christian Mauduit <ufoot@ufoot.org>
+
 	* configure.ac, src/ufoot.org/vapor/vpbuild/vpversion.go: Update
 	version for develop branch
 

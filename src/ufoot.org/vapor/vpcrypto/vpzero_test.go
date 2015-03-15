@@ -45,29 +45,29 @@ func TestZeroesInBigInt(t *testing.T) {
 	}
 }
 
-func TestZeroesInBytes(t *testing.T) {
+func TestZeroesInBuf(t *testing.T) {
 	b := make([]byte, 10)
 
 	b[9] = byte(init_i)
-	z := ZeroesInBytes(b)
+	z := ZeroesInBuf(b)
 	if z != expected_z {
-		t.Errorf("bad zeroes in Bytes for %d, got %d, expected %d", init_i, z, expected_z)
+		t.Errorf("bad zeroes in Buf for %d, got %d, expected %d", init_i, z, expected_z)
 	} else {
-		t.Logf("zeroes in Bytes for %d is %d", init_i, expected_z)
+		t.Logf("zeroes in Buf for %d is %d", init_i, expected_z)
 	}
 	b = make([]byte, 0)
-	z = ZeroesInBytes(b)
+	z = ZeroesInBuf(b)
 	if z != 0 {
-		t.Errorf("bad zeroes in Bytes for empty Bytes, got %d, expected 0", z)
+		t.Errorf("bad zeroes in Buf for empty Buf, got %d, expected 0", z)
 	} else {
-		t.Logf("zeroes in Bytes for empty Bytes is 0")
+		t.Logf("zeroes in Buf for empty Buf is 0")
 	}
 	b = make([]byte, 1)
-	z = ZeroesInBytes(b)
+	z = ZeroesInBuf(b)
 	if z != 0 {
-		t.Errorf("bad zeroes in Bytes for [1]Bytes, got %d, expected 8", z)
+		t.Errorf("bad zeroes in Buf for [1]Bytes, got %d, expected 8", z)
 	} else {
-		t.Logf("zeroes in Bytes for [1]Bytes is 8")
+		t.Logf("zeroes in Buf for [1]Bytes is 8")
 	}
 }
 

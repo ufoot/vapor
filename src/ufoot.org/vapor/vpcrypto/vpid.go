@@ -39,12 +39,12 @@ func Id512(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error
 	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand512(r, nil)
 		if checker == nil || checker.Check(tmpInt) {
-			tmpData = IntToBytes512(tmpInt)
+			tmpData = IntToBuf512(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
 			if err != nil {
 				return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
 			}
-			tmpZ = ZeroesInBytes(Checksum512(tmpSig))
+			tmpZ = ZeroesInBuf(Checksum512(tmpSig))
 			if tmpZ >= z {
 				ret = tmpInt
 				z = tmpZ
@@ -66,12 +66,12 @@ func Id256(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error
 	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand256(r, nil)
 		if checker == nil || checker.Check(tmpInt) {
-			tmpData = IntToBytes256(tmpInt)
+			tmpData = IntToBuf256(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
 			if err != nil {
 				return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
 			}
-			tmpZ = ZeroesInBytes(Checksum256(tmpSig))
+			tmpZ = ZeroesInBuf(Checksum256(tmpSig))
 			if tmpZ >= z {
 				ret = tmpInt
 				z = tmpZ
@@ -92,12 +92,12 @@ func Id128(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error
 	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand128(r, nil)
 		if checker == nil || checker.Check(tmpInt) {
-			tmpData = IntToBytes128(tmpInt)
+			tmpData = IntToBuf128(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
 			if err != nil {
 				return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
 			}
-			tmpZ = ZeroesInBytes(Checksum128(tmpSig))
+			tmpZ = ZeroesInBuf(Checksum128(tmpSig))
 			if tmpZ >= z {
 				ret = tmpInt
 				z = tmpZ
@@ -121,12 +121,12 @@ func Id64(key *Key, checker Checker, seconds int) (uint64, []byte, int, error) {
 		tmpInt = Rand64(r, 0)
 		tmpBig.SetUint64(tmpInt)
 		if checker == nil || checker.Check(&tmpBig) {
-			tmpData = IntToBytes64(tmpInt)
+			tmpData = IntToBuf64(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
 			if err != nil {
 				return 0, nil, 0, vpsys.ErrorChain(err, "can't sign id")
 			}
-			tmpZ = ZeroesInBytes(Checksum64(tmpSig))
+			tmpZ = ZeroesInBuf(Checksum64(tmpSig))
 			if tmpZ >= z {
 				ret = tmpInt
 				z = tmpZ
@@ -150,12 +150,12 @@ func Id32(key *Key, checker Checker, seconds int) (uint32, []byte, int, error) {
 		tmpInt = Rand32(r, 0)
 		tmpBig.SetUint64(uint64(tmpInt))
 		if checker == nil || checker.Check(&tmpBig) {
-			tmpData = IntToBytes32(tmpInt)
+			tmpData = IntToBuf32(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
 			if err != nil {
 				return 0, nil, 0, vpsys.ErrorChain(err, "can't sign id")
 			}
-			tmpZ = ZeroesInBytes(Checksum32(tmpSig))
+			tmpZ = ZeroesInBuf(Checksum32(tmpSig))
 			if tmpZ >= z {
 				ret = tmpInt
 				z = tmpZ

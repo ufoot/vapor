@@ -33,7 +33,7 @@ func ZeroesInBigInt(i *big.Int) int {
 	return p
 }
 
-func ZeroesInBytes(data []byte) int {
+func ZeroesInBuf(data []byte) int {
 	var i big.Int
 	var p int
 

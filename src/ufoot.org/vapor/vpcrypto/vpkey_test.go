@@ -166,8 +166,8 @@ func BenchmarkSign(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_, err = benchKey.Sign(benchContent)
-		if err!=nil {
-			b.Error(vpsys.ErrorChain(err,"unable to sign"))
+		if err != nil {
+			b.Error(vpsys.ErrorChain(err, "unable to sign"))
 		}
 	}
 }
@@ -176,20 +176,20 @@ func BenchmarkCheckSig(b *testing.B) {
 	var err error
 
 	for i := 0; i < b.N; i++ {
-		_, err = benchKey.CheckSig(benchContent,benchSig)
-		if err!=nil {
-			b.Error(vpsys.ErrorChain(err,"unable to check sig"))
+		_, err = benchKey.CheckSig(benchContent, benchSig)
+		if err != nil {
+			b.Error(vpsys.ErrorChain(err, "unable to check sig"))
 		}
 	}
 }
 
 func BenchmarkEncrypt(b *testing.B) {
 	var err error
-	
+
 	for i := 0; i < b.N; i++ {
 		_, err = benchKey.Encrypt(benchContent)
-		if err!=nil {
-			b.Error(vpsys.ErrorChain(err,"unable to encrypt"))
+		if err != nil {
+			b.Error(vpsys.ErrorChain(err, "unable to encrypt"))
 		}
 	}
 }
@@ -199,8 +199,8 @@ func BenchmarkDecrypt(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_, err = benchKey.Decrypt(benchCrypted)
-		if err!=nil {
-			b.Error(vpsys.ErrorChain(err,"unable to decrypt"))
+		if err != nil {
+			b.Error(vpsys.ErrorChain(err, "unable to decrypt"))
 		}
 	}
 }

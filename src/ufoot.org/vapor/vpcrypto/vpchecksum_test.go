@@ -26,26 +26,26 @@ import (
 
 func TestConvert512(t *testing.T) {
 	checksum_int := big.NewInt(1)
-	checksum_bytes := IntToBytes512(checksum_int)
-	checksum_str := BytesToString512(checksum_bytes)
+	checksum_bytes := IntToBuf512(checksum_int)
+	checksum_str := BufToStr512(checksum_bytes)
 	t.Logf("checksum 512 str = %s (len %d)", checksum_str, len(checksum_str))
-	checksum_int2, err := StringToInt512(checksum_str)
+	checksum_int2, err := StrToInt512(checksum_str)
 	if err != nil {
 		t.Error("string to int error", err)
 	}
 	if checksum_int.Cmp(checksum_int2) != 0 {
 		t.Error("checksum ints 512 differ")
 	}
-	checksum_str2 := IntToString512(checksum_int)
+	checksum_str2 := IntToStr512(checksum_int)
 	t.Logf("checksum 512 str2 = %s (len %d)", checksum_str2, len(checksum_str2))
 	if checksum_str != checksum_str2 {
 		t.Error("checksums strings 512 differ")
 	}
-	checksum_bytes2, err2 := StringToBytes512(checksum_str)
+	checksum_bytes2, err2 := StrToBuf512(checksum_str)
 	if err2 != nil {
 		t.Error("string to bytes error", err2)
 	}
-	checksum_int3, err3 := BytesToInt512(checksum_bytes2)
+	checksum_int3, err3 := BufToInt512(checksum_bytes2)
 	if err3 != nil {
 		t.Error("bytes to int error", err3)
 	}
@@ -56,26 +56,26 @@ func TestConvert512(t *testing.T) {
 
 func TestConvert256(t *testing.T) {
 	checksum_int := big.NewInt(1)
-	checksum_bytes := IntToBytes256(checksum_int)
-	checksum_str := BytesToString256(checksum_bytes)
+	checksum_bytes := IntToBuf256(checksum_int)
+	checksum_str := BufToStr256(checksum_bytes)
 	t.Logf("checksum 256 str = %s (len %d)", checksum_str, len(checksum_str))
-	checksum_int2, err := StringToInt256(checksum_str)
+	checksum_int2, err := StrToInt256(checksum_str)
 	if err != nil {
 		t.Error("string to int error", err)
 	}
 	if checksum_int.Cmp(checksum_int2) != 0 {
 		t.Error("checksum ints 256 differ")
 	}
-	checksum_str2 := IntToString256(checksum_int)
+	checksum_str2 := IntToStr256(checksum_int)
 	t.Logf("checksum 256 str2 = %s (len %d)", checksum_str2, len(checksum_str2))
 	if checksum_str != checksum_str2 {
 		t.Error("checksums strings 256 differ")
 	}
-	checksum_bytes2, err2 := StringToBytes256(checksum_str)
+	checksum_bytes2, err2 := StrToBuf256(checksum_str)
 	if err2 != nil {
 		t.Error("string to bytes error", err2)
 	}
-	checksum_int3, err3 := BytesToInt256(checksum_bytes2)
+	checksum_int3, err3 := BufToInt256(checksum_bytes2)
 	if err3 != nil {
 		t.Error("bytes to int error", err3)
 	}
@@ -86,26 +86,26 @@ func TestConvert256(t *testing.T) {
 
 func TestConvert128(t *testing.T) {
 	checksum_int := big.NewInt(1)
-	checksum_bytes := IntToBytes128(checksum_int)
-	checksum_str := BytesToString128(checksum_bytes)
+	checksum_bytes := IntToBuf128(checksum_int)
+	checksum_str := BufToStr128(checksum_bytes)
 	t.Logf("checksum 128 str = %s (len %d)", checksum_str, len(checksum_str))
-	checksum_int2, err := StringToInt128(checksum_str)
+	checksum_int2, err := StrToInt128(checksum_str)
 	if err != nil {
 		t.Error("string to int error", err)
 	}
 	if checksum_int.Cmp(checksum_int2) != 0 {
 		t.Error("checksum ints 128 differ")
 	}
-	checksum_str2 := IntToString128(checksum_int)
+	checksum_str2 := IntToStr128(checksum_int)
 	t.Logf("checksum 128 str2 = %s (len %d)", checksum_str2, len(checksum_str2))
 	if checksum_str != checksum_str2 {
 		t.Error("checksums strings 128 differ")
 	}
-	checksum_bytes2, err2 := StringToBytes128(checksum_str)
+	checksum_bytes2, err2 := StrToBuf128(checksum_str)
 	if err2 != nil {
 		t.Error("string to bytes error", err2)
 	}
-	checksum_int3, err3 := BytesToInt128(checksum_bytes2)
+	checksum_int3, err3 := BufToInt128(checksum_bytes2)
 	if err3 != nil {
 		t.Error("bytes to int error", err3)
 	}
@@ -116,26 +116,26 @@ func TestConvert128(t *testing.T) {
 
 func TestConvert64(t *testing.T) {
 	checksum_int := uint64(1)
-	checksum_bytes := IntToBytes64(checksum_int)
-	checksum_str := BytesToString64(checksum_bytes)
+	checksum_bytes := IntToBuf64(checksum_int)
+	checksum_str := BufToStr64(checksum_bytes)
 	t.Logf("checksum 64 str = %s (len %d)", checksum_str, len(checksum_str))
-	checksum_int2, err := StringToInt64(checksum_str)
+	checksum_int2, err := StrToInt64(checksum_str)
 	if err != nil {
 		t.Error("string to int error", err)
 	}
 	if checksum_int != checksum_int2 {
 		t.Error("checksum ints 64 differ")
 	}
-	checksum_str2 := IntToString64(checksum_int)
+	checksum_str2 := IntToStr64(checksum_int)
 	t.Logf("checksum 64 str2 = %s (len %d)", checksum_str2, len(checksum_str2))
 	if checksum_str != checksum_str2 {
 		t.Error("checksums strings 64 differ")
 	}
-	checksum_bytes2, err2 := StringToBytes64(checksum_str)
+	checksum_bytes2, err2 := StrToBuf64(checksum_str)
 	if err2 != nil {
 		t.Error("string to bytes error", err2)
 	}
-	checksum_int3, err3 := BytesToInt64(checksum_bytes2)
+	checksum_int3, err3 := BufToInt64(checksum_bytes2)
 	if err3 != nil {
 		t.Error("bytes to int error", err3)
 	}
@@ -146,26 +146,26 @@ func TestConvert64(t *testing.T) {
 
 func TestConvert32(t *testing.T) {
 	checksum_int := uint32(1)
-	checksum_bytes := IntToBytes32(checksum_int)
-	checksum_str := BytesToString32(checksum_bytes)
+	checksum_bytes := IntToBuf32(checksum_int)
+	checksum_str := BufToStr32(checksum_bytes)
 	t.Logf("checksum 32 str = %s (len %d)", checksum_str, len(checksum_str))
-	checksum_int2, err := StringToInt32(checksum_str)
+	checksum_int2, err := StrToInt32(checksum_str)
 	if err != nil {
 		t.Error("string to int error", err)
 	}
 	if checksum_int != checksum_int2 {
 		t.Error("checksum ints 32 differ")
 	}
-	checksum_str2 := IntToString32(checksum_int)
+	checksum_str2 := IntToStr32(checksum_int)
 	t.Logf("checksum 32 str2 = %s (len %d)", checksum_str2, len(checksum_str2))
 	if checksum_str != checksum_str2 {
 		t.Error("checksums strings 32 differ")
 	}
-	checksum_bytes2, err2 := StringToBytes32(checksum_str)
+	checksum_bytes2, err2 := StrToBuf32(checksum_str)
 	if err2 != nil {
 		t.Error("string to bytes error", err2)
 	}
-	checksum_int3, err3 := BytesToInt32(checksum_bytes2)
+	checksum_int3, err3 := BufToInt32(checksum_bytes2)
 	if err3 != nil {
 		t.Error("bytes to int error", err3)
 	}
@@ -182,9 +182,9 @@ func TestChecksum512(t *testing.T) {
 
 	for i, _ := range rand512_n {
 		if i == 0 {
-			rand512_n[i] = BytesToString512(Checksum512([]byte("foo")))
+			rand512_n[i] = BufToStr512(Checksum512([]byte("foo")))
 		} else {
-			rand512_n[i] = BytesToString512(Checksum512([]byte(rand512_n[i-1])))
+			rand512_n[i] = BufToStr512(Checksum512([]byte(rand512_n[i-1])))
 		}
 	}
 
@@ -209,9 +209,9 @@ func TestChecksum256(t *testing.T) {
 
 	for i, _ := range rand256_n {
 		if i == 0 {
-			rand256_n[i] = BytesToString256(Checksum256([]byte("foo")))
+			rand256_n[i] = BufToStr256(Checksum256([]byte("foo")))
 		} else {
-			rand256_n[i] = BytesToString256(Checksum256([]byte(rand256_n[i-1])))
+			rand256_n[i] = BufToStr256(Checksum256([]byte(rand256_n[i-1])))
 		}
 	}
 
@@ -236,9 +236,9 @@ func TestChecksum128(t *testing.T) {
 
 	for i, _ := range rand128_n {
 		if i == 0 {
-			rand128_n[i] = BytesToString128(Checksum128([]byte("foo")))
+			rand128_n[i] = BufToStr128(Checksum128([]byte("foo")))
 		} else {
-			rand128_n[i] = BytesToString128(Checksum128([]byte(rand128_n[i-1])))
+			rand128_n[i] = BufToStr128(Checksum128([]byte(rand128_n[i-1])))
 		}
 	}
 
@@ -263,9 +263,9 @@ func TestChecksum64(t *testing.T) {
 
 	for i, _ := range rand64_n {
 		if i == 0 {
-			rand64_n[i] = BytesToString64(Checksum64([]byte("foo")))
+			rand64_n[i] = BufToStr64(Checksum64([]byte("foo")))
 		} else {
-			rand64_n[i] = BytesToString64(Checksum64([]byte(rand64_n[i-1])))
+			rand64_n[i] = BufToStr64(Checksum64([]byte(rand64_n[i-1])))
 		}
 	}
 
@@ -290,9 +290,9 @@ func TestChecksum32(t *testing.T) {
 
 	for i, _ := range rand32_n {
 		if i == 0 {
-			rand32_n[i] = BytesToString32(Checksum32([]byte("foo")))
+			rand32_n[i] = BufToStr32(Checksum32([]byte("foo")))
 		} else {
-			rand32_n[i] = BytesToString32(Checksum32([]byte(rand32_n[i-1])))
+			rand32_n[i] = BufToStr32(Checksum32([]byte(rand32_n[i-1])))
 		}
 	}
 

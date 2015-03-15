@@ -46,7 +46,7 @@ func init() {
 	big1 = big.NewInt(1)
 }
 
-func intToBytesN(checksum *big.Int, bits int) []byte {
+func intToBufN(checksum *big.Int, bits int) []byte {
 	bytes := bits >> 3
 	ret := checksum.Bytes()
 
@@ -66,8 +66,8 @@ func intToBytesN(checksum *big.Int, bits int) []byte {
 	return ret2
 }
 
-func intToStringN(checksum *big.Int, bits int) string {
-	return bytesToStringN(intToBytesN(checksum, bits), bits)
+func intToStrN(checksum *big.Int, bits int) string {
+	return bytesToStrN(intToBufN(checksum, bits), bits)
 }
 
 func bytesToIntN(checksum []byte, bits int) (*big.Int, error) {
@@ -87,7 +87,7 @@ func stringToIntN(checksum string, bits int) (*big.Int, error) {
 	var ret *big.Int
 	var err error
 
-	buf, err = stringToBytesN(checksum, bits)
+	buf, err = stringToBufN(checksum, bits)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to decode checksum hex string")
 	}
@@ -100,7 +100,7 @@ func stringToIntN(checksum string, bits int) (*big.Int, error) {
 	return ret, nil
 }
 
-func stringToBytesN(checksum string, bits int) ([]byte, error) {
+func stringToBufN(checksum string, bits int) ([]byte, error) {
 	var ret []byte
 	var err error
 
@@ -115,7 +115,7 @@ func stringToBytesN(checksum string, bits int) ([]byte, error) {
 	return ret, nil
 }
 
-func bytesToStringN(checksum []byte, bits int) string {
+func bytesToStrN(checksum []byte, bits int) string {
 	l := len(checksum)
 	bytes := bits >> 3
 	switch {
@@ -133,65 +133,65 @@ func bytesToStringN(checksum []byte, bits int) string {
 	return hex.EncodeToString(checksum2)
 }
 
-func IntToBytes512(checksum *big.Int) []byte {
-	return intToBytesN(checksum, 512)
+func IntToBuf512(checksum *big.Int) []byte {
+	return intToBufN(checksum, 512)
 }
 
-func IntToBytes256(checksum *big.Int) []byte {
-	return intToBytesN(checksum, 256)
+func IntToBuf256(checksum *big.Int) []byte {
+	return intToBufN(checksum, 256)
 }
 
-func IntToBytes128(checksum *big.Int) []byte {
-	return intToBytesN(checksum, 128)
+func IntToBuf128(checksum *big.Int) []byte {
+	return intToBufN(checksum, 128)
 }
 
-func IntToBytes64(checksum uint64) []byte {
+func IntToBuf64(checksum uint64) []byte {
 	ret := make([]byte, 8)
 	binary.BigEndian.PutUint64(ret, checksum)
 
 	return ret
 }
 
-func IntToBytes32(checksum uint32) []byte {
+func IntToBuf32(checksum uint32) []byte {
 	ret := make([]byte, 4)
 	binary.BigEndian.PutUint32(ret, checksum)
 
 	return ret
 }
 
-func IntToString512(checksum *big.Int) string {
-	return intToStringN(checksum, 512)
+func IntToStr512(checksum *big.Int) string {
+	return intToStrN(checksum, 512)
 }
 
-func IntToString256(checksum *big.Int) string {
-	return intToStringN(checksum, 256)
+func IntToStr256(checksum *big.Int) string {
+	return intToStrN(checksum, 256)
 }
 
-func IntToString128(checksum *big.Int) string {
-	return intToStringN(checksum, 128)
+func IntToStr128(checksum *big.Int) string {
+	return intToStrN(checksum, 128)
 }
 
-func IntToString64(checksum uint64) string {
-	return bytesToStringN(IntToBytes64(checksum), 64)
+func IntToStr64(checksum uint64) string {
+	return bytesToStrN(IntToBuf64(checksum), 64)
 }
 
-func IntToString32(checksum uint32) string {
-	return bytesToStringN(IntToBytes32(checksum), 32)
+func IntToStr32(checksum uint32) string {
+	return bytesToStrN(IntToBuf32(checksum), 32)
 }
 
-func BytesToInt512(checksum []byte) (*big.Int, error) {
+func BufToInt512(checksum []byte) (*big.Int, error) {
 	return bytesToIntN(checksum, 512)
 }
 
-func BytesToInt256(checksum []byte) (*big.Int, error) {
+func BufToInt256(checksum []byte) (*big.Int, error) {
 	return bytesToIntN(checksum, 256)
 }
 
-func BytesToInt128(checksum []byte) (*big.Int, error) {
+func BufToInt128(checksum []byte) (*big.Int, error) {
 	return bytesToIntN(checksum, 128)
 }
 
-func BytesToInt64(checksum []byte) (uint64, error) {
+func BufToInt64(checksum []byte) (uint64, error) {
 	if len(checksum) != 8 {
 		return 0, errors.New("bad checksum size")
 	}
@@ -200,7 +200,7 @@ func BytesToInt64(checksum []byte) (uint64, error) {
 	return ret, nil
 }
 
-func BytesToInt32(checksum []byte) (uint32, error) {
+func BufToInt32(checksum []byte) (uint32, error) {
 	if len(checksum) != 4 {
 		return 0, errors.New("bad checksum size")
 	}
@@ -209,72 +209,72 @@ func BytesToInt32(checksum []byte) (uint32, error) {
 	return uint32(ret), nil
 }
 
-func StringToInt512(checksum string) (*big.Int, error) {
+func StrToInt512(checksum string) (*big.Int, error) {
 	return stringToIntN(checksum, 512)
 }
 
-func StringToInt256(checksum string) (*big.Int, error) {
+func StrToInt256(checksum string) (*big.Int, error) {
 	return stringToIntN(checksum, 256)
 }
 
-func StringToInt128(checksum string) (*big.Int, error) {
+func StrToInt128(checksum string) (*big.Int, error) {
 	return stringToIntN(checksum, 128)
 }
 
-func StringToInt64(checksum string) (uint64, error) {
-	bytes, err := stringToBytesN(checksum, 64)
+func StrToInt64(checksum string) (uint64, error) {
+	bytes, err := stringToBufN(checksum, 64)
 	if err != nil {
 		return 0, vpsys.ErrorChain(err, "can't convert string to bytes")
 	}
-	return BytesToInt64(bytes)
+	return BufToInt64(bytes)
 }
 
-func StringToInt32(checksum string) (uint32, error) {
-	bytes, err := stringToBytesN(checksum, 32)
+func StrToInt32(checksum string) (uint32, error) {
+	bytes, err := stringToBufN(checksum, 32)
 	if err != nil {
 		return 0, vpsys.ErrorChain(err, "can't convert string to bytes")
 	}
-	return BytesToInt32(bytes)
+	return BufToInt32(bytes)
 }
 
-func StringToBytes512(checksum string) ([]byte, error) {
-	return stringToBytesN(checksum, 512)
+func StrToBuf512(checksum string) ([]byte, error) {
+	return stringToBufN(checksum, 512)
 }
 
-func StringToBytes256(checksum string) ([]byte, error) {
-	return stringToBytesN(checksum, 256)
+func StrToBuf256(checksum string) ([]byte, error) {
+	return stringToBufN(checksum, 256)
 }
 
-func StringToBytes128(checksum string) ([]byte, error) {
-	return stringToBytesN(checksum, 128)
+func StrToBuf128(checksum string) ([]byte, error) {
+	return stringToBufN(checksum, 128)
 }
 
-func StringToBytes64(checksum string) ([]byte, error) {
-	return stringToBytesN(checksum, 64)
+func StrToBuf64(checksum string) ([]byte, error) {
+	return stringToBufN(checksum, 64)
 }
 
-func StringToBytes32(checksum string) ([]byte, error) {
-	return stringToBytesN(checksum, 32)
+func StrToBuf32(checksum string) ([]byte, error) {
+	return stringToBufN(checksum, 32)
 }
 
-func BytesToString512(checksum []byte) string {
-	return bytesToStringN(checksum, 512)
+func BufToStr512(checksum []byte) string {
+	return bytesToStrN(checksum, 512)
 }
 
-func BytesToString256(checksum []byte) string {
-	return bytesToStringN(checksum, 256)
+func BufToStr256(checksum []byte) string {
+	return bytesToStrN(checksum, 256)
 }
 
-func BytesToString128(checksum []byte) string {
-	return bytesToStringN(checksum, 128)
+func BufToStr128(checksum []byte) string {
+	return bytesToStrN(checksum, 128)
 }
 
-func BytesToString64(checksum []byte) string {
-	return bytesToStringN(checksum, 64)
+func BufToStr64(checksum []byte) string {
+	return bytesToStrN(checksum, 64)
 }
 
-func BytesToString32(checksum []byte) string {
-	return bytesToStringN(checksum, 32)
+func BufToStr32(checksum []byte) string {
+	return bytesToStrN(checksum, 32)
 }
 
 func Checksum512(data []byte) []byte {
@@ -308,7 +308,7 @@ func Checksum32(data []byte) []byte {
 }
 
 func PseudoRand512(seed []byte, n *big.Int) *big.Int {
-	checksum, err := BytesToInt512(Checksum512(seed))
+	checksum, err := BufToInt512(Checksum512(seed))
 
 	if err != nil {
 		return nil
@@ -323,7 +323,7 @@ func PseudoRand512(seed []byte, n *big.Int) *big.Int {
 }
 
 func PseudoRand256(seed []byte, n *big.Int) *big.Int {
-	checksum, err := BytesToInt256(Checksum256(seed))
+	checksum, err := BufToInt256(Checksum256(seed))
 
 	if err != nil {
 		return nil
@@ -338,7 +338,7 @@ func PseudoRand256(seed []byte, n *big.Int) *big.Int {
 }
 
 func PseudoRand128(seed []byte, n *big.Int) *big.Int {
-	checksum, err := BytesToInt128(Checksum128(seed))
+	checksum, err := BufToInt128(Checksum128(seed))
 
 	if err != nil {
 		return nil
@@ -353,7 +353,7 @@ func PseudoRand128(seed []byte, n *big.Int) *big.Int {
 }
 
 func PseudoRand64(seed, n uint64) uint64 {
-	checksum := crc64.Checksum(IntToBytes64(seed), crc64_table)
+	checksum := crc64.Checksum(IntToBuf64(seed), crc64_table)
 
 	if n > 1 {
 		return checksum % n
@@ -362,7 +362,7 @@ func PseudoRand64(seed, n uint64) uint64 {
 }
 
 func PseudoRand32(seed, n uint32) uint32 {
-	checksum := crc32.Checksum(IntToBytes32(seed), crc32_table)
+	checksum := crc32.Checksum(IntToBuf32(seed), crc32_table)
 
 	if n > 1 {
 		return checksum % n

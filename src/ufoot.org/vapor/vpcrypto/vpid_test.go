@@ -33,13 +33,13 @@ func init() {
 func TestId512(t *testing.T) {
 	id, sig, z, err := Id512(testKey, nil, 0)
 	if err == nil {
-		t.Logf("Id512 (short) OK id=%s sig=%s z=%d", IntToString512(id), hex.EncodeToString(sig), z)
+		t.Logf("Id512 (short) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate Id512")
 	}
 	id, sig, z, err = Id512(testKey, nil, 3)
 	if err == nil {
-		t.Logf("Id512 (long) OK id=%s sig=%s z=%d", IntToString512(id), hex.EncodeToString(sig), z)
+		t.Logf("Id512 (long) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate Id512")
 	}
@@ -48,13 +48,13 @@ func TestId512(t *testing.T) {
 func TestId256(t *testing.T) {
 	id, sig, z, err := Id256(testKey, nil, 0)
 	if err == nil {
-		t.Logf("Id256 (short) OK id=%s sig=%s z=%d", IntToString256(id), hex.EncodeToString(sig), z)
+		t.Logf("Id256 (short) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate Id256")
 	}
 	id, sig, z, err = Id256(testKey, nil, 3)
 	if err == nil {
-		t.Logf("Id256 (long) OK id=%s sig=%s z=%d", IntToString256(id), hex.EncodeToString(sig), z)
+		t.Logf("Id256 (long) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate Id256")
 	}
@@ -63,13 +63,13 @@ func TestId256(t *testing.T) {
 func TestId128(t *testing.T) {
 	id, sig, z, err := Id128(testKey, nil, 0)
 	if err == nil {
-		t.Logf("Id128 (short) OK id=%s sig=%s z=%d", IntToString128(id), hex.EncodeToString(sig), z)
+		t.Logf("Id128 (short) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate Id128")
 	}
 	id, sig, z, err = Id128(testKey, nil, 3)
 	if err == nil {
-		t.Logf("Id128 (long) OK id=%s sig=%s z=%d", IntToString128(id), hex.EncodeToString(sig), z)
+		t.Logf("Id128 (long) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate Id128")
 	}
@@ -78,13 +78,13 @@ func TestId128(t *testing.T) {
 func TestId64(t *testing.T) {
 	id, sig, z, err := Id64(testKey, nil, 0)
 	if err == nil {
-		t.Logf("Id64 (short) OK id=%s sig=%s z=%d", IntToString64(id), hex.EncodeToString(sig), z)
+		t.Logf("Id64 (short) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate Id64")
 	}
 	id, sig, z, err = Id64(testKey, nil, 3)
 	if err == nil {
-		t.Logf("Id64 (long) OK id=%s sig=%s z=%d", IntToString64(id), hex.EncodeToString(sig), z)
+		t.Logf("Id64 (long) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate Id64")
 	}
@@ -93,13 +93,13 @@ func TestId64(t *testing.T) {
 func TestId32(t *testing.T) {
 	id, sig, z, err := Id32(testKey, nil, 0)
 	if err == nil {
-		t.Logf("Id32 (short) OK id=%s sig=%s z=%d", IntToString32(id), hex.EncodeToString(sig), z)
+		t.Logf("Id32 (short) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate Id32")
 	}
 	id, sig, z, err = Id32(testKey, nil, 3)
 	if err == nil {
-		t.Logf("Id32 (long) OK id=%s sig=%s z=%d", IntToString32(id), hex.EncodeToString(sig), z)
+		t.Logf("Id32 (long) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate Id32")
 	}
