@@ -23,6 +23,9 @@ import (
 	"math/big"
 )
 
+// ZeroesInBigInt counts the zeroes at the end of a big number.
+// For instance, on an odd number, returns 0, but on an even
+// number, returns 1. 0 returns 0.
 func ZeroesInBigInt(i *big.Int) int {
 	n := i.BitLen()
 	var p int
@@ -33,6 +36,9 @@ func ZeroesInBigInt(i *big.Int) int {
 	return p
 }
 
+// ZeroesInBuf counts the zeroes at the end of a buffer.
+// For instance, if last byte of the buffer is 8, returns 3.
+// 0 returns 0.
 func ZeroesInBuf(data []byte) int {
 	var i big.Int
 	var p int
@@ -45,6 +51,9 @@ func ZeroesInBuf(data []byte) int {
 	return p
 }
 
+// ZeroesIn64 counts the zeroes at the end of a 64 bits number.
+// For instance, on an odd number, returns 0, but on an even
+// number, returns 1. 0 returns 0.
 func ZeroesIn64(i uint64) int {
 	var p int
 
@@ -55,6 +64,9 @@ func ZeroesIn64(i uint64) int {
 	return p
 }
 
+// ZeroesIn32 counts the zeroes at the end of a 32 bits number.
+// For instance, on an odd number, returns 0, but on an even
+// number, returns 1. 0 returns 0.
 func ZeroesIn32(i uint32) int {
 	var p int
 

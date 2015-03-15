@@ -24,17 +24,17 @@ import (
 	"testing"
 )
 
-const init_i = 24
-const expected_z = 3
+const initI = 24
+const expectedZ = 3
 
 func TestZeroesInBigInt(t *testing.T) {
-	i := big.NewInt(init_i)
+	i := big.NewInt(initI)
 
 	z := ZeroesInBigInt(i)
-	if z != expected_z {
-		t.Errorf("bad zeroes in BigInt for %d, got %d, expected %d", init_i, z, expected_z)
+	if z != expectedZ {
+		t.Errorf("bad zeroes in BigInt for %d, got %d, expected %d", initI, z, expectedZ)
 	} else {
-		t.Logf("zeroes in BigInt for %d is %d", init_i, expected_z)
+		t.Logf("zeroes in BigInt for %d is %d", initI, expectedZ)
 	}
 	i.SetUint64(0)
 	z = ZeroesInBigInt(i)
@@ -48,12 +48,12 @@ func TestZeroesInBigInt(t *testing.T) {
 func TestZeroesInBuf(t *testing.T) {
 	b := make([]byte, 10)
 
-	b[9] = byte(init_i)
+	b[9] = byte(initI)
 	z := ZeroesInBuf(b)
-	if z != expected_z {
-		t.Errorf("bad zeroes in Buf for %d, got %d, expected %d", init_i, z, expected_z)
+	if z != expectedZ {
+		t.Errorf("bad zeroes in Buf for %d, got %d, expected %d", initI, z, expectedZ)
 	} else {
-		t.Logf("zeroes in Buf for %d is %d", init_i, expected_z)
+		t.Logf("zeroes in Buf for %d is %d", initI, expectedZ)
 	}
 	b = make([]byte, 0)
 	z = ZeroesInBuf(b)
@@ -72,13 +72,13 @@ func TestZeroesInBuf(t *testing.T) {
 }
 
 func TestZeroesIn64(t *testing.T) {
-	i := uint64(init_i)
+	i := uint64(initI)
 
 	z := ZeroesIn64(i)
-	if z != expected_z {
-		t.Errorf("bad zeroes in uint64 for %d, got %d, expected %d", init_i, z, expected_z)
+	if z != expectedZ {
+		t.Errorf("bad zeroes in uint64 for %d, got %d, expected %d", initI, z, expectedZ)
 	} else {
-		t.Logf("zeroes in uint64 for %d is %d", init_i, expected_z)
+		t.Logf("zeroes in uint64 for %d is %d", initI, expectedZ)
 	}
 	z = ZeroesIn64(0)
 	if z != 64 {
@@ -89,13 +89,13 @@ func TestZeroesIn64(t *testing.T) {
 }
 
 func TestZeroesIn32(t *testing.T) {
-	i := uint32(init_i)
+	i := uint32(initI)
 
 	z := ZeroesIn32(i)
-	if z != expected_z {
-		t.Errorf("bad zeroes in uint32 for %d, got %d, expected %d", init_i, z, expected_z)
+	if z != expectedZ {
+		t.Errorf("bad zeroes in uint32 for %d, got %d, expected %d", initI, z, expectedZ)
 	} else {
-		t.Logf("zeroes in uint32 for %d is %d", init_i, expected_z)
+		t.Logf("zeroes in uint32 for %d is %d", initI, expectedZ)
 	}
 	z = ZeroesIn32(0)
 	if z != 32 {

@@ -67,10 +67,10 @@ func intToBufN(checksum *big.Int, bits int) []byte {
 }
 
 func intToStrN(checksum *big.Int, bits int) string {
-	return bytesToStrN(intToBufN(checksum, bits), bits)
+	return bufToStrN(intToBufN(checksum, bits), bits)
 }
 
-func bytesToIntN(checksum []byte, bits int) (*big.Int, error) {
+func bufToIntN(checksum []byte, bits int) (*big.Int, error) {
 	var ret big.Int
 	bytes := bits >> 3
 
@@ -82,17 +82,17 @@ func bytesToIntN(checksum []byte, bits int) (*big.Int, error) {
 	return &ret, nil
 }
 
-func stringToIntN(checksum string, bits int) (*big.Int, error) {
+func strToIntN(checksum string, bits int) (*big.Int, error) {
 	var buf []byte
 	var ret *big.Int
 	var err error
 
-	buf, err = stringToBufN(checksum, bits)
+	buf, err = strToBufN(checksum, bits)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to decode checksum hex string")
 	}
 
-	ret, err = bytesToIntN(buf, bits)
+	ret, err = bufToIntN(buf, bits)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to get checksum bytes")
 	}
@@ -100,7 +100,7 @@ func stringToIntN(checksum string, bits int) (*big.Int, error) {
 	return ret, nil
 }
 
-func stringToBufN(checksum string, bits int) ([]byte, error) {
+func strToBufN(checksum string, bits int) ([]byte, error) {
 	var ret []byte
 	var err error
 
@@ -115,7 +115,7 @@ func stringToBufN(checksum string, bits int) ([]byte, error) {
 	return ret, nil
 }
 
-func bytesToStrN(checksum []byte, bits int) string {
+func bufToStrN(checksum []byte, bits int) string {
 	l := len(checksum)
 	bytes := bits >> 3
 	switch {
@@ -133,18 +133,30 @@ func bytesToStrN(checksum []byte, bits int) string {
 	return hex.EncodeToString(checksum2)
 }
 
+// IntToBuf512 converts a 512 bits integer to a byte buffer.
+// If the number is too low, the buffer is padded with heading zeroes.
+// So the result is always a 64 bytes buffer.
 func IntToBuf512(checksum *big.Int) []byte {
 	return intToBufN(checksum, 512)
 }
 
+// IntToBuf256 converts a 256 bits integer to a byte buffer.
+// If the number is too low, the buffer is padded with heading zeroes.
+// So the result is always a 32 bytes buffer.
 func IntToBuf256(checksum *big.Int) []byte {
 	return intToBufN(checksum, 256)
 }
 
+// IntToBuf128 converts a 128 bits integer to a byte buffer.
+// If the number is too low, the buffer is padded with heading zeroes.
+// So the result is always a 16 bytes buffer.
 func IntToBuf128(checksum *big.Int) []byte {
 	return intToBufN(checksum, 128)
 }
 
+// IntToBuf64 converts a 64 bits integer to a byte buffer.
+// If the number is too low, the buffer is padded with heading zeroes.
+// So the result is always an 8 bytes buffer.
 func IntToBuf64(checksum uint64) []byte {
 	ret := make([]byte, 8)
 	binary.BigEndian.PutUint64(ret, checksum)
@@ -152,6 +164,9 @@ func IntToBuf64(checksum uint64) []byte {
 	return ret
 }
 
+// IntToBuf32 converts a 32 bits integer to a byte buffer.
+// If the number is too low, the buffer is padded with heading zeroes.
+// So the result is always a 4 bytes buffer.
 func IntToBuf32(checksum uint32) []byte {
 	ret := make([]byte, 4)
 	binary.BigEndian.PutUint32(ret, checksum)
@@ -159,38 +174,66 @@ func IntToBuf32(checksum uint32) []byte {
 	return ret
 }
 
+// IntToBuf512 converts a 512 bits integer to a string.
+// It uses an hexadecimal representation of the number.
+// If the number is too low, the string is padded with heading zeroes.
+// So the result is always a 128 bytes/runes string.
 func IntToStr512(checksum *big.Int) string {
 	return intToStrN(checksum, 512)
 }
 
+// IntToBuf256 converts a 256 bits integer to a string.
+// It uses an hexadecimal representation of the number.
+// If the number is too low, the string is padded with heading zeroes.
+// So the result is always a 64 bytes/runes string.
 func IntToStr256(checksum *big.Int) string {
 	return intToStrN(checksum, 256)
 }
 
+// IntToBuf128 converts a 128 bits integer to a string.
+// It uses an hexadecimal representation of the number.
+// If the number is too low, the string is padded with heading zeroes.
+// So the result is always a 32 bytes/runes string.
 func IntToStr128(checksum *big.Int) string {
 	return intToStrN(checksum, 128)
 }
 
+// IntToBuf64 converts a 64 bits integer to a string.
+// It uses an hexadecimal representation of the number.
+// If the number is too low, the string is padded with heading zeroes.
+// So the result is always a 16 bytes/runes string.
 func IntToStr64(checksum uint64) string {
-	return bytesToStrN(IntToBuf64(checksum), 64)
+	return bufToStrN(IntToBuf64(checksum), 64)
 }
 
+// IntToBuf32 converts a 32 bits integer to a string.
+// It uses an hexadecimal representation of the number.
+// If the number is too low, the string is padded with heading zeroes.
+// So the result is always an 8 bytes/runes string.
 func IntToStr32(checksum uint32) string {
-	return bytesToStrN(IntToBuf32(checksum), 32)
+	return bufToStrN(IntToBuf32(checksum), 32)
 }
 
+// BufToInt512 converts a 512 bits buffer to an integer.
+// Buffer must be exactly 64 bytes, else it will fail.
 func BufToInt512(checksum []byte) (*big.Int, error) {
-	return bytesToIntN(checksum, 512)
+	return bufToIntN(checksum, 512)
 }
 
+// BufToInt256 converts a 256 bits buffer to an integer.
+// Buffer must be exactly 32 bytes, else it will fail.
 func BufToInt256(checksum []byte) (*big.Int, error) {
-	return bytesToIntN(checksum, 256)
+	return bufToIntN(checksum, 256)
 }
 
+// BufToInt128 converts a 128 bits buffer to an integer.
+// Buffer must be exactly 16 bytes, else it will fail.
 func BufToInt128(checksum []byte) (*big.Int, error) {
-	return bytesToIntN(checksum, 128)
+	return bufToIntN(checksum, 128)
 }
 
+// BufToInt64 converts a 64 bits buffer to an integer.
+// Buffer must be exactly 8 bytes, else it will fail.
 func BufToInt64(checksum []byte) (uint64, error) {
 	if len(checksum) != 8 {
 		return 0, errors.New("bad checksum size")
@@ -200,6 +243,8 @@ func BufToInt64(checksum []byte) (uint64, error) {
 	return ret, nil
 }
 
+// BufToInt32 converts a 32 bits buffer to an integer.
+// Buffer must be exactly 4 bytes, else it will fail.
 func BufToInt32(checksum []byte) (uint32, error) {
 	if len(checksum) != 4 {
 		return 0, errors.New("bad checksum size")
@@ -209,104 +254,179 @@ func BufToInt32(checksum []byte) (uint32, error) {
 	return uint32(ret), nil
 }
 
+// StrToInt512 converts a 512 bits checksum string to an integer.
+// The string must be exactly 128 bytes/runes long and be readable
+// as an hexadecimal number, else it will fail.
 func StrToInt512(checksum string) (*big.Int, error) {
-	return stringToIntN(checksum, 512)
+	return strToIntN(checksum, 512)
 }
 
+// StrToInt256 converts a 256 bits checksum string to an integer.
+// The string must be exactly 64 bytes/runes long and be readable
+// as an hexadecimal number, else it will fail.
 func StrToInt256(checksum string) (*big.Int, error) {
-	return stringToIntN(checksum, 256)
+	return strToIntN(checksum, 256)
 }
 
+// StrToInt128 converts a 128 bits checksum string to an integer.
+// The string must be exactly 32 bytes/runes long and be readable
+// as an hexadecimal number, else it will fail.
 func StrToInt128(checksum string) (*big.Int, error) {
-	return stringToIntN(checksum, 128)
+	return strToIntN(checksum, 128)
 }
 
+// StrToInt64 converts a 64 bits checksum string to an integer.
+// The string must be exactly 16 bytes/runes long and be readable
+// as an hexadecimal number, else it will fail.
 func StrToInt64(checksum string) (uint64, error) {
-	bytes, err := stringToBufN(checksum, 64)
+	bytes, err := strToBufN(checksum, 64)
 	if err != nil {
 		return 0, vpsys.ErrorChain(err, "can't convert string to bytes")
 	}
 	return BufToInt64(bytes)
 }
 
+// StrToInt32 converts a 32 bits checksum string to an integer.
+// The string must be exactly 8 bytes/runes long and be readable
+// as an hexadecimal number, else it will fail.
 func StrToInt32(checksum string) (uint32, error) {
-	bytes, err := stringToBufN(checksum, 32)
+	bytes, err := strToBufN(checksum, 32)
 	if err != nil {
 		return 0, vpsys.ErrorChain(err, "can't convert string to bytes")
 	}
 	return BufToInt32(bytes)
 }
 
+// StrToBuf512 converts a 512 bits checksum string to a buffer.
+// The string must be exactly 128 bytes/runes long and be readable
+// as an hexadecimal number, else it will fail.
+// The result buffer is twice shorter (64 bytes).
 func StrToBuf512(checksum string) ([]byte, error) {
-	return stringToBufN(checksum, 512)
+	return strToBufN(checksum, 512)
 }
 
+// StrToBuf128 converts a 128 bits checksum string to a buffer.
+// The string must be exactly 64 bytes/runes long and be readable
+// as an hexadecimal number, else it will fail.
+// The result buffer is twice shorter (32 bytes).
 func StrToBuf256(checksum string) ([]byte, error) {
-	return stringToBufN(checksum, 256)
+	return strToBufN(checksum, 256)
 }
 
+// StrToBuf128 converts a 128 bits checksum string to a buffer.
+// The string must be exactly 32 bytes/runes long and be readable
+// as an hexadecimal number, else it will fail.
+// The result buffer is twice shorter (16 bytes).
 func StrToBuf128(checksum string) ([]byte, error) {
-	return stringToBufN(checksum, 128)
+	return strToBufN(checksum, 128)
 }
 
+// StrToBuf64 converts a 64 bits checksum string to a buffer.
+// The string must be exactly 16 bytes/runes long and be readable
+// as an hexadecimal number, else it will fail.
+// The result buffer is twice shorter (8 bytes).
 func StrToBuf64(checksum string) ([]byte, error) {
-	return stringToBufN(checksum, 64)
+	return strToBufN(checksum, 64)
 }
 
+// StrToBuf32 converts a 32 bits checksum string to a buffer.
+// The string must be exactly 8 bytes/runes long and be readable
+// as an hexadecimal number, else it will fail.
+// The result buffer is twice shorter (4 bytes).
 func StrToBuf32(checksum string) ([]byte, error) {
-	return stringToBufN(checksum, 32)
+	return strToBufN(checksum, 32)
 }
 
+// StrToBuf512 converts a 512 bits buffer to a checksum string.
+// If the buffer does not have the right size (64 bytes),
+// the string is truncated or padded with heading zeroes.
+// So the result is always a 128 bytes/runes string.
 func BufToStr512(checksum []byte) string {
-	return bytesToStrN(checksum, 512)
+	return bufToStrN(checksum, 512)
 }
 
+// StrToBuf256 converts a 256 bits buffer to a checksum string.
+// If the buffer does not have the right size (32 bytes),
+// the string is truncated or padded with heading zeroes.
+// So the result is always a 64 bytes/runes string.
 func BufToStr256(checksum []byte) string {
-	return bytesToStrN(checksum, 256)
+	return bufToStrN(checksum, 256)
 }
 
+// StrToBuf128 converts a 128 bits buffer to a checksum string.
+// If the buffer does not have the right size (16 bytes),
+// the string is truncated or padded with heading zeroes.
+// So the result is always a 32 bytes/runes string.
 func BufToStr128(checksum []byte) string {
-	return bytesToStrN(checksum, 128)
+	return bufToStrN(checksum, 128)
 }
 
+// StrToBuf64 converts a 64 bits buffer to a checksum string.
+// If the buffer does not have the right size (8 bytes),
+// the string is truncated or padded with heading zeroes.
+// So the result is always a 16 bytes/runes string.
 func BufToStr64(checksum []byte) string {
-	return bytesToStrN(checksum, 64)
+	return bufToStrN(checksum, 64)
 }
 
+// StrToBuf32 converts a 32 bits buffer to a checksum string.
+// If the buffer does not have the right size (4 bytes),
+// the string is truncated or padded with heading zeroes.
+// So the result is always an 8 bytes/runes string.
 func BufToStr32(checksum []byte) string {
-	return bytesToStrN(checksum, 32)
+	return bufToStrN(checksum, 32)
 }
 
+// Checksum512 calculates a 512 bits checksum of data.
+// Internally, uses some cryptographic method such as SHA,
+// but don't rely on this, just consider it's a checksum.
 func Checksum512(data []byte) []byte {
 	sum := sha512.Sum512(data)
 
 	return sum[0:64]
 }
 
+// Checksum256 calculates a 256 bits checksum of data.
+// Internally, uses some cryptographic method such as SHA,
+// but don't rely on this, just consider it's a checksum.
 func Checksum256(data []byte) []byte {
 	sum := sha256.Sum256(data)
 
 	return sum[0:32]
 }
 
+// Checksum128 calculates a 128 bits checksum of data.
+// Internally, uses some cryptographic method such as SHA,
+// but don't rely on this, just consider it's a checksum.
 func Checksum128(data []byte) []byte {
 	sum := sha1.Sum(data)
 
 	return sum[2:18]
 }
 
+// Checksum64 calculates a 64 bits checksum of data.
+// Internally, uses some cryptographic method such as MD5,
+// but don't rely on this, just consider it's a checksum.
 func Checksum64(data []byte) []byte {
 	sum := md5.Sum(data)
 
 	return sum[8:16]
 }
 
+// Checksum32 calculates a 32 bits checksum of data.
+// Internally, uses some cryptographic method such as MD5,
+// but don't rely on this, just consider it's a checksum.
 func Checksum32(data []byte) []byte {
 	sum := md5.Sum(data)
 
 	return sum[0:4]
 }
 
+// PseudoRand512 returns a pseudo-random value on 512 bits.
+// It is totally predictable, using seed as a input.
+// Called with a given seed, always returns the same result.
+// If n is nil or 0, returns a number between [0, 2^512).
+// If n is greater than 0, returns a number between [0, n).
 func PseudoRand512(seed []byte, n *big.Int) *big.Int {
 	checksum, err := BufToInt512(Checksum512(seed))
 
@@ -322,6 +442,11 @@ func PseudoRand512(seed []byte, n *big.Int) *big.Int {
 	return checksum
 }
 
+// PseudoRand256 returns a pseudo-random value on 256 bits.
+// It is totally predictable, using seed as a input.
+// Called with a given seed, always returns the same result.
+// If n is nil or 0, returns a number between [0, 2^256).
+// If n is greater than 0, returns a number between [0, n).
 func PseudoRand256(seed []byte, n *big.Int) *big.Int {
 	checksum, err := BufToInt256(Checksum256(seed))
 
@@ -337,6 +462,11 @@ func PseudoRand256(seed []byte, n *big.Int) *big.Int {
 	return checksum
 }
 
+// PseudoRand128 returns a pseudo-random value on 128 bits.
+// It is totally predictable, using seed as a input.
+// Called with a given seed, always returns the same result.
+// If n is nil or 0, returns a number between [0, 2^128).
+// If n is greater than 0, returns a number between [0, n).
 func PseudoRand128(seed []byte, n *big.Int) *big.Int {
 	checksum, err := BufToInt128(Checksum128(seed))
 
@@ -352,6 +482,11 @@ func PseudoRand128(seed []byte, n *big.Int) *big.Int {
 	return checksum
 }
 
+// PseudoRand64 returns a pseudo-random value on 64 bits.
+// It is totally predictable, using seed as a input.
+// Called with a given seed, always returns the same result.
+// If n is nil or 0, returns a number between [0, 2^64).
+// If n is greater than 0, returns a number between [0, n).
 func PseudoRand64(seed, n uint64) uint64 {
 	checksum := crc64.Checksum(IntToBuf64(seed), crc64_table)
 
@@ -361,6 +496,11 @@ func PseudoRand64(seed, n uint64) uint64 {
 	return checksum
 }
 
+// PseudoRand32 returns a pseudo-random value on 32 bits.
+// It is totally predictable, using seed as a input.
+// Called with a given seed, always returns the same result.
+// If n is nil or 0, returns a number between [0, 2^32).
+// If n is greater than 0, returns a number between [0, n).
 func PseudoRand32(seed, n uint32) uint32 {
 	checksum := crc32.Checksum(IntToBuf32(seed), crc32_table)
 

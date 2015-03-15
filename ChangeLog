@@ -1,3 +1,13 @@
+2015-03-15  Christian Mauduit <ufoot@ufoot.org>
+
+	* src/ufoot.org/vapor/vpcrypto/vpchecksum.go,
+	src/ufoot.org/vapor/vpcrypto/vpchecksum_test.go,
+	src/ufoot.org/vapor/vpcrypto/vpid.go,
+	src/ufoot.org/vapor/vpcrypto/vpid_test.go,
+	src/ufoot.org/vapor/vpcrypto/vpkey_test.go,
+	src/ufoot.org/vapor/vpcrypto/vpzero.go,
+	src/ufoot.org/vapor/vpcrypto/vpzero_test.go: Renamed vpcrypto funcs
+
 2015-03-14  Christian Mauduit <ufoot@ufoot.org>
 
 	* src/ufoot.org/vapor/vpcrypto/vpkey_test.go: More detailed crypto
