@@ -30,77 +30,77 @@ func init() {
 	testKey, _ = NewKey()
 }
 
-func TestId512(t *testing.T) {
-	id, sig, z, err := Id512(testKey, nil, 0)
+func TestGenerateID512(t *testing.T) {
+	id, sig, z, err := GenerateID512(testKey, nil, 0)
 	if err == nil {
-		t.Logf("Id512 (short) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID512 (short) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
 	} else {
-		t.Error("unable to generate Id512")
+		t.Error("unable to gererate ID512")
 	}
-	id, sig, z, err = Id512(testKey, nil, 3)
+	id, sig, z, err = GenerateID512(testKey, nil, 3)
 	if err == nil {
-		t.Logf("Id512 (long) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID512 (long) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
 	} else {
-		t.Error("unable to generate Id512")
-	}
-}
-
-func TestId256(t *testing.T) {
-	id, sig, z, err := Id256(testKey, nil, 0)
-	if err == nil {
-		t.Logf("Id256 (short) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
-	} else {
-		t.Error("unable to generate Id256")
-	}
-	id, sig, z, err = Id256(testKey, nil, 3)
-	if err == nil {
-		t.Logf("Id256 (long) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
-	} else {
-		t.Error("unable to generate Id256")
+		t.Error("unable to gererate ID512")
 	}
 }
 
-func TestId128(t *testing.T) {
-	id, sig, z, err := Id128(testKey, nil, 0)
+func TestGenerateID256(t *testing.T) {
+	id, sig, z, err := GenerateID256(testKey, nil, 0)
 	if err == nil {
-		t.Logf("Id128 (short) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID256 (short) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
 	} else {
-		t.Error("unable to generate Id128")
+		t.Error("unable to gererate ID256")
 	}
-	id, sig, z, err = Id128(testKey, nil, 3)
+	id, sig, z, err = GenerateID256(testKey, nil, 3)
 	if err == nil {
-		t.Logf("Id128 (long) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID256 (long) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
 	} else {
-		t.Error("unable to generate Id128")
-	}
-}
-
-func TestId64(t *testing.T) {
-	id, sig, z, err := Id64(testKey, nil, 0)
-	if err == nil {
-		t.Logf("Id64 (short) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
-	} else {
-		t.Error("unable to generate Id64")
-	}
-	id, sig, z, err = Id64(testKey, nil, 3)
-	if err == nil {
-		t.Logf("Id64 (long) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
-	} else {
-		t.Error("unable to generate Id64")
+		t.Error("unable to gererate ID256")
 	}
 }
 
-func TestId32(t *testing.T) {
-	id, sig, z, err := Id32(testKey, nil, 0)
+func TestGenerateID128(t *testing.T) {
+	id, sig, z, err := GenerateID128(testKey, nil, 0)
 	if err == nil {
-		t.Logf("Id32 (short) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID128 (short) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
 	} else {
-		t.Error("unable to generate Id32")
+		t.Error("unable to gererate ID128")
 	}
-	id, sig, z, err = Id32(testKey, nil, 3)
+	id, sig, z, err = GenerateID128(testKey, nil, 3)
 	if err == nil {
-		t.Logf("Id32 (long) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID128 (long) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
 	} else {
-		t.Error("unable to generate Id32")
+		t.Error("unable to gererate ID128")
+	}
+}
+
+func TestGenerateID64(t *testing.T) {
+	id, sig, z, err := GenerateID64(testKey, nil, 0)
+	if err == nil {
+		t.Logf("GenerateID64 (short) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
+	} else {
+		t.Error("unable to gererate ID64")
+	}
+	id, sig, z, err = GenerateID64(testKey, nil, 3)
+	if err == nil {
+		t.Logf("GenerateID64 (long) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
+	} else {
+		t.Error("unable to gererate ID64")
+	}
+}
+
+func TestGenerateID32(t *testing.T) {
+	id, sig, z, err := GenerateID32(testKey, nil, 0)
+	if err == nil {
+		t.Logf("GenerateID32 (short) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
+	} else {
+		t.Error("unable to gererate ID32")
+	}
+	id, sig, z, err = GenerateID32(testKey, nil, 3)
+	if err == nil {
+		t.Logf("GenerateID32 (long) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
+	} else {
+		t.Error("unable to gererate ID32")
 	}
 }

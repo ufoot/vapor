@@ -1,6 +1,13 @@
 2015-03-15  Christian Mauduit <ufoot@ufoot.org>
 
 	* src/ufoot.org/vapor/vpcrypto/vpchecksum.go,
+	src/ufoot.org/vapor/vpcrypto/vpkey.go,
+	src/ufoot.org/vapor/vpcrypto/vpkey_test.go,
+	src/ufoot.org/vapor/vpcrypto/vprand.go: Linted crypto/key code
+
+2015-03-15  Christian Mauduit <ufoot@ufoot.org>
+
+	* src/ufoot.org/vapor/vpcrypto/vpchecksum.go,
 	src/ufoot.org/vapor/vpcrypto/vpzero.go,
 	src/ufoot.org/vapor/vpcrypto/vpzero_test.go: Linting vpcrypto code
 

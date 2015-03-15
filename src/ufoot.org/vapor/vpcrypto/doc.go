@@ -17,14 +17,6 @@
 // Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 // Contact author: ufoot@ufoot.org
 
-/*
-Mathematical functions.
-
-A set of mathematical functions, ranging from predictable number
-generators to fixed-point arithmetics, 4D matrix suited for 3D
-graphics, anything that relies to math and is likely to be usefull in
-a game. This is not necessarily what you'd find in a general purpose
-math library, think of it as a super helper that avoids copy/pasting
-the same things over and over.
-*/
+// Package vpcrypto contains some  cryptographic utilities to sign and crypt
+// messages, as well as checksums and pseudo random number generators.
 package vpcrypto

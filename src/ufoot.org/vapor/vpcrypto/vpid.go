@@ -25,11 +25,22 @@ import (
 	"ufoot.org/vapor/vpsys"
 )
 
+// Checker is used to check wether a number, typically an id,
+// verifies a property or not.
 type Checker interface {
+	// Check should return true if number matches property,
+	// false if not.
 	Check(*big.Int) bool
 }
 
-func Id512(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error) {
+// GenerateID512 generates a 512 bits id, and signs it.
+// If checker is not nil, it is garanteed that the property
+// is verified by the id.
+// If seconds is greater than 0, will wait for this amount of
+// time and try and find an id that has a signature with a
+// checksum containing a maximum of zeroes. This allows deep
+// per-key personnalisation.
+func GenerateID512(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
@@ -56,7 +67,14 @@ func Id512(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error
 	return ret, sig, z, nil
 }
 
-func Id256(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error) {
+// GenerateID256 generates a 256 bits id, and signs it.
+// If checker is not nil, it is garanteed that the property
+// is verified by the id.
+// If seconds is greater than 0, will wait for this amount of
+// time and try and find an id that has a signature with a
+// checksum containing a maximum of zeroes. This allows deep
+// per-key personnalisation.
+func GenerateID256(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
@@ -82,7 +100,15 @@ func Id256(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error
 
 	return ret, sig, z, nil
 }
-func Id128(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error) {
+
+// GenerateID128 generates a 128 bits id, and signs it.
+// If checker is not nil, it is garanteed that the property
+// is verified by the id.
+// If seconds is greater than 0, will wait for this amount of
+// time and try and find an id that has a signature with a
+// checksum containing a maximum of zeroes. This allows deep
+// per-key personnalisation.
+func GenerateID128(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
@@ -109,7 +135,14 @@ func Id128(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error
 	return ret, sig, z, nil
 }
 
-func Id64(key *Key, checker Checker, seconds int) (uint64, []byte, int, error) {
+// GenerateID64 generates a 64 bits id, and signs it.
+// If checker is not nil, it is garanteed that the property
+// is verified by the id.
+// If seconds is greater than 0, will wait for this amount of
+// time and try and find an id that has a signature with a
+// checksum containing a maximum of zeroes. This allows deep
+// per-key personnalisation.
+func GenerateID64(key *Key, checker Checker, seconds int) (uint64, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt uint64
 	var tmpBig big.Int
@@ -138,7 +171,14 @@ func Id64(key *Key, checker Checker, seconds int) (uint64, []byte, int, error) {
 	return ret, sig, z, nil
 }
 
-func Id32(key *Key, checker Checker, seconds int) (uint32, []byte, int, error) {
+// GenerateID32 generates a 32 bits id, and signs it.
+// If checker is not nil, it is garanteed that the property
+// is verified by the id.
+// If seconds is greater than 0, will wait for this amount of
+// time and try and find an id that has a signature with a
+// checksum containing a maximum of zeroes. This allows deep
+// per-key personnalisation.
+func GenerateID32(key *Key, checker Checker, seconds int) (uint32, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt uint32
 	var tmpBig big.Int
