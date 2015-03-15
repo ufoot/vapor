@@ -80,7 +80,7 @@ func TestSig(t *testing.T) {
 	var err error
 	var sig []byte
 	var content []byte
-	const content_str string = "foo bar"
+	const contentStr string = "foo bar"
 	var ok bool
 
 	key1, err = NewKey()
@@ -96,7 +96,7 @@ func TestSig(t *testing.T) {
 		t.Error(err)
 	}
 
-	content = []byte(content_str)
+	content = []byte(contentStr)
 	sig, err = key1.Sign(content)
 	if err != nil {
 		t.Error(err)
@@ -120,9 +120,9 @@ func TestEnc(t *testing.T) {
 	var err error
 	var encrypted []byte
 	var decrypted []byte
-	var decrypted_str string
+	var decryptedStr string
 	var content []byte
-	const content_str string = "foo bar"
+	const contentStr string = "foo bar"
 
 	key1, err = NewKey()
 	if err != nil {
@@ -137,7 +137,7 @@ func TestEnc(t *testing.T) {
 		t.Error(err)
 	}
 
-	content = []byte(content_str)
+	content = []byte(contentStr)
 	encrypted, err = key2.Encrypt(content)
 	if err != nil {
 		t.Error(err)
@@ -147,11 +147,11 @@ func TestEnc(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	decrypted_str = string(decrypted)
-	if content_str == decrypted_str {
+	decryptedStr = string(decrypted)
+	if contentStr == decryptedStr {
 		t.Log("decrypted message is same as source")
 	} else {
-		t.Errorf("encryption/decryption problem, results differ \"%s\" vs \"%s\"", content_str, decrypted_str)
+		t.Errorf("encryption/decryption problem, results differ \"%s\" vs \"%s\"", contentStr, decryptedStr)
 	}
 }
 

@@ -32,6 +32,10 @@ import (
 	"ufoot.org/vapor/vpsys"
 )
 
+// Key contains a cryptographic key pair. It might only
+// contain a public key if it has been imported from a public
+// key export. In that case it can not be used for signing
+// and decrypting messages.
 type Key struct {
 	entity *openpgp.Entity
 }
@@ -40,90 +44,100 @@ func init() {
 	_ = ripemd160.New()
 }
 
+// NewKey returns a new pair of cryptographic keys.
+// Note that this function is rather slow, it can take up to one second
+// or more, even on a powerfull computer, so don't generate keys often.
 func NewKey() (*Key, error) {
 	var entity *openpgp.Entity
 	var err error
-	var key_pair Key
-	var byte_writer bytes.Buffer
+	var key Key
+	var byteWriter bytes.Buffer
 
 	entity, err = openpgp.NewEntity("", "", "", nil)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to create a new OpenPGP entity")
 	}
 
-	err = entity.SerializePrivate(&byte_writer, nil)
+	err = entity.SerializePrivate(&byteWriter, nil)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to serialize private key")
 	}
 
-	key_pair.entity = entity
+	key.entity = entity
 
-	return &key_pair, nil
+	return &key, nil
 }
 
-func (key_pair Key) ExportPub() ([]byte, error) {
-	var byte_writer bytes.Buffer
+// ExportPub exports the public key of a key pair.
+func (key Key) ExportPub() ([]byte, error) {
+	var byteWriter bytes.Buffer
 	var err error
-	var pub_key []byte
+	var pubKey []byte
 
-	err = key_pair.entity.Serialize(&byte_writer)
+	err = key.entity.Serialize(&byteWriter)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to serialize public key")
 	}
 
-	pub_key = byte_writer.Bytes()
+	pubKey = byteWriter.Bytes()
 
-	return pub_key, nil
+	return pubKey, nil
 }
 
+// ImportPubKey creates a key from an exported public key.
 func ImportPubKey(key []byte) (*Key, error) {
-	var byte_reader io.Reader
-	var packet_reader *packet.Reader
+	var byteReader io.Reader
+	var packetReader *packet.Reader
 	var err error
-	var pub_key Key
+	var pubKey Key
 	var entity *openpgp.Entity
 
-	byte_reader = bytes.NewReader(key)
-	packet_reader = packet.NewReader(byte_reader)
-	entity, err = openpgp.ReadEntity(packet_reader)
+	byteReader = bytes.NewReader(key)
+	packetReader = packet.NewReader(byteReader)
+	entity, err = openpgp.ReadEntity(packetReader)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to read entity from public key")
 	}
 
-	pub_key.entity = entity
+	pubKey.entity = entity
 
-	return &pub_key, nil
+	return &pubKey, nil
 }
 
+// Sign signs a content with a key.
+// Note that the key must contain a private key, it is not possible
+// to sign with a public key.
 func (key Key) Sign(content []byte) ([]byte, error) {
-	var byte_writer bytes.Buffer
-	var byte_reader io.Reader
+	var byteWriter bytes.Buffer
+	var byteReader io.Reader
 	var sig []byte
 	var err error
 
-	byte_reader = bytes.NewReader(content)
-	err = openpgp.DetachSign(&byte_writer, key.entity, byte_reader, nil)
+	byteReader = bytes.NewReader(content)
+	err = openpgp.DetachSign(&byteWriter, key.entity, byteReader, nil)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to sign content")
 	}
 
-	sig = byte_writer.Bytes()
+	sig = byteWriter.Bytes()
 
 	return sig, nil
 }
 
-func (key Key) CheckSig(content []byte, sig []byte) (bool, error) {
-	var key_ring openpgp.EntityList
+// CheckSig checks a signature.
+// This can be done with a public key, even if private key is not available.
+func (key Key) CheckSig(content, sig []byte) (bool, error) {
+	var keyRing openpgp.EntityList
 	var err error
-	var byte_reader_content io.Reader
-	var byte_reader_sig io.Reader
+	var byteReaderContent io.Reader
+	var byteReaderSig io.Reader
 
-	key_ring = make([]*openpgp.Entity, 1)
-	key_ring[0] = key.entity
+	keyRing = make([]*openpgp.Entity, 1)
+	keyRing[0] = key.entity
 
-	byte_reader_content = bytes.NewReader(content)
-	byte_reader_sig = bytes.NewReader(sig)
-	_, err = openpgp.CheckDetachedSignature(key_ring, byte_reader_content, byte_reader_sig)
+	byteReaderContent = bytes.NewReader(content)
+	byteReaderSig = bytes.NewReader(sig)
+	_, err = openpgp.CheckDetachedSignature(keyRing, byteReaderContent, byteReaderSig)
 
 	if err != nil {
 		return false, err
@@ -132,12 +146,14 @@ func (key Key) CheckSig(content []byte, sig []byte) (bool, error) {
 	return true, nil
 }
 
+// Encrypt encrypts a message.
+// This can be done with a public key, even if private key is not available.
 func (key Key) Encrypt(content []byte) ([]byte, error) {
-	var key_ring openpgp.EntityList
-	var byte_writer bytes.Buffer
+	var keyRing openpgp.EntityList
+	var byteWriter bytes.Buffer
 	var err error
 	var output io.WriteCloser
-	var gzip_output *gzip.Writer
+	var gzipOutput *gzip.Writer
 	var ret []byte
 	var hints openpgp.FileHints
 
@@ -148,49 +164,52 @@ func (key Key) Encrypt(content []byte) ([]byte, error) {
 	hints.IsBinary = true
 	hints.ModTime = time.Now()
 
-	key_ring = make([]*openpgp.Entity, 1)
-	key_ring[0] = key.entity
+	keyRing = make([]*openpgp.Entity, 1)
+	keyRing[0] = key.entity
 
-	output, err = openpgp.Encrypt(&byte_writer, key_ring, nil, &hints, nil)
+	output, err = openpgp.Encrypt(&byteWriter, keyRing, nil, &hints, nil)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to encrypt content")
 	}
-	gzip_output = gzip.NewWriter(output)
-	gzip_output.Write(content)
-	gzip_output.Close()
+	gzipOutput = gzip.NewWriter(output)
+	gzipOutput.Write(content)
+	gzipOutput.Close()
 	output.Close()
 
-	ret = byte_writer.Bytes()
+	ret = byteWriter.Bytes()
 
 	return ret, nil
 }
 
+// Decrypt decrypts a message.
+// Note that the key must contain a private key, it is not possible
+// to sign with a public key.
 func (key Key) Decrypt(content []byte) ([]byte, error) {
-	var key_ring openpgp.EntityList
+	var keyRing openpgp.EntityList
 	var err error
-	var byte_reader io.Reader
-	var message_details *openpgp.MessageDetails
-	var gzip_reader *gzip.Reader
+	var byteReader io.Reader
+	var messageDetails *openpgp.MessageDetails
+	var gzipReader *gzip.Reader
 	var ret []byte
 
-	key_ring = make([]*openpgp.Entity, 1)
-	key_ring[0] = key.entity
+	keyRing = make([]*openpgp.Entity, 1)
+	keyRing[0] = key.entity
 
-	byte_reader = bytes.NewReader(content)
-	message_details, err = openpgp.ReadMessage(byte_reader, key_ring, nil, nil)
+	byteReader = bytes.NewReader(content)
+	messageDetails, err = openpgp.ReadMessage(byteReader, keyRing, nil, nil)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to read PGP content")
 	}
 
-	if !message_details.IsEncrypted {
+	if !messageDetails.IsEncrypted {
 		return nil, errors.New("PGP content was not encrypted")
 	}
-	gzip_reader, err = gzip.NewReader(message_details.UnverifiedBody)
-	defer gzip_reader.Close()
+	gzipReader, err = gzip.NewReader(messageDetails.UnverifiedBody)
+	defer gzipReader.Close()
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to open GZIP within PGP encrypted content")
 	}
-	ret, err = ioutil.ReadAll(gzip_reader)
+	ret, err = ioutil.ReadAll(gzipReader)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to read GZIP within PGP encrypted content")
 	}

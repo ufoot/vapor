@@ -25,55 +25,79 @@ import (
 	"time"
 )
 
-func NewSource() rand.Source {
+var bigZero *big.Int
+var bigOne512 *big.Int
+var bigOne256 *big.Int
+var bigOne128 *big.Int
+
+func init() {
+	bigZero = big.NewInt(0)
+	bigOne512 = big.NewInt(1)
+	bigOne512.Lsh(bigOne512, 512)
+	bigOne256 = big.NewInt(1)
+	bigOne256.Lsh(bigOne256, 256)
+	bigOne128 = big.NewInt(1)
+	bigOne128.Lsh(bigOne128, 128)
+}
+func newSource() rand.Source {
 	var seed uint64
 	var source rand.Source
 	var now time.Time
 
 	now = time.Now()
-	seed = PseudoRand64(uint64(now.Year())*uint64(now.Month())*uint64(now.Day())*uint64(now.Hour())*uint64(now.Minute())*uint64(now.Second())*uint64(now.Nanosecond()), 0)
+	seed = PseudoRand64(uint64(now.Unix()<<32)^uint64(now.Nanosecond()), 0)
 	source = rand.NewSource(int64(seed))
 
 	return source
 }
 
+// NewRand returns a new random number generator.
+// It is seeded with current time, to give it a little entropy.
 func NewRand() *rand.Rand {
-	return rand.New(NewSource())
+	return rand.New(newSource())
 }
 
+// Rand512 returns a random number on 512 bits.
+// If n is nil, 0, or negative, or greater than 2^512, then
+// everything is done as if n was 2^512.
 func Rand512(r *rand.Rand, n *big.Int) *big.Int {
 	ret := big.NewInt(0)
 
-	if n == nil || n.Cmp(big1) <= 0 {
-		n = big.NewInt(1)
-		n.Lsh(n, 512)
+	if n == nil || n.Cmp(bigZero) <= 0 || n.Cmp(bigOne512) > 0 {
+		n = bigOne512
 	}
 
 	return ret.Rand(r, n)
 }
 
+// Rand256 returns a random number on 256 bits.
+// If n is nil, 0, or negative, or greater than 2^256, then
+// everything is done as if n was 2^256.
 func Rand256(r *rand.Rand, n *big.Int) *big.Int {
 	ret := big.NewInt(0)
 
-	if n == nil || n.Cmp(big1) <= 0 {
-		n = big.NewInt(1)
-		n.Lsh(n, 256)
+	if n == nil || n.Cmp(bigZero) <= 0 || n.Cmp(bigOne256) > 0 {
+		n = bigOne256
 	}
 
 	return ret.Rand(r, n)
 }
 
+// Rand128 returns a random number on 128 bits.
+// If n is nil, 0, or negative, or greater than 2^128, then
+// everything is done as if n was 2^128.
 func Rand128(r *rand.Rand, n *big.Int) *big.Int {
 	ret := big.NewInt(0)
 
-	if n == nil || n.Cmp(big1) <= 0 {
-		n = big.NewInt(1)
-		n.Lsh(n, 128)
+	if n == nil || n.Cmp(bigZero) <= 0 || n.Cmp(bigOne128) > 0 {
+		n = bigOne128
 	}
 
 	return ret.Rand(r, n)
 }
 
+// Rand64 returns a random number on 64 bits.
+// If n 0 then everything is done as if n was 2^64.
 func Rand64(r *rand.Rand, n uint64) uint64 {
 	ret := uint64(r.Int63()<<1) ^ uint64(r.Int31())
 	if n > 0 {
@@ -83,6 +107,8 @@ func Rand64(r *rand.Rand, n uint64) uint64 {
 	return ret
 }
 
+// Rand32 returns a random number on 64 bits.
+// If n 0 then everything is done as if n was 2^32.
 func Rand32(r *rand.Rand, n uint32) uint32 {
 	ret := uint32(r.Int63())
 	if n > 0 {

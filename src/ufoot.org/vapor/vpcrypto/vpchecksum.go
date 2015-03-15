@@ -38,12 +38,12 @@ const positiveMask32 = 0x7fffffff
 
 var crc32_table *crc32.Table
 var crc64_table *crc64.Table
-var big1 *big.Int
+var bigOne *big.Int
 
 func init() {
 	crc64_table = crc64.MakeTable(crc64.ECMA)
 	crc32_table = crc32.MakeTable(crc32.IEEE)
-	big1 = big.NewInt(1)
+	bigOne = big.NewInt(1)
 }
 
 func intToBufN(checksum *big.Int, bits int) []byte {
@@ -434,7 +434,7 @@ func PseudoRand512(seed []byte, n *big.Int) *big.Int {
 		return nil
 	}
 
-	if n != nil && n.Cmp(big1) > 0 {
+	if n != nil && n.Cmp(bigOne) > 0 {
 		var ret big.Int
 		ret.Mod(checksum, n)
 		return &ret
@@ -454,7 +454,7 @@ func PseudoRand256(seed []byte, n *big.Int) *big.Int {
 		return nil
 	}
 
-	if n != nil && n.Cmp(big1) > 0 {
+	if n != nil && n.Cmp(bigOne) > 0 {
 		var ret big.Int
 		ret.Mod(checksum, n)
 		return &ret
@@ -474,7 +474,7 @@ func PseudoRand128(seed []byte, n *big.Int) *big.Int {
 		return nil
 	}
 
-	if n != nil && n.Cmp(big1) > 0 {
+	if n != nil && n.Cmp(bigOne) > 0 {
 		var ret big.Int
 		ret.Mod(checksum, n)
 		return &ret
