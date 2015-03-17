@@ -114,9 +114,8 @@ func TestSig(t *testing.T) {
 }
 
 func TestEnc(t *testing.T) {
-	var key1 *Key
+	var key1, key2, key3 *Key
 	var buf []byte
-	var key2 *Key
 	var err error
 	var encrypted []byte
 	var decrypted []byte
@@ -152,6 +151,17 @@ func TestEnc(t *testing.T) {
 		t.Log("decrypted message is same as source")
 	} else {
 		t.Errorf("encryption/decryption problem, results differ \"%s\" vs \"%s\"", contentStr, decryptedStr)
+	}
+
+	key3, err = NewKey()
+	if err != nil {
+		t.Error(err)
+	}
+	decrypted, err = key3.Decrypt(encrypted)
+	if err != nil {
+		t.Log("OK, decrypt is impossible with a bad key")
+	} else {
+		t.Error("decrypt is possible with a bad key, this *should* be impossible")
 	}
 }
 

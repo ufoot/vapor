@@ -63,16 +63,26 @@ func SymEncrypt(content, password []byte) ([]byte, error) {
 	return ret, nil
 }
 
-// SymDecrypt decrypts a message crypted using a symmetric password/key.
-func SymDecrypt(content, password []byte) ([]byte, error) {
+func symDecrypt(content, password []byte) ([]byte, error) {
+	var keyRing openpgp.EntityList
 	var err error
 	var byteReader io.Reader
 	var messageDetails *openpgp.MessageDetails
 	var gzipReader *gzip.Reader
 	var ret []byte
 
+	// This is not very go-ish but when passphrase is wrong,
+	// for instance, ReadMessage fails with nil pointers or
+	// other low level errors, we just trap those.
+	err = errors.New("Unable to decrypt")
+	defer func() {
+		if rec := recover(); rec != nil {
+			// todo : log ?
+		}
+	}()
+
 	byteReader = bytes.NewReader(content)
-	messageDetails, err = openpgp.ReadMessage(byteReader, nil, func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
+	messageDetails, err = openpgp.ReadMessage(byteReader, keyRing, func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
 		return password, nil
 	}, nil)
 	if err != nil {
@@ -94,5 +104,14 @@ func SymDecrypt(content, password []byte) ([]byte, error) {
 	if len(ret) <= 0 {
 		return nil, vpsys.ErrorChain(err, "no data in GZIP within PGP encrypted content")
 	}
-	return ret, nil
+	return ret, err
+}
+
+// SymDecrypt decrypts a message crypted using a symmetric password/key.
+func SymDecrypt(content, password []byte) ([]byte, error) {
+	ret, err := symDecrypt(content, password)
+	if ret == nil || len(ret) == 0 {
+		return nil, errors.New("unable to decrypt")
+	}
+	return ret, err
 }

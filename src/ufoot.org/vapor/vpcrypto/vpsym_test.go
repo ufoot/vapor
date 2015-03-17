@@ -54,6 +54,12 @@ func TestSym(t *testing.T) {
 		} else {
 			t.Error(err)
 		}
+		decrypted, err = SymDecrypt(encrypted, []byte("this is a wrong password"))
+		if err != nil {
+			t.Log("OK, decrypt is impossible with a bad password")
+		} else {
+			t.Error("decrypt is possible with a bad password, this *should* be impossible")
+		}
 	} else {
 		t.Error(err)
 	}

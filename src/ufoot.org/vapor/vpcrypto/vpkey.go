@@ -181,16 +181,23 @@ func (key Key) Encrypt(content []byte) ([]byte, error) {
 	return ret, nil
 }
 
-// Decrypt decrypts a message.
-// Note that the key must contain a private key, it is not possible
-// to sign with a public key.
-func (key Key) Decrypt(content []byte) ([]byte, error) {
+func (key Key) decrypt(content []byte) ([]byte, error) {
 	var keyRing openpgp.EntityList
 	var err error
 	var byteReader io.Reader
 	var messageDetails *openpgp.MessageDetails
 	var gzipReader *gzip.Reader
 	var ret []byte
+
+	// This is not very go-ish but when passphrase is wrong,
+	// for instance, ReadMessage fails with nil pointers or
+	// other low level errors, we just trap those.
+	defer func() {
+		if rec := recover(); rec != nil {
+			ret = nil
+			err = errors.New("Unable to decrypt")
+		}
+	}()
 
 	keyRing = make([]*openpgp.Entity, 1)
 	keyRing[0] = key.entity
@@ -217,4 +224,15 @@ func (key Key) Decrypt(content []byte) ([]byte, error) {
 		return nil, vpsys.ErrorChain(err, "no data in GZIP within PGP encrypted content")
 	}
 	return ret, nil
+}
+
+// Decrypt decrypts a message.
+// Note that the key must contain a private key, it is not possible
+// to sign with a public key.
+func (key Key) Decrypt(content []byte) ([]byte, error) {
+	ret, err := key.decrypt(content)
+	if ret == nil || len(ret) == 0 {
+		return nil, errors.New("unable to decrypt")
+	}
+	return ret, err
 }
