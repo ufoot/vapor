@@ -45,8 +45,9 @@ func (sw stdoutWriter) Write(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
-// The default logger, implements Logger. It basically logs informations
-// in three places, which are the console (stdout), a log file (typically
+// Log is a default implementation of the Logger interface.
+// It basically logs informations in three places,
+// which are the console (stdout), a log file (typically
 // placed in the user's home directory) and syslog. The log file contains
 // everything while the console and syslog will only display important
 // messages. Under the hood, it uses the log.Logger object, so it's safe
@@ -60,19 +61,19 @@ func (sw stdoutWriter) Write(p []byte) (n int, err error) {
 // internal shared global object. As it's safe to call it concurrently,
 // it should fit most cases.
 type Log struct {
-	filename      string
-	p             Priority
-	f             *os.File
-	w             io.Writer
-	file_buffer   *bufio.Writer
-	stdout_buffer *bufio.Writer
-	file_logger   *log.Logger
-	stdout_logger *log.Logger
-	syslog_logger *log.Logger
-	flush_mutex   sync.Mutex
+	filename     string
+	p            Priority
+	f            *os.File
+	w            io.Writer
+	fileBuffer   *bufio.Writer
+	stdoutBuffer *bufio.Writer
+	fileLogger   *log.Logger
+	stdoutLogger *log.Logger
+	syslogLogger *log.Logger
+	flushMutex   sync.Mutex
 }
 
-// Constructs a new log object, note that this is called under the hood
+// NewLog Constructs a new log object, note that this is called under the hood
 // by the global shared object constructor.
 func NewLog(program string) *Log {
 	var logger Log
@@ -88,12 +89,12 @@ func NewLog(program string) *Log {
 		panic(err)
 	}
 
-	logger.file_buffer = bufio.NewWriter(io.Writer(logger.f))
-	logger.stdout_buffer = bufio.NewWriter(s)
+	logger.fileBuffer = bufio.NewWriter(io.Writer(logger.f))
+	logger.stdoutBuffer = bufio.NewWriter(s)
 
-	logger.file_logger = log.New(logger.file_buffer, prefix, log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
-	logger.stdout_logger = log.New(logger.stdout_buffer, prefix, log.LstdFlags)
-	logger.syslog_logger, err = syslog.NewLogger(syslog.Priority(int(syslogPriority))|syslog.LOG_SYSLOG, log.LstdFlags|log.Lshortfile)
+	logger.fileLogger = log.New(logger.fileBuffer, prefix, log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
+	logger.stdoutLogger = log.New(logger.stdoutBuffer, prefix, log.LstdFlags)
+	logger.syslogLogger, err = syslog.NewLogger(syslog.Priority(int(syslogPriority))|syslog.LOG_SYSLOG, log.LstdFlags|log.Lshortfile)
 	if err != nil {
 		panic(err)
 	}
@@ -104,18 +105,18 @@ func NewLog(program string) *Log {
 	return &logger
 }
 
-// Logs a message on all relevant channels, no EOL
+// Log logs a message on all relevant channels, no EOL
 // added, if you want one, do provide one.
 func (l *Log) Log(p Priority, v ...interface{}) {
 	if p <= l.p {
 		if p <= stdoutPriority {
-			l.stdout_logger.Print(v...)
+			l.stdoutLogger.Print(v...)
 		}
 		if p <= filePriority {
-			l.file_logger.Print(v...)
+			l.fileLogger.Print(v...)
 		}
 		if p <= syslogPriority {
-			l.syslog_logger.Print(v...)
+			l.syslogLogger.Print(v...)
 		}
 		if p <= flushPriority {
 			l.Flush()
@@ -123,19 +124,19 @@ func (l *Log) Log(p Priority, v ...interface{}) {
 	}
 }
 
-// Logs a message on all relevant channels, using a printf-like
+// Logf logs a message on all relevant channels, using a printf-like
 // syntax, no EOL  added, if you want one
 // do provide one.
 func (l *Log) Logf(p Priority, format string, v ...interface{}) {
 	if p <= l.p {
 		if p <= stdoutPriority {
-			l.stdout_logger.Printf(format, v...)
+			l.stdoutLogger.Printf(format, v...)
 		}
 		if p <= filePriority {
-			l.file_logger.Printf(format, v...)
+			l.fileLogger.Printf(format, v...)
 		}
 		if p <= syslogPriority {
-			l.syslog_logger.Printf(format, v...)
+			l.syslogLogger.Printf(format, v...)
 		}
 		if p <= flushPriority {
 			l.Flush()
@@ -143,32 +144,32 @@ func (l *Log) Logf(p Priority, format string, v ...interface{}) {
 	}
 }
 
-// Returns the path of the log file.
+// Filename returns the path of the log file.
 func (l *Log) Filename() string {
 	return l.filename
 }
 
-// Sets the priority above which message won't be displayed any more.
+// SetPriority sets the priority above which message won't be displayed any more.
 func (l *Log) SetPriority(p Priority) {
 	l.p = p
 }
 
-// Returns the priority under which message won't be displayed any more.
+// GetPriority returns the priority under which message won't be displayed any more.
 func (l *Log) GetPriority() Priority {
 	return l.p
 }
 
-// Flushes all channels for which it makes sense to be flushed.
+// Flush flushes all channels for which it makes sense to be flushed.
 // This is automatically called if priority is CRIT, ERR, WARNING or NOTICE.
 func (l *Log) Flush() {
-	l.flush_mutex.Lock()
-	l.file_buffer.Flush()
-	l.stdout_buffer.Flush()
+	l.flushMutex.Lock()
+	l.fileBuffer.Flush()
+	l.stdoutBuffer.Flush()
 	// This is why we use a Mutex and a Lock, while buffers buried
 	// under the log.Logger API might be thread-safe, the file
 	// direct access is another story.
 	l.f.Sync()
-	l.flush_mutex.Unlock()
+	l.flushMutex.Unlock()
 }
 
 var globalLog *Log
@@ -181,7 +182,7 @@ func getGlobalLog(program string) *Log {
 	return globalLog
 }
 
-// Initializes the log system. This is not mandatory, you might use
+// LogInit initializes the log system. This is not mandatory, you might use
 // functions such as LogWarning right away, the log file will be
 // opened on-the-fly if needed. However, you might prefer to have the
 // file opened at the very beginning of the program, without waiting
@@ -192,82 +193,97 @@ func LogInit(program string) {
 	getGlobalLog(program)
 }
 
-// Global critical log, no EOL added.
+// LogCrit logs a critical message, no formatting.
+// Uses the default global logging backend.
 func LogCrit(v ...interface{}) {
 	LoggerCrit(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
 }
 
-// Global critical log, printf like interface.
+// LogCritf logs a critical message, formatting "à la" printf.
+// Uses the default global logging backend.
 func LogCritf(f string, v ...interface{}) {
 	LoggerCritf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
 }
 
-// Global error log, no EOL added.
+// LogErr logs an error message, no formatting.
+// Uses the default global logging backend.
 func LogErr(v ...interface{}) {
 	LoggerErr(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
 }
 
-// Global error log, printf like interface.
+// LogErrf logs an error message, formatting "à la" printf.
+// Uses the default global logging backend.
 func LogErrf(f string, v ...interface{}) {
 	LoggerErrf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
 }
 
-// Global warning log, no EOL added.
+// LogWarning logs a warning message, no formatting.
+// Uses the default global logging backend.
 func LogWarning(v ...interface{}) {
 	LoggerWarning(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
 }
 
-// Global warning log, printf like interface.
+// LogWarningf logs a warning message, formatting "à la" printf.
+// Uses the default global logging backend.
 func LogWarningf(f string, v ...interface{}) {
 	LoggerWarningf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
 }
 
-// Global notice log, no EOL added.
+// LogNotice logs a notice message, no formatting.
+// Uses the default global logging backend.
 func LogNotice(v ...interface{}) {
 	LoggerNotice(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
 }
 
-// Global notice log, printf like interface.
+// LogNoticef logs a notice message, formatting "à la" printf.
+// Uses the default global logging backend.
 func LogNoticef(f string, v ...interface{}) {
 	LoggerNoticef(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
 }
 
-// Global info log, no EOL added.
+// LogInfo logs an information message, no formatting.
+// Uses the default global logging backend.
 func LogInfo(v ...interface{}) {
 	LoggerInfo(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
 }
 
-// Global info log, printf like interface.
+// LogInfof logs an information message, formatting "à la" printf.
+// Uses the default global logging backend.
 func LogInfof(f string, v ...interface{}) {
 	LoggerInfof(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
 }
 
-// Global debug log, no EOL added.
+// LogDebug logs a debug message, no formatting.
+// Uses the default global logging backend.
 func LogDebug(v ...interface{}) {
 	LoggerDebug(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
 }
 
-// Global debug log, printf like interface.
+// LogDebugf logs a debug message, formatting "à la" printf.
+// Uses the default global logging backend.
 func LogDebugf(f string, v ...interface{}) {
 	LoggerDebugf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
 }
 
-// Returns the path of the file used for global, default logging.
+// LogFilename returns the path of the file used for global, default logging.
+// Uses the default global logging backend.
 func LogFilename() string {
 	return getGlobalLog(vpbuild.PACKAGE_TARNAME).Filename()
 }
 
-// Sets the global, default logging level.
+// LogSetPriority sets the global, default logging level.
+// Uses the default global logging backend.
 func LogSetPriority(p Priority) {
 	getGlobalLog(vpbuild.PACKAGE_TARNAME).SetPriority(p)
 }
 
-// Returns the global, default logging level.
+// LogGetPriority returns the global, default logging level.
+// Uses the default global logging backend.
 func LogGetPriority() Priority {
 	return getGlobalLog(vpbuild.PACKAGE_TARNAME).GetPriority()
 }
 
-// Flushes the global logging system, more precisely, flushes
+// LogFlush flushes the global logging system, more precisely, flushes
 // stdout and the log file.
 func LogFlush() {
 	getGlobalLog(vpbuild.PACKAGE_TARNAME).Flush()

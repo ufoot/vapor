@@ -28,13 +28,19 @@ import (
 type Priority int
 
 const (
+	// PriorityCrit should be used for critical messages.
 	// Inspired from /usr/include/sys/syslog.h.
 	// We don't use EMERG and ALERT
 	PriorityCrit Priority = iota + Priority(int(syslog.LOG_CRIT))
+	// PriorityErr should be used for error messages.
 	PriorityErr
+	// PriorityWarning should be used for warning messages.
 	PriorityWarning
+	// PriorityNotice should be used for notice messages.
 	PriorityNotice
+	// PriorityInfo should be used for information messages.
 	PriorityInfo
+	// PriorityDebug should be used for debugging messages.
 	PriorityDebug
 )
 
