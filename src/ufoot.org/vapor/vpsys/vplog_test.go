@@ -28,22 +28,16 @@ import (
 
 const checkCritString = "crit1"
 const checkCritStringf = "crit2"
-const checkCritStringln = "crit3"
 const checkErrString = "err1"
 const checkErrStringf = "err2"
-const checkErrStringln = "err3"
 const checkWarningString = "warning1"
 const checkWarningStringf = "warning2"
-const checkWarningStringln = "warning3"
 const checkNoticeString = "notice1"
 const checkNoticeStringf = "notice2"
-const checkNoticeStringln = "notice3"
 const checkInfoString = "info1"
 const checkInfoStringf = "info2"
-const checkInfoStringln = "info3"
 const checkDebugString = "debug1"
 const checkDebugStringf = "debug2"
-const checkDebugStringln = "debug3"
 
 func checkContains(t *testing.T, filename string, text string) {
 	content, err := ioutil.ReadFile(filename)
@@ -61,70 +55,59 @@ func checkContains(t *testing.T, filename string, text string) {
 func TestLogCrit(t *testing.T) {
 	LogCrit(fmt.Sprintf("%s\n", checkCritString))
 	LogCritf("%s", checkCritStringf)
-	LogCritln(checkCritStringln)
 	// no flush as Crit must be auto-flushed
 
 	filename := LogFilename()
 	checkContains(t, filename, checkCritString)
 	checkContains(t, filename, checkCritStringf)
-	checkContains(t, filename, checkCritStringln)
 }
 
 func TestLogErr(t *testing.T) {
 	LogErr(fmt.Sprintf("%s\n", checkErrString))
 	LogErrf("%s", checkErrStringf)
-	LogErrln(checkErrStringln)
 	// no flush as Err must be auto-flushed
 
 	filename := LogFilename()
 	checkContains(t, filename, checkErrString)
 	checkContains(t, filename, checkErrStringf)
-	checkContains(t, filename, checkErrStringln)
 }
 
 func TestLogWarning(t *testing.T) {
 	LogWarning(fmt.Sprintf("%s\n", checkWarningString))
 	LogWarningf("%s", checkWarningStringf)
-	LogWarningln(checkWarningStringln)
 	// no flush as Warning must be auto-flushed
 
 	filename := LogFilename()
 	checkContains(t, filename, checkWarningString)
 	checkContains(t, filename, checkWarningStringf)
-	checkContains(t, filename, checkWarningStringln)
 }
 
 func TestLogNotice(t *testing.T) {
 	LogNotice(fmt.Sprintf("%s\n", checkNoticeString))
 	LogNoticef("%s", checkNoticeStringf)
-	LogNoticeln(checkNoticeStringln)
 	// no flush as Notice must be auto-flushed
 
 	filename := LogFilename()
 	checkContains(t, filename, checkNoticeString)
 	checkContains(t, filename, checkNoticeStringf)
-	checkContains(t, filename, checkNoticeStringln)
 }
 
 func TestLogInfo(t *testing.T) {
 	LogInfo(fmt.Sprintf("%s\n", checkInfoString))
 	LogInfof("%s", checkInfoStringf)
-	LogInfoln(checkInfoStringln)
 	LogFlush()
 
 	filename := LogFilename()
 	checkContains(t, filename, checkInfoString)
 	checkContains(t, filename, checkInfoStringf)
-	checkContains(t, filename, checkInfoStringln)
 }
 
 func TestLogDebug(t *testing.T) {
 	p := LogGetPriority()
-	LogSetPriority(LOG_DEBUG)
+	LogSetPriority(PriorityDebug)
 
 	LogDebug(fmt.Sprintf("%s\n", checkDebugString))
 	LogDebugf("%s", checkDebugStringf)
-	LogDebugln(checkDebugStringln)
 	LogFlush()
 
 	LogSetPriority(p)
@@ -132,5 +115,4 @@ func TestLogDebug(t *testing.T) {
 	filename := LogFilename()
 	checkContains(t, filename, checkDebugString)
 	checkContains(t, filename, checkDebugStringf)
-	checkContains(t, filename, checkDebugStringln)
 }

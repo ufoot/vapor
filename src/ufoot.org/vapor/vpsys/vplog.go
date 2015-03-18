@@ -32,10 +32,10 @@ import (
 )
 
 const basename = "log.txt"
-const stdoutPriority = LOG_NOTICE
-const filePriority = LOG_DEBUG
-const syslogPriority = LOG_WARNING
-const flushPriority = LOG_NOTICE
+const stdoutPriority = PriorityNotice
+const filePriority = PriorityDebug
+const syslogPriority = PriorityWarning
+const flushPriority = PriorityNotice
 
 type stdoutWriter struct {
 }
@@ -81,7 +81,7 @@ func NewLog(program string) *Log {
 
 	prefix := fmt.Sprintf("%s: ", program)
 	logger.filename = path.Join(Home(program), basename)
-	logger.p = LOG_INFO
+	logger.p = PriorityInfo
 
 	logger.f, err = os.Create(logger.filename)
 	if err != nil {
@@ -98,7 +98,7 @@ func NewLog(program string) *Log {
 		panic(err)
 	}
 
-	logger.Logf(LOG_NOTICE, "Log file: %s\n", logger.filename)
+	logger.Logf(PriorityNotice, "Log file: %s", logger.filename)
 	logger.Flush()
 
 	return &logger
@@ -136,25 +136,6 @@ func (l *Log) Logf(p Priority, format string, v ...interface{}) {
 		}
 		if p <= syslogPriority {
 			l.syslog_logger.Printf(format, v...)
-		}
-		if p <= flushPriority {
-			l.Flush()
-		}
-	}
-}
-
-// Logs a message on all relevant channels, and adds
-// an EOL char.
-func (l *Log) Logln(p Priority, v ...interface{}) {
-	if p <= l.p {
-		if p <= stdoutPriority {
-			l.stdout_logger.Println(v...)
-		}
-		if p <= filePriority {
-			l.file_logger.Println(v...)
-		}
-		if p <= syslogPriority {
-			l.syslog_logger.Println(v...)
 		}
 		if p <= flushPriority {
 			l.Flush()
@@ -221,11 +202,6 @@ func LogCritf(f string, v ...interface{}) {
 	LoggerCritf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
 }
 
-// Global critical log, EOL added like in println.
-func LogCritln(v ...interface{}) {
-	LoggerCritln(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
-}
-
 // Global error log, no EOL added.
 func LogErr(v ...interface{}) {
 	LoggerErr(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
@@ -234,11 +210,6 @@ func LogErr(v ...interface{}) {
 // Global error log, printf like interface.
 func LogErrf(f string, v ...interface{}) {
 	LoggerErrf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
-}
-
-// Global error log, EOL added like in println.
-func LogErrln(v ...interface{}) {
-	LoggerErrln(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
 }
 
 // Global warning log, no EOL added.
@@ -251,11 +222,6 @@ func LogWarningf(f string, v ...interface{}) {
 	LoggerWarningf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
 }
 
-// Global warning log, EOL added like in println.
-func LogWarningln(v ...interface{}) {
-	LoggerWarningln(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
-}
-
 // Global notice log, no EOL added.
 func LogNotice(v ...interface{}) {
 	LoggerNotice(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
@@ -264,11 +230,6 @@ func LogNotice(v ...interface{}) {
 // Global notice log, printf like interface.
 func LogNoticef(f string, v ...interface{}) {
 	LoggerNoticef(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
-}
-
-// Global notice log, EOL added like in println.
-func LogNoticeln(v ...interface{}) {
-	LoggerNoticeln(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
 }
 
 // Global info log, no EOL added.
@@ -281,11 +242,6 @@ func LogInfof(f string, v ...interface{}) {
 	LoggerInfof(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
 }
 
-// Global info log, EOL added like in println.
-func LogInfoln(v ...interface{}) {
-	LoggerInfoln(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
-}
-
 // Global debug log, no EOL added.
 func LogDebug(v ...interface{}) {
 	LoggerDebug(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
@@ -294,11 +250,6 @@ func LogDebug(v ...interface{}) {
 // Global debug log, printf like interface.
 func LogDebugf(f string, v ...interface{}) {
 	LoggerDebugf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
-}
-
-// Global debug log, EOL added like in println.
-func LogDebugln(v ...interface{}) {
-	LoggerDebugln(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
 }
 
 // Returns the path of the file used for global, default logging.

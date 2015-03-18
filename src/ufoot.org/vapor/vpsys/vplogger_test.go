@@ -24,10 +24,10 @@ import (
 )
 
 func TestPriorityString(t *testing.T) {
-	t.Logf("priority crit %d/%s", int(LOG_CRIT), PriorityString(LOG_CRIT))
-	t.Logf("priority err %d/%s", int(LOG_ERR), PriorityString(LOG_ERR))
-	t.Logf("priority warning %d/%s", int(LOG_WARNING), PriorityString(LOG_WARNING))
-	t.Logf("priority notice %d/%s", int(LOG_NOTICE), PriorityString(LOG_NOTICE))
-	t.Logf("priority info %d/%s", int(LOG_INFO), PriorityString(LOG_INFO))
-	t.Logf("priority debug %d/%s", int(LOG_DEBUG), PriorityString(LOG_DEBUG))
+	t.Logf("priority crit %d/%s", int(PriorityCrit), PriorityString(PriorityCrit))
+	t.Logf("priority err %d/%s", int(PriorityErr), PriorityString(PriorityErr))
+	t.Logf("priority warning %d/%s", int(PriorityWarning), PriorityString(PriorityWarning))
+	t.Logf("priority notice %d/%s", int(PriorityNotice), PriorityString(PriorityNotice))
+	t.Logf("priority info %d/%s", int(PriorityInfo), PriorityString(PriorityInfo))
+	t.Logf("priority debug %d/%s", int(PriorityDebug), PriorityString(PriorityDebug))
 }

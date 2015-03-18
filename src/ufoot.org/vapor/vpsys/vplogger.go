@@ -23,19 +23,19 @@ import (
 	"log/syslog"
 )
 
-// Logging priority (AKA level), the lower the number, the
+// Priority is a logging priority (AKA level), the lower the number, the
 // higher the priority.
 type Priority int
 
 const (
 	// Inspired from /usr/include/sys/syslog.h.
 	// We don't use EMERG and ALERT
-	LOG_CRIT Priority = iota + Priority(int(syslog.LOG_CRIT))
-	LOG_ERR
-	LOG_WARNING
-	LOG_NOTICE
-	LOG_INFO
-	LOG_DEBUG
+	PriorityCrit Priority = iota + Priority(int(syslog.LOG_CRIT))
+	PriorityErr
+	PriorityWarning
+	PriorityNotice
+	PriorityInfo
+	PriorityDebug
 )
 
 const critString = "CRIT"
@@ -46,115 +46,102 @@ const infoString = "INFO"
 const debugString = "DEBUG"
 const unknownString = "UNKNOWN"
 
-// Custom logging interface, while the package with only one
+// Logger is a custom logging interface, while the package with only one
 // implementation, the interface is technically generic, and
 // could be implemented/used elsewhere. This is design for
 // quick-to-write global usage, not for universality/versatility.
 type Logger interface {
 	Log(p Priority, v ...interface{})
 	Logf(p Priority, f string, v ...interface{})
-	Logln(p Priority, v ...interface{})
 	Filename() string
 	SetPriority(p Priority)
 	GetPriority() Priority
 	Flush()
 }
 
-// Returns a readable string (English word) that corresponds
+// PriorityString returns a readable string (English word) that corresponds
 // to a given log priority.
 func PriorityString(p Priority) string {
-	if p <= LOG_CRIT {
-		p = LOG_CRIT
+	if p <= PriorityCrit {
+		p = PriorityCrit
 	}
-	if p >= LOG_DEBUG {
-		p = LOG_DEBUG
+	if p >= PriorityDebug {
+		p = PriorityDebug
 	}
 	switch p {
-	case LOG_CRIT:
+	case PriorityCrit:
 		return critString
-	case LOG_ERR:
+	case PriorityErr:
 		return errString
-	case LOG_WARNING:
+	case PriorityWarning:
 		return warningString
-	case LOG_NOTICE:
+	case PriorityNotice:
 		return noticeString
-	case LOG_INFO:
+	case PriorityInfo:
 		return infoString
-	case LOG_DEBUG:
+	case PriorityDebug:
 		return debugString
 	}
 
 	return unknownString
 }
 
+// LoggerCrit logs a message with critical level. No formatting.
 func LoggerCrit(l Logger, v ...interface{}) {
-	l.Log(LOG_CRIT, v...)
+	l.Log(PriorityCrit, v...)
 }
 
+// LoggerCritf logs a message with critical level. Formatting "à la" printf.
 func LoggerCritf(l Logger, f string, v ...interface{}) {
-	l.Logf(LOG_CRIT, f, v...)
+	l.Logf(PriorityCrit, f, v...)
 }
 
-func LoggerCritln(l Logger, v ...interface{}) {
-	l.Logln(LOG_CRIT, v...)
-}
-
+// LoggerErr logs a message with error level. No formatting.
 func LoggerErr(l Logger, v ...interface{}) {
-	l.Log(LOG_ERR, v...)
+	l.Log(PriorityErr, v...)
 }
 
+// LoggerErrf logs a message with error level. Formatting "à la" printf.
 func LoggerErrf(l Logger, f string, v ...interface{}) {
-	l.Logf(LOG_ERR, f, v...)
+	l.Logf(PriorityErr, f, v...)
 }
 
-func LoggerErrln(l Logger, v ...interface{}) {
-	l.Logln(LOG_ERR, v...)
-}
-
+// LoggerWarning logs a message with warning level. No formatting.
 func LoggerWarning(l Logger, v ...interface{}) {
-	l.Log(LOG_WARNING, v...)
+	l.Log(PriorityWarning, v...)
 }
 
+// LoggerWarningf logs a message with warning level. Formatting "à la" printf.
 func LoggerWarningf(l Logger, f string, v ...interface{}) {
-	l.Logf(LOG_WARNING, f, v...)
+	l.Logf(PriorityWarning, f, v...)
 }
 
-func LoggerWarningln(l Logger, v ...interface{}) {
-	l.Logln(LOG_WARNING, v...)
-}
-
+// LoggerNotice logs a message with notice level. No formatting.
 func LoggerNotice(l Logger, v ...interface{}) {
-	l.Log(LOG_NOTICE, v...)
+	l.Log(PriorityNotice, v...)
 }
 
+// LoggerNoticef logs a message with notice level. Formatting "à la" printf.
 func LoggerNoticef(l Logger, f string, v ...interface{}) {
-	l.Logf(LOG_NOTICE, f, v...)
+	l.Logf(PriorityNotice, f, v...)
 }
 
-func LoggerNoticeln(l Logger, v ...interface{}) {
-	l.Logln(LOG_NOTICE, v...)
-}
-
+// LoggerInfo logs a message with info level. No formatting.
 func LoggerInfo(l Logger, v ...interface{}) {
-	l.Log(LOG_INFO, v...)
+	l.Log(PriorityInfo, v...)
 }
 
+// LoggerInfof logs a message with info level. Formatting "à la" printf.
 func LoggerInfof(l Logger, f string, v ...interface{}) {
-	l.Logf(LOG_INFO, f, v...)
+	l.Logf(PriorityInfo, f, v...)
 }
 
-func LoggerInfoln(l Logger, v ...interface{}) {
-	l.Logln(LOG_INFO, v...)
-}
-
+// LoggerDebug logs a message with debug level. No formatting.
 func LoggerDebug(l Logger, v ...interface{}) {
-	l.Log(LOG_DEBUG, v...)
+	l.Log(PriorityDebug, v...)
 }
 
+// LoggerDebugf logs a message with debug level. Formatting "à la" printf.
 func LoggerDebugf(l Logger, f string, v ...interface{}) {
-	l.Logf(LOG_DEBUG, f, v...)
-}
-
-func LoggerDebugln(l Logger, v ...interface{}) {
-	l.Logln(LOG_DEBUG, v...)
+	l.Logf(PriorityDebug, f, v...)
 }
