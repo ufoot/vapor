@@ -33,7 +33,7 @@ func (state NibblesState) Init(timestamp time.Time) {
 
 }
 
-// Do process stuff on a game state, typically called in game loop 
+// Do process stuff on a game state, typically called in game loop
 // when receiving events.
 func (state NibblesState) Do(timestamp time.Time, iteration int64, quit chan bool) {
 

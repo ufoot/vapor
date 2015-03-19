@@ -34,10 +34,13 @@ type ConfNode struct {
 
 // ConfTrue is the string used to represent true.
 const ConfTrue string = "true"
+
 // ConfFalse is the string used to represent false.
 const ConfFalse string = "false"
+
 // ConfYes is the string used to represent yes.
 const ConfYes string = "yes"
+
 // ConfNo is the string used to represent no.
 const ConfNo string = "no"
 
