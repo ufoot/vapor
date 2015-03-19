@@ -17,10 +17,5 @@
 // Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 // Contact author: ufoot@ufoot.org
 
-/*
-Main game loop.
-
-Defines the main game loop mecanism. Somehow, all games seem to
-implement this some way or another.
-*/
+// Package vploop implements main game loop.
 package vploop

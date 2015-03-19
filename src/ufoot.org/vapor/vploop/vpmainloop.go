@@ -23,6 +23,7 @@ import (
 	"time"
 )
 
+// MainLoop implements the main game loop.
 func MainLoop(handler LoopHandler) int {
 	var i int64
 	quit := make(chan bool)

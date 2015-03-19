@@ -23,6 +23,7 @@ import (
 	"time"
 )
 
+// LoopHandler is a callback called at each game loop.
 type LoopHandler interface {
 	Init(time.Time)
 	Do(time.Time, int64, chan bool)

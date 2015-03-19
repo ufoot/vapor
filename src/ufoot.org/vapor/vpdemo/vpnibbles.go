@@ -23,18 +23,23 @@ import (
 	"time"
 )
 
+// NibbleState stores the game state.
 type NibblesState struct {
 	level [][]int
 }
 
+// Init initializes the game state.
 func (state NibblesState) Init(timestamp time.Time) {
 
 }
 
+// Do process stuff on a game state, typically called in game loop 
+// when receiving events.
 func (state NibblesState) Do(timestamp time.Time, iteration int64, quit chan bool) {
 
 }
 
+// Quit should be called at the end of a game.
 func (state NibblesState) Quit(timestamp time.Time) {
 
 }
