@@ -17,11 +17,6 @@
 // Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 // Contact author: ufoot@ufoot.org
 
-/*
-General usage functions.
-
-Looks like this package ends up like a great receptacle for anything
-that is of general usage and does not fit elsewhere. No, it's not a
-garbage.
-*/
+// Package vpsys contains general purpose utility functions such as
+// logging or error handling.
 package vpsys

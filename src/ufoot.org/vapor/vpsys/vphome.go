@@ -25,6 +25,11 @@ import (
 	"path"
 )
 
+// Home returns the path of the home directory of the user.
+// It is not necessarly the "HOME" environment variable, indeed,
+// if this one is not available, it will try other places, call mkdir,
+// do whatever it can to find some suitable place where the program
+// could legitimately store some data.
 func Home(program string) string {
 	var home string
 	var err error
