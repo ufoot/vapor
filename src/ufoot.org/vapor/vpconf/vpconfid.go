@@ -23,10 +23,12 @@ import (
 	"strings"
 )
 
-const CONF_ID_SEP string = "."
+// ConfIDSep is the separator used to separate ids.
+const ConfIDSep string = "."
 
-func ConfIdSplit(id string) []string {
-	split := strings.Split(strings.ToLower(id), CONF_ID_SEP)
+// ConfIDSplit splits a conf path into its members.
+func ConfIDSplit(id string) []string {
+	split := strings.Split(strings.ToLower(id), ConfIDSep)
 	var ret []string
 	var val string
 
@@ -39,7 +41,8 @@ func ConfIdSplit(id string) []string {
 	return ret
 }
 
-func ConfIdJoin(id []string) string {
+// ConfIDJoin joins conf path members to form a path.
+func ConfIDJoin(id []string) string {
 	var tmp []string
 	var val string
 
@@ -49,17 +52,20 @@ func ConfIdJoin(id []string) string {
 		}
 	}
 
-	return strings.ToLower(strings.Join(tmp, CONF_ID_SEP))
+	return strings.ToLower(strings.Join(tmp, ConfIDSep))
 }
 
-func ConfIdParentChildren(id string) (string, string) {
+// ConfIDParentChildren returns the top-level parent
+// of a conf path, and the child path associated.
+// For instance foo.bar.num should return foo and bar.num.
+func ConfIDParentChildren(id string) (string, string) {
 	var parent string
 	var children string
 
-	split := ConfIdSplit(id)
+	split := ConfIDSplit(id)
 
 	parent = split[0]
-	children = ConfIdJoin(split[1:])
+	children = ConfIDJoin(split[1:])
 
 	return parent, children
 }

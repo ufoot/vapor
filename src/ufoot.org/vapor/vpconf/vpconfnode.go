@@ -26,26 +26,32 @@ import (
 	"ufoot.org/vapor/vpsys"
 )
 
+// ConfNode is where the config is stored.
 type ConfNode struct {
 	value    string
 	sub_node *[]ConfNode
 }
 
-const CONF_TRUE string = "true"
-const CONF_FALSE string = "false"
-const CONF_YES string = "yes"
-const CONF_NO string = "no"
+// ConfTrue is the string used to represent true.
+const ConfTrue string = "true"
+// ConfFalse is the string used to represent false.
+const ConfFalse string = "false"
+// ConfYes is the string used to represent yes.
+const ConfYes string = "yes"
+// ConfNo is the string used to represent no.
+const ConfNo string = "no"
 
+// ConfParseBool parses a boolean in a string.
 func ConfParseBool(val string) bool {
 	var err error
 	var int_val int64
 
 	val = strings.ToLower(val)
 
-	if val == CONF_TRUE || val == CONF_YES {
+	if val == ConfTrue || val == ConfYes {
 		return true
 	}
-	if val == CONF_FALSE || val == CONF_NO {
+	if val == ConfFalse || val == ConfNo {
 		return false
 	}
 
@@ -57,12 +63,18 @@ func ConfParseBool(val string) bool {
 	return false
 }
 
+// ReadEnv reads environment vars and puts them
+// in the conf node.
+// Returns the number of keys read.
 func (n *ConfNode) ReadEnv(prefix string) int {
 	var nb_read int
 
 	return nb_read
 }
 
+// ReadNode reads vars from a file and puts the values
+// in the conf node.
+// Returns the number of keys read.
 func (n *ConfNode) ReadFile(filename string) (int, error) {
 	var nb_read int
 	var err error
@@ -70,21 +82,30 @@ func (n *ConfNode) ReadFile(filename string) (int, error) {
 	return nb_read, err
 }
 
+// ReadArgv reads vars from argv and puts the values
+// in the conf node.
+// Returns the number of keys read.
 func (n *ConfNode) ReadArgv() int {
 	var nb_read int
 
 	return nb_read
 }
 
+// Clear clears the contents of a conf node.
 func (n *ConfNode) Clear() {
 }
 
+// Merge merges two conf node objects.
+// If two different values are available, the values
+// of the arguments should be used.
+// Returns the number of keys read.
 func (n *ConfNode) Merge(other *ConfNode) int {
 	var nb_merge int
 
 	return nb_merge
 }
 
+// SetString sets a key to the given value.
 func (n *ConfNode) SetString(key string, val string) error {
 	var err error
 
@@ -93,6 +114,7 @@ func (n *ConfNode) SetString(key string, val string) error {
 	return err
 }
 
+// GetString returns a given value.
 func (n *ConfNode) GetString(key string) (string, error) {
 	var err error
 	var val string
@@ -102,10 +124,12 @@ func (n *ConfNode) GetString(key string) (string, error) {
 	return val, err
 }
 
+// SetInt32 set a key to the given int value.
 func (n *ConfNode) SetInt32(key string, val int32) error {
 	return n.SetString(key, fmt.Sprintf("%d", val))
 }
 
+// GetInt32 returns a given value, as an int32.
 func (n *ConfNode) GetInt32(key string) (int32, error) {
 	var ret int64
 	var err error
@@ -121,10 +145,12 @@ func (n *ConfNode) GetInt32(key string) (int32, error) {
 	return int32(ret), vpsys.ErrorChain(err, "unable to parse int")
 }
 
+// SetFloat32 set a key to the given int value.
 func (n *ConfNode) SetFloat32(key string, val float32) error {
 	return n.SetString(key, fmt.Sprintf("%f", val))
 }
 
+// GetFloat32 returns a given value, as a float32.
 func (n *ConfNode) GetFloat32(key string) (float32, error) {
 	var ret float64
 	var err error
@@ -140,14 +166,16 @@ func (n *ConfNode) GetFloat32(key string) (float32, error) {
 	return float32(ret), err
 }
 
+// SetBool set a key to the given boolean value.
 func (n *ConfNode) SetBool(key string, val bool) error {
 	if val {
-		return n.SetString(key, CONF_TRUE)
+		return n.SetString(key, ConfTrue)
 	} else {
-		return n.SetString(key, CONF_FALSE)
+		return n.SetString(key, ConfFalse)
 	}
 }
 
+// GetBool returns a given value, as a boolean.
 func (n *ConfNode) GetBool(key string) (bool, error) {
 	var err error
 	var str_val string

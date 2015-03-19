@@ -30,7 +30,7 @@ func TestConfIdSplit(t *testing.T) {
 	var l int
 
 	for _, id = range checkFooBarStrings {
-		split = ConfIdSplit(id)
+		split = ConfIDSplit(id)
 		t.Log("split", id, "->", split)
 		l = len(split)
 		if l != 2 {

@@ -23,7 +23,7 @@ import (
 	"time"
 )
 
-// NibbleState stores the game state.
+// NibblesState stores the game state.
 type NibblesState struct {
 	level [][]int
 }
