@@ -34,6 +34,11 @@ func X64Mat2New(x1, x2, x3, x4 vpnumber.X64) *X64Mat2 {
 	return &X64Mat2{x1, x2, x3, x4}
 }
 
+// X64Mat2Identity creates a new identity matrix.
+func X64Mat2Identity() *X64Mat2 {
+	return &X64Mat2{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+}
+
 // ToI32 converts the matrix to an int32 matrix.
 func (mat *X64Mat2) ToI32() *I32Mat2 {
 	var ret I32Mat2
@@ -272,13 +277,13 @@ func X64Mat2MulComp(a, b *X64Mat2) *X64Mat2 {
 func X64Mat2Inv(mat *X64Mat2) *X64Mat2 {
 	ret := X64Mat2{
 		mat.Get(1, 1),
-		-mat.Get(1, 0),
 		-mat.Get(0, 1),
+		-mat.Get(1, 0),
 		mat.Get(0, 0),
 	}
 
 	det := mat.Det()
-	mat.DivScale(det)
+	ret.DivScale(det)
 
 	return &ret
 }

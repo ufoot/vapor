@@ -34,6 +34,11 @@ func F32Mat2New(f1, f2, f3, f4 float32) *F32Mat2 {
 	return &F32Mat2{f1, f2, f3, f4}
 }
 
+// F32Mat2Identity creates a new identity matrix.
+func F32Mat2Identity() *F32Mat2 {
+	return &F32Mat2{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
+}
+
 // ToI32 converts the matrix to an int32 matrix.
 func (mat *F32Mat2) ToI32() *I32Mat2 {
 	var ret I32Mat2
@@ -272,13 +277,13 @@ func F32Mat2MulComp(a, b *F32Mat2) *F32Mat2 {
 func F32Mat2Inv(mat *F32Mat2) *F32Mat2 {
 	ret := F32Mat2{
 		mat.Get(1, 1),
-		-mat.Get(1, 0),
 		-mat.Get(0, 1),
+		-mat.Get(1, 0),
 		mat.Get(0, 0),
 	}
 
 	det := mat.Det()
-	mat.DivScale(det)
+	ret.DivScale(det)
 
 	return &ret
 }

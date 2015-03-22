@@ -20,11 +20,12 @@
 package vpmatrix
 
 import (
+	"math/rand"
 	"testing"
 	"ufoot.org/vapor/vpnumber"
 )
 
-func TestF64Mat2Math(t *testing.T) {
+func TestF64Mat2Basic(t *testing.T) {
 	const f11 = 3.0
 	const f12 = 30.0
 	const f21 = -40.0
@@ -101,10 +102,41 @@ func TestF64Mat2Math(t *testing.T) {
 	m3.DivScale(0)
 }
 
+func invertableF64Mat2() *F64Mat2 {
+	var ret F64Mat2
+
+	for vpnumber.F64IsSimilar(ret.Det(), vpnumber.F64Const0) {
+		for i := range ret {
+			ret[i] = rand.Float64()
+		}
+	}
+
+	return &ret
+}
+
+func TestF64Mat2Comp(t *testing.T) {
+	m1 := invertableF64Mat2()
+	m2 := F64Mat2Inv(m1)
+	id := F64Mat2Identity()
+
+	m2.MulComp(m1)
+	if !F64Mat2IsSimilar(m2, id) {
+		t.Errorf("multiplicating matrix by its inverse does not return identity, %f %f %f %f", m2[0], m2[1], m2[2], m2[3])
+	}
+}
+
 func BenchmarkF64Mat2Add(b *testing.B) {
 	mat := F64Mat2New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
+	}
+}
+
+func BenchmarkF64Mat2Inv(b *testing.B) {
+	mat := invertableF64Mat2()
+
+	for i := 0; i < b.N; i++ {
+		_ = F64Mat2Inv(mat)
 	}
 }

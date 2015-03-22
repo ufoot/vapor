@@ -20,11 +20,12 @@
 package vpmatrix
 
 import (
+	"math/rand"
 	"testing"
 	"ufoot.org/vapor/vpnumber"
 )
 
-func TestX32Mat2Math(t *testing.T) {
+func TestX32Mat2Basic(t *testing.T) {
 	var x11 = vpnumber.F32ToX32(3.0)
 	var x12 = vpnumber.F32ToX32(-11.0)
 	var x21 = vpnumber.F32ToX32(9.0)
@@ -101,10 +102,41 @@ func TestX32Mat2Math(t *testing.T) {
 	m3.DivScale(0)
 }
 
+func invertableX32Mat2() *X32Mat2 {
+	var ret X32Mat2
+
+	for vpnumber.X32IsSimilar(ret.Det(), vpnumber.X32Const0) {
+		for i := range ret {
+			ret[i] = vpnumber.I32ToX32(rand.Int31n(3))
+		}
+	}
+
+	return &ret
+}
+
+func TestX32Mat2Comp(t *testing.T) {
+	m1 := invertableX32Mat2()
+	m2 := X32Mat2Inv(m1)
+	id := X32Mat2Identity()
+
+	m2.MulComp(m1)
+	if !X32Mat2IsSimilar(m2, id) {
+		t.Errorf("multiplicating matrix by its inverse does not return identity, %x %x %x %x", m2[0], m2[1], m2[2], m2[3])
+	}
+}
+
 func BenchmarkX32Mat2Add(b *testing.B) {
 	mat := X32Mat2New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
+	}
+}
+
+func BenchmarkX32Mat2Inv(b *testing.B) {
+	mat := invertableX32Mat2()
+
+	for i := 0; i < b.N; i++ {
+		_ = X32Mat2Inv(mat)
 	}
 }

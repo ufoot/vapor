@@ -20,11 +20,12 @@
 package vpmatrix
 
 import (
+	"math/rand"
 	"testing"
 	"ufoot.org/vapor/vpnumber"
 )
 
-func TestX64Mat2Math(t *testing.T) {
+func TestX64Mat2Basic(t *testing.T) {
 	var x11 = vpnumber.F64ToX64(3.0)
 	var x12 = vpnumber.F64ToX64(-43.0)
 	var x21 = vpnumber.F64ToX64(31.0)
@@ -101,10 +102,41 @@ func TestX64Mat2Math(t *testing.T) {
 	m3.DivScale(0)
 }
 
+func invertableX64Mat2() *X64Mat2 {
+	var ret X64Mat2
+
+	for vpnumber.X64IsSimilar(ret.Det(), vpnumber.X64Const0) {
+		for i := range ret {
+			ret[i] = vpnumber.I64ToX64(rand.Int63n(10))
+		}
+	}
+
+	return &ret
+}
+
+func TestX64Mat2Comp(t *testing.T) {
+	m1 := invertableX64Mat2()
+	m2 := X64Mat2Inv(m1)
+	id := X64Mat2Identity()
+
+	m2.MulComp(m1)
+	if !X64Mat2IsSimilar(m2, id) {
+		t.Errorf("multiplicating matrix by its inverse does not return identity, %x %x %x %x", m2[0], m2[1], m2[2], m2[3])
+	}
+}
+
 func BenchmarkX64Mat2Add(b *testing.B) {
 	mat := X64Mat2New(vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
+	}
+}
+
+func BenchmarkX64Mat2Inv(b *testing.B) {
+	mat := invertableX64Mat2()
+
+	for i := 0; i < b.N; i++ {
+		_ = X64Mat2Inv(mat)
 	}
 }

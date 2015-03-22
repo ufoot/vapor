@@ -34,6 +34,11 @@ func F64Mat2New(f1, f2, f3, f4 float64) *F64Mat2 {
 	return &F64Mat2{f1, f2, f3, f4}
 }
 
+// F64Mat2Identity creates a new identity matrix.
+func F64Mat2Identity() *F64Mat2 {
+	return &F64Mat2{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
+}
+
 // ToI32 converts the matrix to an int32 matrix.
 func (mat *F64Mat2) ToI32() *I32Mat2 {
 	var ret I32Mat2
@@ -272,13 +277,13 @@ func F64Mat2MulComp(a, b *F64Mat2) *F64Mat2 {
 func F64Mat2Inv(mat *F64Mat2) *F64Mat2 {
 	ret := F64Mat2{
 		mat.Get(1, 1),
-		-mat.Get(1, 0),
 		-mat.Get(0, 1),
+		-mat.Get(1, 0),
 		mat.Get(0, 0),
 	}
 
 	det := mat.Det()
-	mat.DivScale(det)
+	ret.DivScale(det)
 
 	return &ret
 }

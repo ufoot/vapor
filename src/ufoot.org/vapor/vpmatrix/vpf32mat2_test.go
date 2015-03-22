@@ -20,11 +20,12 @@
 package vpmatrix
 
 import (
+	"math/rand"
 	"testing"
 	"ufoot.org/vapor/vpnumber"
 )
 
-func TestF32Mat2Math(t *testing.T) {
+func TestF32Mat2Basic(t *testing.T) {
 	const f11 = 3.0
 	const f12 = 3.0
 	const f21 = -8.0
@@ -101,10 +102,41 @@ func TestF32Mat2Math(t *testing.T) {
 	m3.DivScale(0)
 }
 
+func invertableF32Mat2() *F32Mat2 {
+	var ret F32Mat2
+
+	for vpnumber.F32IsSimilar(ret.Det(), vpnumber.F32Const0) {
+		for i := range ret {
+			ret[i] = rand.Float32()
+		}
+	}
+
+	return &ret
+}
+
+func TestF32Mat2Comp(t *testing.T) {
+	m1 := invertableF32Mat2()
+	m2 := F32Mat2Inv(m1)
+	id := F32Mat2Identity()
+
+	m2.MulComp(m1)
+	if !F32Mat2IsSimilar(m2, id) {
+		t.Errorf("multiplicating matrix by its inverse does not return identity, %f %f %f %f", m2[0], m2[1], m2[2], m2[3])
+	}
+}
+
 func BenchmarkF32Mat2Add(b *testing.B) {
 	mat := F32Mat2New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
+	}
+}
+
+func BenchmarkF32Mat2Inv(b *testing.B) {
+	mat := invertableF32Mat2()
+
+	for i := 0; i < b.N; i++ {
+		_ = F32Mat2Inv(mat)
 	}
 }

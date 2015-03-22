@@ -34,6 +34,11 @@ func X32Mat2New(x1, x2, x3, x4 vpnumber.X32) *X32Mat2 {
 	return &X32Mat2{x1, x2, x3, x4}
 }
 
+// X32Mat2Identity creates a new identity matrix.
+func X32Mat2Identity() *X32Mat2 {
+	return &X32Mat2{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
+}
+
 // ToI32 converts the matrix to an int32 matrix.
 func (mat *X32Mat2) ToI32() *I32Mat2 {
 	var ret I32Mat2
@@ -272,13 +277,13 @@ func X32Mat2MulComp(a, b *X32Mat2) *X32Mat2 {
 func X32Mat2Inv(mat *X32Mat2) *X32Mat2 {
 	ret := X32Mat2{
 		mat.Get(1, 1),
-		-mat.Get(1, 0),
 		-mat.Get(0, 1),
+		-mat.Get(1, 0),
 		mat.Get(0, 0),
 	}
 
 	det := mat.Det()
-	mat.DivScale(det)
+	ret.DivScale(det)
 
 	return &ret
 }
