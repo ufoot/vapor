@@ -24,7 +24,7 @@ for m in Makefile.dep Makefile.help ; do
 done
 
 echo >> Makefile.help
-echo "Below are listed global Makefile targets." >> Makefile.help
+echo "Below are listed global Makefile targets:" >> Makefile.help
 echo "vp: builds all binaries (alias for all)." >> Makefile.help
 echo "check: runs test suite." >> Makefile.help
 echo "bench: runs test suite in bench mode." >> Makefile.help
@@ -39,7 +39,7 @@ echo "help: display help about Makefile targets." >> Makefile.help
 echo "stamp: update build stamp." >> Makefile.help
 echo "indent: automatically indent code." >> Makefile.help
 echo >> Makefile.help
-echo "Below are listed per-package Makefile targets." >> Makefile.help
+echo "Below are listed per-package Makefile targets:" >> Makefile.help
 
 for t in "" "check-" "bench-" "lint-" "devel-" "doc-" ; do
     echo ".PHONY: ${t}vp" >> Makefile.dep
@@ -47,10 +47,11 @@ for t in "" "check-" "bench-" "lint-" "devel-" "doc-" ; do
     for i in src/ufoot.org/vapor/vp* ; do
 	j=$(echo $i | sed "s/.*ufoot.org\/vapor\///")
         echo -n " ${t}${j}" >> Makefile.dep
-	echo "${t}${j}" >> Makefile.help 
+	echo -n "${t}${j} " >> Makefile.help 
     done
     echo >> Makefile.dep
     echo >> Makefile.dep
+    echo >> Makefile.help
 done
 
 echo "configure.ac: $(ls src/ufoot.org/vapor/vp*/*.go | sort -u | tr "\n" " ")" >> Makefile.dep
