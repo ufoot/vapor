@@ -106,7 +106,7 @@ func TestF32Mat2Basic(t *testing.T) {
 func invertableF32Mat2() *F32Mat2 {
 	var ret F32Mat2
 
-	for math.Abs(float64(ret.Det()))< 0.5 {
+	for math.Abs(float64(ret.Det())) < 0.5 {
 		for i := range ret {
 			ret[i] = rand.Float32()
 		}
@@ -121,8 +121,36 @@ func TestF32Mat2Comp(t *testing.T) {
 	id := F32Mat2Identity()
 
 	m2.MulComp(m1)
-	if !F32Mat2IsSimilar(m2, id) {
-		t.Error("multiplicating matrix by its inverse does not return identity")
+	if F32Mat2IsSimilar(m2, id) {
+		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
+	} else {
+		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
+	}
+}
+
+func TestF32Mat2JSON(t *testing.T) {
+	m1 := invertableF32Mat2()
+	m2 := F32Mat2Identity()
+
+	var err error
+	var jsonBuf []byte
+
+	jsonBuf, err = m1.MarshalJSON()
+	if err == nil {
+		t.Logf("encoded JSON for F32Mat2 is \"%s\"", string(jsonBuf))
+	} else {
+		t.Error("unable to encode JSON for F32Mat2")
+	}
+	err = m2.UnmarshalJSON([]byte("nawak"))
+	if err == nil {
+		t.Error("able to decode JSON for F32Mat2, but json is not correct")
+	}
+	err = m2.UnmarshalJSON(jsonBuf)
+	if err != nil {
+		t.Error("unable to decode JSON for F32Mat2")
+	}
+	if !F32Mat2IsSimilar(m1, m2) {
+		t.Error("unmarshalled matrix is different from original")
 	}
 }
 

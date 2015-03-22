@@ -20,11 +20,13 @@
 package vpmatrix
 
 import (
+	"math"
+	"math/rand"
 	"testing"
 	"ufoot.org/vapor/vpnumber"
 )
 
-func TestF32Mat3Math(t *testing.T) {
+func TestF32Mat3Basic(t *testing.T) {
 	const f11 = 3.0
 	const f12 = 333.0
 	const f13 = 31.0
@@ -111,10 +113,69 @@ func TestF32Mat3Math(t *testing.T) {
 	m3.DivScale(0)
 }
 
+func invertableF32Mat3() *F32Mat3 {
+	var ret F32Mat3
+
+	for math.Abs(float64(ret.Det())) < 0.5 {
+		for i := range ret {
+			ret[i] = rand.Float32()
+		}
+	}
+
+	return &ret
+}
+
+func TestF32Mat3Comp(t *testing.T) {
+	m1 := invertableF32Mat3()
+	m2 := F32Mat3Inv(m1)
+	id := F32Mat3Identity()
+
+	m2.MulComp(m1)
+	if F32Mat3IsSimilar(m2, id) {
+		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
+	} else {
+		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
+	}
+}
+
+func TestF32Mat3JSON(t *testing.T) {
+	m1 := invertableF32Mat3()
+	m2 := F32Mat3Identity()
+
+	var err error
+	var jsonBuf []byte
+
+	jsonBuf, err = m1.MarshalJSON()
+	if err == nil {
+		t.Logf("encoded JSON for F32Mat3 is \"%s\"", string(jsonBuf))
+	} else {
+		t.Error("unable to encode JSON for F32Mat3")
+	}
+	err = m2.UnmarshalJSON([]byte("nawak"))
+	if err == nil {
+		t.Error("able to decode JSON for F32Mat3, but json is not correct")
+	}
+	err = m2.UnmarshalJSON(jsonBuf)
+	if err != nil {
+		t.Error("unable to decode JSON for F32Mat3")
+	}
+	if !F32Mat3IsSimilar(m1, m2) {
+		t.Error("unmarshalled matrix is different from original")
+	}
+}
+
 func BenchmarkF32Mat3Add(b *testing.B) {
 	mat := F32Mat3New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
+	}
+}
+
+func BenchmarkF32Mat3Inv(b *testing.B) {
+	mat := invertableF32Mat3()
+
+	for i := 0; i < b.N; i++ {
+		_ = F32Mat3Inv(mat)
 	}
 }

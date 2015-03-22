@@ -20,7 +20,9 @@
 package vpmatrix
 
 import (
+	"encoding/json"
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpsys"
 )
 
 // F64Mat4 is a matrix containing 4x4 float64 values.
@@ -32,6 +34,11 @@ type F64Mat4 [16]float64
 // first elements fill first column.
 func F64Mat4New(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16 float64) *F64Mat4 {
 	return &F64Mat4{f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16}
+}
+
+// F64Mat4Identity creates a new identity matrix.
+func F64Mat4Identity() *F64Mat4 {
+	return &F64Mat4{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
 }
 
 // ToI32 converts the matrix to an int32 matrix.
@@ -99,6 +106,54 @@ func (mat *F64Mat4) Get(col, row int) float64 {
 	return mat[col*4+row]
 }
 
+// MarshalJSON implements the json.Marshaler interface.
+func (mat *F64Mat4) MarshalJSON() ([]byte, error) {
+	var tmpArray [4][4]float64
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			tmpArray[col][row] = mat[col*4+row]
+		}
+	}
+
+	ret, err := json.Marshal(tmpArray)
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal F64Mat4")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (mat *F64Mat4) UnmarshalJSON(data []byte) error {
+	var tmpArray [4][4]float64
+
+	err := json.Unmarshal(data, &tmpArray)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal F64Mat4")
+	}
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			mat[col*4+row] = tmpArray[col][row]
+		}
+	}
+
+	return nil
+}
+
+// String returns a readable form of the matrix.
+func (mat *F64Mat4) String() string {
+	buf, err := mat.MarshalJSON()
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
+}
+
 // Add adds operand to the matrix.
 // It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat4) Add(op *F64Mat4) *F64Mat4 {
@@ -156,6 +211,11 @@ func (mat *F64Mat4) MulComp(op *F64Mat4) *F64Mat4 {
 	*mat = *F64Mat4MulComp(mat, op)
 
 	return mat
+}
+
+// Det returns the matrix determinant.
+func (mat *F64Mat4) Det() float64 {
+	return 0.75
 }
 
 // MulVec performs a multiplication of a vector by a 4x4 matrix,

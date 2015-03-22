@@ -20,7 +20,9 @@
 package vpmatrix
 
 import (
+	"encoding/json"
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpsys"
 )
 
 // F64Mat3 is a matrix containing 3x3 float64 values.
@@ -104,6 +106,54 @@ func (mat *F64Mat3) Get(col, row int) float64 {
 	return mat[col*3+row]
 }
 
+// MarshalJSON implements the json.Marshaler interface.
+func (mat *F64Mat3) MarshalJSON() ([]byte, error) {
+	var tmpArray [3][3]float64
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			tmpArray[col][row] = mat[col*3+row]
+		}
+	}
+
+	ret, err := json.Marshal(tmpArray)
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal F64Mat3")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (mat *F64Mat3) UnmarshalJSON(data []byte) error {
+	var tmpArray [3][3]float64
+
+	err := json.Unmarshal(data, &tmpArray)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal F64Mat3")
+	}
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			mat[col*3+row] = tmpArray[col][row]
+		}
+	}
+
+	return nil
+}
+
+// String returns a readable form of the matrix.
+func (mat *F64Mat3) String() string {
+	buf, err := mat.MarshalJSON()
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
+}
+
 // Add adds operand to the matrix.
 // It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat3) Add(op *F64Mat3) *F64Mat3 {
@@ -159,6 +209,21 @@ func (mat *F64Mat3) IsSimilar(op *F64Mat3) bool {
 // It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat3) MulComp(op *F64Mat3) *F64Mat3 {
 	*mat = *F64Mat3MulComp(mat, op)
+
+	return mat
+}
+
+// Det returns the matrix determinant.
+func (mat *F64Mat3) Det() float64 {
+	return mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 2) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 2) - mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 0)
+}
+
+// Inv inverts the matrix.
+// Never fails (no division by zero error, never) but if the
+// matrix can't be inverted, result does not make sense.
+// It modifies the matrix, and returns a pointer on it.
+func (mat *F64Mat3) Inv() *F64Mat3 {
+	*mat = *F64Mat3Inv(mat)
 
 	return mat
 }
@@ -263,6 +328,29 @@ func F64Mat3MulComp(a, b *F64Mat3) *F64Mat3 {
 			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1)+a.Get(2, r)*b.Get(c, 2))
 		}
 	}
+
+	return &ret
+}
+
+// F64Mat3Inv inverts a matrix.
+// Never fails (no division by zero error, never) but if the
+// matrix can't be inverted, result does not make sense.
+// Args is left untouched, a pointer on a new object is returned.
+func F64Mat3Inv(mat *F64Mat3) *F64Mat3 {
+	ret := F64Mat3{
+		mat.Get(1, 1)*mat.Get(2, 2) - mat.Get(1, 2)*mat.Get(2, 1),
+		mat.Get(0, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(2, 2),
+		mat.Get(0, 1)*mat.Get(1, 2) - mat.Get(0, 2)*mat.Get(1, 1),
+		mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(1, 0)*mat.Get(2, 2),
+		mat.Get(0, 0)*mat.Get(2, 2) - mat.Get(0, 2)*mat.Get(2, 0),
+		mat.Get(0, 2)*mat.Get(1, 0) - mat.Get(0, 0)*mat.Get(1, 2),
+		mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(1, 1)*mat.Get(2, 0),
+		mat.Get(0, 1)*mat.Get(2, 0) - mat.Get(0, 0)*mat.Get(2, 1),
+		mat.Get(0, 0)*mat.Get(1, 1) - mat.Get(0, 1)*mat.Get(1, 0),
+	}
+
+	det := mat.Det()
+	ret.DivScale(det)
 
 	return &ret
 }

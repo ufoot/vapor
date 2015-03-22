@@ -20,7 +20,9 @@
 package vpmatrix
 
 import (
+	"encoding/json"
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpsys"
 )
 
 // F32Mat3 is a matrix containing 3x3 float32 values.
@@ -104,6 +106,54 @@ func (mat *F32Mat3) Get(col, row int) float32 {
 	return mat[col*3+row]
 }
 
+// MarshalJSON implements the json.Marshaler interface.
+func (mat *F32Mat3) MarshalJSON() ([]byte, error) {
+	var tmpArray [3][3]float32
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			tmpArray[col][row] = mat[col*3+row]
+		}
+	}
+
+	ret, err := json.Marshal(tmpArray)
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal F32Mat3")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (mat *F32Mat3) UnmarshalJSON(data []byte) error {
+	var tmpArray [3][3]float32
+
+	err := json.Unmarshal(data, &tmpArray)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal F32Mat3")
+	}
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			mat[col*3+row] = tmpArray[col][row]
+		}
+	}
+
+	return nil
+}
+
+// String returns a readable form of the matrix.
+func (mat *F32Mat3) String() string {
+	buf, err := mat.MarshalJSON()
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
+}
+
 // Add adds operand to the matrix.
 // It modifies the matrix, and returns a pointer on it.
 func (mat *F32Mat3) Add(op *F32Mat3) *F32Mat3 {
@@ -159,6 +209,21 @@ func (mat *F32Mat3) IsSimilar(op *F32Mat3) bool {
 // It modifies the matrix, and returns a pointer on it.
 func (mat *F32Mat3) MulComp(op *F32Mat3) *F32Mat3 {
 	*mat = *F32Mat3MulComp(mat, op)
+
+	return mat
+}
+
+// Det returns the matrix determinant.
+func (mat *F32Mat3) Det() float32 {
+	return mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 2) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 2) - mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 0)
+}
+
+// Inv inverts the matrix.
+// Never fails (no division by zero error, never) but if the
+// matrix can't be inverted, result does not make sense.
+// It modifies the matrix, and returns a pointer on it.
+func (mat *F32Mat3) Inv() *F32Mat3 {
+	*mat = *F32Mat3Inv(mat)
 
 	return mat
 }
@@ -263,6 +328,29 @@ func F32Mat3MulComp(a, b *F32Mat3) *F32Mat3 {
 			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1)+a.Get(2, r)*b.Get(c, 2))
 		}
 	}
+
+	return &ret
+}
+
+// F32Mat3Inv inverts a matrix.
+// Never fails (no division by zero error, never) but if the
+// matrix can't be inverted, result does not make sense.
+// Args is left untouched, a pointer on a new object is returned.
+func F32Mat3Inv(mat *F32Mat3) *F32Mat3 {
+	ret := F32Mat3{
+		mat.Get(1, 1)*mat.Get(2, 2) - mat.Get(1, 2)*mat.Get(2, 1),
+		mat.Get(0, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(2, 2),
+		mat.Get(0, 1)*mat.Get(1, 2) - mat.Get(0, 2)*mat.Get(1, 1),
+		mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(1, 0)*mat.Get(2, 2),
+		mat.Get(0, 0)*mat.Get(2, 2) - mat.Get(0, 2)*mat.Get(2, 0),
+		mat.Get(0, 2)*mat.Get(1, 0) - mat.Get(0, 0)*mat.Get(1, 2),
+		mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(1, 1)*mat.Get(2, 0),
+		mat.Get(0, 1)*mat.Get(2, 0) - mat.Get(0, 0)*mat.Get(2, 1),
+		mat.Get(0, 0)*mat.Get(1, 1) - mat.Get(0, 1)*mat.Get(1, 0),
+	}
+
+	det := mat.Det()
+	ret.DivScale(det)
 
 	return &ret
 }

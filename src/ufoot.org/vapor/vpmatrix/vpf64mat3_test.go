@@ -20,6 +20,8 @@
 package vpmatrix
 
 import (
+	"math"
+	"math/rand"
 	"testing"
 	"ufoot.org/vapor/vpnumber"
 )
@@ -109,6 +111,57 @@ func TestF64Mat3Math(t *testing.T) {
 	// it 3d math is usually : glitch in display. This is less
 	// disastrous than a floating point exception.
 	m3.DivScale(0)
+}
+
+func invertableF64Mat3() *F64Mat3 {
+	var ret F64Mat3
+
+	for math.Abs(float64(ret.Det())) < 0.25 {
+		for i := range ret {
+			ret[i] = rand.Float64()
+		}
+	}
+
+	return &ret
+}
+
+func TestF64Mat3Comp(t *testing.T) {
+	m1 := invertableF64Mat3()
+	m2 := F64Mat3Inv(m1)
+	id := F64Mat3Identity()
+
+	m2.MulComp(m1)
+	if F64Mat3IsSimilar(m2, id) {
+		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
+	} else {
+		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
+	}
+}
+
+func TestF64Mat3JSON(t *testing.T) {
+	m1 := invertableF64Mat3()
+	m2 := F64Mat3Identity()
+
+	var err error
+	var jsonBuf []byte
+
+	jsonBuf, err = m1.MarshalJSON()
+	if err == nil {
+		t.Logf("encoded JSON for F64Mat3 is \"%s\"", string(jsonBuf))
+	} else {
+		t.Error("unable to encode JSON for F64Mat3")
+	}
+	err = m2.UnmarshalJSON([]byte("nawak"))
+	if err == nil {
+		t.Error("able to decode JSON for F64Mat3, but json is not correct")
+	}
+	err = m2.UnmarshalJSON(jsonBuf)
+	if err != nil {
+		t.Error("unable to decode JSON for F64Mat3")
+	}
+	if !F64Mat3IsSimilar(m1, m2) {
+		t.Error("unmarshalled matrix is different from original")
+	}
 }
 
 func BenchmarkF64Mat3Add(b *testing.B) {
