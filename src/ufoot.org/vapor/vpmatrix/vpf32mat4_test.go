@@ -139,6 +139,19 @@ func invertableF32Mat4() *F32Mat4 {
 	return &ret
 }
 
+func TestF32Mat4Comp(t *testing.T) {
+	m1 := invertableF32Mat4()
+	m2 := F32Mat4Inv(m1)
+	id := F32Mat4Identity()
+
+	m2.MulComp(m1)
+	if F32Mat4IsSimilar(m2, id) {
+		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
+	} else {
+		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
+	}
+}
+
 func TestF32Mat4JSON(t *testing.T) {
 	m1 := invertableF32Mat4()
 	m2 := F32Mat4Identity()
@@ -170,5 +183,13 @@ func BenchmarkF32Mat4Add(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
+	}
+}
+
+func BenchmarkF32Mat4Inv(b *testing.B) {
+	mat := invertableF32Mat4()
+
+	for i := 0; i < b.N; i++ {
+		_ = F32Mat4Inv(mat)
 	}
 }

@@ -139,6 +139,19 @@ func invertableF64Mat4() *F64Mat4 {
 	return &ret
 }
 
+func TestF64Mat4Comp(t *testing.T) {
+	m1 := invertableF64Mat4()
+	m2 := F64Mat4Inv(m1)
+	id := F64Mat4Identity()
+
+	m2.MulComp(m1)
+	if F64Mat4IsSimilar(m2, id) {
+		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
+	} else {
+		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
+	}
+}
+
 func TestF64Mat4JSON(t *testing.T) {
 	m1 := invertableF64Mat4()
 	m2 := F64Mat4Identity()
@@ -170,5 +183,13 @@ func BenchmarkF64Mat4Add(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
+	}
+}
+
+func BenchmarkF64Mat4Inv(b *testing.B) {
+	mat := invertableF64Mat4()
+
+	for i := 0; i < b.N; i++ {
+		_ = F64Mat4Inv(mat)
 	}
 }
