@@ -21,6 +21,7 @@ package vpmatrix
 
 import (
 	"math/rand"
+	"math"
 	"testing"
 	"ufoot.org/vapor/vpnumber"
 )
@@ -105,7 +106,7 @@ func TestF64Mat2Basic(t *testing.T) {
 func invertableF64Mat2() *F64Mat2 {
 	var ret F64Mat2
 
-	for vpnumber.F64IsSimilar(ret.Det(), vpnumber.F64Const0) {
+	for math.Abs(ret.Det())< 0.25 {
 		for i := range ret {
 			ret[i] = rand.Float64()
 		}

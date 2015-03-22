@@ -105,7 +105,7 @@ func TestX32Mat2Basic(t *testing.T) {
 func invertableX32Mat2() *X32Mat2 {
 	var ret X32Mat2
 
-	for vpnumber.X32IsSimilar(ret.Det(), vpnumber.X32Const0) {
+	for vpnumber.X32Abs(ret.Det())< vpnumber.X32Const1 {
 		for i := range ret {
 			ret[i] = vpnumber.I32ToX32(rand.Int31n(3))
 		}

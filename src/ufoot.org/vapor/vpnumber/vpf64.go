@@ -38,8 +38,8 @@ const f64Const7 float64 = 7.0
 const f64Const8 float64 = 8.0
 const f64Const9 float64 = 9.0
 
-const f64SimilarDiff float64 = 1.0e-6
-const f64SimilarScale float64 = 1.0e-18
+const f64SimilarDiff float64 = 1.0e-5
+const f64SimilarScale float64 = 1.0e-15
 
 // F64ToX32 converts a float64 to a fixed point number on 32 bits.
 func F64ToX32(f float64) X32 {

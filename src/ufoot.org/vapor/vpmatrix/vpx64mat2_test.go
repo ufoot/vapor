@@ -105,7 +105,7 @@ func TestX64Mat2Basic(t *testing.T) {
 func invertableX64Mat2() *X64Mat2 {
 	var ret X64Mat2
 
-	for vpnumber.X64IsSimilar(ret.Det(), vpnumber.X64Const0) {
+	for vpnumber.X64Abs(ret.Det())< vpnumber.X64Const1 {
 		for i := range ret {
 			ret[i] = vpnumber.I64ToX64(rand.Int63n(10))
 		}
