@@ -107,6 +107,16 @@ func (vec *I64Vec3) Sub(op *I64Vec3) *I64Vec3 {
 	return vec
 }
 
+// Neg changes the sign of all vector members.
+// It modifies the vector, and returns a pointer on it.
+func (vec *I64Vec3) Neg() *I64Vec3 {
+	for i,v := range vec {
+		vec[i] = -v
+	}
+
+	return vec
+}
+
 // I64Vec3Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func I64Vec3Add(veca, vecb *I64Vec3) *I64Vec3 {
@@ -126,3 +136,14 @@ func I64Vec3Sub(veca, vecb *I64Vec3) *I64Vec3 {
 
 	return &ret
 }
+
+// I64Vec3Neg changes the sign of all vector members.
+// Arg is left untouched, a pointer on a new object is returned.
+func I64Vec3Neg(vec *I64Vec3) *I64Vec3 {
+	var ret = *vec
+
+	_ = ret.Neg()
+
+	return &ret
+}
+

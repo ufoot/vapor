@@ -107,6 +107,16 @@ func (vec *I32Vec4) Sub(op *I32Vec4) *I32Vec4 {
 	return vec
 }
 
+// Neg changes the sign of all vector members.
+// It modifies the vector, and returns a pointer on it.
+func (vec *I32Vec4) Neg() *I32Vec4 {
+	for i,v := range vec {
+		vec[i] = -v
+	}
+
+	return vec
+}
+
 // I32Vec4Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func I32Vec4Add(veca, vecb *I32Vec4) *I32Vec4 {
@@ -123,6 +133,16 @@ func I32Vec4Sub(veca, vecb *I32Vec4) *I32Vec4 {
 	var ret = *veca
 
 	_ = ret.Sub(vecb)
+
+	return &ret
+}
+
+// I32Vec4Neg changes the sign of all vector members.
+// Arg is left untouched, a pointer on a new object is returned.
+func I32Vec4Neg(vec *I32Vec4) *I32Vec4 {
+	var ret = *vec
+
+	_ = ret.Neg()
 
 	return &ret
 }
