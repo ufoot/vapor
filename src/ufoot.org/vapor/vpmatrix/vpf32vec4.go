@@ -108,6 +108,16 @@ func (vec *F32Vec4) Sub(op *F32Vec4) *F32Vec4 {
 	return vec
 }
 
+// Neg changes the sign of all vector members.
+// It modifies the vector, and returns a pointer on it.
+func (vec *F32Vec4) Neg() *F32Vec4 {
+	for i,v := range vec {
+		vec[i] = -v
+	}
+
+	return vec
+}
+
 // MulScale multiplies all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
 func (vec *F32Vec4) MulScale(factor float32) *F32Vec4 {
@@ -181,6 +191,16 @@ func F32Vec4Sub(veca, vecb *F32Vec4) *F32Vec4 {
 	var ret = *veca
 
 	_ = ret.Sub(vecb)
+
+	return &ret
+}
+
+// F32Vec4Neg changes the sign of all vector members.
+// Arg is left untouched, a pointer on a new object is returned.
+func F32Vec4Neg(vec *F32Vec4) *F32Vec4 {
+	var ret = *vec
+
+	_ = ret.Neg()
 
 	return &ret
 }
