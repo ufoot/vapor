@@ -19,14 +19,35 @@
 # Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 # Contact author: ufoot@ufoot.org
 
-rm -f Makefile.dep && touch Makefile.dep
+for m in Makefile.dep Makefile.help ; do
+    rm -f $m && touch $m
+done
+
+echo >> Makefile.help
+echo "Below are listed global Makefile targets." >> Makefile.help
+echo "vp: builds all binaries (alias for all)." >> Makefile.help
+echo "check: runs test suite." >> Makefile.help
+echo "bench: runs test suite in bench mode." >> Makefile.help
+echo "lint: lints (cleanup & check) source code." >> Makefile.help
+echo "devel: developers target, indents, lints and tests code in verbose mode." >> Makefile.help
+echo "doc: generate documentation." >> Makefile.help
+echo "clean: cleans up build." >> Makefile.help
+echo "distclean: cleans up build, removing even more files." >> Makefile.help
+echo "get: get go libraries from github.com or golang.org." >> Makefile.help
+echo "dep: generate dependencies."  >> Makefile.help
+echo "help: display help about Makefile targets." >> Makefile.help
+echo "stamp: update build stamp." >> Makefile.help
+echo "indent: automatically indent code." >> Makefile.help
+echo >> Makefile.help
+echo "Below are listed per-package Makefile targets." >> Makefile.help
 
 for t in "" "check-" "bench-" "lint-" "devel-" "doc-" ; do
     echo ".PHONY: ${t}vp" >> Makefile.dep
     echo -n "${t}vp:" >> Makefile.dep
     for i in src/ufoot.org/vapor/vp* ; do
 	j=$(echo $i | sed "s/.*ufoot.org\/vapor\///")
-        echo -n " ${t}$j" >> Makefile.dep
+        echo -n " ${t}${j}" >> Makefile.dep
+	echo "${t}${j}" >> Makefile.help 
     done
     echo >> Makefile.dep
     echo >> Makefile.dep

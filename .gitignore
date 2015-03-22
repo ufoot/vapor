@@ -5,6 +5,7 @@ config.log
 config.status
 Makefile
 Makefile.dep
+Makefile.help
 bin
 pkg
 doc

@@ -24,6 +24,7 @@ VP_TOPBUILDDIR = @VP_TOPBUILDDIR@
 VP_TOPSRCDIR = @VP_TOPSRCDIR@
 
 .PHONY: all
+.PHONY: vp
 .PHONY: check
 .PHONY: bench
 .PHONY: lint
@@ -31,8 +32,11 @@ VP_TOPSRCDIR = @VP_TOPSRCDIR@
 .PHONY: doc
 .PHONY: clean
 .PHONY: distclean
+.PHONY: get
 .PHONY: dep
+.PHONY: help
 .PHONY: stamp
+.PHONY: indent
 
 all: vp
 
@@ -46,13 +50,11 @@ devel: indent dep stamp vp devel-vp
 
 doc: indent dep stamp doc-vp
 
-include Makefile.dep
-
 clean:
 	rm -rf bin pkg doc
 
 distclean: clean
-	rm -rf autom4te.cache config.log config.status Makefile Makefile.dep src/golang.org src/github.com
+	rm -rf autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src/golang.org src/github.com
 
 get:
 	./get.sh
@@ -60,9 +62,14 @@ get:
 dep:
 	./dep.sh
 
+help:
+	cat Makefile.help
+
 stamp:
 	./stamp.sh
 
 indent:
 	./indent.sh
+
+include Makefile.dep
 
