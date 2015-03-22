@@ -85,6 +85,12 @@ func TestX32Vec4Math(t *testing.T) {
 		t.Error("Sub error")
 	}
 
+	v3 = X32Vec4Add(v1, X32Vec4Neg(v2))
+	v4 = X32Vec4Sub(v1, v2)
+	if !X32Vec4IsSimilar(v3, v4) {
+		t.Error("Neg error")
+	}
+
 	v3 = X32Vec4MulScale(v1, xmul)
 	v4 = X32Vec4New(vpnumber.X32Mul(x1, xmul), vpnumber.X32Mul(x2, xmul), vpnumber.X32Mul(x3, xmul), vpnumber.X32Mul(x4, xmul))
 	if !X32Vec4IsSimilar(v3, v4) {

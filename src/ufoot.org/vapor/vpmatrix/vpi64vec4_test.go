@@ -75,4 +75,10 @@ func TestI64Vec4Math(t *testing.T) {
 	if *v3 != *v4 {
 		t.Error("Sub error")
 	}
+
+	v3 = I64Vec4Add(v1, I64Vec4Neg(v2))
+	v4 = I64Vec4Sub(v1, v2)
+	if *v3 != *v4 {
+		t.Error("Neg error")
+	}
 }

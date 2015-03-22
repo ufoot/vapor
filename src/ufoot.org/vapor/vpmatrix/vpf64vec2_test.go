@@ -81,6 +81,12 @@ func TestF64Vec2Math(t *testing.T) {
 		t.Error("Sub error")
 	}
 
+	v3 = F64Vec2Add(v1, F64Vec2Neg(v2))
+	v4 = F64Vec2Sub(v1, v2)
+	if !F64Vec2IsSimilar(v3, v4) {
+		t.Error("Neg error")
+	}
+
 	v3 = F64Vec2MulScale(v1, fmul)
 	v4 = F64Vec2New(f1*fmul, f2*fmul)
 	if !F64Vec2IsSimilar(v3, v4) {

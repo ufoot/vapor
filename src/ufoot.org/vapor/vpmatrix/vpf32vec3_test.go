@@ -83,6 +83,12 @@ func TestF32Vec3Math(t *testing.T) {
 		t.Error("Sub error")
 	}
 
+	v3 = F32Vec3Add(v1, F32Vec3Neg(v2))
+	v4 = F32Vec3Sub(v1, v2)
+	if !F32Vec3IsSimilar(v3, v4) {
+		t.Error("Neg error")
+	}
+
 	v3 = F32Vec3MulScale(v1, fmul)
 	v4 = F32Vec3New(f1*fmul, f2*fmul, f3*fmul)
 	if !F32Vec3IsSimilar(v3, v4) {

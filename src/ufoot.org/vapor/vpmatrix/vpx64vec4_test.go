@@ -85,6 +85,12 @@ func TestX64Vec4Math(t *testing.T) {
 		t.Error("Sub error")
 	}
 
+	v3 = X64Vec4Add(v1, X64Vec4Neg(v2))
+	v4 = X64Vec4Sub(v1, v2)
+	if !X64Vec4IsSimilar(v3, v4) {
+		t.Error("Neg error")
+	}
+
 	v3 = X64Vec4MulScale(v1, xmul)
 	v4 = X64Vec4New(vpnumber.X64Mul(x1, xmul), vpnumber.X64Mul(x2, xmul), vpnumber.X64Mul(x3, xmul), vpnumber.X64Mul(x4, xmul))
 	if !X64Vec4IsSimilar(v3, v4) {

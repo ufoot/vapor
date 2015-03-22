@@ -73,4 +73,10 @@ func TestI32Vec3Math(t *testing.T) {
 	if *v3 != *v4 {
 		t.Error("Sub error")
 	}
+
+	v3 = I32Vec3Add(v1, I32Vec3Neg(v2))
+	v4 = I32Vec3Sub(v1, v2)
+	if *v3 != *v4 {
+		t.Error("Neg error")
+	}
 }
