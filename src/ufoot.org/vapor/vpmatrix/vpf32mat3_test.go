@@ -26,7 +26,7 @@ import (
 	"ufoot.org/vapor/vpnumber"
 )
 
-func TestF32Mat3Basic(t *testing.T) {
+func TestF32Mat3Math(t *testing.T) {
 	const f11 = 3.0
 	const f12 = 333.0
 	const f13 = 31.0

@@ -20,7 +20,9 @@
 package vpmatrix
 
 import (
+	"encoding/json"
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpsys"
 )
 
 // X64Mat4 is a matrix containing 4x4 fixed point 64 bit values.
@@ -32,6 +34,11 @@ type X64Mat4 [16]vpnumber.X64
 // first elements fill first column.
 func X64Mat4New(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16 vpnumber.X64) *X64Mat4 {
 	return &X64Mat4{x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16}
+}
+
+// X64Mat4Identity creates a new identity matrix.
+func X64Mat4Identity() *X64Mat4 {
+	return &X64Mat4{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
 // ToI32 converts the matrix to an int32 matrix.
@@ -99,6 +106,54 @@ func (mat *X64Mat4) Get(col, row int) vpnumber.X64 {
 	return mat[col*4+row]
 }
 
+// MarshalJSON implements the json.Marshaler interface.
+func (mat *X64Mat4) MarshalJSON() ([]byte, error) {
+	var tmpArray [4][4]int64
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			tmpArray[col][row] = int64(mat[col*4+row])
+		}
+	}
+
+	ret, err := json.Marshal(tmpArray)
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal X64Mat4")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (mat *X64Mat4) UnmarshalJSON(data []byte) error {
+	var tmpArray [4][4]int64
+
+	err := json.Unmarshal(data, &tmpArray)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal X64Mat4")
+	}
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			mat[col*4+row] = vpnumber.X64(tmpArray[col][row])
+		}
+	}
+
+	return nil
+}
+
+// String returns a readable form of the matrix.
+func (mat *X64Mat4) String() string {
+	buf, err := mat.MarshalJSON()
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
+}
+
 // Add adds operand to the matrix.
 // It modifies the matrix, and returns a pointer on it.
 func (mat *X64Mat4) Add(op *X64Mat4) *X64Mat4 {
@@ -156,6 +211,11 @@ func (mat *X64Mat4) MulComp(op *X64Mat4) *X64Mat4 {
 	*mat = *X64Mat4MulComp(mat, op)
 
 	return mat
+}
+
+// Det returns the matrix determinant.
+func (mat *X64Mat4) Det() vpnumber.X64 {
+	return vpnumber.F64ToX64(1.5)
 }
 
 // MulVec performs a multiplication of a vector by a 4x4 matrix,

@@ -26,7 +26,7 @@ import (
 	"ufoot.org/vapor/vpnumber"
 )
 
-func TestF64Mat2Basic(t *testing.T) {
+func TestF64Mat2Math(t *testing.T) {
 	const f11 = 3.0
 	const f12 = 30.0
 	const f21 = -40.0

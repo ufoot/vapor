@@ -20,6 +20,7 @@
 package vpmatrix
 
 import (
+	"math/rand"
 	"testing"
 	"ufoot.org/vapor/vpnumber"
 )
@@ -123,6 +124,44 @@ func TestX64Mat4Math(t *testing.T) {
 	// it 3d math is usually : glitch in display. This is less
 	// disastrous than a floating point exception.
 	m3.DivScale(0)
+}
+
+func invertableX64Mat4() *X64Mat4 {
+	var ret X64Mat4
+
+	for vpnumber.X64Abs(ret.Det()) < vpnumber.X64Const1 {
+		for i := range ret {
+			ret[i] = vpnumber.I32ToX64(rand.Int31n(3))
+		}
+	}
+
+	return &ret
+}
+
+func TestX64Mat4JSON(t *testing.T) {
+	m1 := invertableX64Mat4()
+	m2 := X64Mat4Identity()
+
+	var err error
+	var jsonBuf []byte
+
+	jsonBuf, err = m1.MarshalJSON()
+	if err == nil {
+		t.Logf("encoded JSON for X64Mat4 is \"%s\"", string(jsonBuf))
+	} else {
+		t.Error("unable to encode JSON for X64Mat4")
+	}
+	err = m2.UnmarshalJSON([]byte("nawak"))
+	if err == nil {
+		t.Error("able to decode JSON for X64Mat4, but json is not correct")
+	}
+	err = m2.UnmarshalJSON(jsonBuf)
+	if err != nil {
+		t.Error("unable to decode JSON for X64Mat4")
+	}
+	if !X64Mat4IsSimilar(m1, m2) {
+		t.Error("unmarshalled matrix is different from original")
+	}
 }
 
 func BenchmarkX64Mat4Add(b *testing.B) {

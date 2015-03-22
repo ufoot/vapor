@@ -53,7 +53,7 @@ const x64Const9 X64 = 0x900000000
 const x64Half = 0x080000000
 const x64ShiftHalf = 16
 const x64SimilarDiff = 0x01000000
-const x64SimilarScale = 0x00400000
+const x64SimilarScale = 0x00800000
 const x64IpMask = 0xffffffff00000000
 
 // X64ToI32 converts a fixed point number on 64 bits to an int32.
@@ -111,6 +111,20 @@ func X64Abs(x X64) X64 {
 // Beware of rounding errors, might be very approximative on limit cases.
 func X64Mul(x1 X64, x2 X64) X64 {
 	return X64((int64(x1) >> x64ShiftHalf) * (int64(x2) >> x64ShiftHalf))
+}
+
+// X64Muln multiplicates several fixed point numbers on 64 bits.
+// Calls the 2 args mul function recursively.
+// Beware of rounding errors, might be very approximative on limit cases.
+func X64Muln(x X64, xn ...X64) X64 {
+	switch len(xn) {
+	case 0:
+		return x
+	case 1:
+		return X64Mul(x, xn[0])
+	}
+	x = X64Mul(x, xn[0])
+	return X64Muln(x, xn[1:]...)
 }
 
 // X64Div divides 2 fixed point numbers on 64 bits. This is not

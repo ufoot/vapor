@@ -20,7 +20,9 @@
 package vpmatrix
 
 import (
+	"encoding/json"
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpsys"
 )
 
 // X32Mat2 is a matrix containing 2x2 fixed point 32 bit values.
@@ -102,6 +104,54 @@ func (mat *X32Mat2) Set(col, row int, val vpnumber.X32) {
 // Get gets the value of the matrix for a given column and row.
 func (mat *X32Mat2) Get(col, row int) vpnumber.X32 {
 	return mat[col*2+row]
+}
+
+// MarshalJSON implements the json.Marshaler interface.
+func (mat *X32Mat2) MarshalJSON() ([]byte, error) {
+	var tmpArray [2][2]int32
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			tmpArray[col][row] = int32(mat[col*2+row])
+		}
+	}
+
+	ret, err := json.Marshal(tmpArray)
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal X32Mat2")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (mat *X32Mat2) UnmarshalJSON(data []byte) error {
+	var tmpArray [2][2]int32
+
+	err := json.Unmarshal(data, &tmpArray)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal X32Mat2")
+	}
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			mat[col*2+row] = vpnumber.X32(tmpArray[col][row])
+		}
+	}
+
+	return nil
+}
+
+// String returns a readable form of the matrix.
+func (mat *X32Mat2) String() string {
+	buf, err := mat.MarshalJSON()
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // Add adds operand to the matrix.

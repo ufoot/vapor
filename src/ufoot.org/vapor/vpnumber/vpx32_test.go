@@ -95,6 +95,10 @@ func TestX32Math(t *testing.T) {
 	if x != x32Const6 {
 		t.Error("can't mul xint32 numbers", x)
 	}
+	x = X32Muln(x32Const2, x32Const3, x32Const4)
+	if x != X32Mul(x32Const6, x32Const4) {
+		t.Error("can't muln xint32 numbers", x)
+	}
 	x = X32Div(x32Const8, x32Const2)
 	if x != x32Const4 {
 		t.Error("can't div xint32 numbers", x)

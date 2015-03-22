@@ -49,7 +49,7 @@ const x32Const9 X32 = 0x90000
 const x32Half = 0x08000
 const x32ShiftHalf = 8
 const x32SimilarDiff = 0x0800
-const x32SimilarScale = 0x0200
+const x32SimilarScale = 0x0400
 const x32IpMask = 0xffff0000
 
 // X32ToI32 converts a fixed point number on 32 bits to an int32.
@@ -107,6 +107,20 @@ func X32Abs(x X32) X32 {
 // Beware of rounding errors, might be very approximative on limit cases.
 func X32Mul(x1 X32, x2 X32) X32 {
 	return X32((int32(x1) >> x32ShiftHalf) * (int32(x2) >> x32ShiftHalf))
+}
+
+// X32Muln multiplicates several fixed point numbers on 32 bits.
+// Calls the 2 args mul function recursively.
+// Beware of rounding errors, might be very approximative on limit cases.
+func X32Muln(x X32, xn ...X32) X32 {
+	switch len(xn) {
+	case 0:
+		return x
+	case 1:
+		return X32Mul(x, xn[0])
+	}
+	x = X32Mul(x, xn[0])
+	return X32Muln(x, xn[1:]...)
 }
 
 // X32Div divides 2 fixed point numbers on 32 bits. This is not

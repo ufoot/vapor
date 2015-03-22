@@ -95,6 +95,10 @@ func TestX64Math(t *testing.T) {
 	if x != x64Const6 {
 		t.Error("can't mul xint64 numbers", x)
 	}
+	x = X64Muln(x64Const2, x64Const3, x64Const4)
+	if x != X64Mul(x64Const6, x64Const4) {
+		t.Error("can't muln xint64 numbers", x)
+	}
 	x = X64Div(x64Const8, x64Const2)
 	if x != x64Const4 {
 		t.Error("can't div xint64 numbers", x)
