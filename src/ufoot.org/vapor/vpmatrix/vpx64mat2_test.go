@@ -121,7 +121,7 @@ func TestX64Mat2Comp(t *testing.T) {
 
 	m2.MulComp(m1)
 	if !X64Mat2IsSimilar(m2, id) {
-		t.Errorf("multiplicating matrix by its inverse does not return identity, %x %x %x %x", m2[0], m2[1], m2[2], m2[3])
+		t.Error("multiplicating matrix by its inverse does not return identity")
 	}
 }
 

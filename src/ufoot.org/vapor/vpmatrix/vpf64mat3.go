@@ -34,6 +34,11 @@ func F64Mat3New(f1, f2, f3, f4, f5, f6, f7, f8, f9 float64) *F64Mat3 {
 	return &F64Mat3{f1, f2, f3, f4, f5, f6, f7, f8, f9}
 }
 
+// F64Mat3Identity creates a new identity matrix.
+func F64Mat3Identity() *F64Mat3 {
+	return &F64Mat3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
+}
+
 // ToI32 converts the matrix to an int32 matrix.
 func (mat *F64Mat3) ToI32() *I32Mat3 {
 	var ret I32Mat3
