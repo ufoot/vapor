@@ -34,7 +34,7 @@ func TestX64Vec3Math(t *testing.T) {
 	var x7 = vpnumber.F64ToX64(2.0)
 
 	var xmul = vpnumber.F64ToX64(10.0)
-	var xsumsq = vpnumber.F64ToX64(26.0)
+	var xsqmag = vpnumber.F64ToX64(26.0)
 	var xlength = vpnumber.F64ToX64(5.099019)
 
 	var v1, v2, v3, v4 *X64Vec3
@@ -101,9 +101,9 @@ func TestX64Vec3Math(t *testing.T) {
 	// disastrous than a floating point exception.
 	v3.DivScale(0)
 
-	x = X64Vec3SumSq(v1)
-	if !vpnumber.X64IsSimilar(x, xsumsq) {
-		t.Error("SumSq error", x, xsumsq)
+	x = X64Vec3SqMag(v1)
+	if !vpnumber.X64IsSimilar(x, xsqmag) {
+		t.Error("SqMag error", x, xsqmag)
 	}
 
 	x = X64Vec3Length(v1)

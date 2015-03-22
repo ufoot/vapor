@@ -32,7 +32,7 @@ func TestX32Vec2Math(t *testing.T) {
 	var x6 = vpnumber.F32ToX32(6.0)
 
 	var xmul = vpnumber.F32ToX32(10.0)
-	var xsumsq = vpnumber.F32ToX32(25.0)
+	var xsqmag = vpnumber.F32ToX32(25.0)
 	var xlength = vpnumber.F32ToX32(5.0)
 
 	var v1, v2, v3, v4 *X32Vec2
@@ -99,9 +99,9 @@ func TestX32Vec2Math(t *testing.T) {
 	// disastrous than a floating point exception.
 	v3.DivScale(0)
 
-	x = X32Vec2SumSq(v1)
-	if !vpnumber.X32IsSimilar(x, xsumsq) {
-		t.Error("SumSq error", x, xsumsq)
+	x = X32Vec2SqMag(v1)
+	if !vpnumber.X32IsSimilar(x, xsqmag) {
+		t.Error("SqMag error", x, xsqmag)
 	}
 
 	x = X32Vec2Length(v1)

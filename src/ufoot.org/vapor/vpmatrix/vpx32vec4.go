@@ -128,10 +128,10 @@ func (vec *X32Vec4) DivScale(factor vpnumber.X32) *X32Vec4 {
 	return vec
 }
 
-// SumSq returns the sum of the squares of all values.
+// SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func (vec *X32Vec4) SumSq() vpnumber.X32 {
+func (vec *X32Vec4) SqMag() vpnumber.X32 {
 	var sq vpnumber.X32
 
 	for _, v := range vec {
@@ -143,7 +143,7 @@ func (vec *X32Vec4) SumSq() vpnumber.X32 {
 
 // Length returns the length of the vector.
 func (vec *X32Vec4) Length() vpnumber.X32 {
-	return vpmath.X32Sqrt(vec.SumSq())
+	return vpmath.X32Sqrt(vec.SqMag())
 }
 
 // Normalize scales the vector so that its length is 1.
@@ -205,11 +205,11 @@ func X32Vec4DivScale(vec *X32Vec4, factor vpnumber.X32) *X32Vec4 {
 	return &ret
 }
 
-// X32Vec4SumSq returns the sum of the squares of all values.
+// X32Vec4SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func X32Vec4SumSq(vec *X32Vec4) vpnumber.X32 {
-	return vec.SumSq()
+func X32Vec4SqMag(vec *X32Vec4) vpnumber.X32 {
+	return vec.SqMag()
 }
 
 // X32Vec4Length returns the length of a vector.

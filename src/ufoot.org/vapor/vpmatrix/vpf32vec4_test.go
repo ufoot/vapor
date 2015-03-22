@@ -36,7 +36,7 @@ func TestF32Vec4Math(t *testing.T) {
 	const f8 = -30.0
 
 	const fmul = 10.0
-	const fsumsq = 126.0
+	const fsqmag = 126.0
 	const flength = 11.225
 
 	var v1, v2, v3, v4 *F32Vec4
@@ -103,9 +103,9 @@ func TestF32Vec4Math(t *testing.T) {
 	// disastrous than a floating point exception.
 	v3.DivScale(0)
 
-	f = F32Vec4SumSq(v1)
-	if !vpnumber.F32IsSimilar(f, fsumsq) {
-		t.Error("SumSq error", f, fsumsq)
+	f = F32Vec4SqMag(v1)
+	if !vpnumber.F32IsSimilar(f, fsqmag) {
+		t.Error("SqMag error", f, fsqmag)
 	}
 
 	f = F32Vec4Length(v1)

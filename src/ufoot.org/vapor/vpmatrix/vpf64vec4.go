@@ -128,10 +128,10 @@ func (vec *F64Vec4) DivScale(factor float64) *F64Vec4 {
 	return vec
 }
 
-// SumSq returns the sum of the squares of all values.
+// SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func (vec *F64Vec4) SumSq() float64 {
+func (vec *F64Vec4) SqMag() float64 {
 	var sq float64
 
 	for _, v := range vec {
@@ -143,7 +143,7 @@ func (vec *F64Vec4) SumSq() float64 {
 
 // Length returns the length of the vector.
 func (vec *F64Vec4) Length() float64 {
-	return math.Sqrt(vec.SumSq())
+	return math.Sqrt(vec.SqMag())
 }
 
 // Normalize scales the vector so that its length is 1.
@@ -205,11 +205,11 @@ func F64Vec4DivScale(vec *F64Vec4, factor float64) *F64Vec4 {
 	return &ret
 }
 
-// F64Vec4SumSq returns the sum of the squares of all values.
+// F64Vec4SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func F64Vec4SumSq(vec *F64Vec4) float64 {
-	return vec.SumSq()
+func F64Vec4SqMag(vec *F64Vec4) float64 {
+	return vec.SqMag()
 }
 
 // F64Vec4Length returns the length of a vector.

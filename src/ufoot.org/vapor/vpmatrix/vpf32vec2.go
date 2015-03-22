@@ -128,10 +128,10 @@ func (vec *F32Vec2) DivScale(factor float32) *F32Vec2 {
 	return vec
 }
 
-// SumSq returns the sum of the squares of all values.
+// SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func (vec *F32Vec2) SumSq() float32 {
+func (vec *F32Vec2) SqMag() float32 {
 	var sq float32
 
 	for _, v := range vec {
@@ -143,7 +143,7 @@ func (vec *F32Vec2) SumSq() float32 {
 
 // Length returns the length of the vector.
 func (vec *F32Vec2) Length() float32 {
-	return float32(math.Sqrt(float64(vec.SumSq())))
+	return float32(math.Sqrt(float64(vec.SqMag())))
 }
 
 // Normalize scales the vector so that its length is 1.
@@ -205,11 +205,11 @@ func F32Vec2DivScale(vec *F32Vec2, factor float32) *F32Vec2 {
 	return &ret
 }
 
-// F32Vec2SumSq returns the sum of the squares of all values.
+// F32Vec2SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func F32Vec2SumSq(vec *F32Vec2) float32 {
-	return vec.SumSq()
+func F32Vec2SqMag(vec *F32Vec2) float32 {
+	return vec.SqMag()
 }
 
 // F32Vec2Length returns the length of a vector.
