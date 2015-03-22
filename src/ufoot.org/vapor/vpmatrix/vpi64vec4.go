@@ -110,7 +110,7 @@ func (vec *I64Vec4) Sub(op *I64Vec4) *I64Vec4 {
 // Neg changes the sign of all vector members.
 // It modifies the vector, and returns a pointer on it.
 func (vec *I64Vec4) Neg() *I64Vec4 {
-	for i,v := range vec {
+	for i, v := range vec {
 		vec[i] = -v
 	}
 
@@ -146,4 +146,3 @@ func I64Vec4Neg(vec *I64Vec4) *I64Vec4 {
 
 	return &ret
 }
-

@@ -111,7 +111,7 @@ func (vec *F64Vec3) Sub(op *F64Vec3) *F64Vec3 {
 // Neg changes the sign of all vector members.
 // It modifies the vector, and returns a pointer on it.
 func (vec *F64Vec3) Neg() *F64Vec3 {
-	for i,v := range vec {
+	for i, v := range vec {
 		vec[i] = -v
 	}
 
