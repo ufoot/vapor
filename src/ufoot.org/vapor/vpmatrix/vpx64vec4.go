@@ -108,6 +108,16 @@ func (vec *X64Vec4) Sub(op *X64Vec4) *X64Vec4 {
 	return vec
 }
 
+// Neg changes the sign of all vector members.
+// It modifies the vector, and returns a pointer on it.
+func (vec *X64Vec4) Neg() *X64Vec4 {
+	for i,v := range vec {
+		vec[i] = -v
+	}
+
+	return vec
+}
+
 // MulScale multiplies all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
 func (vec *X64Vec4) MulScale(factor vpnumber.X64) *X64Vec4 {
@@ -181,6 +191,16 @@ func X64Vec4Sub(veca, vecb *X64Vec4) *X64Vec4 {
 	var ret = *veca
 
 	_ = ret.Sub(vecb)
+
+	return &ret
+}
+
+// X64Vec4Neg changes the sign of all vector members.
+// Arg is left untouched, a pointer on a new object is returned.
+func X64Vec4Neg(vec *X64Vec4) *X64Vec4 {
+	var ret = *vec
+
+	_ = ret.Neg()
 
 	return &ret
 }
