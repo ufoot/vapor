@@ -253,3 +253,15 @@ func X64IsSimilar(x1 X64, x2 X64) bool {
 
 	return false
 }
+
+// X64Lerp performs a linear interpolation between a and b.
+func X64Lerp(x1 X64, x2 X64, beta X64) X64 {
+	switch {
+	case beta <= X64Const0:
+		return x1
+	case beta >= X64Const1:
+		return x2
+	}
+
+	return X64Mul(x1, (X64Const1-beta)) + X64Mul(x2, beta)
+}

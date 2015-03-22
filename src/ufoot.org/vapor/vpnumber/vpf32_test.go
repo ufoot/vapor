@@ -75,3 +75,24 @@ func TestF32Similar(t *testing.T) {
 		t.Error("Can't figure out float32 is similar to 1", f)
 	}
 }
+
+func TestF32Lerp(t *testing.T) {
+	var f float32
+	const f1 float32 = -2.0
+	const f2 float32 = 8.0
+	const beta float32 = 0.7
+	const lerp float32 = 5.0
+
+	f = F32Lerp(f1, f2, beta)
+	if !F32IsSimilar(f, lerp) {
+		t.Errorf("bad lerp, got %f should be %f", f, beta)
+	}
+	f = F32Lerp(f1, f2, -F32Const1)
+	if f != f1 {
+		t.Errorf("bad lerp on negative beta, got %f should be %f", f, f1)
+	}
+	f = F32Lerp(f1, f2, F32Const1+F32Const1)
+	if f != f2 {
+		t.Errorf("bad lerp on beta>1, got %f should be %f", f, f2)
+	}
+}

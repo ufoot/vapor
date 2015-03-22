@@ -195,6 +195,27 @@ func TestX64Similar(t *testing.T) {
 	}
 }
 
+func TestX64Lerp(t *testing.T) {
+	var x X64
+	var x1 X64 = F64ToX64(-2.0)
+	var x2 X64 = F64ToX64(8.0)
+	var beta X64 = F64ToX64(0.7)
+	var lerp X64 = F64ToX64(5.0)
+
+	x = X64Lerp(x1, x2, beta)
+	if !X64IsSimilar(x, lerp) {
+		t.Errorf("bad lerp, got %x should be %x", x, lerp)
+	}
+	x = X64Lerp(x1, x2, -X64Const1)
+	if x != x1 {
+		t.Errorf("bad lerp on negative beta, got %x should be %x", x, x1)
+	}
+	x = X64Lerp(x1, x2, X64Const1+X64Const1)
+	if x != x2 {
+		t.Errorf("bad lerp on beta>1, got %x should be %x", x, x2)
+	}
+}
+
 func BenchmarkX64Add(b *testing.B) {
 	var x = x64Const2
 	var y = x64Const5

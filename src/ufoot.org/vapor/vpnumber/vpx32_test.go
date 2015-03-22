@@ -195,6 +195,27 @@ func TestX32Similar(t *testing.T) {
 	}
 }
 
+func TestX32Lerp(t *testing.T) {
+	var x X32
+	var x1 X32 = F32ToX32(-2.0)
+	var x2 X32 = F32ToX32(8.0)
+	var beta X32 = F32ToX32(0.7)
+	var lerp X32 = F32ToX32(5.0)
+
+	x = X32Lerp(x1, x2, beta)
+	if !X32IsSimilar(x, lerp) {
+		t.Errorf("bad lerp, got %x should be %x", x, lerp)
+	}
+	x = X32Lerp(x1, x2, -X32Const1)
+	if x != x1 {
+		t.Errorf("bad lerp on negative beta, got %x should be %x", x, x1)
+	}
+	x = X32Lerp(x1, x2, X32Const1+X32Const1)
+	if x != x2 {
+		t.Errorf("bad lerp on beta>1, got %x should be %x", x, x2)
+	}
+}
+
 func BenchmarkX32Add(b *testing.B) {
 	var x = x32Const2
 	var y = x32Const5

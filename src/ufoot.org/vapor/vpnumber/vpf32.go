@@ -84,3 +84,15 @@ func F32IsSimilar(f1 float32, f2 float32) bool {
 
 	return false
 }
+
+// F32Lerp performs a linear interpolation between a and b.
+func F32Lerp(f1 float32, f2 float32, beta float32) float32 {
+	switch {
+	case beta <= F32Const0:
+		return f1
+	case beta >= F32Const1:
+		return f2
+	}
+
+	return f1*(F32Const1-beta) + f2*beta
+}

@@ -84,3 +84,15 @@ func F64IsSimilar(f1 float64, f2 float64) bool {
 
 	return false
 }
+
+// F64Lerp performs a linear interpolation between a and b.
+func F64Lerp(f1 float64, f2 float64, beta float64) float64 {
+	switch {
+	case beta <= F64Const0:
+		return f1
+	case beta >= F64Const1:
+		return f2
+	}
+
+	return f1*(F64Const1-beta) + f2*beta
+}

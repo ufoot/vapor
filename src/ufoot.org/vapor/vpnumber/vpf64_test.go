@@ -75,3 +75,24 @@ func TestF64Similar(t *testing.T) {
 		t.Error("Can't figure out float64 is similar to 1", f)
 	}
 }
+
+func TestF64Lerp(t *testing.T) {
+	var f float64
+	const f1 float64 = -2.0
+	const f2 float64 = 8.0
+	const beta float64 = 0.7
+	const lerp float64 = 5.0
+
+	f = F64Lerp(f1, f2, beta)
+	if !F64IsSimilar(f, lerp) {
+		t.Errorf("bad lerp, got %f should be %f", f, beta)
+	}
+	f = F64Lerp(f1, f2, -F64Const1)
+	if f != f1 {
+		t.Errorf("bad lerp on negative beta, got %f should be %f", f, f1)
+	}
+	f = F64Lerp(f1, f2, F64Const1+F64Const1)
+	if f != f2 {
+		t.Errorf("bad lerp on beta>1, got %f should be %f", f, f2)
+	}
+}
