@@ -197,10 +197,10 @@ func TestX64Similar(t *testing.T) {
 
 func TestX64Lerp(t *testing.T) {
 	var x X64
-	var x1 X64 = F64ToX64(-2.0)
-	var x2 X64 = F64ToX64(8.0)
-	var beta X64 = F64ToX64(0.7)
-	var lerp X64 = F64ToX64(5.0)
+	var x1 = F64ToX64(-2.0)
+	var x2 = F64ToX64(8.0)
+	var beta = F64ToX64(0.7)
+	var lerp = F64ToX64(5.0)
 
 	x = X64Lerp(x1, x2, beta)
 	if !X64IsSimilar(x, lerp) {

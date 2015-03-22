@@ -197,10 +197,10 @@ func TestX32Similar(t *testing.T) {
 
 func TestX32Lerp(t *testing.T) {
 	var x X32
-	var x1 X32 = F32ToX32(-2.0)
-	var x2 X32 = F32ToX32(8.0)
-	var beta X32 = F32ToX32(0.7)
-	var lerp X32 = F32ToX32(5.0)
+	var x1 = F32ToX32(-2.0)
+	var x2 = F32ToX32(8.0)
+	var beta = F32ToX32(0.7)
+	var lerp = F32ToX32(5.0)
 
 	x = X32Lerp(x1, x2, beta)
 	if !X32IsSimilar(x, lerp) {
