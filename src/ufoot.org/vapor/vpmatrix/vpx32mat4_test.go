@@ -131,11 +131,24 @@ func invertableX32Mat4() *X32Mat4 {
 
 	for vpnumber.X32Abs(ret.Det()) < vpnumber.X32Const1 {
 		for i := range ret {
-			ret[i] = vpnumber.I32ToX32(rand.Int31n(3))
+			ret[i] = vpnumber.I32ToX32(rand.Int31n(10)) >> 3
 		}
 	}
 
 	return &ret
+}
+
+func TestX32Mat4Comp(t *testing.T) {
+	m1 := invertableX32Mat4()
+	m2 := X32Mat4Inv(m1)
+	id := X32Mat4Identity()
+
+	m2.MulComp(m1)
+	if X32Mat4IsSimilar(m2, id) {
+		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
+	} else {
+		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
+	}
 }
 
 func TestX32Mat4JSON(t *testing.T) {
@@ -169,5 +182,13 @@ func BenchmarkX32Mat4Add(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
+	}
+}
+
+func BenchmarkX32Mat4Inv(b *testing.B) {
+	mat := invertableX32Mat4()
+
+	for i := 0; i < b.N; i++ {
+		_ = X32Mat4Inv(mat)
 	}
 }

@@ -131,11 +131,24 @@ func invertableX64Mat4() *X64Mat4 {
 
 	for vpnumber.X64Abs(ret.Det()) < vpnumber.X64Const1 {
 		for i := range ret {
-			ret[i] = vpnumber.I32ToX64(rand.Int31n(3))
+			ret[i] = vpnumber.I64ToX64(rand.Int63n(10)) >> 3
 		}
 	}
 
 	return &ret
+}
+
+func TestX64Mat4Comp(t *testing.T) {
+	m1 := invertableX64Mat4()
+	m2 := X64Mat4Inv(m1)
+	id := X64Mat4Identity()
+
+	m2.MulComp(m1)
+	if X64Mat4IsSimilar(m2, id) {
+		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
+	} else {
+		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
+	}
 }
 
 func TestX64Mat4JSON(t *testing.T) {
@@ -169,5 +182,13 @@ func BenchmarkX64Mat4Add(b *testing.B) {
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
+	}
+}
+
+func BenchmarkX64Mat4Inv(b *testing.B) {
+	mat := invertableX64Mat4()
+
+	for i := 0; i < b.N; i++ {
+		_ = X64Mat4Inv(mat)
 	}
 }

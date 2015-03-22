@@ -117,7 +117,7 @@ func invertableX64Mat3() *X64Mat3 {
 
 	for vpnumber.X64Abs(ret.Det()) < vpnumber.X64Const1 {
 		for i := range ret {
-			ret[i] = vpnumber.I32ToX64(rand.Int31n(3))
+			ret[i] = vpnumber.I64ToX64(rand.Int63n(10)) >> 2
 		}
 	}
 

@@ -215,7 +215,17 @@ func (mat *X32Mat4) MulComp(op *X32Mat4) *X32Mat4 {
 
 // Det returns the matrix determinant.
 func (mat *X32Mat4) Det() vpnumber.X32 {
-	return vpnumber.F32ToX32(1.5)
+	return vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(2, 1), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(2, 1), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(2, 2), mat.Get(3, 0)) + vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(2, 2), mat.Get(3, 0)) + vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(2, 0), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(2, 0), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(2, 2), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(2, 2), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 3), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 3), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(2, 0), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(2, 0), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(2, 1), mat.Get(3, 2)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(2, 1), mat.Get(3, 2)) + vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 3), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 3), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 0), mat.Get(3, 3)) + vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 0), mat.Get(3, 3)) + vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 1), mat.Get(3, 3)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 1), mat.Get(3, 3)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 2), mat.Get(3, 3)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 2), mat.Get(3, 3))
+}
+
+// Inv inverts the matrix.
+// Never fails (no division by zero error, never) but if the
+// matrix can't be inverted, result does not make sense.
+// It modifies the matrix, and returns a pointer on it.
+func (mat *X32Mat4) Inv() *X32Mat4 {
+	*mat = *X32Mat4Inv(mat)
+
+	return mat
 }
 
 // MulVec performs a multiplication of a vector by a 4x4 matrix,
@@ -318,6 +328,36 @@ func X32Mat4MulComp(a, b *X32Mat4) *X32Mat4 {
 			ret.Set(c, r, vpnumber.X32Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X32Mul(a.Get(1, r), b.Get(c, 1))+vpnumber.X32Mul(a.Get(2, r), b.Get(c, 2))+vpnumber.X32Mul(a.Get(3, r), b.Get(c, 3)))
 		}
 	}
+
+	return &ret
+}
+
+// X32Mat4Inv inverts a matrix.
+// Never fails (no division by zero error, never) but if the
+// matrix can't be inverted, result does not make sense.
+// Args is left untouched, a pointer on a new object is returned.
+func X32Mat4Inv(mat *X32Mat4) *X32Mat4 {
+	ret := X32Mat4{
+		vpnumber.X32Muln(mat.Get(1, 2), mat.Get(2, 3), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(1, 3), mat.Get(2, 2), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(1, 3), mat.Get(2, 1), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(1, 1), mat.Get(2, 3), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(1, 2), mat.Get(2, 1), mat.Get(3, 3)) + vpnumber.X32Muln(mat.Get(1, 1), mat.Get(2, 2), mat.Get(3, 3)),
+		vpnumber.X32Muln(mat.Get(0, 3), mat.Get(2, 2), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(2, 3), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(2, 1), mat.Get(3, 2)) + vpnumber.X32Muln(mat.Get(0, 1), mat.Get(2, 3), mat.Get(3, 2)) + vpnumber.X32Muln(mat.Get(0, 2), mat.Get(2, 1), mat.Get(3, 3)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(2, 2), mat.Get(3, 3)),
+		vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(3, 3)) + vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(3, 3)),
+		vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(2, 1)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(2, 1)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(2, 2)) + vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(2, 2)) + vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 3)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 3)),
+		vpnumber.X32Muln(mat.Get(1, 3), mat.Get(2, 2), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(1, 2), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(1, 3), mat.Get(2, 0), mat.Get(3, 2)) + vpnumber.X32Muln(mat.Get(1, 0), mat.Get(2, 3), mat.Get(3, 2)) + vpnumber.X32Muln(mat.Get(1, 2), mat.Get(2, 0), mat.Get(3, 3)) - vpnumber.X32Muln(mat.Get(1, 0), mat.Get(2, 2), mat.Get(3, 3)),
+		vpnumber.X32Muln(mat.Get(0, 2), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(2, 2), mat.Get(3, 0)) + vpnumber.X32Muln(mat.Get(0, 3), mat.Get(2, 0), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(2, 3), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(2, 0), mat.Get(3, 3)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(2, 2), mat.Get(3, 3)),
+		vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(3, 2)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(3, 2)) + vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(3, 3)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(3, 3)),
+		vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(2, 0)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(2, 0)) + vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(2, 2)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(2, 2)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 3)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 3)),
+		vpnumber.X32Muln(mat.Get(1, 1), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(1, 3), mat.Get(2, 1), mat.Get(3, 0)) + vpnumber.X32Muln(mat.Get(1, 3), mat.Get(2, 0), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(1, 0), mat.Get(2, 3), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(1, 1), mat.Get(2, 0), mat.Get(3, 3)) + vpnumber.X32Muln(mat.Get(1, 0), mat.Get(2, 1), mat.Get(3, 3)),
+		vpnumber.X32Muln(mat.Get(0, 3), mat.Get(2, 1), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(2, 0), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(2, 3), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(0, 1), mat.Get(2, 0), mat.Get(3, 3)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(2, 1), mat.Get(3, 3)),
+		vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(3, 0)) + vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(3, 3)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(3, 3)),
+		vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(2, 0)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(2, 0)) - vpnumber.X32Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(2, 1)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(2, 1)) + vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 3)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 3)),
+		vpnumber.X32Muln(mat.Get(1, 2), mat.Get(2, 1), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(1, 1), mat.Get(2, 2), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(1, 2), mat.Get(2, 0), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(1, 0), mat.Get(2, 2), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(1, 1), mat.Get(2, 0), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(1, 0), mat.Get(2, 1), mat.Get(3, 2)),
+		vpnumber.X32Muln(mat.Get(0, 1), mat.Get(2, 2), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(2, 1), mat.Get(3, 0)) + vpnumber.X32Muln(mat.Get(0, 2), mat.Get(2, 0), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(2, 2), mat.Get(3, 1)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(2, 0), mat.Get(3, 2)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(2, 1), mat.Get(3, 2)),
+		vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(3, 0)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(3, 1)) + vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(3, 2)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(3, 2)),
+		vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 0)) - vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 0)) + vpnumber.X32Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 1)) - vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 1)) - vpnumber.X32Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 2)) + vpnumber.X32Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 2)),
+	}
+
+	det := mat.Det()
+	ret.DivScale(det)
 
 	return &ret
 }

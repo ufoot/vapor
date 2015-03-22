@@ -113,11 +113,8 @@ func X32Mul(x1 X32, x2 X32) X32 {
 // Calls the 2 args mul function recursively.
 // Beware of rounding errors, might be very approximative on limit cases.
 func X32Muln(x X32, xn ...X32) X32 {
-	switch len(xn) {
-	case 0:
+	if xn == nil || len(xn) <= 0 {
 		return x
-	case 1:
-		return X32Mul(x, xn[0])
 	}
 	x = X32Mul(x, xn[0])
 	return X32Muln(x, xn[1:]...)

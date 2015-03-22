@@ -107,7 +107,7 @@ func invertableX32Mat2() *X32Mat2 {
 
 	for vpnumber.X32Abs(ret.Det()) < vpnumber.X32Const1 {
 		for i := range ret {
-			ret[i] = vpnumber.I32ToX32(rand.Int31n(3))
+			ret[i] = vpnumber.I32ToX32(rand.Int31n(10)) >> 1
 		}
 	}
 

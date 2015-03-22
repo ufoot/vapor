@@ -117,11 +117,8 @@ func X64Mul(x1 X64, x2 X64) X64 {
 // Calls the 2 args mul function recursively.
 // Beware of rounding errors, might be very approximative on limit cases.
 func X64Muln(x X64, xn ...X64) X64 {
-	switch len(xn) {
-	case 0:
+	if xn == nil || len(xn) <= 0 {
 		return x
-	case 1:
-		return X64Mul(x, xn[0])
 	}
 	x = X64Mul(x, xn[0])
 	return X64Muln(x, xn[1:]...)
