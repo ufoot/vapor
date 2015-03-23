@@ -48,8 +48,8 @@ const x32Const9 X32 = 0x90000
 
 const x32Half = 0x08000
 const x32ShiftHalf = 8
-const x32SimilarDiff = 0x0800
-const x32SimilarScale = 0x0400
+const x32SimilarDiff = 0x1000
+const x32SimilarScale = 0x0800
 const x32IpMask = 0xffff0000
 
 // X32ToI32 converts a fixed point number on 32 bits to an int32.
