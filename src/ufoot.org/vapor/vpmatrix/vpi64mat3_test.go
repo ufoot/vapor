@@ -86,3 +86,30 @@ func TestI64Mat3Math(t *testing.T) {
 		t.Error("Sub error")
 	}
 }
+
+func TestI64Mat3JSON(t *testing.T) {
+	m1 := I64Mat3Identity()
+	var m2 I64Mat3
+	
+	var err error
+	var jsonBuf []byte
+
+	jsonBuf, err = m1.MarshalJSON()
+	if err == nil {
+		t.Logf("encoded JSON for I64Mat3 is \"%s\"", string(jsonBuf))
+	} else {
+		t.Error("unable to encode JSON for I64Mat3")
+	}
+	err = m2.UnmarshalJSON([]byte("nawak"))
+	if err == nil {
+		t.Error("able to decode JSON for I64Mat3, but json is not correct")
+	}
+	err = m2.UnmarshalJSON(jsonBuf)
+	if err != nil {
+		t.Error("unable to decode JSON for I64Mat3")
+	}
+	if *m1!= m2 {
+		t.Error("unmarshalled matrix is different from original")
+	}
+}
+

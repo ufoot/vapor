@@ -21,6 +21,8 @@ package vpmatrix
 
 import (
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpsys"
+	"encoding/json"
 )
 
 // I64Mat4 is a matrix containing 4x4 int64 values.
@@ -32,6 +34,11 @@ type I64Mat4 [16]int64
 // first elements fill first column.
 func I64Mat4New(i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16 int64) *I64Mat4 {
 	return &I64Mat4{i1, i2, i3, i4, i5, i6, i7, i8, i9, i10, i11, i12, i13, i14, i15, i16}
+}
+
+// I64Mat4Identity creates a new identity matrix.
+func I64Mat4Identity() *I64Mat4 {
+	return &I64Mat4{vpnumber.I64Const1, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const1, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const1, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const1}
 }
 
 // ToI32 converts the matrix to an int32 matrix.
@@ -97,6 +104,54 @@ func (mat *I64Mat4) Set(col, row int, val int64) {
 // Get gets the value of the matrix for a given column and row.
 func (mat *I64Mat4) Get(col, row int) int64 {
 	return mat[col*4+row]
+}
+
+// MarshalJSON implements the json.Marshaler interface.
+func (mat *I64Mat4) MarshalJSON() ([]byte, error) {
+	var tmpArray [4][4]int64
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			tmpArray[col][row] = mat[col*4+row]
+		}
+	}
+
+	ret, err := json.Marshal(tmpArray)
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal I64Mat4")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (mat *I64Mat4) UnmarshalJSON(data []byte) error {
+	var tmpArray [4][4]int64
+
+	err := json.Unmarshal(data, &tmpArray)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal I64Mat4")
+	}
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			mat[col*4+row] = tmpArray[col][row]
+		}
+	}
+
+	return nil
+}
+
+// String returns a readable form of the matrix.
+func (mat *I64Mat4) String() string {
+	buf, err := mat.MarshalJSON()
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // Add adds operand to the matrix.

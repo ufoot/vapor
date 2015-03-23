@@ -21,6 +21,8 @@ package vpmatrix
 
 import (
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpsys"
+	"encoding/json"
 )
 
 // I32Mat2 is a matrix containing 2x2 int32 values.
@@ -32,6 +34,11 @@ type I32Mat2 [4]int32
 // first elements fill first column.
 func I32Mat2New(i1, i2, i3, i4 int32) *I32Mat2 {
 	return &I32Mat2{i1, i2, i3, i4}
+}
+
+// I32Mat2Identity creates a new identity matrix.
+func I32Mat2Identity() *I32Mat2 {
+	return &I32Mat2{vpnumber.I32Const1, vpnumber.I32Const0, vpnumber.I32Const0, vpnumber.I32Const1}
 }
 
 // ToI64 converts the matrix to an int64 matrix.
@@ -97,6 +104,54 @@ func (mat *I32Mat2) Set(col, row int, val int32) {
 // Get gets the value of the matrix for a given column and row.
 func (mat *I32Mat2) Get(col, row int) int32 {
 	return mat[col*2+row]
+}
+
+// MarshalJSON implements the json.Marshaler interface.
+func (mat *I32Mat2) MarshalJSON() ([]byte, error) {
+	var tmpArray [2][2]int32
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			tmpArray[col][row] = mat[col*2+row]
+		}
+	}
+
+	ret, err := json.Marshal(tmpArray)
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal I32Mat2")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (mat *I32Mat2) UnmarshalJSON(data []byte) error {
+	var tmpArray [2][2]int32
+
+	err := json.Unmarshal(data, &tmpArray)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal I32Mat2")
+	}
+
+	for col := range tmpArray {
+		for row := range tmpArray[col] {
+			mat[col*2+row] = tmpArray[col][row]
+		}
+	}
+
+	return nil
+}
+
+// String returns a readable form of the matrix.
+func (mat *I32Mat2) String() string {
+	buf, err := mat.MarshalJSON()
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // Add adds operand to the matrix.
