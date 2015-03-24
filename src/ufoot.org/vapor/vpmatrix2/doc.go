@@ -17,5 +17,5 @@
 // Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpmatrix2 contains 2x2 matrix and vector utilities. 
+// Package vpmatrix2 contains 2x2 matrix and vector utilities.
 package vpmatrix2

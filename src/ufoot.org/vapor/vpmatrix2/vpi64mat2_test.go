@@ -80,7 +80,7 @@ func TestI64Mat2Math(t *testing.T) {
 func TestI64Mat2JSON(t *testing.T) {
 	m1 := I64Mat2Identity()
 	var m2 I64Mat2
-	
+
 	var err error
 	var jsonBuf []byte
 
@@ -98,8 +98,7 @@ func TestI64Mat2JSON(t *testing.T) {
 	if err != nil {
 		t.Error("unable to decode JSON for I64Mat2")
 	}
-	if *m1!= m2 {
+	if *m1 != m2 {
 		t.Error("unmarshalled matrix is different from original")
 	}
 }
-
