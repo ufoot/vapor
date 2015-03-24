@@ -220,6 +220,33 @@ func TestX64Lerp(t *testing.T) {
 	}
 }
 
+func TestX64Vec3JSON(t *testing.T) {
+	x1 := F64ToX64(0.5)
+	x2 := X64Const1
+
+	var err error
+	var jsonBuf []byte
+
+	jsonBuf, err = x1.MarshalJSON()
+	t.Logf("x1=%s x2=%s", x1.String(), x2.String())
+	if err == nil {
+		t.Logf("encoded JSON for X64 is \"%s\"", string(jsonBuf))
+	} else {
+		t.Error("unable to encode JSON for X64")
+	}
+	err = x2.UnmarshalJSON([]byte("nawak"))
+	if err == nil {
+		t.Error("able to decode JSON for X64, but json is not correct")
+	}
+	err = x2.UnmarshalJSON(jsonBuf)
+	if err != nil {
+		t.Error("unable to decode JSON for X64")
+	}
+	if !X64IsSimilar(x1, x2) {
+		t.Error("unmarshalled vector is different from original")
+	}
+}
+
 func BenchmarkX64Add(b *testing.B) {
 	var x = x64Const2
 	var y = x64Const5

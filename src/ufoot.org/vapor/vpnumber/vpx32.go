@@ -19,6 +19,11 @@
 
 package vpnumber
 
+import (
+	"encoding/json"
+	"ufoot.org/vapor/vpsys"
+)
+
 // X32 is a fixed point number on 32 bits. The idea is to arbitrary
 // consider that 2^16 is 1, the 16 strongest bits being the
 // integer part, and the 16 weakest bits being the fractionnal
@@ -75,6 +80,42 @@ func X32ToF32(x X32) float32 {
 // X32ToF64 converts a fixed point number on 32 bits to a float64.
 func X32ToF64(x X32) float64 {
 	return float64(x) / float64(X32Const1)
+}
+
+// MarshalJSON implements the json.Marshaler interface.
+func (x *X32) MarshalJSON() ([]byte, error) {
+	ret, err := json.Marshal(int32(*x))
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal X32")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (x *X32) UnmarshalJSON(data []byte) error {
+	var tmp int32
+
+	err := json.Unmarshal(data, &tmp)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal X32")
+	}
+
+	*x = X32(tmp)
+
+	return nil
+}
+
+// String returns a readable form of the matrix.
+func (x *X32) String() string {
+	buf, err := json.Marshal(X32ToF32(*x))
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // X32Min returns the minimum value bewteen 2 fixed point numbers on 32 bits.

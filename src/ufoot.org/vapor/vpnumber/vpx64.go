@@ -20,7 +20,9 @@
 package vpnumber
 
 import (
+	"encoding/json"
 	"math/big"
+	"ufoot.org/vapor/vpsys"
 )
 
 // X64 is as fixed point number on 64 bits, the idea is to arbitrary
@@ -79,6 +81,42 @@ func X64ToF32(x X64) float32 {
 // X64ToF64 converts a fixed point number on 64 bits to a float64.
 func X64ToF64(x X64) float64 {
 	return float64(x) / float64(X64Const1)
+}
+
+// MarshalJSON implements the json.Marshaler interface.
+func (x *X64) MarshalJSON() ([]byte, error) {
+	ret, err := json.Marshal(int64(*x))
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal X64")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (x *X64) UnmarshalJSON(data []byte) error {
+	var tmp int64
+
+	err := json.Unmarshal(data, &tmp)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal X64")
+	}
+
+	*x = X64(tmp)
+
+	return nil
+}
+
+// String returns a readable form of the matrix.
+func (x *X64) String() string {
+	buf, err := json.Marshal(X64ToF64(*x))
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // X64Min returns the minimum value bewteen 2 fixed point numbers on 64 bits.
