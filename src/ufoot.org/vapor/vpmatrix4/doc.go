@@ -17,5 +17,5 @@
 // Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpmatrix4 contains 4x4 matrix and vector utilities. 
+// Package vpmatrix4 contains 4x4 matrix and vector utilities.
 package vpmatrix4

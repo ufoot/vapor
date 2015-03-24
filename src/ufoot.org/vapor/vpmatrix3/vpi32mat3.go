@@ -20,9 +20,9 @@
 package vpmatrix3
 
 import (
+	"encoding/json"
 	"ufoot.org/vapor/vpnumber"
 	"ufoot.org/vapor/vpsys"
-	"encoding/json"
 )
 
 // I32Mat3 is a matrix containing 3x3 int32 values.

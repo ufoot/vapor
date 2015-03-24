@@ -21,9 +21,9 @@ package vpmatrix4
 
 import (
 	"encoding/json"
+	"ufoot.org/vapor/vpmatrix3"
 	"ufoot.org/vapor/vpnumber"
 	"ufoot.org/vapor/vpsys"
-	"ufoot.org/vapor/vpmatrix3"
 )
 
 // F32Mat4 is a matrix containing 4x4 float32 values.

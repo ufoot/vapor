@@ -104,7 +104,7 @@ func TestI32Mat4Math(t *testing.T) {
 func TestI32Mat4JSON(t *testing.T) {
 	m1 := I32Mat4Identity()
 	var m2 I32Mat4
-	
+
 	var err error
 	var jsonBuf []byte
 
@@ -122,8 +122,7 @@ func TestI32Mat4JSON(t *testing.T) {
 	if err != nil {
 		t.Error("unable to decode JSON for I32Mat4")
 	}
-	if *m1!= m2 {
+	if *m1 != m2 {
 		t.Error("unmarshalled matrix is different from original")
 	}
 }
-

@@ -20,9 +20,9 @@
 package vpmatrix4
 
 import (
+	"encoding/json"
 	"ufoot.org/vapor/vpnumber"
 	"ufoot.org/vapor/vpsys"
-	"encoding/json"
 )
 
 // I32Mat4 is a matrix containing 4x4 int32 values.

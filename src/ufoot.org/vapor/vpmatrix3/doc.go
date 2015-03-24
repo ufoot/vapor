@@ -17,5 +17,5 @@
 // Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpmatrix3 contains 3x3 matrix and vector utilities. 
+// Package vpmatrix3 contains 3x3 matrix and vector utilities.
 package vpmatrix3
