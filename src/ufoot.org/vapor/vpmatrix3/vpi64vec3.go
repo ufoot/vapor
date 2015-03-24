@@ -20,7 +20,9 @@
 package vpmatrix3
 
 import (
+	"encoding/json"
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpsys"
 )
 
 // I64Vec3 is a vector containing 3 int64 values.
@@ -115,6 +117,42 @@ func (vec *I64Vec3) Neg() *I64Vec3 {
 	}
 
 	return vec
+}
+
+// MarshalJSON implements the json.Marshaler interface.
+func (vec *I64Vec3) MarshalJSON() ([]byte, error) {
+	ret, err := json.Marshal([3]int64(*vec))
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal I64Vec3")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (vec *I64Vec3) UnmarshalJSON(data []byte) error {
+	var tmpArray [3]int64
+
+	err := json.Unmarshal(data, &tmpArray)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal I64Vec3")
+	}
+
+	*vec = I64Vec3(tmpArray)
+
+	return nil
+}
+
+// String returns a readable form of the vecrix.
+func (vec *I64Vec3) String() string {
+	buf, err := vec.MarshalJSON()
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // I64Vec3Add adds two vectors.

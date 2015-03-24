@@ -124,6 +124,32 @@ func TestF32Vec3Math(t *testing.T) {
 	}
 }
 
+func TestF32Vec3JSON(t *testing.T) {
+	m1 := F32Vec3New(0.1, 0.2, 0.3)
+	m2 := F32Vec3New(1.0, 0.0, 0.0)
+
+	var err error
+	var jsonBuf []byte
+
+	jsonBuf, err = m1.MarshalJSON()
+	if err == nil {
+		t.Logf("encoded JSON for F32Vec3 is \"%s\"", string(jsonBuf))
+	} else {
+		t.Error("unable to encode JSON for F32Vec3")
+	}
+	err = m2.UnmarshalJSON([]byte("nawak"))
+	if err == nil {
+		t.Error("able to decode JSON for F32Vec3, but json is not correct")
+	}
+	err = m2.UnmarshalJSON(jsonBuf)
+	if err != nil {
+		t.Error("unable to decode JSON for F32Vec3")
+	}
+	if !F32Vec3IsSimilar(m1, m2) {
+		t.Error("unmarshalled vecrix is different from original")
+	}
+}
+
 func BenchmarkF32Vec3Add(b *testing.B) {
 	vec := F32Vec3New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
 
