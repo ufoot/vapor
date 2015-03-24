@@ -144,7 +144,7 @@ func TestF64Vec2JSON(t *testing.T) {
 		t.Error("unable to decode JSON for F64Vec2")
 	}
 	if !F64Vec2IsSimilar(m1, m2) {
-		t.Error("unmarshalled vecrix is different from original")
+		t.Error("unmarshalled vector is different from original")
 	}
 }
 

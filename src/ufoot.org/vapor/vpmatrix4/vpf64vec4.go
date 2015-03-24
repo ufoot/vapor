@@ -114,7 +114,7 @@ func (vec *F64Vec4) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// String returns a readable form of the vecrix.
+// String returns a readable form of the vector.
 func (vec *F64Vec4) String() string {
 	buf, err := vec.MarshalJSON()
 

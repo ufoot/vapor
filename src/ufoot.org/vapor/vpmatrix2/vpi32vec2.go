@@ -113,7 +113,7 @@ func (vec *I32Vec2) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
-// String returns a readable form of the vecrix.
+// String returns a readable form of the vector.
 func (vec *I32Vec2) String() string {
 	buf, err := vec.MarshalJSON()
 
