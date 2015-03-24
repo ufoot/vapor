@@ -145,7 +145,7 @@ func (mat *X64Mat4) UnmarshalJSON(data []byte) error {
 
 // String returns a readable form of the matrix.
 func (mat *X64Mat4) String() string {
-	buf, err := mat.MarshalJSON()
+	buf, err := mat.ToF64().MarshalJSON()
 
 	if err != nil {
 		// Catching & ignoring error

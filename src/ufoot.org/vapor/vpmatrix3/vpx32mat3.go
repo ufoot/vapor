@@ -145,7 +145,7 @@ func (mat *X32Mat3) UnmarshalJSON(data []byte) error {
 
 // String returns a readable form of the matrix.
 func (mat *X32Mat3) String() string {
-	buf, err := mat.MarshalJSON()
+	buf, err := mat.ToF32().MarshalJSON()
 
 	if err != nil {
 		// Catching & ignoring error

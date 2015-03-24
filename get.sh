@@ -21,8 +21,8 @@
 
 export GOPATH=$(pwd)
 
-go get github.com/golang/lint/golint
-go get golang.org/x/crypto/ripemd160
-go get golang.org/x/crypto/openpgp
-go get golang.org/x/crypto/openpgp/packet
+go get -u golang.org/x/crypto/ripemd160
+go get -u golang.org/x/crypto/openpgp
+go get -u golang.org/x/crypto/openpgp/packet
+go get -u github.com/golang/lint/golint
 

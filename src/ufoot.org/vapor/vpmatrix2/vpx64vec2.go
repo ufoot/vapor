@@ -124,7 +124,7 @@ func (vec *X64Vec2) UnmarshalJSON(data []byte) error {
 
 // String returns a readable form of the vecrix.
 func (vec *X64Vec2) String() string {
-	buf, err := vec.MarshalJSON()
+	buf, err := vec.ToF64().MarshalJSON()
 
 	if err != nil {
 		// Catching & ignoring error
