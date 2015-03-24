@@ -292,7 +292,7 @@ func X64IsSimilar(x1 X64, x2 X64) bool {
 	diff := X64Abs(x1 - x2)
 	scale := X64Max(X64Abs(x1), X64Abs(x2))
 
-	if scale < x64SimilarScale {
+	if scale <= x64SimilarScale {
 		return true
 	}
 

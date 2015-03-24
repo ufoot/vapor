@@ -273,7 +273,7 @@ func X32IsSimilar(x1 X32, x2 X32) bool {
 	diff := X32Abs(x1 - x2)
 	scale := X32Max(X32Abs(x1), X32Abs(x2))
 
-	if scale < x32SimilarScale {
+	if scale <= x32SimilarScale {
 		return true
 	}
 

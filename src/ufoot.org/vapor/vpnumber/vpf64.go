@@ -74,7 +74,7 @@ func F64IsSimilar(f1 float64, f2 float64) bool {
 	diff := math.Abs(f1 - f2)
 	scale := math.Max(math.Abs(f1), math.Abs(f2))
 
-	if scale < f64SimilarScale {
+	if scale <= f64SimilarScale {
 		return true
 	}
 
