@@ -82,3 +82,29 @@ func TestI64Vec4Math(t *testing.T) {
 		t.Error("Neg error")
 	}
 }
+
+func TestI64Vec4JSON(t *testing.T) {
+	m1 := I64Vec4New(10, 20, 30, 40)
+	m2 := I64Vec4New(1, 0, 0, 0)
+
+	var err error
+	var jsonBuf []byte
+
+	jsonBuf, err = m1.MarshalJSON()
+	if err == nil {
+		t.Logf("encoded JSON for I64Vec4 is \"%s\"", string(jsonBuf))
+	} else {
+		t.Error("unable to encode JSON for I64Vec4")
+	}
+	err = m2.UnmarshalJSON([]byte("nawak"))
+	if err == nil {
+		t.Error("able to decode JSON for I64Vec4, but json is not correct")
+	}
+	err = m2.UnmarshalJSON(jsonBuf)
+	if err != nil {
+		t.Error("unable to decode JSON for I64Vec4")
+	}
+	if *m1 != *m2 {
+		t.Error("unmarshalled vecrix is different from original")
+	}
+}

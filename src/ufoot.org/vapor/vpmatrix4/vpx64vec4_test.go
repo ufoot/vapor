@@ -126,6 +126,32 @@ func TestX64Vec4Math(t *testing.T) {
 	}
 }
 
+func TestX64Vec4JSON(t *testing.T) {
+	m1 := X64Vec4New(vpnumber.I64ToX64(10), vpnumber.I64ToX64(20), vpnumber.I64ToX64(30), vpnumber.I64ToX64(40))
+	m2 := X64Vec4New(vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0)
+
+	var err error
+	var jsonBuf []byte
+
+	jsonBuf, err = m1.MarshalJSON()
+	if err == nil {
+		t.Logf("encoded JSON for X64Vec4 is \"%s\"", string(jsonBuf))
+	} else {
+		t.Error("unable to encode JSON for X64Vec4")
+	}
+	err = m2.UnmarshalJSON([]byte("nawak"))
+	if err == nil {
+		t.Error("able to decode JSON for X64Vec4, but json is not correct")
+	}
+	err = m2.UnmarshalJSON(jsonBuf)
+	if err != nil {
+		t.Error("unable to decode JSON for X64Vec4")
+	}
+	if !X64Vec4IsSimilar(m1, m2) {
+		t.Error("unmarshalled vecrix is different from original")
+	}
+}
+
 func BenchmarkX64Vec4Add(b *testing.B) {
 	vec := X64Vec4New(vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1)
 

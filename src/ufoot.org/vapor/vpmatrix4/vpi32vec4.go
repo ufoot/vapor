@@ -20,7 +20,9 @@
 package vpmatrix4
 
 import (
+	"encoding/json"
 	"ufoot.org/vapor/vpnumber"
+	"ufoot.org/vapor/vpsys"
 )
 
 // I32Vec4 is a vector containing 4 int32 values.
@@ -85,6 +87,42 @@ func (vec *I32Vec4) ToF64() *F64Vec4 {
 	}
 
 	return &ret
+}
+
+// MarshalJSON implements the json.Marshaler interface.
+func (vec *I32Vec4) MarshalJSON() ([]byte, error) {
+	ret, err := json.Marshal([4]int32(*vec))
+	if err != nil {
+		return nil, vpsys.ErrorChain(err, "unable to marshal I32Vec4")
+	}
+
+	return ret, nil
+}
+
+// UnmarshalJSON implements the json.Unmarshaler interface.
+func (vec *I32Vec4) UnmarshalJSON(data []byte) error {
+	var tmpArray [4]int32
+
+	err := json.Unmarshal(data, &tmpArray)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to unmarshal I32Vec4")
+	}
+
+	*vec = I32Vec4(tmpArray)
+
+	return nil
+}
+
+// String returns a readable form of the vecrix.
+func (vec *I32Vec4) String() string {
+	buf, err := vec.MarshalJSON()
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // Add adds operand to the vector.
