@@ -2,7 +2,8 @@ Vapor is a toolkit designed to support Liquid War 7.
 
 While truely dedicated to power the multiplayer game Liquid War 7, it
 may be used to develop other games. The idea is to provide all the
-components that are not directly linked to the Liquid War gameplay,
+components that are not directly linked to the
+[Liquid War](http://www.ufoot.org/liquidwar) gameplay,
 including, but not limited to, network tools, massive parallel
 computation, game loops, fixed-point math arithmetics, etc.
 
@@ -17,14 +18,20 @@ Vapor is a set of [golang](http://golang.org/) packages.
 Install
 -------
 
-Packages can be installed from [github](http://github.com/) with
-a standard `go get` command. For instance:
+Packages can be installed from [github](http://github.com/ufoot/vapor)
+with a standard `go get` command. For instance:
 
 `go get github.com/ufoot/vapor/vpsys`
 
 Alternatively, on UNIXish platforms, a `./configure` script sets
 up some Makefiles which allow the usual `./configure && make` sequence
 to work. Use `make help` to discover standard targets.
+
+Documentation
+-------------
+
+Source code documentation is browsable online 
+on [godoc.org](http://godoc.org/github.com/ufoot/vapor).
 
 Project status
 --------------
