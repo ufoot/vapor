@@ -295,12 +295,6 @@ func F32Vec4Normalize(vec *F32Vec4) *F32Vec4 {
 	return &ret
 }
 
-// F32Vec4IsSimilar returns true if vectors are approximatively the same.
-// This is a workarround to ignore rounding errors.
-func F32Vec4IsSimilar(veca, vecb *F32Vec4) bool {
-	return veca.IsSimilar(vecb)
-}
-
 // F32Vec4Dot returns the dot product of two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func F32Vec4Dot(veca, vecb *F32Vec4) *F32Vec4 {

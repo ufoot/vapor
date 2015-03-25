@@ -303,12 +303,6 @@ func X32Vec2Normalize(vec *X32Vec2) *X32Vec2 {
 	return &ret
 }
 
-// X32Vec2IsSimilar returns true if vectors are approximatively the same.
-// This is a workarround to ignore rounding errors.
-func X32Vec2IsSimilar(veca, vecb *X32Vec2) bool {
-	return veca.IsSimilar(vecb)
-}
-
 // X32Vec2Dot returns the dot product of two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func X32Vec2Dot(veca, vecb *X32Vec2) *X32Vec2 {
