@@ -124,6 +124,12 @@ func TestF32Vec4Math(t *testing.T) {
 	if f != vpnumber.F32Const1 {
 		t.Error("Normalize error", f)
 	}
+
+	v3 = F32Vec4Dot(v1, v2)
+	v4 = F32Vec4New(f1*f5, f2*f6, f3*f7, f4*f8)
+	if !F32Vec4IsSimilar(v3, v4) {
+		t.Error("Dot error")
+	}
 }
 
 func TestF32Vec4JSON(t *testing.T) {

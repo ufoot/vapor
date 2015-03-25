@@ -122,6 +122,12 @@ func TestX64Vec3Math(t *testing.T) {
 	if !vpnumber.X64IsSimilar(x, vpnumber.X64Const1) {
 		t.Error("Normalize error", x)
 	}
+
+	v3 = X64Vec3Dot(v1, v2)
+	v4 = X64Vec3New(vpnumber.X64Mul(x1, x5), vpnumber.X64Mul(x2, x6), vpnumber.X64Mul(x3, x7))
+	if !X64Vec3IsSimilar(v3, v4) {
+		t.Error("Dot error")
+	}
 }
 
 func TestX64Vec3JSON(t *testing.T) {

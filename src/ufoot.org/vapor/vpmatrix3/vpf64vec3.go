@@ -213,6 +213,16 @@ func (vec *F64Vec3) IsSimilar(op *F64Vec3) bool {
 	return ret
 }
 
+// Dot returns the the dot product of two vectors.
+// It modifies the vector, and returns a pointer on it.
+func (vec *F64Vec3) Dot(op *F64Vec3) *F64Vec3 {
+	for i, v := range op {
+		vec[i] *= v
+	}
+
+	return vec
+}
+
 // F64Vec3Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func F64Vec3Add(veca, vecb *F64Vec3) *F64Vec3 {
@@ -289,4 +299,14 @@ func F64Vec3Normalize(vec *F64Vec3) *F64Vec3 {
 // This is a workarround to ignore rounding errors.
 func F64Vec3IsSimilar(veca, vecb *F64Vec3) bool {
 	return veca.IsSimilar(vecb)
+}
+
+// F64Vec3Dot returns the dot products of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
+func F64Vec3Dot(veca, vecb *F64Vec3) *F64Vec3 {
+	var ret = *veca
+
+	_ = ret.Dot(vecb)
+
+	return &ret
 }

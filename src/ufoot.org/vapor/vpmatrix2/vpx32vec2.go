@@ -221,6 +221,16 @@ func (vec *X32Vec2) IsSimilar(op *X32Vec2) bool {
 	return ret
 }
 
+// Dot returns the the dot product of two vectors.
+// It modifies the vector, and returns a pointer on it.
+func (vec *X32Vec2) Dot(op *X32Vec2) *X32Vec2 {
+	for i, v := range op {
+		vec[i] = vpnumber.X32Mul(vec[i], v)
+	}
+
+	return vec
+}
+
 // X32Vec2Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func X32Vec2Add(veca, vecb *X32Vec2) *X32Vec2 {
@@ -297,4 +307,14 @@ func X32Vec2Normalize(vec *X32Vec2) *X32Vec2 {
 // This is a workarround to ignore rounding errors.
 func X32Vec2IsSimilar(veca, vecb *X32Vec2) bool {
 	return veca.IsSimilar(vecb)
+}
+
+// X32Vec2Dot returns the dot products of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
+func X32Vec2Dot(veca, vecb *X32Vec2) *X32Vec2 {
+	var ret = *veca
+
+	_ = ret.Dot(vecb)
+
+	return &ret
 }

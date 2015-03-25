@@ -122,6 +122,12 @@ func TestX32Vec3Math(t *testing.T) {
 	if !vpnumber.X32IsSimilar(x, vpnumber.X32Const1) {
 		t.Error("Normalize error", x)
 	}
+
+	v3 = X32Vec3Dot(v1, v2)
+	v4 = X32Vec3New(vpnumber.X32Mul(x1, x5), vpnumber.X32Mul(x2, x6), vpnumber.X32Mul(x3, x7))
+	if !X32Vec3IsSimilar(v3, v4) {
+		t.Error("Dot error")
+	}
 }
 
 func TestX32Vec3JSON(t *testing.T) {

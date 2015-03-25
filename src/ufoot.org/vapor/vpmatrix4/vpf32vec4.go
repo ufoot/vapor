@@ -213,6 +213,16 @@ func (vec *F32Vec4) IsSimilar(op *F32Vec4) bool {
 	return ret
 }
 
+// Dot returns the the dot product of two vectors.
+// It modifies the vector, and returns a pointer on it.
+func (vec *F32Vec4) Dot(op *F32Vec4) *F32Vec4 {
+	for i, v := range op {
+		vec[i] *= v
+	}
+
+	return vec
+}
+
 // F32Vec4Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func F32Vec4Add(veca, vecb *F32Vec4) *F32Vec4 {
@@ -289,4 +299,14 @@ func F32Vec4Normalize(vec *F32Vec4) *F32Vec4 {
 // This is a workarround to ignore rounding errors.
 func F32Vec4IsSimilar(veca, vecb *F32Vec4) bool {
 	return veca.IsSimilar(vecb)
+}
+
+// F32Vec4Dot returns the dot products of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
+func F32Vec4Dot(veca, vecb *F32Vec4) *F32Vec4 {
+	var ret = *veca
+
+	_ = ret.Dot(vecb)
+
+	return &ret
 }
