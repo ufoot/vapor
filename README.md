@@ -1,5 +1,4 @@
 Vapor is a toolkit designed to support Liquid War 7.
-====================================================
 
 While truely dedicated to power the multiplayer game Liquid War 7, it
 may be used to develop other games. The idea is to provide all the
@@ -27,10 +26,19 @@ Alternatively, on UNIXish platforms, a `./configure` script sets
 up some Makefiles which allow the usual `./configure && make` sequence
 to work. Use `make help` to discover standard targets.
 
-Project Status
+Project status
 --------------
 
 Experimental. Unstable. Under heavy work. Use at your own risks. Period.
+
+News
+====
+
+* September 2014 : package creation, nothing yet, only ideas.
+  Just an almost empty golang package.
+
+* March 2015 : some basic functionnalities such as matrix computation
+  are well advanced, code published on github.
 
 License
 =======
