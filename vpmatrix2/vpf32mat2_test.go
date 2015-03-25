@@ -42,7 +42,7 @@ func TestF32Mat2Math(t *testing.T) {
 	var m1, m2, m3, m4 *F32Mat2
 
 	m1 = F32Mat2New(f11, f12, f21, f22)
-	if !F32Mat2IsSimilar(m1, m1) {
+	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
@@ -74,24 +74,24 @@ func TestF32Mat2Math(t *testing.T) {
 	m2 = F32Mat2New(f51, f52, f61, f62)
 	m3 = F32Mat2Add(m1, m2)
 	m4 = F32Mat2New(f11+f51, f12+f52, f21+f61, f22+f62)
-	if !F32Mat2IsSimilar(m3, m4) {
+	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
 	m3 = F32Mat2Sub(m1, m2)
 	m4 = F32Mat2New(f11-f51, f12-f52, f21-f61, f22-f62)
-	if !F32Mat2IsSimilar(m3, m4) {
+	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = F32Mat2MulScale(m1, fmul)
 	m4 = F32Mat2New(f11*fmul, f12*fmul, f21*fmul, f22*fmul)
-	if !F32Mat2IsSimilar(m3, m4) {
+	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
 
 	m3 = F32Mat2DivScale(m3, fmul)
-	if !F32Mat2IsSimilar(m3, m1) {
+	if !m3.IsSimilar(m1) {
 		t.Error("DivScale error")
 	}
 
@@ -121,7 +121,7 @@ func TestF32Mat2Comp(t *testing.T) {
 	id := F32Mat2Identity()
 
 	m2.MulComp(m1)
-	if F32Mat2IsSimilar(m2, id) {
+	if m2.IsSimilar(id) {
 		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
 	} else {
 		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
@@ -149,7 +149,7 @@ func TestF32Mat2JSON(t *testing.T) {
 	if err != nil {
 		t.Error("unable to decode JSON for F32Mat2")
 	}
-	if !F32Mat2IsSimilar(m1, m2) {
+	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled matrix is different from original")
 	}
 }

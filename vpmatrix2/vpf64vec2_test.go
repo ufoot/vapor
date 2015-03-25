@@ -39,7 +39,7 @@ func TestF64Vec2Math(t *testing.T) {
 	var f float64
 
 	v1 = F64Vec2New(f1, f2)
-	if !F64Vec2IsSimilar(v1, v1) {
+	if !v1.IsSimilar(v1) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
@@ -71,30 +71,30 @@ func TestF64Vec2Math(t *testing.T) {
 	v2 = F64Vec2New(f5, f6)
 	v3 = F64Vec2Add(v1, v2)
 	v4 = F64Vec2New(f1+f5, f2+f6)
-	if !F64Vec2IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Add error")
 	}
 
 	v3 = F64Vec2Sub(v1, v2)
 	v4 = F64Vec2New(f1-f5, f2-f6)
-	if !F64Vec2IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Sub error")
 	}
 
 	v3 = F64Vec2Add(v1, F64Vec2Neg(v2))
 	v4 = F64Vec2Sub(v1, v2)
-	if !F64Vec2IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Neg error")
 	}
 
 	v3 = F64Vec2MulScale(v1, fmul)
 	v4 = F64Vec2New(f1*fmul, f2*fmul)
-	if !F64Vec2IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("MulScale error")
 	}
 
 	v3 = F64Vec2DivScale(v3, fmul)
-	if !F64Vec2IsSimilar(v3, v1) {
+	if !v3.IsSimilar(v1) {
 		t.Error("DivScale error")
 	}
 
@@ -123,7 +123,7 @@ func TestF64Vec2Math(t *testing.T) {
 
 	v3 = F64Vec2Dot(v1, v2)
 	v4 = F64Vec2New(f1*f5, f2*f6)
-	if !F64Vec2IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Dot error")
 	}
 }
@@ -149,7 +149,7 @@ func TestF64Vec2JSON(t *testing.T) {
 	if err != nil {
 		t.Error("unable to decode JSON for F64Vec2")
 	}
-	if !F64Vec2IsSimilar(m1, m2) {
+	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled vector is different from original")
 	}
 }

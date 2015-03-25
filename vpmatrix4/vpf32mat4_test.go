@@ -66,7 +66,7 @@ func TestF32Mat4Math(t *testing.T) {
 	var m1, m2, m3, m4 *F32Mat4
 
 	m1 = F32Mat4New(f11, f12, f13, f14, f21, f22, f23, f24, f31, f32, f33, f34, f41, f42, f43, f44)
-	if !F32Mat4IsSimilar(m1, m1) {
+	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
@@ -98,24 +98,24 @@ func TestF32Mat4Math(t *testing.T) {
 	m2 = F32Mat4New(f51, f52, f53, f54, f61, f62, f63, f64, f71, f72, f73, f74, f81, f82, f83, f84)
 	m3 = F32Mat4Add(m1, m2)
 	m4 = F32Mat4New(f11+f51, f12+f52, f13+f53, f14+f54, f21+f61, f22+f62, f23+f63, f24+f64, f31+f71, f32+f72, f33+f73, f34+f74, f41+f81, f42+f82, f43+f83, f44+f84)
-	if !F32Mat4IsSimilar(m3, m4) {
+	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
 	m3 = F32Mat4Sub(m1, m2)
 	m4 = F32Mat4New(f11-f51, f12-f52, f13-f53, f14-f54, f21-f61, f22-f62, f23-f63, f24-f64, f31-f71, f32-f72, f33-f73, f34-f74, f41-f81, f42-f82, f43-f83, f44-f84)
-	if !F32Mat4IsSimilar(m3, m4) {
+	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = F32Mat4MulScale(m1, fmul)
 	m4 = F32Mat4New(f11*fmul, f12*fmul, f13*fmul, f14*fmul, f21*fmul, f22*fmul, f23*fmul, f24*fmul, f31*fmul, f32*fmul, f33*fmul, f34*fmul, f41*fmul, f42*fmul, f43*fmul, f44*fmul)
-	if !F32Mat4IsSimilar(m3, m4) {
+	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
 
 	m3 = F32Mat4DivScale(m3, fmul)
-	if !F32Mat4IsSimilar(m3, m1) {
+	if !m3.IsSimilar(m1) {
 		t.Error("DivScale error")
 	}
 
@@ -145,7 +145,7 @@ func TestF32Mat4Comp(t *testing.T) {
 	id := F32Mat4Identity()
 
 	m2.MulComp(m1)
-	if F32Mat4IsSimilar(m2, id) {
+	if m2.IsSimilar(id) {
 		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
 	} else {
 		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
@@ -173,7 +173,7 @@ func TestF32Mat4JSON(t *testing.T) {
 	if err != nil {
 		t.Error("unable to decode JSON for F32Mat4")
 	}
-	if !F32Mat4IsSimilar(m1, m2) {
+	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled matrix is different from original")
 	}
 }

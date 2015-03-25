@@ -65,7 +65,7 @@ func TestX64Mat4Math(t *testing.T) {
 	var m1, m2, m3, m4 *X64Mat4
 
 	m1 = X64Mat4New(x11, x12, x13, x14, x21, x22, x23, x24, x31, x32, x33, x34, x41, x42, x43, x44)
-	if !X64Mat4IsSimilar(m1, m1) {
+	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
@@ -97,24 +97,24 @@ func TestX64Mat4Math(t *testing.T) {
 	m2 = X64Mat4New(x51, x52, x53, x54, x61, x62, x63, x64, x71, x72, x73, x74, x81, x82, x83, x84)
 	m3 = X64Mat4Add(m1, m2)
 	m4 = X64Mat4New(x11+x51, x12+x52, x13+x53, x14+x54, x21+x61, x22+x62, x23+x63, x24+x64, x31+x71, x32+x72, x33+x73, x34+x74, x41+x81, x42+x82, x43+x83, x44+x84)
-	if !X64Mat4IsSimilar(m3, m4) {
+	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
 	m3 = X64Mat4Sub(m1, m2)
 	m4 = X64Mat4New(x11-x51, x12-x52, x13-x53, x14-x54, x21-x61, x22-x62, x23-x63, x24-x64, x31-x71, x32-x72, x33-x73, x34-x74, x41-x81, x42-x82, x43-x83, x44-x84)
-	if !X64Mat4IsSimilar(m3, m4) {
+	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = X64Mat4MulScale(m1, xmul)
 	m4 = X64Mat4New(vpnumber.X64Mul(x11, xmul), vpnumber.X64Mul(x12, xmul), vpnumber.X64Mul(x13, xmul), vpnumber.X64Mul(x14, xmul), vpnumber.X64Mul(x21, xmul), vpnumber.X64Mul(x22, xmul), vpnumber.X64Mul(x23, xmul), vpnumber.X64Mul(x24, xmul), vpnumber.X64Mul(x31, xmul), vpnumber.X64Mul(x32, xmul), vpnumber.X64Mul(x33, xmul), vpnumber.X64Mul(x34, xmul), vpnumber.X64Mul(x41, xmul), vpnumber.X64Mul(x42, xmul), vpnumber.X64Mul(x43, xmul), vpnumber.X64Mul(x44, xmul))
-	if !X64Mat4IsSimilar(m3, m4) {
+	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
 
 	m3 = X64Mat4DivScale(m3, xmul)
-	if !X64Mat4IsSimilar(m3, m1) {
+	if !m3.IsSimilar(m1) {
 		t.Error("DivScale error")
 	}
 
@@ -144,7 +144,7 @@ func TestX64Mat4Comp(t *testing.T) {
 	id := X64Mat4Identity()
 
 	m2.MulComp(m1)
-	if X64Mat4IsSimilar(m2, id) {
+	if m2.IsSimilar(id) {
 		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
 	} else {
 		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
@@ -172,7 +172,7 @@ func TestX64Mat4JSON(t *testing.T) {
 	if err != nil {
 		t.Error("unable to decode JSON for X64Mat4")
 	}
-	if !X64Mat4IsSimilar(m1, m2) {
+	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled matrix is different from original")
 	}
 }

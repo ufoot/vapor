@@ -43,7 +43,7 @@ func TestX64Vec4Math(t *testing.T) {
 	var x vpnumber.X64
 
 	v1 = X64Vec4New(x1, x2, x3, x4)
-	if !X64Vec4IsSimilar(v1, v1) {
+	if !v1.IsSimilar(v1) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
@@ -75,30 +75,30 @@ func TestX64Vec4Math(t *testing.T) {
 	v2 = X64Vec4New(x5, x6, x7, x8)
 	v3 = X64Vec4Add(v1, v2)
 	v4 = X64Vec4New(x1+x5, x2+x6, x3+x7, x4+x8)
-	if !X64Vec4IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Add error")
 	}
 
 	v3 = X64Vec4Sub(v1, v2)
 	v4 = X64Vec4New(x1-x5, x2-x6, x3-x7, x4-x8)
-	if !X64Vec4IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Sub error")
 	}
 
 	v3 = X64Vec4Add(v1, X64Vec4Neg(v2))
 	v4 = X64Vec4Sub(v1, v2)
-	if !X64Vec4IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Neg error")
 	}
 
 	v3 = X64Vec4MulScale(v1, xmul)
 	v4 = X64Vec4New(vpnumber.X64Mul(x1, xmul), vpnumber.X64Mul(x2, xmul), vpnumber.X64Mul(x3, xmul), vpnumber.X64Mul(x4, xmul))
-	if !X64Vec4IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("MulScale error")
 	}
 
 	v3 = X64Vec4DivScale(v3, xmul)
-	if !X64Vec4IsSimilar(v3, v1) {
+	if !v3.IsSimilar(v1) {
 		t.Error("DivScale error")
 	}
 
@@ -127,7 +127,7 @@ func TestX64Vec4Math(t *testing.T) {
 
 	v3 = X64Vec4Dot(v1, v2)
 	v4 = X64Vec4New(vpnumber.X64Mul(x1, x5), vpnumber.X64Mul(x2, x6), vpnumber.X64Mul(x3, x7), vpnumber.X64Mul(x4, x8))
-	if !X64Vec4IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Dot error")
 	}
 }
@@ -153,7 +153,7 @@ func TestX64Vec4JSON(t *testing.T) {
 	if err != nil {
 		t.Error("unable to decode JSON for X64Vec4")
 	}
-	if !X64Vec4IsSimilar(m1, m2) {
+	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled vector is different from original")
 	}
 }

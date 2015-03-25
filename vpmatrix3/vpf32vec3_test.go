@@ -41,7 +41,7 @@ func TestF32Vec3Math(t *testing.T) {
 	var f float32
 
 	v1 = F32Vec3New(f1, f2, f3)
-	if !F32Vec3IsSimilar(v1, v1) {
+	if !v1.IsSimilar(v1) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
@@ -73,30 +73,30 @@ func TestF32Vec3Math(t *testing.T) {
 	v2 = F32Vec3New(f5, f6, f7)
 	v3 = F32Vec3Add(v1, v2)
 	v4 = F32Vec3New(f1+f5, f2+f6, f3+f7)
-	if !F32Vec3IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Add error")
 	}
 
 	v3 = F32Vec3Sub(v1, v2)
 	v4 = F32Vec3New(f1-f5, f2-f6, f3-f7)
-	if !F32Vec3IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Sub error")
 	}
 
 	v3 = F32Vec3Add(v1, F32Vec3Neg(v2))
 	v4 = F32Vec3Sub(v1, v2)
-	if !F32Vec3IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Neg error")
 	}
 
 	v3 = F32Vec3MulScale(v1, fmul)
 	v4 = F32Vec3New(f1*fmul, f2*fmul, f3*fmul)
-	if !F32Vec3IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("MulScale error")
 	}
 
 	v3 = F32Vec3DivScale(v3, fmul)
-	if !F32Vec3IsSimilar(v3, v1) {
+	if !v3.IsSimilar(v1) {
 		t.Error("DivScale error")
 	}
 
@@ -125,7 +125,7 @@ func TestF32Vec3Math(t *testing.T) {
 
 	v3 = F32Vec3Dot(v1, v2)
 	v4 = F32Vec3New(f1*f5, f2*f6, f3*f7)
-	if !F32Vec3IsSimilar(v3, v4) {
+	if !v3.IsSimilar(v4) {
 		t.Error("Dot error")
 	}
 }
@@ -151,7 +151,7 @@ func TestF32Vec3JSON(t *testing.T) {
 	if err != nil {
 		t.Error("unable to decode JSON for F32Vec3")
 	}
-	if !F32Vec3IsSimilar(m1, m2) {
+	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled vector is different from original")
 	}
 }
