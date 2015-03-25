@@ -6,9 +6,8 @@ config.status
 Makefile
 Makefile.dep
 Makefile.help
+src
 bin
 pkg
 doc
-src/golang.org
-src/github.com
 *~

@@ -22,7 +22,7 @@ package vpmatrix4
 import (
 	"math/rand"
 	"testing"
-	"ufoot.org/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpnumber"
 )
 
 func TestX64Mat4Math(t *testing.T) {

@@ -21,9 +21,9 @@ package vpmatrix3
 
 import (
 	"encoding/json"
-	"ufoot.org/vapor/vpmath"
-	"ufoot.org/vapor/vpnumber"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpmath"
+	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // X32Vec3 is a vector containing 3 fixed point 32 bit values.

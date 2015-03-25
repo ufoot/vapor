@@ -21,8 +21,8 @@ package vpmatrix2
 
 import (
 	"encoding/json"
-	"ufoot.org/vapor/vpnumber"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // I32Vec2 is a vector containing 2 int32 values.

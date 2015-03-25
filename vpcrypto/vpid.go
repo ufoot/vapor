@@ -22,7 +22,7 @@ package vpcrypto
 import (
 	"math/big"
 	"time"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // Checker is used to check wether a number, typically an id,

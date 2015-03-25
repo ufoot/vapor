@@ -22,7 +22,7 @@ package vpmath
 import (
 	"math"
 	"testing"
-	"ufoot.org/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpnumber"
 )
 
 func TestX32Cos(t *testing.T) {

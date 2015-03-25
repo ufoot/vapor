@@ -28,7 +28,7 @@ import (
 	"os"
 	"path"
 	"sync"
-	"ufoot.org/vapor/vpbuild"
+	"github.com/ufoot/vapor/vpbuild"
 )
 
 const basename = "log.txt"

@@ -21,7 +21,7 @@ package vpcrypto
 
 import (
 	"testing"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 var benchKey *Key

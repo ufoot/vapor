@@ -21,7 +21,7 @@ package vpsys
 
 import (
 	"testing"
-	"ufoot.org/vapor/vpbuild"
+	"github.com/ufoot/vapor/vpbuild"
 )
 
 func TestHome(t *testing.T) {

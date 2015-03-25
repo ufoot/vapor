@@ -33,7 +33,7 @@ usage () {
 
 find_configure_ac () {
     if [ -f configure.ac ] ; then
-	    CONFIGURE_AC="$(readlink -f configure.ac || readlink configure.ac)"
+	    CONFIGURE_AC="configure.ac"
 	    if [ -f ${CONFIGURE_AC} ] ; then
             true
 	    else
@@ -47,8 +47,8 @@ find_configure_ac () {
 }
 
 find_vpversion_go () {
-    if [ -f src/ufoot.org/vapor/vpbuild/vpversion.go ] ; then
-	    VPVERSION_GO="$(readlink -f src/ufoot.org/vapor/vpbuild/vpversion.go || readlink src/ufoot.org/vpbuild/vpversion.go)"
+    if [ -f vpbuild/vpversion.go ] ; then
+	    VPVERSION_GO="vpbuild/vpversion.go"
 	    if [ -f ${CONFIGURE_AC} ] ; then
             true
 	    else
@@ -56,14 +56,14 @@ find_vpversion_go () {
             exit 2
 	    fi
     else
-	    echo "unable to find src/ufoot.org/vapor/vpbuild/vpversion.go"
+	    echo "unable to find vpbuild/vpversion.go"
 	    exit 1
     fi
 }
 
 find_vppackage_go () {
-    if [ -f src/ufoot.org/vapor/vpbuild/vppackage.go ] ; then
-	    VPPACKAGE_GO="$(readlink -f src/ufoot.org/vapor/vpbuild/vppackage.go || readlink src/ufoot.org/vapor/vpbuild/vppackage.go)"
+    if [ -f vpbuild/vppackage.go ] ; then
+	    VPPACKAGE_GO="vpbuild/vppackage.go"
 	    if [ -f ${CONFIGURE_AC} ] ; then
             true
 	    else
@@ -71,7 +71,7 @@ find_vppackage_go () {
             exit 2
 	    fi
     else
-	    echo "unable to find src/ufoot.org/vapor/vpbuild/vppackage.go"
+	    echo "unable to find vpbuild/vppackage.go"
 	    exit 1
     fi
 }
@@ -104,7 +104,7 @@ calc_branch () {
 
 calc_commits () {
     if [ "x${VERSION_BRANCH}" = "x" ] ; then
-	SRC_GO=$(ls -d src/ufoot.org/vapor/vp* | grep -v "vapor/vpbuild" | sort | tr "\n" " ")
+	SRC_GO=$(ls -d vp* | grep -v "vpbuild" | sort | tr "\n" " ")
 	VERSION_COMMITS=$(git log --oneline --color=never -- ${SRC_GO} | wc -l)
     else
 	VERSION_COMMITS=

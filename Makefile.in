@@ -54,7 +54,7 @@ clean:
 	rm -rf bin pkg doc
 
 distclean: clean
-	rm -rf autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src/golang.org src/github.com
+	rm -rf autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src
 
 get:
 	./get.sh

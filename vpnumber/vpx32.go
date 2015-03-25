@@ -21,7 +21,7 @@ package vpnumber
 
 import (
 	"encoding/json"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // X32 is a fixed point number on 32 bits. The idea is to arbitrary

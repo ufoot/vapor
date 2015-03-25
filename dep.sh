@@ -53,37 +53,36 @@ for t in "" "check-" "bench-" "lint-" "devel-" "doc-" ; do
     echo >> Makefile.help
 done
 
-echo "configure.ac: $(ls src/ufoot.org/vapor/vp*/*.go | sort -u | tr "\n" " ")" >> Makefile.dep
+echo "configure.ac: $(ls vp*/*.go | sort -u | tr "\n" " ")" >> Makefile.dep
 echo "\tcd \$(VP_TOPSRCDIR) && ./dep.sh && ./stamp.sh" >> Makefile.dep
 echo >> Makefile.dep
 
-for i in $(ls -d src/ufoot.org/vapor/vp* | sort -u | tr "\n" " ") ; do
-    j=$(echo $i | sed "s/.*ufoot.org\/vapor\///")
-    k=$(echo $i | sed "s/.*src\/ufoot\.org/ufoot.org/")
-    l=$(ls $i/*.go | sort -u | tr "\n" " ")
-    echo ".PHONY: $j" >> Makefile.dep
-    echo "$j: configure.ac $l" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go install $k" >> Makefile.dep
+for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
+    j="github.com/ufoot/vapor/$i"
+    k=$(ls $i/*.go | sort -u | tr "\n" " ")
+    echo ".PHONY: $i" >> Makefile.dep
+    echo "$i: configure.ac $k" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go install $j" >> Makefile.dep
     echo >> Makefile.dep
-    echo ".PHONY: check-$j" >> Makefile.dep
-    echo "check-$j: configure.ac $l" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go test $k" >> Makefile.dep
+    echo ".PHONY: check-$i" >> Makefile.dep
+    echo "check-$i: configure.ac $k" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go test $j" >> Makefile.dep
     echo >> Makefile.dep
-    echo ".PHONY: bench-$j" >> Makefile.dep
-    echo "bench-$j: configure.ac $l" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go test -bench . $k" >> Makefile.dep
+    echo ".PHONY: bench-$i" >> Makefile.dep
+    echo "bench-$i: configure.ac $k" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go test -bench . $j" >> Makefile.dep
     echo >> Makefile.dep
-    echo ".PHONY: lint-$j" >> Makefile.dep
-    echo "lint-$j: configure.ac $l" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go vet $k && \$(VP_TOPSRCDIR)/bin/golint $k" >> Makefile.dep
+    echo ".PHONY: lint-$i" >> Makefile.dep
+    echo "lint-$i: configure.ac $k" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go vet $j && \$(VP_TOPSRCDIR)/bin/golint $j" >> Makefile.dep
     echo >> Makefile.dep
-    echo ".PHONY: devel-$j" >> Makefile.dep
-    echo "devel-$j: configure.ac $l" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go vet $k && go test -v $k" >> Makefile.dep
+    echo ".PHONY: devel-$i" >> Makefile.dep
+    echo "devel-$i: configure.ac $k" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go vet $j && go test -v $j" >> Makefile.dep
     echo >> Makefile.dep
-    echo ".PHONY: doc-$j" >> Makefile.dep
-    echo "doc-$j: configure.ac $l" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && godoc $k > doc/txt/$j.txt && godoc -html $k > doc/html/$j.html" >> Makefile.dep
+    echo ".PHONY: doc-$i" >> Makefile.dep
+    echo "doc-$i: configure.ac $k" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && godoc $j > doc/txt/$i.txt && godoc -html $j > doc/html/$i.html" >> Makefile.dep
     echo >> Makefile.dep
 done
 

@@ -20,8 +20,8 @@
 package main
 
 import (
-	"ufoot.org/vapor/vploop"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vploop"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 func main() {

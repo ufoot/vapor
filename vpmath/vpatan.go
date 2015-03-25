@@ -20,7 +20,7 @@
 package vpmath
 
 import (
-	"ufoot.org/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpnumber"
 )
 
 // X32Atan is a lookup table based implementation of the arctangent

@@ -21,8 +21,8 @@ package vpmatrix4
 
 import (
 	"encoding/json"
-	"ufoot.org/vapor/vpnumber"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // I64Vec4 is a vector containing 4 int64 values.

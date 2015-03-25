@@ -21,9 +21,9 @@ package vpmatrix3
 
 import (
 	"encoding/json"
-	"ufoot.org/vapor/vpmatrix2"
-	"ufoot.org/vapor/vpnumber"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpmatrix2"
+	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // F64Mat3 is a matrix containing 3x3 float64 values.

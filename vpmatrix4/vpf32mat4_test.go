@@ -23,7 +23,7 @@ import (
 	"math"
 	"math/rand"
 	"testing"
-	"ufoot.org/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpnumber"
 )
 
 func TestF32Mat4Math(t *testing.T) {

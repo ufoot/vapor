@@ -30,7 +30,7 @@ import (
 	"hash/crc32"
 	"hash/crc64"
 	"math/big"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 const positiveMask64 = 0x7fffffffffffffff

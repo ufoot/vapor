@@ -22,7 +22,7 @@ package vpcrypto
 import (
 	"encoding/hex"
 	"testing"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 var benchSymPassword []byte

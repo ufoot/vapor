@@ -21,8 +21,8 @@ package vpmatrix2
 
 import (
 	"encoding/json"
-	"ufoot.org/vapor/vpnumber"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // F32Mat2 is a matrix containing 2x2 float32 values.

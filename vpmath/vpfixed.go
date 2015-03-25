@@ -22,7 +22,7 @@
 package vpmath
 
 import (
-	"ufoot.org/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpnumber"
 )
 
 // X32Const2Pi contains 2*PI, that is, about 6.28, as a fixed point integer on 32 bits.

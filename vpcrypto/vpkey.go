@@ -29,7 +29,7 @@ import (
 	"io"
 	"io/ioutil"
 	"time"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // Key contains a cryptographic key pair. It might only

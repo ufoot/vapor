@@ -21,7 +21,7 @@ package vpmatrix3
 
 import (
 	"testing"
-	"ufoot.org/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpnumber"
 )
 
 func TestX32Vec3Math(t *testing.T) {

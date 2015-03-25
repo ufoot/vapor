@@ -21,8 +21,8 @@ package vpmatrix3
 
 import (
 	"encoding/json"
-	"ufoot.org/vapor/vpnumber"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // I64Mat3 is a matrix containing 3x3 int64 values.

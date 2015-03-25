@@ -21,9 +21,9 @@ package vpmatrix4
 
 import (
 	"encoding/json"
-	"ufoot.org/vapor/vpmath"
-	"ufoot.org/vapor/vpnumber"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpmath"
+	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // X64Vec4 is a vector containing 4 fixed point 64 bit values.

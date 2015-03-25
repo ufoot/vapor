@@ -23,7 +23,7 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // ConfNode is where the config is stored.

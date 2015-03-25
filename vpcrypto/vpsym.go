@@ -27,7 +27,7 @@ import (
 	"io"
 	"io/ioutil"
 	"time"
-	"ufoot.org/vapor/vpsys"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // SymEncrypt encrypts a message using a symmetric password/key.
