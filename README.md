@@ -47,6 +47,16 @@ News
 * March 2015 : some basic functionnalities such as matrix computation
   are well advanced, code published on github.
 
+Authors
+=======
+
+* Christian Mauduit <ufoot@ufoot.org> : main developper, project
+  maintainer.
+
+* All Liquid War 3, Liquid War 5 and Liquid War 6 contributors have
+  indirectly helped for this project to exist. No real code snippets,
+  but ideas where reused whenever possible.
+
 License
 =======
 
