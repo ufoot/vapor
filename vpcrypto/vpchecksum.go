@@ -27,10 +27,10 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
+	"github.com/ufoot/vapor/vpsys"
 	"hash/crc32"
 	"hash/crc64"
 	"math/big"
-	"github.com/ufoot/vapor/vpsys"
 )
 
 const positiveMask64 = 0x7fffffffffffffff

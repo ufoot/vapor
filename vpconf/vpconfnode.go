@@ -21,9 +21,9 @@ package vpconf
 
 import (
 	"fmt"
+	"github.com/ufoot/vapor/vpsys"
 	"strconv"
 	"strings"
-	"github.com/ufoot/vapor/vpsys"
 )
 
 // ConfNode is where the config is stored.

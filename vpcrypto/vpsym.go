@@ -23,11 +23,11 @@ import (
 	"bytes"
 	"compress/gzip"
 	"errors"
+	"github.com/ufoot/vapor/vpsys"
 	"golang.org/x/crypto/openpgp"
 	"io"
 	"io/ioutil"
 	"time"
-	"github.com/ufoot/vapor/vpsys"
 )
 
 // SymEncrypt encrypts a message using a symmetric password/key.

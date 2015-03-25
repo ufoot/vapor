@@ -20,8 +20,8 @@
 package vpcrypto
 
 import (
-	"testing"
 	"github.com/ufoot/vapor/vpsys"
+	"testing"
 )
 
 var benchKey *Key

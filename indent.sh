@@ -19,5 +19,7 @@
 # Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 # Contact author: ufoot@ufoot.org
 
-find src/ufoot.org/vapor -type f -a -name "*.go" -exec go fmt "{}" \;
+for i in vp*/*.go ; do
+    go fmt "$i"
+done
 

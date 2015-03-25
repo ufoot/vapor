@@ -23,13 +23,13 @@ import (
 	"bytes"
 	"compress/gzip"
 	"errors"
+	"github.com/ufoot/vapor/vpsys"
 	"golang.org/x/crypto/openpgp"
 	"golang.org/x/crypto/openpgp/packet"
 	"golang.org/x/crypto/ripemd160"
 	"io"
 	"io/ioutil"
 	"time"
-	"github.com/ufoot/vapor/vpsys"
 )
 
 // Key contains a cryptographic key pair. It might only

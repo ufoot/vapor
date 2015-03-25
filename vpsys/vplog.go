@@ -22,13 +22,13 @@ package vpsys
 import (
 	"bufio"
 	"fmt"
+	"github.com/ufoot/vapor/vpbuild"
 	"io"
 	"log"
 	"log/syslog"
 	"os"
 	"path"
 	"sync"
-	"github.com/ufoot/vapor/vpbuild"
 )
 
 const basename = "log.txt"

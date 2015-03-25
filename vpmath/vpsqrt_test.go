@@ -20,9 +20,9 @@
 package vpmath
 
 import (
+	"github.com/ufoot/vapor/vpnumber"
 	"math"
 	"testing"
-	"github.com/ufoot/vapor/vpnumber"
 )
 
 func TestX32Sqrt(t *testing.T) {

@@ -21,8 +21,8 @@ package vpcrypto
 
 import (
 	"encoding/hex"
-	"testing"
 	"github.com/ufoot/vapor/vpsys"
+	"testing"
 )
 
 var benchSymPassword []byte

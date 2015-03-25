@@ -21,8 +21,8 @@ package vpnumber
 
 import (
 	"encoding/json"
-	"math/big"
 	"github.com/ufoot/vapor/vpsys"
+	"math/big"
 )
 
 // X64 is as fixed point number on 64 bits, the idea is to arbitrary

@@ -20,9 +20,9 @@
 package vpcrypto
 
 import (
+	"github.com/ufoot/vapor/vpsys"
 	"math/big"
 	"time"
-	"github.com/ufoot/vapor/vpsys"
 )
 
 // Checker is used to check wether a number, typically an id,
