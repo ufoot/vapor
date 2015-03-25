@@ -105,18 +105,18 @@ func TestF32Vec2Math(t *testing.T) {
 	// disastrous than a floating point exception.
 	v3.DivScale(0)
 
-	f = F32Vec2SqMag(v1)
+	f = v1.SqMag()
 	if !vpnumber.F32IsSimilar(f, fsqmag) {
 		t.Error("SqMag error", f, fsqmag)
 	}
 
-	f = F32Vec2Length(v1)
+	f = v1.Length()
 	if !vpnumber.F32IsSimilar(f, flength) {
 		t.Error("Length error", f, flength)
 	}
 
 	v3 = F32Vec2Normalize(v1)
-	f = F32Vec2Length(v3)
+	f = v3.Length()
 	if f != vpnumber.F32Const1 {
 		t.Error("Normalize error", f)
 	}

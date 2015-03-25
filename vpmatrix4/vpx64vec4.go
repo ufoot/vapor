@@ -281,18 +281,6 @@ func X64Vec4DivScale(vec *X64Vec4, factor vpnumber.X64) *X64Vec4 {
 	return &ret
 }
 
-// X64Vec4SqMag returns the sum of the squares of all values.
-// It is used to calculate length, it is faster than the complete
-// length calculation, as it does not perform a square root.
-func X64Vec4SqMag(vec *X64Vec4) vpnumber.X64 {
-	return vec.SqMag()
-}
-
-// X64Vec4Length returns the length of a vector.
-func X64Vec4Length(vec *X64Vec4) vpnumber.X64 {
-	return vec.Length()
-}
-
 // X64Vec4Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
 func X64Vec4Normalize(vec *X64Vec4) *X64Vec4 {

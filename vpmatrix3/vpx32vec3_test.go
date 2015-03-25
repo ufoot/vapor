@@ -107,18 +107,18 @@ func TestX32Vec3Math(t *testing.T) {
 	// disastrous than a floating point exception.
 	v3.DivScale(0)
 
-	x = X32Vec3SqMag(v1)
+	x = v1.SqMag()
 	if !vpnumber.X32IsSimilar(x, xsqmag) {
 		t.Error("SqMag error", x, xsqmag)
 	}
 
-	x = X32Vec3Length(v1)
+	x = v1.Length()
 	if !vpnumber.X32IsSimilar(x, xlength) {
 		t.Error("Length error", x, xlength)
 	}
 
 	v3 = X32Vec3Normalize(v1)
-	x = X32Vec3Length(v3)
+	x = v3.Length()
 	if !vpnumber.X32IsSimilar(x, vpnumber.X32Const1) {
 		t.Error("Normalize error", x)
 	}

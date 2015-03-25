@@ -109,18 +109,18 @@ func TestX64Vec4Math(t *testing.T) {
 	// disastrous than a floating point exception.
 	v3.DivScale(0)
 
-	x = X64Vec4SqMag(v1)
+	x = v1.SqMag()
 	if !vpnumber.X64IsSimilar(x, xsqmag) {
 		t.Error("SqMag error", x, xsqmag)
 	}
 
-	x = X64Vec4Length(v1)
+	x = v1.Length()
 	if !vpnumber.X64IsSimilar(x, xlength) {
 		t.Error("Length error", x, xlength)
 	}
 
 	v3 = X64Vec4Normalize(v1)
-	x = X64Vec4Length(v3)
+	x = v3.Length()
 	if !vpnumber.X64IsSimilar(x, vpnumber.X64Const1) {
 		t.Error("Normalize error", x)
 	}

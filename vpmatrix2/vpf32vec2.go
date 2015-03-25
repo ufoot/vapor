@@ -273,18 +273,6 @@ func F32Vec2DivScale(vec *F32Vec2, factor float32) *F32Vec2 {
 	return &ret
 }
 
-// F32Vec2SqMag returns the sum of the squares of all values.
-// It is used to calculate length, it is faster than the complete
-// length calculation, as it does not perform a square root.
-func F32Vec2SqMag(vec *F32Vec2) float32 {
-	return vec.SqMag()
-}
-
-// F32Vec2Length returns the length of a vector.
-func F32Vec2Length(vec *F32Vec2) float32 {
-	return vec.Length()
-}
-
 // F32Vec2Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
 func F32Vec2Normalize(vec *F32Vec2) *F32Vec2 {
