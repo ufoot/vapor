@@ -26,3 +26,7 @@ go get -u golang.org/x/crypto/openpgp
 go get -u golang.org/x/crypto/openpgp/packet
 go get -u github.com/golang/lint/golint
 
+rm -rf src/github.com/ufoot/vapor
+install -d src/github.com/ufoot/vapor
+for i in vp*; do ln -s $i src/github.com/ufoot/vapor/$i ; done
+

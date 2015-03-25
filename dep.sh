@@ -44,10 +44,9 @@ echo "Below are listed per-package Makefile targets:" >> Makefile.help
 for t in "" "check-" "bench-" "lint-" "devel-" "doc-" ; do
     echo ".PHONY: ${t}vp" >> Makefile.dep
     echo -n "${t}vp:" >> Makefile.dep
-    for i in src/ufoot.org/vapor/vp* ; do
-	j=$(echo $i | sed "s/.*ufoot.org\/vapor\///")
-        echo -n " ${t}${j}" >> Makefile.dep
-	echo -n "${t}${j} " >> Makefile.help 
+    for i in vp* ; do
+        echo -n " ${t}${i}" >> Makefile.dep
+	echo -n "${t}${i} " >> Makefile.help 
     done
     echo >> Makefile.dep
     echo >> Makefile.dep
