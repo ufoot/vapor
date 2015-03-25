@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
-// Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
+// Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
 package vpmatrix2

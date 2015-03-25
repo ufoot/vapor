@@ -18,7 +18,7 @@ Vapor is a set of [golang](http://golang.org/) packages.
 Install
 -------
 
-Packages can be installed from [github](http://github.com/ufoot/vapor)
+Packages can be installed from [github](https://github.com/ufoot/vapor)
 with a standard `go get` command. For instance:
 
 `go get github.com/ufoot/vapor/vpsys`
@@ -75,7 +75,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
+Vapor homepage: https://github.com/ufoot/vapor
 Contact author: ufoot@ufoot.org
 
 
