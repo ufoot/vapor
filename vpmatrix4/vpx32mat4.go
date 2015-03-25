@@ -313,12 +313,6 @@ func X32Mat4DivScale(mat *X32Mat4, factor vpnumber.X32) *X32Mat4 {
 	return &ret
 }
 
-// X32Mat4IsSimilar returns true if matrices are approximatively the same.
-// This is a workarround to ignore rounding errors.
-func X32Mat4IsSimilar(mata, matb *X32Mat4) bool {
-	return mata.IsSimilar(matb)
-}
-
 // X32Mat4MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func X32Mat4MulComp(a, b *X32Mat4) *X32Mat4 {

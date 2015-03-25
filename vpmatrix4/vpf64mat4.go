@@ -313,12 +313,6 @@ func F64Mat4DivScale(mat *F64Mat4, factor float64) *F64Mat4 {
 	return &ret
 }
 
-// F64Mat4IsSimilar returns true if matrices are approximatively the same.
-// This is a workarround to ignore rounding errors.
-func F64Mat4IsSimilar(mata, matb *F64Mat4) bool {
-	return mata.IsSimilar(matb)
-}
-
 // F64Mat4MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func F64Mat4MulComp(a, b *F64Mat4) *F64Mat4 {

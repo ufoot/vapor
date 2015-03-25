@@ -20,8 +20,8 @@
 package vpmatrix3
 
 import (
-	"testing"
 	"github.com/ufoot/vapor/vpnumber"
+	"testing"
 )
 
 func TestX64Vec3Math(t *testing.T) {

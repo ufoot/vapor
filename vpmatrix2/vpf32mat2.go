@@ -300,12 +300,6 @@ func F32Mat2DivScale(mat *F32Mat2, factor float32) *F32Mat2 {
 	return &ret
 }
 
-// F32Mat2IsSimilar returns true if matrices are approximatively the same.
-// This is a workarround to ignore rounding errors.
-func F32Mat2IsSimilar(mata, matb *F32Mat2) bool {
-	return mata.IsSimilar(matb)
-}
-
 // F32Mat2MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func F32Mat2MulComp(a, b *F32Mat2) *F32Mat2 {

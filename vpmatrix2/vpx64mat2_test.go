@@ -20,9 +20,9 @@
 package vpmatrix2
 
 import (
+	"github.com/ufoot/vapor/vpnumber"
 	"math/rand"
 	"testing"
-	"github.com/ufoot/vapor/vpnumber"
 )
 
 func TestX64Mat2Math(t *testing.T) {

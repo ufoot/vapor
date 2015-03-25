@@ -21,9 +21,9 @@ package vpmatrix2
 
 import (
 	"encoding/json"
-	"math"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"math"
 )
 
 // F32Vec2 is a vector containing 2 float32 values.

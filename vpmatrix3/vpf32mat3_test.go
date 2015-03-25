@@ -20,10 +20,10 @@
 package vpmatrix3
 
 import (
+	"github.com/ufoot/vapor/vpnumber"
 	"math"
 	"math/rand"
 	"testing"
-	"github.com/ufoot/vapor/vpnumber"
 )
 
 func TestF32Mat3Math(t *testing.T) {

@@ -21,9 +21,9 @@ package vpmatrix4
 
 import (
 	"encoding/json"
-	"math"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"math"
 )
 
 // F32Vec4 is a vector containing 4 float32 values.

@@ -21,9 +21,9 @@ package vpmatrix2
 
 import (
 	"encoding/json"
-	"math"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"math"
 )
 
 // F64Vec2 is a vector containing 2 float64 values.

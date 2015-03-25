@@ -21,9 +21,9 @@ package vpmatrix3
 
 import (
 	"encoding/json"
-	"math"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"math"
 )
 
 // F32Vec3 is a vector containing 3 float32 values.

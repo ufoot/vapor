@@ -300,12 +300,6 @@ func X64Mat2DivScale(mat *X64Mat2, factor vpnumber.X64) *X64Mat2 {
 	return &ret
 }
 
-// X64Mat2IsSimilar returns true if matrices are approximatively the same.
-// This is a workarround to ignore rounding errors.
-func X64Mat2IsSimilar(mata, matb *X64Mat2) bool {
-	return mata.IsSimilar(matb)
-}
-
 // X64Mat2MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func X64Mat2MulComp(a, b *X64Mat2) *X64Mat2 {

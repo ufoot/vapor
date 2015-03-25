@@ -20,8 +20,8 @@
 package vpmatrix4
 
 import (
-	"testing"
 	"github.com/ufoot/vapor/vpnumber"
+	"testing"
 )
 
 func TestF32Vec4Math(t *testing.T) {
