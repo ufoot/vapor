@@ -19,6 +19,6 @@
 
 package vpbuild
 
-const VERSION_MAJOR = 0         // VERSION_MAJOR set by stamp.sh
-const VERSION_MINOR = 1         // VERSION_MINOR set by stamp.sh
-const VERSION_STAMP = "develop" // VERSION_STAMP set by stamp.sh
+const VERSION_MAJOR = 0   // VERSION_MAJOR set by stamp.sh
+const VERSION_MINOR = 1   // VERSION_MINOR set by stamp.sh
+const VERSION_STAMP = "7" // VERSION_STAMP set by stamp.sh
