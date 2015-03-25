@@ -19,7 +19,7 @@
 
 package vpbuild
 
-const PACKAGE_TARNAME = "vapor"                               // PACKAGE_TARNAME set by stamp.sh
-const PACKAGE_NAME = "Vapor Toolkit"                          // PACKAGE_NAME set by stamp.sh
-const PACKAGE_EMAIL = "ufoot@ufoot.org"                       // PACKAGE_EMAIL set by stamp.sh
+const PACKAGE_TARNAME = "vapor"                      // PACKAGE_TARNAME set by stamp.sh
+const PACKAGE_NAME = "Vapor Toolkit"                 // PACKAGE_NAME set by stamp.sh
+const PACKAGE_EMAIL = "ufoot@ufoot.org"              // PACKAGE_EMAIL set by stamp.sh
 const PACKAGE_URL = "https://github.com/ufoot/vapor" // PACKAGE_URL set by stamp.sh
