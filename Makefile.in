@@ -57,19 +57,19 @@ distclean: clean
 	rm -rf autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src
 
 get:
-	./get.sh
+	./.utils/get.sh
 
 dep:
-	./dep.sh
+	./.utils/dep.sh
 
 help:
 	cat Makefile.help
 
 stamp:
-	./stamp.sh
+	./.utils/stamp.sh
 
 indent:
-	./indent.sh
+	./.utils/indent.sh
 
 include Makefile.dep
 

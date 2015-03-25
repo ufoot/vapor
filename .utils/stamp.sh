@@ -26,11 +26,6 @@ PACKAGE_URL="http:\\/\\/www.ufoot.org\\/liquidwar\\/v7\\/vapor"
 VERSION_MAJOR=0
 VERSION_MINOR=1
 
-usage () {
-    echo "usage:"
-    echo "        ./stamp.sh"
-}
-
 find_configure_ac () {
     if [ -f configure.ac ] ; then
 	    CONFIGURE_AC="configure.ac"
@@ -136,16 +131,12 @@ do_patch () {
     fi
 }
 
-if [ x"$1" = "x" ] ; then
-    find_configure_ac
-    find_vpversion_go
-    find_vppackage_go
-    git_check
-    git_changelog
-    calc_branch
-    calc_commits
-    do_patch
-else
-    usage
-fi
+find_configure_ac
+find_vpversion_go
+find_vppackage_go
+git_check
+git_changelog
+calc_branch
+calc_commits
+do_patch
 
