@@ -301,7 +301,7 @@ func F64Vec2IsSimilar(veca, vecb *F64Vec2) bool {
 	return veca.IsSimilar(vecb)
 }
 
-// F64Vec2Dot returns the dot products of two vectors.
+// F64Vec2Dot returns the dot product of two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func F64Vec2Dot(veca, vecb *F64Vec2) *F64Vec2 {
 	var ret = *veca

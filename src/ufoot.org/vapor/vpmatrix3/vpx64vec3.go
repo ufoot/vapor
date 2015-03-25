@@ -309,7 +309,7 @@ func X64Vec3IsSimilar(veca, vecb *X64Vec3) bool {
 	return veca.IsSimilar(vecb)
 }
 
-// X64Vec3Dot returns the dot products of two vectors.
+// X64Vec3Dot returns the dot product of two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func X64Vec3Dot(veca, vecb *X64Vec3) *X64Vec3 {
 	var ret = *veca
