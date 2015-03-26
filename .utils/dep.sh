@@ -19,6 +19,14 @@
 # Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 # Contact author: ufoot@ufoot.org
 
+if [ -d ../.utils ] ; then
+    cd ..
+fi
+if [ ! -d .utils ] ; then
+    echo "$0 should be run in srcdir"
+    exit 1
+fi
+
 for m in Makefile.dep Makefile.help ; do
     rm -f $m && touch $m
 done
