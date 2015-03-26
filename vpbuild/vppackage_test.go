@@ -25,69 +25,69 @@ import (
 )
 
 func TestPackageTarname(t *testing.T) {
-	tarname_string := PACKAGE_TARNAME
-	tarname_runes := []rune(tarname_string)
-	tarname_len := len(tarname_runes)
+	tarnameString := PackageTarname
+	tarnameRunes := []rune(tarnameString)
+	tarnameLen := len(tarnameRunes)
 
-	if tarname_len <= 0 {
-		t.Errorf("package tarname is too short \"%s\"", tarname_string)
+	if tarnameLen <= 0 {
+		t.Errorf("package tarname is too short \"%s\"", tarnameString)
 	}
-	for _, r := range tarname_runes {
+	for _, r := range tarnameRunes {
 		if !(unicode.IsDigit(r) || (unicode.IsLetter(r) && unicode.IsLower(r) && r < 128)) {
-			t.Errorf("package tarname contains non letter/digit ascii7 char \"%s\"", tarname_string)
+			t.Errorf("package tarname contains non letter/digit ascii7 char \"%s\"", tarnameString)
 		}
 	}
 
-	t.Logf("tarname=%s", tarname_string)
+	t.Logf("tarname=%s", tarnameString)
 }
 
 func TestPackageName(t *testing.T) {
-	name_string := PACKAGE_NAME
-	name_runes := []rune(name_string)
-	name_len := len(name_runes)
+	nameString := PackageName
+	nameRunes := []rune(nameString)
+	nameLen := len(nameRunes)
 
-	if name_len <= 0 {
-		t.Errorf("package name is too short \"%s\"", name_string)
+	if nameLen <= 0 {
+		t.Errorf("package name is too short \"%s\"", nameString)
 	}
-	for _, r := range name_runes {
+	for _, r := range nameRunes {
 		if !(r >= 32 && r < 128) {
-			t.Errorf("package name contains non ascii7 char \"%s\"", name_string)
+			t.Errorf("package name contains non ascii7 char \"%s\"", nameString)
 		}
 	}
 
-	t.Logf("name=%s", name_string)
+	t.Logf("name=%s", nameString)
 }
 
 func TestPackageEmail(t *testing.T) {
-	email_string := PACKAGE_EMAIL
-	email_runes := []rune(email_string)
-	email_len := len(email_runes)
+	emailString := PackageEmail
+	emailRunes := []rune(emailString)
+	emailLen := len(emailRunes)
 
-	if email_len <= 0 {
-		t.Errorf("package email is too short \"%s\"", email_string)
+	if emailLen <= 0 {
+		t.Errorf("package email is too short \"%s\"", emailString)
 	}
-	for _, r := range email_runes {
+	for _, r := range emailRunes {
 		if !(r >= 32 && r < 128) {
-			t.Errorf("package email contains non ascii7 char \"%s\"", email_string)
+			t.Errorf("package email contains non ascii7 char \"%s\"", emailString)
 		}
 	}
 
-	t.Logf("email=%s", email_string)
+	t.Logf("email=%s", emailString)
 }
 
-func TestPackageUrl(t *testing.T) {
-	url_string := PACKAGE_URL
-	url_runes := []rune(url_string)
-	url_len := len(url_runes)
+func TestPackageURL(t *testing.T) {
+	urlString := PackageURL
+	urlRunes := []rune(urlString)
+	urlLen := len(urlRunes)
 
-	if url_len <= 0 {
-		t.Errorf("package url is too short \"%s\"", url_string)
+	if urlLen <= 0 {
+		t.Errorf("package url is too short \"%s\"", urlString)
 	}
-	for _, r := range url_runes {
+	for _, r := range urlRunes {
 		if !(r >= 32 && r < 128) {
-			t.Errorf("package url contains non ascii7 char \"%s\"", url_string)
+			t.Errorf("package url contains non ascii7 char \"%s\"", urlString)
 		}
 	}
 
-	t.Logf("url=%s", url_string)
+	t.Logf("url=%s", urlString)
 }

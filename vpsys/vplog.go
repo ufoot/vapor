@@ -196,95 +196,95 @@ func LogInit(program string) {
 // LogCrit logs a critical message, no formatting.
 // Uses the default global logging backend.
 func LogCrit(v ...interface{}) {
-	LoggerCrit(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
+	LoggerCrit(getGlobalLog(vpbuild.PackageTarname), v...)
 }
 
 // LogCritf logs a critical message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogCritf(f string, v ...interface{}) {
-	LoggerCritf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
+	LoggerCritf(getGlobalLog(vpbuild.PackageTarname), f, v...)
 }
 
 // LogErr logs an error message, no formatting.
 // Uses the default global logging backend.
 func LogErr(v ...interface{}) {
-	LoggerErr(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
+	LoggerErr(getGlobalLog(vpbuild.PackageTarname), v...)
 }
 
 // LogErrf logs an error message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogErrf(f string, v ...interface{}) {
-	LoggerErrf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
+	LoggerErrf(getGlobalLog(vpbuild.PackageTarname), f, v...)
 }
 
 // LogWarning logs a warning message, no formatting.
 // Uses the default global logging backend.
 func LogWarning(v ...interface{}) {
-	LoggerWarning(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
+	LoggerWarning(getGlobalLog(vpbuild.PackageTarname), v...)
 }
 
 // LogWarningf logs a warning message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogWarningf(f string, v ...interface{}) {
-	LoggerWarningf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
+	LoggerWarningf(getGlobalLog(vpbuild.PackageTarname), f, v...)
 }
 
 // LogNotice logs a notice message, no formatting.
 // Uses the default global logging backend.
 func LogNotice(v ...interface{}) {
-	LoggerNotice(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
+	LoggerNotice(getGlobalLog(vpbuild.PackageTarname), v...)
 }
 
 // LogNoticef logs a notice message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogNoticef(f string, v ...interface{}) {
-	LoggerNoticef(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
+	LoggerNoticef(getGlobalLog(vpbuild.PackageTarname), f, v...)
 }
 
 // LogInfo logs an information message, no formatting.
 // Uses the default global logging backend.
 func LogInfo(v ...interface{}) {
-	LoggerInfo(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
+	LoggerInfo(getGlobalLog(vpbuild.PackageTarname), v...)
 }
 
 // LogInfof logs an information message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogInfof(f string, v ...interface{}) {
-	LoggerInfof(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
+	LoggerInfof(getGlobalLog(vpbuild.PackageTarname), f, v...)
 }
 
 // LogDebug logs a debug message, no formatting.
 // Uses the default global logging backend.
 func LogDebug(v ...interface{}) {
-	LoggerDebug(getGlobalLog(vpbuild.PACKAGE_TARNAME), v...)
+	LoggerDebug(getGlobalLog(vpbuild.PackageTarname), v...)
 }
 
 // LogDebugf logs a debug message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogDebugf(f string, v ...interface{}) {
-	LoggerDebugf(getGlobalLog(vpbuild.PACKAGE_TARNAME), f, v...)
+	LoggerDebugf(getGlobalLog(vpbuild.PackageTarname), f, v...)
 }
 
 // LogFilename returns the path of the file used for global, default logging.
 // Uses the default global logging backend.
 func LogFilename() string {
-	return getGlobalLog(vpbuild.PACKAGE_TARNAME).Filename()
+	return getGlobalLog(vpbuild.PackageTarname).Filename()
 }
 
 // LogSetPriority sets the global, default logging level.
 // Uses the default global logging backend.
 func LogSetPriority(p Priority) {
-	getGlobalLog(vpbuild.PACKAGE_TARNAME).SetPriority(p)
+	getGlobalLog(vpbuild.PackageTarname).SetPriority(p)
 }
 
 // LogGetPriority returns the global, default logging level.
 // Uses the default global logging backend.
 func LogGetPriority() Priority {
-	return getGlobalLog(vpbuild.PACKAGE_TARNAME).GetPriority()
+	return getGlobalLog(vpbuild.PackageTarname).GetPriority()
 }
 
 // LogFlush flushes the global logging system, more precisely, flushes
 // stdout and the log file.
 func LogFlush() {
-	getGlobalLog(vpbuild.PACKAGE_TARNAME).Flush()
+	getGlobalLog(vpbuild.PackageTarname).Flush()
 }

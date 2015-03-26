@@ -28,7 +28,7 @@ import (
 
 // ConfNode is where the config is stored.
 type ConfNode struct {
-	value    string
+	value   string
 	subNode *[]ConfNode
 }
 

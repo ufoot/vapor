@@ -27,7 +27,7 @@ import (
 func TestHome(t *testing.T) {
 	var home string
 
-	home = Home(vpbuild.PACKAGE_TARNAME)
+	home = Home(vpbuild.PackageTarname)
 
 	t.Logf("home=%s", home)
 }
