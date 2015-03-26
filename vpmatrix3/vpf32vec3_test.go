@@ -37,7 +37,7 @@ func TestF32Vec3Math(t *testing.T) {
 	const fsqmag = 26.0
 	const flength = 5.099
 
-	var v1, v2, v3, v4 *F32Vec3
+	var v1, v2, v3, v4, v5 *F32Vec3
 	var f float32
 
 	v1 = F32Vec3New(f1, f2, f3)
@@ -127,6 +127,14 @@ func TestF32Vec3Math(t *testing.T) {
 	v4 = F32Vec3New(f1*f5, f2*f6, f3*f7)
 	if !v3.IsSimilar(v4) {
 		t.Error("Dot error")
+	}
+
+	v3 = F32Vec3Cross(v1, v2).Normalize()
+	v4 = F32Vec3Cross(v2, v3).Normalize()
+	v5 = F32Vec3Cross(v4, v2).Normalize()
+	t.Log("Cross product %s x %s = %s", v4.String(), v2.String(), v5.String())
+	if !v3.IsSimilar(v5) {
+		t.Error("Cross error")
 	}
 }
 

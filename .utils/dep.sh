@@ -54,7 +54,7 @@ for t in "" "check-" "bench-" "lint-" "devel-" "doc-" ; do
 done
 
 echo "configure.ac: $(ls vp*/*.go | sort -u | tr "\n" " ")" >> Makefile.dep
-echo "\tcd \$(VP_TOPSRCDIR) && ./dep.sh && ./stamp.sh" >> Makefile.dep
+echo "\tcd \$(VP_TOPSRCDIR) && ./.utils/dep.sh && ./.utils/stamp.sh" >> Makefile.dep
 echo >> Makefile.dep
 
 for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do

@@ -37,7 +37,7 @@ func TestX32Vec3Math(t *testing.T) {
 	var xsqmag = vpnumber.F32ToX32(26.0)
 	var xlength = vpnumber.F32ToX32(5.099)
 
-	var v1, v2, v3, v4 *X32Vec3
+	var v1, v2, v3, v4, v5 *X32Vec3
 	var x vpnumber.X32
 
 	v1 = X32Vec3New(x1, x2, x3)
@@ -127,6 +127,14 @@ func TestX32Vec3Math(t *testing.T) {
 	v4 = X32Vec3New(vpnumber.X32Mul(x1, x5), vpnumber.X32Mul(x2, x6), vpnumber.X32Mul(x3, x7))
 	if !v3.IsSimilar(v4) {
 		t.Error("Dot error")
+	}
+
+	v3 = X32Vec3Cross(v1, v2).Normalize()
+	v4 = X32Vec3Cross(v2, v3).Normalize()
+	v5 = X32Vec3Cross(v4, v2).Normalize()
+	t.Log("Cross product %s x %s = %s", v4.String(), v2.String(), v5.String())
+	if !v3.IsSimilar(v5) {
+		t.Error("Cross error")
 	}
 }
 

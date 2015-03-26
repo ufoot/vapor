@@ -231,6 +231,14 @@ func (vec *X64Vec3) Dot(op *X64Vec3) *X64Vec3 {
 	return vec
 }
 
+// Cross returns the the cross product of two vectors.
+// It modifies the vector, and returns a pointer on it.
+func (vec *X64Vec3) Cross(op *X64Vec3) *X64Vec3 {
+	*vec = *X64Vec3Cross(vec, op)
+
+	return vec
+}
+
 // X64Vec3Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
 func X64Vec3Add(veca, vecb *X64Vec3) *X64Vec3 {
@@ -297,6 +305,14 @@ func X64Vec3Dot(veca, vecb *X64Vec3) *X64Vec3 {
 	var ret = *veca
 
 	_ = ret.Dot(vecb)
+
+	return &ret
+}
+
+// Cross returns the the cross product of two vectors.
+// It modifies the vector, and returns a pointer on it.
+func X64Vec3Cross(veca, vecb *X64Vec3) *X64Vec3 {
+	var ret = X64Vec3{vpnumber.X64Mul(veca[1], vecb[2]) - vpnumber.X64Mul(veca[2], vecb[1]), vpnumber.X64Mul(veca[2], vecb[0]) - vpnumber.X64Mul(veca[0], vecb[2]), vpnumber.X64Mul(veca[0], vecb[1]) - vpnumber.X64Mul(veca[1], vecb[0])}
 
 	return &ret
 }
