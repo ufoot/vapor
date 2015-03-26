@@ -301,8 +301,8 @@ func F32Vec3Dot(veca, vecb *F32Vec3) *F32Vec3 {
 	return &ret
 }
 
-// Cross returns the the cross product of two vectors.
-// It modifies the vector, and returns a pointer on it.
+// F32Vec3Cross returns the the cross product of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func F32Vec3Cross(veca, vecb *F32Vec3) *F32Vec3 {
 	var ret = F32Vec3{veca[1]*vecb[2] - veca[2]*vecb[1], veca[2]*vecb[0] - veca[0]*vecb[2], veca[0]*vecb[1] - veca[1]*vecb[0]}
 
