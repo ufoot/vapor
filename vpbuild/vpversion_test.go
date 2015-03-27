@@ -25,7 +25,7 @@ import (
 )
 
 func TestVersionMajor(t *testing.T) {
-	major := VERSION_MAJOR
+	major := VersionMajor
 
 	if major < 0 {
 		t.Errorf("negative major version %d", major)
@@ -35,7 +35,7 @@ func TestVersionMajor(t *testing.T) {
 }
 
 func TestVersionMinor(t *testing.T) {
-	minor := VERSION_MINOR
+	minor := VersionMinor
 
 	if minor <= 0 {
 		t.Errorf("zero or negative minor version %d", minor)
@@ -45,18 +45,18 @@ func TestVersionMinor(t *testing.T) {
 }
 
 func TestVersionStamp(t *testing.T) {
-	stamp_string := VERSION_STAMP
-	stamp_runes := []rune(stamp_string)
-	stamp_len := len(stamp_runes)
+	stampString := VersionStamp
+	stampRunes := []rune(stampString)
+	stampLen := len(stampRunes)
 
-	if stamp_len <= 0 {
-		t.Errorf("stamp is too short \"%s\"", stamp_string)
+	if stampLen <= 0 {
+		t.Errorf("stamp is too short \"%s\"", stampString)
 	}
-	for _, r := range stamp_runes {
+	for _, r := range stampRunes {
 		if !(unicode.IsDigit(r) || (unicode.IsLetter(r) && r < 128)) {
-			t.Errorf("stamp contains non letter/digit ascii7 char \"%s\"", stamp_string)
+			t.Errorf("stamp contains non letter/digit ascii7 char \"%s\"", stampString)
 		}
 	}
 
-	t.Logf("stamp=%s", stamp_string)
+	t.Logf("stamp=%s", stampString)
 }

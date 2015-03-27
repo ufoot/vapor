@@ -28,8 +28,8 @@ import (
 
 // ConfNode is where the config is stored.
 type ConfNode struct {
-	value    string
-	sub_node *[]ConfNode
+	value   string
+	subNode *[]ConfNode
 }
 
 // ConfTrue is the string used to represent true.
@@ -47,7 +47,7 @@ const ConfNo string = "no"
 // ConfParseBool parses a boolean in a string.
 func ConfParseBool(val string) bool {
 	var err error
-	var int_val int64
+	var intVal int64
 
 	val = strings.ToLower(val)
 
@@ -58,8 +58,8 @@ func ConfParseBool(val string) bool {
 		return false
 	}
 
-	int_val, err = strconv.ParseInt(val, 64, 10)
-	if err == nil && int_val > 0 {
+	intVal, err = strconv.ParseInt(val, 64, 10)
+	if err == nil && intVal > 0 {
 		return true
 	}
 
@@ -70,28 +70,28 @@ func ConfParseBool(val string) bool {
 // in the conf node.
 // Returns the number of keys read.
 func (n *ConfNode) ReadEnv(prefix string) int {
-	var nb_read int
+	var nbRead int
 
-	return nb_read
+	return nbRead
 }
 
-// ReadNode reads vars from a file and puts the values
+// ReadFile reads vars from a file and puts the values
 // in the conf node.
 // Returns the number of keys read.
 func (n *ConfNode) ReadFile(filename string) (int, error) {
-	var nb_read int
+	var nbRead int
 	var err error
 
-	return nb_read, err
+	return nbRead, err
 }
 
 // ReadArgv reads vars from argv and puts the values
 // in the conf node.
 // Returns the number of keys read.
 func (n *ConfNode) ReadArgv() int {
-	var nb_read int
+	var nbRead int
 
-	return nb_read
+	return nbRead
 }
 
 // Clear clears the contents of a conf node.
@@ -103,9 +103,9 @@ func (n *ConfNode) Clear() {
 // of the arguments should be used.
 // Returns the number of keys read.
 func (n *ConfNode) Merge(other *ConfNode) int {
-	var nb_merge int
+	var nbMerge int
 
-	return nb_merge
+	return nbMerge
 }
 
 // SetString sets a key to the given value.
@@ -136,14 +136,14 @@ func (n *ConfNode) SetInt32(key string, val int32) error {
 func (n *ConfNode) GetInt32(key string) (int32, error) {
 	var ret int64
 	var err error
-	var str_val string
+	var strVal string
 
-	str_val, err = n.GetString(key)
+	strVal, err = n.GetString(key)
 	if err != nil {
 		return 0, err
 	}
 
-	ret, err = strconv.ParseInt(str_val, 32, 10)
+	ret, err = strconv.ParseInt(strVal, 32, 10)
 
 	return int32(ret), vpsys.ErrorChain(err, "unable to parse int")
 }
@@ -157,14 +157,14 @@ func (n *ConfNode) SetFloat32(key string, val float32) error {
 func (n *ConfNode) GetFloat32(key string) (float32, error) {
 	var ret float64
 	var err error
-	var str_val string
+	var strVal string
 
-	str_val, err = n.GetString(key)
+	strVal, err = n.GetString(key)
 	if err != nil {
 		return 0, err
 	}
 
-	ret, err = strconv.ParseFloat(str_val, 32)
+	ret, err = strconv.ParseFloat(strVal, 32)
 
 	return float32(ret), err
 }
@@ -173,20 +173,19 @@ func (n *ConfNode) GetFloat32(key string) (float32, error) {
 func (n *ConfNode) SetBool(key string, val bool) error {
 	if val {
 		return n.SetString(key, ConfTrue)
-	} else {
-		return n.SetString(key, ConfFalse)
 	}
+	return n.SetString(key, ConfFalse)
 }
 
 // GetBool returns a given value, as a boolean.
 func (n *ConfNode) GetBool(key string) (bool, error) {
 	var err error
-	var str_val string
+	var strVal string
 
-	str_val, err = n.GetString(key)
+	strVal, err = n.GetString(key)
 	if err != nil {
 		return false, err
 	}
 
-	return ConfParseBool(str_val), nil
+	return ConfParseBool(strVal), nil
 }

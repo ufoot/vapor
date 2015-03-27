@@ -55,6 +55,7 @@ clean:
 
 distclean: clean
 	rm -rf autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src
+	find . -name "*~" -exec rm -f "{}" \;
 
 get:
 	./.utils/get.sh

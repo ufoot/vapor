@@ -41,6 +41,11 @@ func X64Mat2Identity() *X64Mat2 {
 	return &X64Mat2{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
+// X64Mat2Trans creates a new translation matrix.
+func X64Mat2Trans(x vpnumber.X64) *X64Mat2 {
+	return &X64Mat2{vpnumber.X64Const0, vpnumber.X64Const0, x, vpnumber.X64Const1}
+}
+
 // ToI32 converts the matrix to an int32 matrix.
 func (mat *X64Mat2) ToI32() *I32Mat2 {
 	var ret I32Mat2

@@ -222,13 +222,14 @@ func (vec *X64Vec2) IsSimilar(op *X64Vec2) bool {
 }
 
 // Dot returns the the dot product of two vectors.
-// It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec2) Dot(op *X64Vec2) *X64Vec2 {
+func (vec *X64Vec2) Dot(op *X64Vec2) vpnumber.X64 {
+	var dot vpnumber.X64
+
 	for i, v := range op {
-		vec[i] = vpnumber.X64Mul(vec[i], v)
+		dot += vpnumber.X64Mul(vec[i], v)
 	}
 
-	return vec
+	return dot
 }
 
 // X64Vec2Add adds two vectors.
@@ -287,16 +288,6 @@ func X64Vec2Normalize(vec *X64Vec2) *X64Vec2 {
 	var ret = *vec
 
 	_ = ret.Normalize()
-
-	return &ret
-}
-
-// X64Vec2Dot returns the dot product of two vectors.
-// Args are left untouched, a pointer on a new object is returned.
-func X64Vec2Dot(veca, vecb *X64Vec2) *X64Vec2 {
-	var ret = *veca
-
-	_ = ret.Dot(vecb)
 
 	return &ret
 }

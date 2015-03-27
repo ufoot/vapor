@@ -42,6 +42,11 @@ func X32Mat4Identity() *X32Mat4 {
 	return &X32Mat4{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
 }
 
+// X32Mat4Trans creates a new translation matrix.
+func X32Mat4Trans(vec *vpmatrix3.X32Vec3) *X32Mat4 {
+	return &X32Mat4{vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vec[0], vec[1], vec[2], vpnumber.X32Const1}
+}
+
 // ToI32 converts the matrix to an int32 matrix.
 func (mat *X32Mat4) ToI32() *I32Mat4 {
 	var ret I32Mat4

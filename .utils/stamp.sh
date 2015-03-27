@@ -19,6 +19,14 @@
 # Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 # Contact author: ufoot@ufoot.org
 
+if [ -d ../.utils ] ; then
+    cd ..
+fi
+if [ ! -d .utils ] ; then
+    echo "$0 should be run in srcdir"
+    exit 1
+fi
+
 PACKAGE_TARNAME="vapor"
 PACKAGE_NAME="Vapor Toolkit"
 PACKAGE_EMAIL="ufoot@ufoot.org"
@@ -114,16 +122,16 @@ do_patch () {
         touch ${CONFIGURE_AC}
     else
         echo "patching ${VPPACKAGE_GO} with package tarname=${PACKAGE_TARNAME} name=${PACKAGE_NAME} email=${PACKAGE_EMAIL} url=${PACKAGE_URL}"
-        sed -i "s/const.*\/\/.*PACKAGE_TARNAME.*stamp.sh/const PACKAGE_TARNAME = \"${PACKAGE_TARNAME}\" \/\/ PACKAGE_TARNAME set by stamp.sh/g" ${VPPACKAGE_GO}
-        sed -i "s/const.*\/\/.*PACKAGE_NAME.*stamp.sh/const PACKAGE_NAME = \"${PACKAGE_NAME}\" \/\/ PACKAGE_NAME set by stamp.sh/g" ${VPPACKAGE_GO}
-        sed -i "s/const.*\/\/.*PACKAGE_EMAIL.*stamp.sh/const PACKAGE_EMAIL = \"${PACKAGE_EMAIL}\" \/\/ PACKAGE_EMAIL set by stamp.sh/g" ${VPPACKAGE_GO}
-        sed -i "s/const.*\/\/.*PACKAGE_URL.*stamp.sh/const PACKAGE_URL = \"${PACKAGE_URL}\" \/\/ PACKAGE_URL set by stamp.sh/g" ${VPPACKAGE_GO}
+        sed -i "s/const.*\/\/.*PackageTarname.*stamp.sh/const PackageTarname = \"${PACKAGE_TARNAME}\" \/\/ PackageTarname set by stamp.sh/g" ${VPPACKAGE_GO}
+        sed -i "s/const.*\/\/.*PackageName.*stamp.sh/const PackageName = \"${PACKAGE_NAME}\" \/\/ PackageName set by stamp.sh/g" ${VPPACKAGE_GO}
+        sed -i "s/const.*\/\/.*PackageEmail.*stamp.sh/const PackageEmail = \"${PACKAGE_EMAIL}\" \/\/ PackageEmail set by stamp.sh/g" ${VPPACKAGE_GO}
+        sed -i "s/const.*\/\/.*PackageURL.*stamp.sh/const PackageURL = \"${PACKAGE_URL}\" \/\/ PackageURL set by stamp.sh/g" ${VPPACKAGE_GO}
         go vet ${VPPACKAGE_GO}
         go fmt ${VPPACKAGE_GO}
         echo "patching ${VPVERSION_GO} with version major=${VERSION_MAJOR} minor=${VERSION_MINOR} stamp=${VERSION_STAMP}"
-        sed -i "s/const.*\/\/.*VERSION_MAJOR.*stamp.sh/const VERSION_MAJOR = ${VERSION_MAJOR} \/\/ VERSION_MAJOR set by stamp.sh/g" ${VPVERSION_GO}
-        sed -i "s/const.*\/\/.*VERSION_MINOR.*stamp.sh/const VERSION_MINOR = ${VERSION_MINOR} \/\/ VERSION_MINOR set by stamp.sh/g" ${VPVERSION_GO}
-        sed -i "s/const.*\/\/.*VERSION_STAMP.*stamp.sh/const VERSION_STAMP = \"${VERSION_STAMP}\" \/\/ VERSION_STAMP set by stamp.sh/g" ${VPVERSION_GO}
+        sed -i "s/const.*\/\/.*VersionMajor.*stamp.sh/const VersionMajor = ${VERSION_MAJOR} \/\/ VersionMajor set by stamp.sh/g" ${VPVERSION_GO}
+        sed -i "s/const.*\/\/.*VersionMinor.*stamp.sh/const VersionMinor = ${VERSION_MINOR} \/\/ VersionMinor set by stamp.sh/g" ${VPVERSION_GO}
+        sed -i "s/const.*\/\/.*VersionStamp.*stamp.sh/const VersionStamp = \"${VERSION_STAMP}\" \/\/ VersionStamp set by stamp.sh/g" ${VPVERSION_GO}
         go vet ${VPVERSION_GO}
         go fmt ${VPVERSION_GO}
         echo "patching ${CONFIGURE_AC} with version ${VERSION_DOT}"

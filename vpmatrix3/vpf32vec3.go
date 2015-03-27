@@ -214,11 +214,20 @@ func (vec *F32Vec3) IsSimilar(op *F32Vec3) bool {
 }
 
 // Dot returns the the dot product of two vectors.
-// It modifies the vector, and returns a pointer on it.
-func (vec *F32Vec3) Dot(op *F32Vec3) *F32Vec3 {
+func (vec *F32Vec3) Dot(op *F32Vec3) float32 {
+	var dot float32
+
 	for i, v := range op {
-		vec[i] *= v
+		dot += vec[i] * v
 	}
+
+	return dot
+}
+
+// Cross returns the the cross product of two vectors.
+// It modifies the vector, and returns a pointer on it.
+func (vec *F32Vec3) Cross(op *F32Vec3) *F32Vec3 {
+	*vec = *F32Vec3Cross(vec, op)
 
 	return vec
 }
@@ -283,12 +292,10 @@ func F32Vec3Normalize(vec *F32Vec3) *F32Vec3 {
 	return &ret
 }
 
-// F32Vec3Dot returns the dot product of two vectors.
+// F32Vec3Cross returns the the cross product of two vectors.
 // Args are left untouched, a pointer on a new object is returned.
-func F32Vec3Dot(veca, vecb *F32Vec3) *F32Vec3 {
-	var ret = *veca
-
-	_ = ret.Dot(vecb)
+func F32Vec3Cross(veca, vecb *F32Vec3) *F32Vec3 {
+	var ret = F32Vec3{veca[1]*vecb[2] - veca[2]*vecb[1], veca[2]*vecb[0] - veca[0]*vecb[2], veca[0]*vecb[1] - veca[1]*vecb[0]}
 
 	return &ret
 }
