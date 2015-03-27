@@ -123,9 +123,9 @@ func TestF64Vec3Math(t *testing.T) {
 		t.Error("Normalize error", f)
 	}
 
-	v3 = F64Vec3Dot(v1, v2)
-	v4 = F64Vec3New(f1*f5, f2*f6, f3*f7)
-	if !v3.IsSimilar(v4) {
+	dot1 := v1.Dot(v2)
+	dot2 := f1*f5 + f2*f6 + f3*f7
+	if !vpnumber.F64IsSimilar(dot1, dot2) {
 		t.Error("Dot error")
 	}
 

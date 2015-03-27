@@ -222,13 +222,14 @@ func (vec *X32Vec4) IsSimilar(op *X32Vec4) bool {
 }
 
 // Dot returns the the dot product of two vectors.
-// It modifies the vector, and returns a pointer on it.
-func (vec *X32Vec4) Dot(op *X32Vec4) *X32Vec4 {
+func (vec *X32Vec4) Dot(op *X32Vec4) vpnumber.X32 {
+	var dot vpnumber.X32
+
 	for i, v := range op {
-		vec[i] = vpnumber.X32Mul(vec[i], v)
+		dot += vpnumber.X32Mul(vec[i], v)
 	}
 
-	return vec
+	return dot
 }
 
 // X32Vec4Add adds two vectors.
@@ -287,16 +288,6 @@ func X32Vec4Normalize(vec *X32Vec4) *X32Vec4 {
 	var ret = *vec
 
 	_ = ret.Normalize()
-
-	return &ret
-}
-
-// X32Vec4Dot returns the dot product of two vectors.
-// Args are left untouched, a pointer on a new object is returned.
-func X32Vec4Dot(veca, vecb *X32Vec4) *X32Vec4 {
-	var ret = *veca
-
-	_ = ret.Dot(vecb)
 
 	return &ret
 }
