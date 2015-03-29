@@ -127,6 +127,31 @@ func TestX64Mat2Comp(t *testing.T) {
 	}
 }
 
+func TestX64Mat2Aff(t *testing.T) {
+	p1 := vpnumber.F64ToX64(3.0)
+	t1 := vpnumber.F64ToX64(6.0)
+
+	v1 := X64Vec2New(p1, vpnumber.X64Const1)
+	mt := X64Mat2Trans(t1)
+	t.Logf("translation mat2 for %f is %s", vpnumber.X64ToF64(p1), mt.String())
+	v2 := mt.MulVec(v1)
+	t.Logf("mat2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
+	v3 := X64Vec2New(p1+t1, vpnumber.X64Const1)
+	if !v2.IsSimilar(v3) {
+		t.Errorf("mat2 MulVec error v2=%s v3=%s", v2.String(), v3.String())
+	}
+	v2pos := mt.MulVecPos(p1)
+	v3pos := p1 + t1
+	if !vpnumber.X64IsSimilar(v2pos, v3pos) {
+		t.Errorf("mat2 MulVecPos error v2pos=%f v3pos=%f", vpnumber.X64ToF64(v2pos), vpnumber.X64ToF64(v3pos))
+	}
+	v2dir := mt.MulVecDir(p1)
+	v3dir := p1
+	if !vpnumber.X64IsSimilar(v2dir, v3dir) {
+		t.Errorf("mat2 MulVecDir error v2dir=%f v3dir=%f", vpnumber.X64ToF64(v2dir), vpnumber.X64ToF64(v3dir))
+	}
+}
+
 func TestX64Mat2JSON(t *testing.T) {
 	m1 := invertableX64Mat2()
 	m2 := X64Mat2Identity()

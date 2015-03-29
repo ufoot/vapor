@@ -20,6 +20,7 @@
 package vpmatrix4
 
 import (
+	"github.com/ufoot/vapor/vpmatrix3"
 	"github.com/ufoot/vapor/vpnumber"
 	"math/rand"
 	"testing"
@@ -148,6 +149,36 @@ func TestX32Mat4Comp(t *testing.T) {
 		t.Logf("multiplicating matrix by its inverse return something similar to identity m2=%s", m2.String())
 	} else {
 		t.Errorf("multiplicating matrix by its inverse does not return identity m1=%s m2=%s", m1.String(), m2.String())
+	}
+}
+
+func TestX32Mat4Aff(t *testing.T) {
+	p1 := vpnumber.F32ToX32(3.0)
+	p2 := vpnumber.F32ToX32(4.0)
+	p3 := vpnumber.F32ToX32(5.0)
+	t1 := vpnumber.F32ToX32(6.5)
+	t2 := vpnumber.F32ToX32(8.5)
+	t3 := vpnumber.F32ToX32(10.5)
+
+	v1 := X32Vec4New(p1, p2, p3, vpnumber.X32Const1)
+	vt := vpmatrix3.X32Vec3New(t1, t2, t3)
+	mt := X32Mat4Trans(vt)
+	t.Logf("translation mat4 for %s is %s", vt.String(), mt.String())
+	v2 := mt.MulVec(v1)
+	t.Logf("mat4 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
+	v3 := X32Vec4New(p1+t1, p2+t2, p3+t3, vpnumber.X32Const1)
+	if !v2.IsSimilar(v3) {
+		t.Errorf("mat4 MulVec error v2=%s v3=%s", v2.String(), v3.String())
+	}
+	v2pos := mt.MulVecPos(v1.ToVec3())
+	v3pos := v1.ToVec3().Add(vt)
+	if !v2pos.IsSimilar(v3pos) {
+		t.Errorf("mat4 MulVecPos error v2pos=%s v3pos=%s", v2pos.String(), v3pos.String())
+	}
+	v2dir := mt.MulVecDir(v1.ToVec3())
+	v3dir := v1.ToVec3()
+	if !v2dir.IsSimilar(v3dir) {
+		t.Errorf("mat4 MulVecDir error v2dir=%s v3dir=%s", v2dir.String(), v3dir.String())
 	}
 }
 

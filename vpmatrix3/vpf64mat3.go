@@ -44,7 +44,7 @@ func F64Mat3Identity() *F64Mat3 {
 
 // F64Mat3Trans creates a new translation matrix.
 func F64Mat3Trans(vec *vpmatrix2.F64Vec2) *F64Mat3 {
-	return &F64Mat3{vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vec[0], vec[1], vpnumber.F64Const1}
+	return &F64Mat3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vec[0], vec[1], vpnumber.F64Const1}
 }
 
 // ToI32 converts the matrix to an int32 matrix.

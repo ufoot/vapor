@@ -127,6 +127,31 @@ func TestX32Mat2Comp(t *testing.T) {
 	}
 }
 
+func TestX32Mat2Aff(t *testing.T) {
+	p1 := vpnumber.F32ToX32(3.0)
+	t1 := vpnumber.F32ToX32(6.0)
+
+	v1 := X32Vec2New(p1, vpnumber.X32Const1)
+	mt := X32Mat2Trans(t1)
+	t.Logf("translation mat2 for %f is %s", vpnumber.X32ToF32(p1), mt.String())
+	v2 := mt.MulVec(v1)
+	t.Logf("mat2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
+	v3 := X32Vec2New(p1+t1, vpnumber.X32Const1)
+	if !v2.IsSimilar(v3) {
+		t.Errorf("mat2 MulVec error v2=%s v3=%s", v2.String(), v3.String())
+	}
+	v2pos := mt.MulVecPos(p1)
+	v3pos := p1 + t1
+	if !vpnumber.X32IsSimilar(v2pos, v3pos) {
+		t.Errorf("mat2 MulVecPos error v2pos=%f v3pos=%f", vpnumber.X32ToF32(v2pos), vpnumber.X32ToF32(v3pos))
+	}
+	v2dir := mt.MulVecDir(p1)
+	v3dir := p1
+	if !vpnumber.X32IsSimilar(v2dir, v3dir) {
+		t.Errorf("mat2 MulVecDir error v2dir=%f v3dir=%f", vpnumber.X32ToF32(v2dir), vpnumber.X32ToF32(v3dir))
+	}
+}
+
 func TestX32Mat2JSON(t *testing.T) {
 	m1 := invertableX32Mat2()
 	m2 := X32Mat2Identity()

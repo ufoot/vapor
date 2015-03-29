@@ -128,6 +128,31 @@ func TestF64Mat2Comp(t *testing.T) {
 	}
 }
 
+func TestF64Mat2Aff(t *testing.T) {
+	const p1 = 3.0
+	const t1 = 6.0
+
+	v1 := F64Vec2New(p1, vpnumber.F64Const1)
+	mt := F64Mat2Trans(t1)
+	t.Logf("translation mat2 for %f is %s", p1, mt.String())
+	v2 := mt.MulVec(v1)
+	t.Logf("mat2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
+	v3 := F64Vec2New(p1+t1, vpnumber.F64Const1)
+	if !v2.IsSimilar(v3) {
+		t.Errorf("mat2 MulVec error v2=%s v3=%s", v2.String(), v3.String())
+	}
+	v2pos := mt.MulVecPos(p1)
+	v3pos := float64(p1 + t1)
+	if !vpnumber.F64IsSimilar(v2pos, v3pos) {
+		t.Errorf("mat2 MulVecPos error v2pos=%f v3pos=%f", v2pos, v3pos)
+	}
+	v2dir := mt.MulVecDir(p1)
+	v3dir := float64(p1)
+	if !vpnumber.F64IsSimilar(v2dir, v3dir) {
+		t.Errorf("mat2 MulVecDir error v2dir=%f v3dir=%f", v2dir, v3dir)
+	}
+}
+
 func TestF64Mat2JSON(t *testing.T) {
 	m1 := invertableF64Mat2()
 	m2 := F64Mat2Identity()

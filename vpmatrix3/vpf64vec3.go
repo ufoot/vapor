@@ -21,6 +21,7 @@ package vpmatrix3
 
 import (
 	"encoding/json"
+	"github.com/ufoot/vapor/vpmatrix2"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"math"
@@ -33,6 +34,17 @@ type F64Vec3 [3]float64
 // F64Vec3New creates a new vector containing 3 float64 values.
 func F64Vec3New(f1, f2, f3 float64) *F64Vec3 {
 	return &F64Vec3{f1, f2, f3}
+}
+
+// F64VecFromVec2 creates a new vector from a smaller one,
+// by appending a value at its end.
+func F64Vec3FromVec2(vec *vpmatrix2.F64Vec2, f float64) *F64Vec3 {
+	return &F64Vec3{vec[0], vec[1], f}
+}
+
+// F64VecToVec2 creates a smaller vector by removing the last value.
+func (vec *F64Vec3) ToVec2() *vpmatrix2.F64Vec2 {
+	return &vpmatrix2.F64Vec2{vec[0], vec[1]}
 }
 
 // ToI32 converts the vector to an int32 vector.

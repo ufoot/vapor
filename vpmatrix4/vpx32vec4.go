@@ -22,6 +22,7 @@ package vpmatrix4
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpmath"
+	"github.com/ufoot/vapor/vpmatrix3"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 )
@@ -33,6 +34,17 @@ type X32Vec4 [4]vpnumber.X32
 // X32Vec4New creates a new vector containing 4 fixed point 32 bit values.
 func X32Vec4New(x1, x2, x3, x4 vpnumber.X32) *X32Vec4 {
 	return &X32Vec4{x1, x2, x3, x4}
+}
+
+// X32VecFromVec3 creates a new vector from a smaller one,
+// by appending a value at its end.
+func X32Vec4FromVec3(vec *vpmatrix3.X32Vec3, x vpnumber.X32) *X32Vec4 {
+	return &X32Vec4{vec[0], vec[1], vec[2], x}
+}
+
+// X32VecToVec3 creates a smaller vector by removing the last value.
+func (vec *X32Vec4) ToVec3() *vpmatrix3.X32Vec3 {
+	return &vpmatrix3.X32Vec3{vec[0], vec[1], vec[2]}
 }
 
 // ToI32 converts the vector to an int32 vector.
