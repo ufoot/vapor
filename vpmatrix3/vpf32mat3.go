@@ -219,6 +219,14 @@ func (mat *F32Mat3) IsSimilar(op *F32Mat3) bool {
 	return ret
 }
 
+// Transpose inverts rows and columns (matrix transposition).
+// It modifies the matrix, and returns a pointer on it.
+func (mat *F32Mat3) Transpose(op *F32Mat3) *F32Mat3 {
+	*mat = *F32Mat3Transpose(op)
+
+	return mat
+}
+
 // MulComp multiplies the matrix by another matrix (composition).
 // It modifies the matrix, and returns a pointer on it.
 func (mat *F32Mat3) MulComp(op *F32Mat3) *F32Mat3 {
@@ -322,6 +330,20 @@ func F32Mat3DivScale(mat *F32Mat3, factor float32) *F32Mat3 {
 	var ret = *mat
 
 	_ = ret.DivScale(factor)
+
+	return &ret
+}
+
+// F32Mat3Transpose inverts rows and columns (matrix transposition).
+// Args is left untouched, a pointer on a new object is returned.
+func F32Mat3Transpose(mat *F32Mat3) *F32Mat3 {
+	var ret F32Mat3
+
+	for c := 0; c < 3; c++ {
+		for r := 0; r < 3; r++ {
+			ret.Set(c, r, mat.Get(r, c))
+		}
+	}
 
 	return &ret
 }

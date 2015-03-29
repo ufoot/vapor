@@ -210,6 +210,14 @@ func (mat *F64Mat2) IsSimilar(op *F64Mat2) bool {
 	return ret
 }
 
+// Transpose inverts rows and columns (matrix transposition).
+// It modifies the matrix, and returns a pointer on it.
+func (mat *F64Mat2) Transpose(op *F64Mat2) *F64Mat2 {
+	*mat = *F64Mat2Transpose(op)
+
+	return mat
+}
+
 // MulComp multiplies the matrix by another matrix (composition).
 // It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat2) MulComp(op *F64Mat2) *F64Mat2 {
@@ -301,6 +309,20 @@ func F64Mat2DivScale(mat *F64Mat2, factor float64) *F64Mat2 {
 	var ret = *mat
 
 	_ = ret.DivScale(factor)
+
+	return &ret
+}
+
+// F64Mat2Transpose inverts rows and columns (matrix transposition).
+// Args is left untouched, a pointer on a new object is returned.
+func F64Mat2Transpose(mat *F64Mat2) *F64Mat2 {
+	var ret F64Mat2
+
+	for c := 0; c < 2; c++ {
+		for r := 0; r < 2; r++ {
+			ret.Set(c, r, mat.Get(r, c))
+		}
+	}
 
 	return &ret
 }

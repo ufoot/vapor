@@ -233,6 +233,14 @@ func (mat *X32Mat4) IsSimilar(op *X32Mat4) bool {
 	return ret
 }
 
+// Transpose inverts rows and columns (matrix transposition).
+// It modifies the matrix, and returns a pointer on it.
+func (mat *X32Mat4) Transpose(op *X32Mat4) *X32Mat4 {
+	*mat = *X32Mat4Transpose(op)
+
+	return mat
+}
+
 // MulComp multiplies the matrix by another matrix (composition).
 // It modifies the matrix, and returns a pointer on it.
 func (mat *X32Mat4) MulComp(op *X32Mat4) *X32Mat4 {
@@ -336,6 +344,20 @@ func X32Mat4DivScale(mat *X32Mat4, factor vpnumber.X32) *X32Mat4 {
 	var ret = *mat
 
 	_ = ret.DivScale(factor)
+
+	return &ret
+}
+
+// X32Mat4Transpose inverts rows and columns (matrix transposition).
+// Args is left untouched, a pointer on a new object is returned.
+func X32Mat4Transpose(mat *X32Mat4) *X32Mat4 {
+	var ret X32Mat4
+
+	for c := 0; c < 4; c++ {
+		for r := 0; r < 4; r++ {
+			ret.Set(c, r, mat.Get(r, c))
+		}
+	}
 
 	return &ret
 }
