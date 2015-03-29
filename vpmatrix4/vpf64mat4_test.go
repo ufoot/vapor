@@ -181,6 +181,63 @@ func TestF64Mat4Aff(t *testing.T) {
 	if !v2dir.IsSimilar(v3dir) {
 		t.Errorf("mat4 MulVecDir error v2dir=%s v3dir=%s", v2dir.String(), v3dir.String())
 	}
+
+	mr := F64Mat4RotX(math.Pi / 2)
+	t.Logf("rotation mat4 for PI/2 is %s", mr.String())
+	v2 = mr.MulVec(v1)
+	t.Logf("mat4 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
+	v3 = F64Vec4New(v1[0], -v1[2], v1[1], vpnumber.F64Const1)
+	if !v2.IsSimilar(v3) {
+		t.Errorf("mat4 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
+	}
+	v2pos = mr.MulVecPos(v1.ToVec3())
+	v3pos = v3.ToVec3()
+	if !v2pos.IsSimilar(v3pos) {
+		t.Errorf("mat4 Z rotation MulVecPos error v2pos=%s v3pos=%s", v2pos.String(), v3pos.String())
+	}
+	v2dir = mr.MulVecDir(v1.ToVec3())
+	v3dir = v3.ToVec3()
+	if !v2dir.IsSimilar(v3dir) {
+		t.Errorf("mat4 Z rotation MulVecDir error v2dir=%s v3dir=%s", v2dir.String(), v3dir.String())
+	}
+
+	mr = F64Mat4RotY(math.Pi / 2)
+	t.Logf("rotation mat4 for PI/2 is %s", mr.String())
+	v2 = mr.MulVec(v1)
+	t.Logf("mat4 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
+	v3 = F64Vec4New(v1[2], v1[1], -v1[0], vpnumber.F64Const1)
+	if !v2.IsSimilar(v3) {
+		t.Errorf("mat4 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
+	}
+	v2pos = mr.MulVecPos(v1.ToVec3())
+	v3pos = v3.ToVec3()
+	if !v2pos.IsSimilar(v3pos) {
+		t.Errorf("mat4 Z rotation MulVecPos error v2pos=%s v3pos=%s", v2pos.String(), v3pos.String())
+	}
+	v2dir = mr.MulVecDir(v1.ToVec3())
+	v3dir = v3.ToVec3()
+	if !v2dir.IsSimilar(v3dir) {
+		t.Errorf("mat4 Z rotation MulVecDir error v2dir=%s v3dir=%s", v2dir.String(), v3dir.String())
+	}
+
+	mr = F64Mat4RotZ(math.Pi / 2)
+	t.Logf("rotation mat4 for PI/2 is %s", mr.String())
+	v2 = mr.MulVec(v1)
+	t.Logf("mat4 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
+	v3 = F64Vec4New(-v1[1], v1[0], v1[2], vpnumber.F64Const1)
+	if !v2.IsSimilar(v3) {
+		t.Errorf("mat4 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
+	}
+	v2pos = mr.MulVecPos(v1.ToVec3())
+	v3pos = v3.ToVec3()
+	if !v2pos.IsSimilar(v3pos) {
+		t.Errorf("mat4 Z rotation MulVecPos error v2pos=%s v3pos=%s", v2pos.String(), v3pos.String())
+	}
+	v2dir = mr.MulVecDir(v1.ToVec3())
+	v3dir = v3.ToVec3()
+	if !v2dir.IsSimilar(v3dir) {
+		t.Errorf("mat4 Z rotation MulVecDir error v2dir=%s v3dir=%s", v2dir.String(), v3dir.String())
+	}
 }
 
 func TestF64Mat4JSON(t *testing.T) {
