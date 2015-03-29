@@ -36,13 +36,13 @@ func X32Vec4New(x1, x2, x3, x4 vpnumber.X32) *X32Vec4 {
 	return &X32Vec4{x1, x2, x3, x4}
 }
 
-// X32VecFromVec3 creates a new vector from a smaller one,
+// X32Vec4FromVec3 creates a new vector from a smaller one,
 // by appending a value at its end.
 func X32Vec4FromVec3(vec *vpmatrix3.X32Vec3, x vpnumber.X32) *X32Vec4 {
 	return &X32Vec4{vec[0], vec[1], vec[2], x}
 }
 
-// X32VecToVec3 creates a smaller vector by removing the last value.
+// ToVec3 creates a smaller vector by removing the last value.
 func (vec *X32Vec4) ToVec3() *vpmatrix3.X32Vec3 {
 	return &vpmatrix3.X32Vec3{vec[0], vec[1], vec[2]}
 }

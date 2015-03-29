@@ -36,13 +36,13 @@ func F32Vec4New(f1, f2, f3, f4 float32) *F32Vec4 {
 	return &F32Vec4{f1, f2, f3, f4}
 }
 
-// F32VecFromVec3 creates a new vector from a smaller one,
+// F32Vec4FromVec3 creates a new vector from a smaller one,
 // by appending a value at its end.
 func F32Vec4FromVec3(vec *vpmatrix3.F32Vec3, f float32) *F32Vec4 {
 	return &F32Vec4{vec[0], vec[1], vec[2], f}
 }
 
-// F32VecToVec3 creates a smaller vector by removing the last value.
+// ToVec3 creates a smaller vector by removing the last value.
 func (vec *F32Vec4) ToVec3() *vpmatrix3.F32Vec3 {
 	return &vpmatrix3.F32Vec3{vec[0], vec[1], vec[2]}
 }

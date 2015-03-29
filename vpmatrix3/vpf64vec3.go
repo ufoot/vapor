@@ -36,13 +36,13 @@ func F64Vec3New(f1, f2, f3 float64) *F64Vec3 {
 	return &F64Vec3{f1, f2, f3}
 }
 
-// F64VecFromVec2 creates a new vector from a smaller one,
+// F64Vec3FromVec2 creates a new vector from a smaller one,
 // by appending a value at its end.
 func F64Vec3FromVec2(vec *vpmatrix2.F64Vec2, f float64) *F64Vec3 {
 	return &F64Vec3{vec[0], vec[1], f}
 }
 
-// F64VecToVec2 creates a smaller vector by removing the last value.
+// ToVec2 creates a smaller vector by removing the last value.
 func (vec *F64Vec3) ToVec2() *vpmatrix2.F64Vec2 {
 	return &vpmatrix2.F64Vec2{vec[0], vec[1]}
 }
