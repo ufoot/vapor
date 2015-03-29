@@ -21,6 +21,7 @@ package vpmatrix4
 
 import (
 	"encoding/json"
+	"github.com/ufoot/vapor/vpmath"
 	"github.com/ufoot/vapor/vpmatrix3"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
@@ -45,6 +46,27 @@ func X64Mat4Identity() *X64Mat4 {
 // X64Mat4Trans creates a new translation matrix.
 func X64Mat4Trans(vec *vpmatrix3.X64Vec3) *X64Mat4 {
 	return &X64Mat4{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vec[0], vec[1], vec[2], vpnumber.X64Const1}
+}
+
+// X64Mat4RotX creates a new rotation matrix.
+// The rotation is done in 3D over the x (1st) axis.
+// Angle is given in radians.
+func X64Mat4RotX(r vpnumber.X64) *X64Mat4 {
+	return &X64Mat4{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpmath.X64Cos(r), -vpmath.X64Sin(r), vpnumber.X64Const0, vpnumber.X64Const0, vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+}
+
+// X64Mat4RotY creates a new rotation matrix.
+// The rotation is done in 3D over the y (2nd) axis.
+// Angle is given in radians.
+func X64Mat4RotY(r vpnumber.X64) *X64Mat4 {
+	return &X64Mat4{vpmath.X64Cos(r), vpnumber.X64Const0, vpmath.X64Sin(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, -vpmath.X64Sin(r), vpnumber.X64Const0, vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+}
+
+// X64Mat4RotZ creates a new rotation matrix.
+// The rotation is done in 3D over the z (3rd) axis.
+// Angle is given in radians.
+func X64Mat4RotZ(r vpnumber.X64) *X64Mat4 {
+	return &X64Mat4{vpmath.X64Cos(r), -vpmath.X64Sin(r), vpnumber.X64Const0, vpnumber.X64Const0, vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
 // ToI32 converts the matrix to an int32 matrix.

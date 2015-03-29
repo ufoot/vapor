@@ -24,6 +24,7 @@ import (
 	"github.com/ufoot/vapor/vpmatrix2"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"math"
 )
 
 // F32Mat3 is a matrix containing 3x3 float32 values.
@@ -45,6 +46,13 @@ func F32Mat3Identity() *F32Mat3 {
 // F32Mat3Trans creates a new translation matrix.
 func F32Mat3Trans(vec *vpmatrix2.F32Vec2) *F32Mat3 {
 	return &F32Mat3{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vec[0], vec[1], vpnumber.F32Const1}
+}
+
+// F32Mat3Rot creates a new rotation matrix.
+// The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
+// Angle is given in radians.
+func F32Mat3Rot(r float32) *F32Mat3 {
+	return &F32Mat3{float32(math.Cos(float64(r))), -float32(math.Sin(float64(r))), vpnumber.F32Const0, float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
 // ToI32 converts the matrix to an int32 matrix.

@@ -21,6 +21,7 @@ package vpmatrix3
 
 import (
 	"encoding/json"
+	"github.com/ufoot/vapor/vpmath"
 	"github.com/ufoot/vapor/vpmatrix2"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
@@ -45,6 +46,13 @@ func X64Mat3Identity() *X64Mat3 {
 // X64Mat3Trans creates a new translation matrix.
 func X64Mat3Trans(vec *vpmatrix2.X64Vec2) *X64Mat3 {
 	return &X64Mat3{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vec[0], vec[1], vpnumber.X64Const1}
+}
+
+// X64Mat3Rot creates a new rotation matrix.
+// The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
+// Angle is given in radians.
+func X64Mat3Rot(r vpnumber.X64) *X64Mat3 {
+	return &X64Mat3{vpmath.X64Cos(r), -vpmath.X64Sin(r), vpnumber.X64Const0, vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
 // ToI32 converts the matrix to an int32 matrix.
