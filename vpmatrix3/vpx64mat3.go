@@ -52,7 +52,7 @@ func X64Mat3Trans(vec *vpmatrix2.X64Vec2) *X64Mat3 {
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.
 func X64Mat3Rot(r vpnumber.X64) *X64Mat3 {
-	return &X64Mat3{vpmath.X64Cos(r), -vpmath.X64Sin(r), vpnumber.X64Const0, vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+	return &X64Mat3{vpmath.X64Cos(r), vpmath.X64Sin(r), vpnumber.X64Const0, -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
 // ToI32 converts the matrix to an int32 matrix.

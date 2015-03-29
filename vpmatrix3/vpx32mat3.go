@@ -52,7 +52,7 @@ func X32Mat3Trans(vec *vpmatrix2.X32Vec2) *X32Mat3 {
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.
 func X32Mat3Rot(r vpnumber.X32) *X32Mat3 {
-	return &X32Mat3{vpmath.X32Cos(r), -vpmath.X32Sin(r), vpnumber.X32Const0, vpmath.X32Sin(r), vpmath.X32Cos(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
+	return &X32Mat3{vpmath.X32Cos(r), vpmath.X32Sin(r), vpnumber.X32Const0, -vpmath.X32Sin(r), vpmath.X32Cos(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
 }
 
 // ToI32 converts the matrix to an int32 matrix.
