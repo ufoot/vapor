@@ -20,26 +20,69 @@
 package vploop
 
 import (
+	"github.com/ufoot/vapor/vpsys"
 	"time"
 )
 
 // MainLoop implements the main game loop.
-func MainLoop(handler LoopHandler) int {
-	var i int64
-	quit := make(chan bool)
+func MainLoop(handlers ...LoopHandler) int64 {
+	quit := make(chan bool, len(handlers))
+	channels := make([]<-chan time.Time, len(handlers))
+	iterations := make(chan int64, len(handlers))
+	var done int
+	var localIterations int64
+	var totalIterations int64
 
-	handler.Init(time.Now())
-	defer handler.Quit(time.Now())
-	for {
-		now := time.Now()
-		select {
-		case q := <-quit:
-			if q == true {
-				return 0
+	vpsys.LogNoticef("loop initial")
+
+	for i, handler := range handlers {
+		handler.Init(time.Now())
+		channels[i] = time.Tick(handler.Duration())
+		defer handler.Quit(time.Now())
+	}
+
+	vpsys.LogNoticef("loop all begin")
+	for i, channel := range channels {
+		go func() {
+			vpsys.LogNoticef("loop %d begin", i)
+			var iteration int64
+			for {
+				iteration = iteration + 1
+				select {
+				case q := <-quit:
+					vpsys.LogNoticef("quit received %d iteration=%d", i, iteration)
+					if q == true {
+						vpsys.LogNoticef("loop %d end 1/3", i)
+						quit <- true
+						vpsys.LogNoticef("loop %d end 2/3", i)
+						iterations <- iteration
+						vpsys.LogNoticef("loop %d end 3/3", i)
+						return
+					}
+				default:
+					select {
+					case timestamp := <-channel:
+						handlers[i].Do(timestamp, iteration, quit)
+					}
+				}
 			}
+		}()
+	}
+	vpsys.LogNoticef("loop all end")
+
+	for {
+		select {
+		case localIterations = <-iterations:
+			vpsys.LogNoticef("local iterations %d", localIterations)
+			totalIterations += localIterations
+			done++
 		default:
-			handler.Do(now, i, quit)
-			i = i + 1
+			if done >= len(handlers) {
+				vpsys.LogNoticef("loop final")
+				return totalIterations
+			}
 		}
 	}
+
+	return 0
 }

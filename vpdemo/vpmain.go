@@ -25,10 +25,11 @@ import (
 )
 
 func main() {
-	var state NibblesState
+	var state1 NibblesState
+	var state2 NibblesState
 
 	vpsys.LogInit("vpdemo")
-	vploop.MainLoop(state)
+	vploop.MainLoop(state1, state2)
 
 	return
 }

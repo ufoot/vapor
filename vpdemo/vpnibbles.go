@@ -20,8 +20,15 @@
 package main
 
 import (
+	"github.com/ufoot/vapor/vpsys"
 	"time"
 )
+
+var start time.Time
+
+func init() {
+	start = time.Now()
+}
 
 // NibblesState stores the game state.
 type NibblesState struct {
@@ -29,17 +36,28 @@ type NibblesState struct {
 }
 
 // Init initializes the game state.
-func (state NibblesState) Init(timestamp time.Time) {
+func (state NibblesState) Duration() time.Duration {
+	return time.Second / 10
+}
 
+// Init initializes the game state.
+func (state NibblesState) Init(timestamp time.Time) {
+	vpsys.LogNoticef("game init")
 }
 
 // Do process stuff on a game state, typically called in game loop
 // when receiving events.
-func (state NibblesState) Do(timestamp time.Time, iteration int64, quit chan bool) {
-
+func (state NibblesState) Do(timestamp time.Time, iteration int64, quit chan<- bool) {
+	if start.Unix()+3 > time.Now().Unix() {
+		vpsys.LogNoticef("game loop iteration=%d", iteration)
+	} else {
+		vpsys.LogNoticef("game end iteration=%d 1/2", iteration)
+		quit <- true
+		vpsys.LogNoticef("game end iteration=%d 2/2", iteration)
+	}
 }
 
 // Quit should be called at the end of a game.
 func (state NibblesState) Quit(timestamp time.Time) {
-
+	vpsys.LogNoticef("game quit")
 }
