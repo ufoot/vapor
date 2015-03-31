@@ -43,7 +43,7 @@ func MainLoop(handlers ...LoopHandler) int64 {
 
 	vpsys.LogNoticef("loop all begin")
 	for i, channel := range channels {
-		go func() {
+		go func(i int, channel <-chan time.Time) {
 			vpsys.LogNoticef("loop %d begin", i)
 			var iteration int64
 			for {
@@ -66,7 +66,7 @@ func MainLoop(handlers ...LoopHandler) int64 {
 					}
 				}
 			}
-		}()
+		}(i, channel)
 	}
 	vpsys.LogNoticef("loop all end")
 
@@ -83,6 +83,4 @@ func MainLoop(handlers ...LoopHandler) int64 {
 			}
 		}
 	}
-
-	return 0
 }
