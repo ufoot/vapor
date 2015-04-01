@@ -20,37 +20,50 @@
 package vpmatrix4
 
 import (
+	"encoding/json"
 	"github.com/ufoot/vapor/vpmatrix3"
 	"github.com/ufoot/vapor/vpnumber"
 )
 
-// X32Bas2 is a 2D space basis, composed of 3 points in a 2D space.
+// X32Bas3 is a 2D space basis, composed of 3 points in a 2D space.
 // It's defined along with 3x3 matrix code as manipulating such basis
 // requires 3x3 code. X and Y are considered relative positions,
 // with O as the origin.
-type X32Bas2 struct {
+type X32Bas3 struct {
 	O vpmatrix3.X32Vec3
 	X vpmatrix3.X32Vec3
 	Y vpmatrix3.X32Vec3
 	Z vpmatrix3.X32Vec3
 }
 
-// X32Bas2New creates a new 2D space basis.
-func X32Bas2New(o, x, y, z *vpmatrix3.X32Vec3) *X32Bas2 {
-	return &X32Bas2{*o, *x, *y, *z}
+// X32Bas3New creates a new 2D space basis.
+func X32Bas3New(o, x, y, z *vpmatrix3.X32Vec3) *X32Bas3 {
+	return &X32Bas3{*o, *x, *y, *z}
 }
 
-// X32Bas2Default creates a new 2D space basis, using default
+// X32Bas3Default creates a new 2D space basis, using default
 // orthogonal settings (origin at 0,0 with vectors 1,0 and 0,1).
-func X32Bas2Default() *X32Bas2 {
-	return &X32Bas2{*vpmatrix3.X32Vec3New(vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0), *vpmatrix3.X32Vec3New(vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0), *vpmatrix3.X32Vec3New(vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0), *vpmatrix3.X32Vec3New(vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1)}
+func X32Bas3Default() *X32Bas3 {
+	return &X32Bas3{*vpmatrix3.X32Vec3New(vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0), *vpmatrix3.X32Vec3New(vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0), *vpmatrix3.X32Vec3New(vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0), *vpmatrix3.X32Vec3New(vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1)}
+}
+
+// String returns a readable form of the basis.
+func (bas *X32Bas3) String() string {
+	buf, err := json.Marshal(bas)
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // Normalize normalizes a 2D space basis, by normalizing
 // all vectors in it.
 // It modifies the basis, and returns a pointer on it.
-func (bas *X32Bas2) Normalize() *X32Bas2 {
-	*bas = *X32Bas2Normalize(bas)
+func (bas *X32Bas3) Normalize() *X32Bas3 {
+	*bas = *X32Bas3Normalize(bas)
 
 	return bas
 }
@@ -58,24 +71,24 @@ func (bas *X32Bas2) Normalize() *X32Bas2 {
 // Ortho makes a 3D space basis orthogonal,
 // by using an Z * X as Y, and X * Y as Z.
 // It modifies the basis, and returns a pointer on it.
-func (bas *X32Bas2) Ortho() *X32Bas2 {
-	*bas = *X32Bas2Ortho(bas)
+func (bas *X32Bas3) Ortho() *X32Bas3 {
+	*bas = *X32Bas3Ortho(bas)
 
 	return bas
 }
 
-// X32Bas2Normalize normalizes a 3D space basis, by normalizing
+// X32Bas3Normalize normalizes a 3D space basis, by normalizing
 // all vectors in it.
 // Args is left untouched, a pointer on a new object is returned.
-func X32Bas2Normalize(bas *X32Bas2) *X32Bas2 {
-	return &X32Bas2{bas.O, *vpmatrix3.X32Vec3Normalize(&bas.X), *vpmatrix3.X32Vec3Normalize(&bas.Y), *vpmatrix3.X32Vec3Normalize(&bas.Z)}
+func X32Bas3Normalize(bas *X32Bas3) *X32Bas3 {
+	return &X32Bas3{bas.O, *vpmatrix3.X32Vec3Normalize(&bas.X), *vpmatrix3.X32Vec3Normalize(&bas.Y), *vpmatrix3.X32Vec3Normalize(&bas.Z)}
 }
 
-// X32Bas2Ortho makes a 3D space basis orthogonal,
+// X32Bas3Ortho makes a 3D space basis orthogonal,
 // by using an Z * X as Y, and X * Y as Z.
 // Args is left untouched, a pointer on a new object is returned.
-func X32Bas2Ortho(bas *X32Bas2) *X32Bas2 {
+func X32Bas3Ortho(bas *X32Bas3) *X32Bas3 {
 	y := vpmatrix3.X32Vec3Cross(&bas.Z, &bas.X)
 	z := vpmatrix3.X32Vec3Cross(&bas.X, y)
-	return &X32Bas2{bas.O, bas.X, *y, *z}
+	return &X32Bas3{bas.O, bas.X, *y, *z}
 }

@@ -20,6 +20,7 @@
 package vpmatrix4
 
 import (
+	"encoding/json"
 	"github.com/ufoot/vapor/vpmatrix3"
 	"github.com/ufoot/vapor/vpnumber"
 )
@@ -44,6 +45,18 @@ func X64Bas3New(o, x, y, z *vpmatrix3.X64Vec3) *X64Bas3 {
 // orthogonal settings (origin at 0,0,0 with vectors 1,0,0 0,1,0 and 0,0,1).
 func X64Bas3Default() *X64Bas3 {
 	return &X64Bas3{*vpmatrix3.X64Vec3New(vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0), *vpmatrix3.X64Vec3New(vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0), *vpmatrix3.X64Vec3New(vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0), *vpmatrix3.X64Vec3New(vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1)}
+}
+
+// String returns a readable form of the basis.
+func (bas *X64Bas3) String() string {
+	buf, err := json.Marshal(bas)
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // Normalize normalizes a 3D space basis, by normalizing

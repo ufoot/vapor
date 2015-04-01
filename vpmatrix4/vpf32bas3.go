@@ -20,6 +20,7 @@
 package vpmatrix4
 
 import (
+	"encoding/json"
 	"github.com/ufoot/vapor/vpmatrix3"
 	"github.com/ufoot/vapor/vpnumber"
 )
@@ -44,6 +45,18 @@ func F32Bas3New(o, x, y, z *vpmatrix3.F32Vec3) *F32Bas3 {
 // orthogonal settings (origin at 0,0,0 with vectors 1,0,0 0,1,0 and 0,0,1).
 func F32Bas3Default() *F32Bas3 {
 	return &F32Bas3{*vpmatrix3.F32Vec3New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), *vpmatrix3.F32Vec3New(vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0), *vpmatrix3.F32Vec3New(vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0), *vpmatrix3.F32Vec3New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1)}
+}
+
+// String returns a readable form of the basis.
+func (bas *F32Bas3) String() string {
+	buf, err := json.Marshal(bas)
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // Normalize normalizes a 3D space basis, by normalizing

@@ -20,6 +20,7 @@
 package vpmatrix3
 
 import (
+	"encoding/json"
 	"github.com/ufoot/vapor/vpmatrix2"
 	"github.com/ufoot/vapor/vpnumber"
 )
@@ -43,6 +44,18 @@ func X32Bas2New(o, x, y *vpmatrix2.X32Vec2) *X32Bas2 {
 // orthogonal settings (origin at 0,0 with vectors 1,0 and 0,1).
 func X32Bas2Default() *X32Bas2 {
 	return &X32Bas2{*vpmatrix2.X32Vec2New(vpnumber.X32Const0, vpnumber.X32Const0), *vpmatrix2.X32Vec2New(vpnumber.X32Const1, vpnumber.X32Const0), *vpmatrix2.X32Vec2New(vpnumber.X32Const0, vpnumber.X32Const1)}
+}
+
+// String returns a readable form of the basis.
+func (bas *X32Bas2) String() string {
+	buf, err := json.Marshal(bas)
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // Normalize normalizes a 2D space basis, by normalizing
