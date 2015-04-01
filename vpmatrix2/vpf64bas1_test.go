@@ -26,8 +26,8 @@ import (
 )
 
 func TestF64Bas1Math(t *testing.T) {
-	var o float64 = 2.5
-	var x float64 = 3.5
+	const o = 2.5
+	const x = 3.5
 
 	b := F64Bas1New(o, x)
 	t.Logf("F64Bas1 b=%s", b.String())

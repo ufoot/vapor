@@ -26,8 +26,8 @@ import (
 )
 
 func TestX64Bas1Math(t *testing.T) {
-	var o vpnumber.X64 = vpnumber.F64ToX64(2.5)
-	var x vpnumber.X64 = vpnumber.F64ToX64(3.5)
+	var o = vpnumber.F64ToX64(2.5)
+	var x = vpnumber.F64ToX64(3.5)
 
 	b := X64Bas1New(o, x)
 	t.Logf("X64Bas1 b=%s", b.String())

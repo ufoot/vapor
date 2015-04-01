@@ -35,7 +35,7 @@ type NibblesState struct {
 	level [][]int
 }
 
-// Init initializes the game state.
+// Duration returns the duration of an iteration, time between two Do calls.
 func (state NibblesState) Duration() time.Duration {
 	return time.Second / 10
 }

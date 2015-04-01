@@ -26,8 +26,8 @@ import (
 )
 
 func TestX32Bas1Math(t *testing.T) {
-	var o vpnumber.X32 = vpnumber.F32ToX32(2.5)
-	var x vpnumber.X32 = vpnumber.F32ToX32(3.5)
+	var o = vpnumber.F32ToX32(2.5)
+	var x = vpnumber.F32ToX32(3.5)
 
 	b := X32Bas1New(o, x)
 	t.Logf("X32Bas1 b=%s", b.String())

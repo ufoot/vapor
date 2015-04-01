@@ -26,8 +26,8 @@ import (
 )
 
 func TestF32Bas1Math(t *testing.T) {
-	var o float32 = 2.5
-	var x float32 = 3.5
+	const o = 2.5
+	const x = 3.5
 
 	b := F32Bas1New(o, x)
 	t.Logf("F32Bas1 b=%s", b.String())
