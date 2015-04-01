@@ -20,6 +20,7 @@
 package vpmatrix2
 
 import (
+	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 )
 
@@ -41,6 +42,18 @@ func X64Bas1New(o, x vpnumber.X64) *X64Bas1 {
 // orthogonal settings (origin at 0 with vectors 1).
 func X64Bas1Default() *X64Bas1 {
 	return &X64Bas1{vpnumber.X64Const0, vpnumber.X64Const1}
+}
+
+// String returns a readable form of the basis.
+func (bas *X64Bas1) String() string {
+	buf, err := json.Marshal(bas)
+
+	if err != nil {
+		// Catching & ignoring error
+		return ""
+	}
+
+	return string(buf)
 }
 
 // Normalize normalizes a 1D space basis, by normalizing
