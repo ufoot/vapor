@@ -74,7 +74,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo >> Makefile.dep
     echo ".PHONY: check-$i" >> Makefile.dep
     echo "check-$i: configure.ac $k" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go test $j" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go test -cover $j" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: bench-$i" >> Makefile.dep
     echo "bench-$i: configure.ac $k" >> Makefile.dep
@@ -86,7 +86,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo >> Makefile.dep
     echo ".PHONY: devel-$i" >> Makefile.dep
     echo "devel-$i: configure.ac $k" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go vet $j && go test -v $j" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go vet $j && go test -v -cover $j" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: doc-$i" >> Makefile.dep
     echo "doc-$i: configure.ac $k" >> Makefile.dep
