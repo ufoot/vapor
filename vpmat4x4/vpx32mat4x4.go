@@ -22,10 +22,10 @@ package vpmat4x4
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpmath"
-	"github.com/ufoot/vapor/vpvec3"
-	"github.com/ufoot/vapor/vpvec4"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec3"
+	"github.com/ufoot/vapor/vpvec4"
 )
 
 // X32Mat4x4 is a matrix containing 4x4 fixed point 32 bit values.

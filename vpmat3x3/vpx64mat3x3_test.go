@@ -21,9 +21,9 @@ package vpmat3x3
 
 import (
 	"github.com/ufoot/vapor/vpmath"
+	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpvec3"
-	"github.com/ufoot/vapor/vpnumber"
 	"math/rand"
 	"testing"
 )

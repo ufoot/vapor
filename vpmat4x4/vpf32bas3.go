@@ -21,8 +21,8 @@ package vpmat4x4
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpvec3"
 	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpvec3"
 )
 
 // F32Bas3 is a 3D space basis, composed of 4 points in a 4D space.

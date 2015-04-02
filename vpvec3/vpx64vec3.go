@@ -22,9 +22,9 @@ package vpvec3
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpmath"
-	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
 )
 
 // X64Vec3 is a vector containing 3 fixed point 64 bit values.

@@ -21,8 +21,8 @@ package vpmat3x3
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpvec2"
 	"testing"
 )
 

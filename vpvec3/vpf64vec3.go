@@ -21,9 +21,9 @@ package vpvec3
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
 	"math"
 )
 

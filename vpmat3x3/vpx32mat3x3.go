@@ -22,10 +22,10 @@ package vpmat3x3
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpmath"
-	"github.com/ufoot/vapor/vpvec2"
-	"github.com/ufoot/vapor/vpvec3"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
+	"github.com/ufoot/vapor/vpvec3"
 )
 
 // X32Mat3x3 is a matrix containing 3x3 fixed point 32 bit values.

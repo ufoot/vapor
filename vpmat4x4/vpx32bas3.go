@@ -21,8 +21,8 @@ package vpmat4x4
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpvec3"
 	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpvec3"
 )
 
 // X32Bas3 is a 2D space basis, composed of 3 points in a 2D space.

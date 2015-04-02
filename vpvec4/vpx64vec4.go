@@ -22,9 +22,9 @@ package vpvec4
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpmath"
-	"github.com/ufoot/vapor/vpvec3"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec3"
 )
 
 // X64Vec4 is a vector containing 4 fixed point 64 bit values.
