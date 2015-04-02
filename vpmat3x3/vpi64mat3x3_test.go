@@ -23,7 +23,7 @@ import (
 	"testing"
 )
 
-func TestI64Mat3x3x3Math(t *testing.T) {
+func TestI64Mat3x3Math(t *testing.T) {
 	const i11 = 3
 	const i12 = 333
 	const i13 = 31
@@ -44,9 +44,9 @@ func TestI64Mat3x3x3Math(t *testing.T) {
 	const i72 = 2
 	const i73 = 1
 
-	var m1, m2, m3, m4 *I64Mat3x3x3
+	var m1, m2, m3, m4 *I64Mat3x3
 
-	m1 = I64Mat3x3x3New(i11, i12, i13, i21, i22, i23, i31, i32, i33)
+	m1 = I64Mat3x3New(i11, i12, i13, i21, i22, i23, i31, i32, i33)
 
 	m2 = m1.ToI32().ToI64()
 	if *m1 != *m2 {
@@ -73,40 +73,40 @@ func TestI64Mat3x3x3Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = I64Mat3x3x3New(i51, i52, i53, i61, i62, i63, i71, i72, i73)
-	m3 = I64Mat3x3x3Add(m1, m2)
-	m4 = I64Mat3x3x3New(i11+i51, i12+i52, i13+i53, i21+i61, i22+i62, i23+i63, i31+i71, i32+i72, i33+i73)
+	m2 = I64Mat3x3New(i51, i52, i53, i61, i62, i63, i71, i72, i73)
+	m3 = I64Mat3x3Add(m1, m2)
+	m4 = I64Mat3x3New(i11+i51, i12+i52, i13+i53, i21+i61, i22+i62, i23+i63, i31+i71, i32+i72, i33+i73)
 	if *m3 != *m4 {
 		t.Error("Add error")
 	}
 
-	m3 = I64Mat3x3x3Sub(m1, m2)
-	m4 = I64Mat3x3x3New(i11-i51, i12-i52, i13-i53, i21-i61, i22-i62, i23-i63, i31-i71, i32-i72, i33-i73)
+	m3 = I64Mat3x3Sub(m1, m2)
+	m4 = I64Mat3x3New(i11-i51, i12-i52, i13-i53, i21-i61, i22-i62, i23-i63, i31-i71, i32-i72, i33-i73)
 	if *m3 != *m4 {
 		t.Error("Sub error")
 	}
 }
 
-func TestI64Mat3x3x3JSON(t *testing.T) {
-	m1 := I64Mat3x3x3Identity()
-	var m2 I64Mat3x3x3
+func TestI64Mat3x3JSON(t *testing.T) {
+	m1 := I64Mat3x3Identity()
+	var m2 I64Mat3x3
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for I64Mat3x3x3 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for I64Mat3x3 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for I64Mat3x3x3")
+		t.Error("unable to encode JSON for I64Mat3x3")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for I64Mat3x3x3, but json is not correct")
+		t.Error("able to decode JSON for I64Mat3x3, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for I64Mat3x3x3")
+		t.Error("unable to decode JSON for I64Mat3x3")
 	}
 	if *m1 != m2 {
 		t.Error("unmarshalled matrix is different from original")

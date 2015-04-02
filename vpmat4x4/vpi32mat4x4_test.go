@@ -23,7 +23,7 @@ import (
 	"testing"
 )
 
-func TestI32Mat4x4x4Math(t *testing.T) {
+func TestI32Mat4x4Math(t *testing.T) {
 	const i11 = 130
 	const i12 = 230
 	const i13 = 330
@@ -58,9 +58,9 @@ func TestI32Mat4x4x4Math(t *testing.T) {
 	const i83 = -83003
 	const i84 = -93004
 
-	var m1, m2, m3, m4 *I32Mat4x4x4
+	var m1, m2, m3, m4 *I32Mat4x4
 
-	m1 = I32Mat4x4x4New(i11, i12, i13, i14, i21, i22, i23, i24, i31, i32, i33, i34, i41, i42, i43, i44)
+	m1 = I32Mat4x4New(i11, i12, i13, i14, i21, i22, i23, i24, i31, i32, i33, i34, i41, i42, i43, i44)
 
 	m2 = m1.ToI64().ToI32()
 	if *m1 != *m2 {
@@ -87,40 +87,40 @@ func TestI32Mat4x4x4Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = I32Mat4x4x4New(i51, i52, i53, i54, i61, i62, i63, i64, i71, i72, i73, i74, i81, i82, i83, i84)
-	m3 = I32Mat4x4x4Add(m1, m2)
-	m4 = I32Mat4x4x4New(i11+i51, i12+i52, i13+i53, i14+i54, i21+i61, i22+i62, i23+i63, i24+i64, i31+i71, i32+i72, i33+i73, i34+i74, i41+i81, i42+i82, i43+i83, i44+i84)
+	m2 = I32Mat4x4New(i51, i52, i53, i54, i61, i62, i63, i64, i71, i72, i73, i74, i81, i82, i83, i84)
+	m3 = I32Mat4x4Add(m1, m2)
+	m4 = I32Mat4x4New(i11+i51, i12+i52, i13+i53, i14+i54, i21+i61, i22+i62, i23+i63, i24+i64, i31+i71, i32+i72, i33+i73, i34+i74, i41+i81, i42+i82, i43+i83, i44+i84)
 	if *m3 != *m4 {
 		t.Error("Add error")
 	}
 
-	m3 = I32Mat4x4x4Sub(m1, m2)
-	m4 = I32Mat4x4x4New(i11-i51, i12-i52, i13-i53, i14-i54, i21-i61, i22-i62, i23-i63, i24-i64, i31-i71, i32-i72, i33-i73, i34-i74, i41-i81, i42-i82, i43-i83, i44-i84)
+	m3 = I32Mat4x4Sub(m1, m2)
+	m4 = I32Mat4x4New(i11-i51, i12-i52, i13-i53, i14-i54, i21-i61, i22-i62, i23-i63, i24-i64, i31-i71, i32-i72, i33-i73, i34-i74, i41-i81, i42-i82, i43-i83, i44-i84)
 	if *m3 != *m4 {
 		t.Error("Sub error")
 	}
 }
 
-func TestI32Mat4x4x4JSON(t *testing.T) {
-	m1 := I32Mat4x4x4Identity()
-	var m2 I32Mat4x4x4
+func TestI32Mat4x4JSON(t *testing.T) {
+	m1 := I32Mat4x4Identity()
+	var m2 I32Mat4x4
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for I32Mat4x4x4 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for I32Mat4x4 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for I32Mat4x4x4")
+		t.Error("unable to encode JSON for I32Mat4x4")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for I32Mat4x4x4, but json is not correct")
+		t.Error("able to decode JSON for I32Mat4x4, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for I32Mat4x4x4")
+		t.Error("unable to decode JSON for I32Mat4x4")
 	}
 	if *m1 != m2 {
 		t.Error("unmarshalled matrix is different from original")
