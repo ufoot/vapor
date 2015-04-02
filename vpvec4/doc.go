@@ -17,5 +17,5 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpvec3 contains 4 members vector utilities.
-package vpvec3
+// Package vpvec4 contains 4 members vector utilities.
+package vpvec4

@@ -17,5 +17,5 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpmat4x4 contains 4x4 matrix and vector utilities.
+// Package vpmat4x4 contains 4x4 matrix utilities.
 package vpmat4x4

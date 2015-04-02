@@ -17,5 +17,5 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpmat2x2 contains 2x2 matrix and vector utilities.
+// Package vpmat2x2 contains 2x2 matrix utilities.
 package vpmat2x2
