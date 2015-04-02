@@ -23,28 +23,27 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
-	"github.com/ufoot/vapor/vpvec2"
 )
 
 // X32Mat2x1 is a matrix containing 2x1 fixed point 32 bit values.
 // Can hold the values of a point in a plane.
-type X32Mat2x1 [4]vpnumber.X32
+type X32Mat2x1 [2]vpnumber.X32
 
 // X32Mat2x1New creates a new matrix containing 2x1 fixed point 32 bit values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func X32Mat2x1New(x1, x2, x3, x4 vpnumber.X32) *X32Mat2x1 {
-	return &X32Mat2x1{x1, x2, x3, x4}
+func X32Mat2x1New(x1, x2 vpnumber.X32) *X32Mat2x1 {
+	return &X32Mat2x1{x1, x2}
 }
 
 // X32Mat2x1Identity creates a new identity matrix.
 func X32Mat2x1Identity() *X32Mat2x1 {
-	return &X32Mat2x1{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
+	return &X32Mat2x1{vpnumber.X32Const1, vpnumber.X32Const0}
 }
 
 // X32Mat2x1Trans creates a new translation matrix.
 func X32Mat2x1Trans(x vpnumber.X32) *X32Mat2x1 {
-	return &X32Mat2x1{vpnumber.X32Const1, vpnumber.X32Const0, x, vpnumber.X32Const1}
+	return &X32Mat2x1{vpnumber.X32Const1, x}
 }
 
 // ToI32 converts the matrix to an int32 matrix.
@@ -104,12 +103,12 @@ func (mat *X32Mat2x1) ToF64() *F64Mat2x1 {
 
 // Set sets the value of the matrix for a given column and row.
 func (mat *X32Mat2x1) Set(col, row int, val vpnumber.X32) {
-	mat[col*2+row] = val
+	mat[col+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
 func (mat *X32Mat2x1) Get(col, row int) vpnumber.X32 {
-	return mat[col*2+row]
+	return mat[col+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
@@ -118,7 +117,7 @@ func (mat *X32Mat2x1) MarshalJSON() ([]byte, error) {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			tmpArray[col][row] = int32(mat[col*2+row])
+			tmpArray[col][row] = int32(mat[col+row])
 		}
 	}
 
@@ -141,7 +140,7 @@ func (mat *X32Mat2x1) UnmarshalJSON(data []byte) error {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			mat[col*2+row] = vpnumber.X32(tmpArray[col][row])
+			mat[col+row] = vpnumber.X32(tmpArray[col][row])
 		}
 	}
 
@@ -211,14 +210,6 @@ func (mat *X32Mat2x1) IsSimilar(op *X32Mat2x1) bool {
 	return ret
 }
 
-// Transpose inverts rows and columns (matrix transposition).
-// It modifies the matrix, and returns a pointer on it.
-func (mat *X32Mat2x1) Transpose(op *X32Mat2x1) *X32Mat2x1 {
-	*mat = *X32Mat2x1Transpose(op)
-
-	return mat
-}
-
 // MulComp multiplies the matrix by another matrix (composition).
 // It modifies the matrix, and returns a pointer on it.
 func (mat *X32Mat2x1) MulComp(op *X32Mat2x1) *X32Mat2x1 {
@@ -229,7 +220,7 @@ func (mat *X32Mat2x1) MulComp(op *X32Mat2x1) *X32Mat2x1 {
 
 // Det returns the matrix determinant.
 func (mat *X32Mat2x1) Det() vpnumber.X32 {
-	return vpnumber.X32Mul(mat.Get(0, 0), mat.Get(1, 1)) - vpnumber.X32Mul(mat.Get(0, 1), mat.Get(1, 0))
+	return mat.Get(0, 0)
 }
 
 // Inv inverts the matrix.
@@ -243,17 +234,6 @@ func (mat *X32Mat2x1) Inv() *X32Mat2x1 {
 }
 
 // MulVec performs a multiplication of a vector by a 2x1 matrix,
-// considering the vector is a column vector (matrix left, vector right).
-func (mat *X32Mat2x1) MulVec(vec *vpvec2.X32Vec2) *vpvec2.X32Vec2 {
-	var ret vpvec2.X32Vec2
-
-	for i := range vec {
-		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1])
-	}
-
-	return &ret
-}
-
 // MulVecPos performs a multiplication of a vector by a 2x1 matrix,
 // considering the vector is a column vector (matrix left, vector right).
 // The last member of the vector is assumed to be 1, so in practice a
@@ -314,30 +294,13 @@ func X32Mat2x1DivScale(mat *X32Mat2x1, factor vpnumber.X32) *X32Mat2x1 {
 	return &ret
 }
 
-// X32Mat2x1Transpose inverts rows and columns (matrix transposition).
-// Args is left untouched, a pointer on a new object is returned.
-func X32Mat2x1Transpose(mat *X32Mat2x1) *X32Mat2x1 {
-	var ret X32Mat2x1
-
-	for c := 0; c < 2; c++ {
-		for r := 0; r < 2; r++ {
-			ret.Set(c, r, mat.Get(r, c))
-		}
-	}
-
-	return &ret
-}
-
 // X32Mat2x1MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func X32Mat2x1MulComp(a, b *X32Mat2x1) *X32Mat2x1 {
 	var ret X32Mat2x1
 
-	for c := 0; c < 2; c++ {
-		for r := 0; r < 2; r++ {
-			ret.Set(c, r, vpnumber.X32Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X32Mul(a.Get(1, r), b.Get(c, 1)))
-		}
-	}
+	ret.Set(0, 0, vpnumber.X32Mul(a.Get(0, 0), b.Get(0, 0)))
+	ret.Set(1, 0, vpnumber.X32Mul(a.Get(0, 0), b.Get(1, 0))+a.Get(1, 0))
 
 	return &ret
 }
@@ -348,10 +311,8 @@ func X32Mat2x1MulComp(a, b *X32Mat2x1) *X32Mat2x1 {
 // Args is left untouched, a pointer on a new object is returned.
 func X32Mat2x1Inv(mat *X32Mat2x1) *X32Mat2x1 {
 	ret := X32Mat2x1{
-		mat.Get(1, 1),
-		-mat.Get(0, 1),
+		vpnumber.X32Const1,
 		-mat.Get(1, 0),
-		mat.Get(0, 0),
 	}
 
 	det := mat.Det()
