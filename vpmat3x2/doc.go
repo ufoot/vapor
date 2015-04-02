@@ -17,5 +17,5 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpmat3x3 contains 3x3 matrix utilities.
-package vpmat3x3
+// Package vpmat3x2 contains 3x2 matrix utilities.
+package vpmat3x2
