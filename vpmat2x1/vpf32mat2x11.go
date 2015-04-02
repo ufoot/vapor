@@ -17,35 +17,35 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpmat2x2
+package vpmat2x1
 
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 )
 
-// X64Bas1 is a 1D space basis, composed of 2 points in a 1D space.
-// It's defined along with 2x2 matrix code as manipulating such basis
-// requires 2x2 code. X is considered a relative position,
+// F32Bas1 is a 1D space basis, composed of 2 points in a 1D space.
+// It's defined along with 2x1 matrix code as manipulating such basis
+// requires 2x1 code. X is considered a relative position,
 // with O as the origin.
-type X64Bas1 struct {
-	O vpnumber.X64
-	X vpnumber.X64
+type F32Bas1 struct {
+	O float32
+	X float32
 }
 
-// X64Bas1New creates a new 1D space basis.
-func X64Bas1New(o, x vpnumber.X64) *X64Bas1 {
-	return &X64Bas1{o, x}
+// F32Bas1New creates a new 1D space basis.
+func F32Bas1New(o, x float32) *F32Bas1 {
+	return &F32Bas1{o, x}
 }
 
-// X64Bas1Default creates a new 1D space basis, using default
+// F32Bas1Default creates a new 1D space basis, using default
 // orthogonal settings (origin at 0 with vectors 1).
-func X64Bas1Default() *X64Bas1 {
-	return &X64Bas1{vpnumber.X64Const0, vpnumber.X64Const1}
+func F32Bas1Default() *F32Bas1 {
+	return &F32Bas1{vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
 // String returns a readable form of the basis.
-func (bas *X64Bas1) String() string {
+func (bas *F32Bas1) String() string {
 	buf, err := json.Marshal(bas)
 
 	if err != nil {
@@ -59,15 +59,15 @@ func (bas *X64Bas1) String() string {
 // Normalize normalizes a 1D space basis, by normalizing
 // all vectors in it.
 // It modifies the basis, and returns a pointer on it.
-func (bas *X64Bas1) Normalize() *X64Bas1 {
-	*bas = *X64Bas1Normalize(bas)
+func (bas *F32Bas1) Normalize() *F32Bas1 {
+	*bas = *F32Bas1Normalize(bas)
 
 	return bas
 }
 
-// X64Bas1Normalize normalizes a 1D space basis, by normalizing
+// F32Bas1Normalize normalizes a 1D space basis, by normalizing
 // all vectors in it.
 // Args is left untouched, a pointer on a new object is returned.
-func X64Bas1Normalize(bas *X64Bas1) *X64Bas1 {
-	return &X64Bas1{bas.O, vpnumber.X64Const1}
+func F32Bas1Normalize(bas *F32Bas1) *F32Bas1 {
+	return &F32Bas1{bas.O, vpnumber.F32Const1}
 }

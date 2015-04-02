@@ -17,7 +17,7 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpmat2x2
+package vpmat2x1
 
 import (
 	"encoding/json"
@@ -25,44 +25,44 @@ import (
 	"testing"
 )
 
-func TestF64Bas1Math(t *testing.T) {
-	const o = 2.5
-	const x = 3.5
+func TestX64Bas1Math(t *testing.T) {
+	var o = vpnumber.F64ToX64(2.5)
+	var x = vpnumber.F64ToX64(3.5)
 
-	b := F64Bas1New(o, x)
-	t.Logf("F64Bas1 b=%s", b.String())
+	b := X64Bas1New(o, x)
+	t.Logf("X64Bas1 b=%s", b.String())
 	b.Normalize()
-	t.Logf("F64Bas1 normalized b=%s", b.String())
-	if !vpnumber.F64IsSimilar(b.O, o) {
-		t.Error("F64Bas1 normalized origin changed")
+	t.Logf("X64Bas1 normalized b=%s", b.String())
+	if !vpnumber.X64IsSimilar(b.O, o) {
+		t.Error("X64Bas1 normalized origin changed")
 	}
-	if !vpnumber.F64IsSimilar(b.X, vpnumber.F64Const1) {
-		t.Error("F64Bas1 normalized size is wrong")
+	if !vpnumber.X64IsSimilar(b.X, vpnumber.X64Const1) {
+		t.Error("X64Bas1 normalized size is wrong")
 	}
 }
 
-func TestF64Bas1JSON(t *testing.T) {
-	var o float64
-	var x float64
-	b1 := F64Bas1Default()
-	b2 := F64Bas1New(o, x)
+func TestX64Bas1JSON(t *testing.T) {
+	var o vpnumber.X64
+	var x vpnumber.X64
+	b1 := X64Bas1Default()
+	b2 := X64Bas1New(o, x)
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = json.Marshal(b1)
 	if err == nil {
-		t.Logf("encoded JSON for F64Bas1 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for X64Bas1 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for F64Bas1")
+		t.Error("unable to encode JSON for X64Bas1")
 	}
 	err = json.Unmarshal([]byte("nawak"), &b2)
 	if err == nil {
-		t.Error("able to decode JSON for F64Bas1, but json is not correct")
+		t.Error("able to decode JSON for X64Bas1, but json is not correct")
 	}
 	err = json.Unmarshal(jsonBuf, &b2)
 	if err != nil {
-		t.Error("unable to decode JSON for F64Bas1")
+		t.Error("unable to decode JSON for X64Bas1")
 	}
 	if *b1 != *b2 {
 		t.Error("unmarshalled matrix is different from original")
