@@ -21,15 +21,15 @@ package vpmatrix3
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpmatrix2"
+	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpnumber"
 	"testing"
 )
 
 func TestX32Bas2Math(t *testing.T) {
-	o := vpmatrix2.F32Vec2New(1.5, 2.5).ToX32()
-	x := vpmatrix2.F32Vec2New(2.1, 2.1).ToX32()
-	y := vpmatrix2.F32Vec2New(3.1, 3.1).ToX32()
+	o := vpvec2.F32Vec2New(1.5, 2.5).ToX32()
+	x := vpvec2.F32Vec2New(2.1, 2.1).ToX32()
+	y := vpvec2.F32Vec2New(3.1, 3.1).ToX32()
 
 	b := X32Bas2New(o, x, y)
 	t.Logf("X32Bas2 b=%s", b.String())

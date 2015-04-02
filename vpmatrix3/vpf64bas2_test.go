@@ -21,15 +21,15 @@ package vpmatrix3
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpmatrix2"
+	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpnumber"
 	"testing"
 )
 
 func TestF64Bas2Math(t *testing.T) {
-	o := vpmatrix2.F64Vec2New(1.5, 2.5)
-	x := vpmatrix2.F64Vec2New(2.1, 2.1)
-	y := vpmatrix2.F64Vec2New(3.1, 3.1)
+	o := vpvec2.F64Vec2New(1.5, 2.5)
+	x := vpvec2.F64Vec2New(2.1, 2.1)
+	y := vpvec2.F64Vec2New(3.1, 3.1)
 
 	b := F64Bas2New(o, x, y)
 	t.Logf("F64Bas2 b=%s", b.String())

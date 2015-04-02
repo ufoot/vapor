@@ -21,7 +21,7 @@ package vpmatrix4
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpmatrix3"
+	"github.com/ufoot/vapor/vpvec3"
 	"github.com/ufoot/vapor/vpnumber"
 )
 
@@ -30,21 +30,21 @@ import (
 // requires 3x3 code. X and Y are considered relative positions,
 // with O as the origin.
 type X64Bas3 struct {
-	O vpmatrix3.X64Vec3
-	X vpmatrix3.X64Vec3
-	Y vpmatrix3.X64Vec3
-	Z vpmatrix3.X64Vec3
+	O vpvec3.X64Vec3
+	X vpvec3.X64Vec3
+	Y vpvec3.X64Vec3
+	Z vpvec3.X64Vec3
 }
 
 // X64Bas3New creates a new 3D space basis.
-func X64Bas3New(o, x, y, z *vpmatrix3.X64Vec3) *X64Bas3 {
+func X64Bas3New(o, x, y, z *vpvec3.X64Vec3) *X64Bas3 {
 	return &X64Bas3{*o, *x, *y, *z}
 }
 
 // X64Bas3Default creates a new 3D space basis, using default
 // orthogonal settings (origin at 0,0,0 with vectors 1,0,0 0,1,0 and 0,0,1).
 func X64Bas3Default() *X64Bas3 {
-	return &X64Bas3{*vpmatrix3.X64Vec3New(vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0), *vpmatrix3.X64Vec3New(vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0), *vpmatrix3.X64Vec3New(vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0), *vpmatrix3.X64Vec3New(vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1)}
+	return &X64Bas3{*vpvec3.X64Vec3New(vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0), *vpvec3.X64Vec3New(vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0), *vpvec3.X64Vec3New(vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0), *vpvec3.X64Vec3New(vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1)}
 }
 
 // String returns a readable form of the basis.
@@ -81,14 +81,14 @@ func (bas *X64Bas3) Ortho() *X64Bas3 {
 // all vectors in it.
 // Args is left untouched, a pointer on a new object is returned.
 func X64Bas3Normalize(bas *X64Bas3) *X64Bas3 {
-	return &X64Bas3{bas.O, *vpmatrix3.X64Vec3Normalize(&bas.X), *vpmatrix3.X64Vec3Normalize(&bas.Y), *vpmatrix3.X64Vec3Normalize(&bas.Z)}
+	return &X64Bas3{bas.O, *vpvec3.X64Vec3Normalize(&bas.X), *vpvec3.X64Vec3Normalize(&bas.Y), *vpvec3.X64Vec3Normalize(&bas.Z)}
 }
 
 // X64Bas3Ortho makes a 3D space basis orthogonal,
 // by using an Z * X as Y, and X * Y as Z.
 // Args is left untouched, a pointer on a new object is returned.
 func X64Bas3Ortho(bas *X64Bas3) *X64Bas3 {
-	y := vpmatrix3.X64Vec3Cross(&bas.Z, &bas.X)
-	z := vpmatrix3.X64Vec3Cross(&bas.X, y)
+	y := vpvec3.X64Vec3Cross(&bas.Z, &bas.X)
+	z := vpvec3.X64Vec3Cross(&bas.X, y)
 	return &X64Bas3{bas.O, bas.X, *y, *z}
 }

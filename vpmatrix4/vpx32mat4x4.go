@@ -22,7 +22,8 @@ package vpmatrix4
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpmath"
-	"github.com/ufoot/vapor/vpmatrix3"
+	"github.com/ufoot/vapor/vpvec3"
+	"github.com/ufoot/vapor/vpvec4"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 )
@@ -44,7 +45,7 @@ func X32Mat4x4Identity() *X32Mat4x4 {
 }
 
 // X32Mat4x4Trans creates a new translation matrix.
-func X32Mat4x4Trans(vec *vpmatrix3.X32Vec3) *X32Mat4x4 {
+func X32Mat4x4Trans(vec *vpvec3.X32Vec3) *X32Mat4x4 {
 	return &X32Mat4x4{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vec[0], vec[1], vec[2], vpnumber.X32Const1}
 }
 
@@ -266,8 +267,8 @@ func (mat *X32Mat4x4) Inv() *X32Mat4x4 {
 
 // MulVec performs a multiplication of a vector by a 4x4 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *X32Mat4x4) MulVec(vec *X32Vec4) *X32Vec4 {
-	var ret X32Vec4
+func (mat *X32Mat4x4) MulVec(vec *vpvec4.X32Vec4) *vpvec4.X32Vec4 {
+	var ret vpvec4.X32Vec4
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + vpnumber.X32Mul(mat.Get(2, i), vec[2]) + vpnumber.X32Mul(mat.Get(3, i), vec[3])
@@ -282,8 +283,8 @@ func (mat *X32Mat4x4) MulVec(vec *X32Vec4) *X32Vec4 {
 // position vector of length 3 (a point in space) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X32Mat4x4) MulVecPos(vec *vpmatrix3.X32Vec3) *vpmatrix3.X32Vec3 {
-	var ret vpmatrix3.X32Vec3
+func (mat *X32Mat4x4) MulVecPos(vec *vpvec3.X32Vec3) *vpvec3.X32Vec3 {
+	var ret vpvec3.X32Vec3
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + vpnumber.X32Mul(mat.Get(2, i), vec[2]) + mat.Get(3, i)
@@ -298,8 +299,8 @@ func (mat *X32Mat4x4) MulVecPos(vec *vpmatrix3.X32Vec3) *vpmatrix3.X32Vec3 {
 // direction vector of length 3 (a point in space) is passed. This allow geometric
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X32Mat4x4) MulVecDir(vec *vpmatrix3.X32Vec3) *vpmatrix3.X32Vec3 {
-	var ret vpmatrix3.X32Vec3
+func (mat *X32Mat4x4) MulVecDir(vec *vpvec3.X32Vec3) *vpvec3.X32Vec3 {
+	var ret vpvec3.X32Vec3
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + vpnumber.X32Mul(mat.Get(2, i), vec[2])

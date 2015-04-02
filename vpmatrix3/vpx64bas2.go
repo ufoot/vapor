@@ -21,7 +21,7 @@ package vpmatrix3
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpmatrix2"
+	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpnumber"
 )
 
@@ -30,20 +30,20 @@ import (
 // requires 3x3 code. X and Y are considered relative positions,
 // with O as the origin.
 type X64Bas2 struct {
-	O vpmatrix2.X64Vec2
-	X vpmatrix2.X64Vec2
-	Y vpmatrix2.X64Vec2
+	O vpvec2.X64Vec2
+	X vpvec2.X64Vec2
+	Y vpvec2.X64Vec2
 }
 
 // X64Bas2New creates a new 2D space basis.
-func X64Bas2New(o, x, y *vpmatrix2.X64Vec2) *X64Bas2 {
+func X64Bas2New(o, x, y *vpvec2.X64Vec2) *X64Bas2 {
 	return &X64Bas2{*o, *x, *y}
 }
 
 // X64Bas2Default creates a new 2D space basis, using default
 // orthogonal settings (origin at 0,0 with vectors 1,0 and 0,1).
 func X64Bas2Default() *X64Bas2 {
-	return &X64Bas2{*vpmatrix2.X64Vec2New(vpnumber.X64Const0, vpnumber.X64Const0), *vpmatrix2.X64Vec2New(vpnumber.X64Const1, vpnumber.X64Const0), *vpmatrix2.X64Vec2New(vpnumber.X64Const0, vpnumber.X64Const1)}
+	return &X64Bas2{*vpvec2.X64Vec2New(vpnumber.X64Const0, vpnumber.X64Const0), *vpvec2.X64Vec2New(vpnumber.X64Const1, vpnumber.X64Const0), *vpvec2.X64Vec2New(vpnumber.X64Const0, vpnumber.X64Const1)}
 }
 
 // String returns a readable form of the basis.
@@ -80,12 +80,12 @@ func (bas *X64Bas2) Ortho() *X64Bas2 {
 // all vectors in it.
 // Args is left untouched, a pointer on a new object is returned.
 func X64Bas2Normalize(bas *X64Bas2) *X64Bas2 {
-	return &X64Bas2{bas.O, *vpmatrix2.X64Vec2Normalize(&bas.X), *vpmatrix2.X64Vec2Normalize(&bas.Y)}
+	return &X64Bas2{bas.O, *vpvec2.X64Vec2Normalize(&bas.X), *vpvec2.X64Vec2Normalize(&bas.Y)}
 }
 
 // X64Bas2Ortho makes a 2D space basis orthogonal,
 // by using an orthogonal vector to X as the Y vector.
 // Args is left untouched, a pointer on a new object is returned.
 func X64Bas2Ortho(bas *X64Bas2) *X64Bas2 {
-	return &X64Bas2{bas.O, bas.X, *vpmatrix2.X64Vec2New(-bas.X[1], bas.X[0])}
+	return &X64Bas2{bas.O, bas.X, *vpvec2.X64Vec2New(-bas.X[1], bas.X[0])}
 }

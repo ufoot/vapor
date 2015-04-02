@@ -21,7 +21,7 @@ package vpmatrix3
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpmatrix2"
+	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpnumber"
 )
 
@@ -30,20 +30,20 @@ import (
 // requires 3x3 code. X and Y are considered relative positions,
 // with O as the origin.
 type F32Bas2 struct {
-	O vpmatrix2.F32Vec2
-	X vpmatrix2.F32Vec2
-	Y vpmatrix2.F32Vec2
+	O vpvec2.F32Vec2
+	X vpvec2.F32Vec2
+	Y vpvec2.F32Vec2
 }
 
 // F32Bas2New creates a new 2D space basis.
-func F32Bas2New(o, x, y *vpmatrix2.F32Vec2) *F32Bas2 {
+func F32Bas2New(o, x, y *vpvec2.F32Vec2) *F32Bas2 {
 	return &F32Bas2{*o, *x, *y}
 }
 
 // F32Bas2Default creates a new 2D space basis, using default
 // orthogonal settings (origin at 0,0 with vectors 1,0 and 0,1).
 func F32Bas2Default() *F32Bas2 {
-	return &F32Bas2{*vpmatrix2.F32Vec2New(vpnumber.F32Const0, vpnumber.F32Const0), *vpmatrix2.F32Vec2New(vpnumber.F32Const1, vpnumber.F32Const0), *vpmatrix2.F32Vec2New(vpnumber.F32Const0, vpnumber.F32Const1)}
+	return &F32Bas2{*vpvec2.F32Vec2New(vpnumber.F32Const0, vpnumber.F32Const0), *vpvec2.F32Vec2New(vpnumber.F32Const1, vpnumber.F32Const0), *vpvec2.F32Vec2New(vpnumber.F32Const0, vpnumber.F32Const1)}
 }
 
 // String returns a readable form of the basis.
@@ -80,12 +80,12 @@ func (bas *F32Bas2) Ortho() *F32Bas2 {
 // all vectors in it.
 // Args is left untouched, a pointer on a new object is returned.
 func F32Bas2Normalize(bas *F32Bas2) *F32Bas2 {
-	return &F32Bas2{bas.O, *vpmatrix2.F32Vec2Normalize(&bas.X), *vpmatrix2.F32Vec2Normalize(&bas.Y)}
+	return &F32Bas2{bas.O, *vpvec2.F32Vec2Normalize(&bas.X), *vpvec2.F32Vec2Normalize(&bas.Y)}
 }
 
 // F32Bas2Ortho makes a 2D space basis orthogonal,
 // by using an orthogonal vector to X as the Y vector.
 // Args is left untouched, a pointer on a new object is returned.
 func F32Bas2Ortho(bas *F32Bas2) *F32Bas2 {
-	return &F32Bas2{bas.O, bas.X, *vpmatrix2.F32Vec2New(-bas.X[1], bas.X[0])}
+	return &F32Bas2{bas.O, bas.X, *vpvec2.F32Vec2New(-bas.X[1], bas.X[0])}
 }

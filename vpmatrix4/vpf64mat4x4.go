@@ -21,7 +21,8 @@ package vpmatrix4
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpmatrix3"
+	"github.com/ufoot/vapor/vpvec3"
+	"github.com/ufoot/vapor/vpvec4"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"math"
@@ -44,7 +45,7 @@ func F64Mat4x4Identity() *F64Mat4x4 {
 }
 
 // F64Mat4x4Trans creates a new translation matrix.
-func F64Mat4x4Trans(vec *vpmatrix3.F64Vec3) *F64Mat4x4 {
+func F64Mat4x4Trans(vec *vpvec3.F64Vec3) *F64Mat4x4 {
 	return &F64Mat4x4{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vec[0], vec[1], vec[2], vpnumber.F64Const1}
 }
 
@@ -266,8 +267,8 @@ func (mat *F64Mat4x4) Inv() *F64Mat4x4 {
 
 // MulVec performs a multiplication of a vector by a 4x4 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *F64Mat4x4) MulVec(vec *F64Vec4) *F64Vec4 {
-	var ret F64Vec4
+func (mat *F64Mat4x4) MulVec(vec *vpvec4.F64Vec4) *vpvec4.F64Vec4 {
+	var ret vpvec4.F64Vec4
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2] + mat.Get(3, i)*vec[3]
@@ -282,8 +283,8 @@ func (mat *F64Mat4x4) MulVec(vec *F64Vec4) *F64Vec4 {
 // position vector of length 3 (a point in space) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-func (mat *F64Mat4x4) MulVecPos(vec *vpmatrix3.F64Vec3) *vpmatrix3.F64Vec3 {
-	var ret vpmatrix3.F64Vec3
+func (mat *F64Mat4x4) MulVecPos(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
+	var ret vpvec3.F64Vec3
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2] + mat.Get(3, i)
@@ -298,8 +299,8 @@ func (mat *F64Mat4x4) MulVecPos(vec *vpmatrix3.F64Vec3) *vpmatrix3.F64Vec3 {
 // direction vector of length 3 (a point in space) is passed. This allow geometric
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
-func (mat *F64Mat4x4) MulVecDir(vec *vpmatrix3.F64Vec3) *vpmatrix3.F64Vec3 {
-	var ret vpmatrix3.F64Vec3
+func (mat *F64Mat4x4) MulVecDir(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
+	var ret vpvec3.F64Vec3
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2]

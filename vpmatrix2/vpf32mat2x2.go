@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
 )
 
 // F32Mat2 is a matrix containing 2x2 float32 values.
@@ -243,8 +244,8 @@ func (mat *F32Mat2) Inv() *F32Mat2 {
 
 // MulVec performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *F32Mat2) MulVec(vec *F32Vec2) *F32Vec2 {
-	var ret F32Vec2
+func (mat *F32Mat2) MulVec(vec *vpvec2.F32Vec2) *vpvec2.F32Vec2 {
+	var ret vpvec2.F32Vec2
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1]

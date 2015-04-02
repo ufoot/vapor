@@ -20,7 +20,8 @@
 package vpmatrix3
 
 import (
-	"github.com/ufoot/vapor/vpmatrix2"
+	"github.com/ufoot/vapor/vpvec2"
+	"github.com/ufoot/vapor/vpvec3"
 	"github.com/ufoot/vapor/vpnumber"
 	"math"
 	"math/rand"
@@ -145,13 +146,13 @@ func TestF32Mat3x3Aff(t *testing.T) {
 	const t1 = 6.5
 	const t2 = 8.5
 
-	v1 := F32Vec3New(p1, p2, vpnumber.F32Const1)
-	vt := vpmatrix2.F32Vec2New(t1, t2)
+	v1 := vpvec3.F32Vec3New(p1, p2, vpnumber.F32Const1)
+	vt := vpvec2.F32Vec2New(t1, t2)
 	mt := F32Mat3x3Trans(vt)
 	t.Logf("translation mat3x3x3 for %s is %s", vt.String(), mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat3x3x3 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
-	v3 := F32Vec3New(p1+t1, p2+t2, vpnumber.F32Const1)
+	v3 := vpvec3.F32Vec3New(p1+t1, p2+t2, vpnumber.F32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat3x3x3 translation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -170,7 +171,7 @@ func TestF32Mat3x3Aff(t *testing.T) {
 	t.Logf("rotation mat3x3x3 for PI/2 is %s", mr.String())
 	v2 = mr.MulVec(v1)
 	t.Logf("mat3x3x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = F32Vec3New(-v1[1], v1[0], vpnumber.F32Const1)
+	v3 = vpvec3.F32Vec3New(-v1[1], v1[0], vpnumber.F32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat3x3x3 rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}

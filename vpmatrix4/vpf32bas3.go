@@ -21,7 +21,7 @@ package vpmatrix4
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpmatrix3"
+	"github.com/ufoot/vapor/vpvec3"
 	"github.com/ufoot/vapor/vpnumber"
 )
 
@@ -30,21 +30,21 @@ import (
 // requires 4x4 code. X, Y and Z are considered relative positions,
 // with O as the origin.
 type F32Bas3 struct {
-	O vpmatrix3.F32Vec3
-	X vpmatrix3.F32Vec3
-	Y vpmatrix3.F32Vec3
-	Z vpmatrix3.F32Vec3
+	O vpvec3.F32Vec3
+	X vpvec3.F32Vec3
+	Y vpvec3.F32Vec3
+	Z vpvec3.F32Vec3
 }
 
 // F32Bas3New creates a new 3D space basis.
-func F32Bas3New(o, x, y, z *vpmatrix3.F32Vec3) *F32Bas3 {
+func F32Bas3New(o, x, y, z *vpvec3.F32Vec3) *F32Bas3 {
 	return &F32Bas3{*o, *x, *y, *z}
 }
 
 // F32Bas3Default creates a new 3D space basis, using default
 // orthogonal settings (origin at 0,0,0 with vectors 1,0,0 0,1,0 and 0,0,1).
 func F32Bas3Default() *F32Bas3 {
-	return &F32Bas3{*vpmatrix3.F32Vec3New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), *vpmatrix3.F32Vec3New(vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0), *vpmatrix3.F32Vec3New(vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0), *vpmatrix3.F32Vec3New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1)}
+	return &F32Bas3{*vpvec3.F32Vec3New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), *vpvec3.F32Vec3New(vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0), *vpvec3.F32Vec3New(vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0), *vpvec3.F32Vec3New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1)}
 }
 
 // String returns a readable form of the basis.
@@ -81,14 +81,14 @@ func (bas *F32Bas3) Ortho() *F32Bas3 {
 // all vectors in it.
 // Args is left untouched, a pointer on a new object is returned.
 func F32Bas3Normalize(bas *F32Bas3) *F32Bas3 {
-	return &F32Bas3{bas.O, *vpmatrix3.F32Vec3Normalize(&bas.X), *vpmatrix3.F32Vec3Normalize(&bas.Y), *vpmatrix3.F32Vec3Normalize(&bas.Z)}
+	return &F32Bas3{bas.O, *vpvec3.F32Vec3Normalize(&bas.X), *vpvec3.F32Vec3Normalize(&bas.Y), *vpvec3.F32Vec3Normalize(&bas.Z)}
 }
 
 // F32Bas3Ortho makes a 3D space basis orthogonal,
 // by using an Z * X as Y, and X * Y as Z.
 // Args is left untouched, a pointer on a new object is returned.
 func F32Bas3Ortho(bas *F32Bas3) *F32Bas3 {
-	y := vpmatrix3.F32Vec3Cross(&bas.Z, &bas.X)
-	z := vpmatrix3.F32Vec3Cross(&bas.X, y)
+	y := vpvec3.F32Vec3Cross(&bas.Z, &bas.X)
+	z := vpvec3.F32Vec3Cross(&bas.X, y)
 	return &F32Bas3{bas.O, bas.X, *y, *z}
 }

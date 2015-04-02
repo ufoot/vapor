@@ -22,7 +22,8 @@ package vpmatrix3
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpmath"
-	"github.com/ufoot/vapor/vpmatrix2"
+	"github.com/ufoot/vapor/vpvec2"
+	"github.com/ufoot/vapor/vpvec3"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 )
@@ -44,7 +45,7 @@ func X32Mat3x3Identity() *X32Mat3x3 {
 }
 
 // X32Mat3x3Trans creates a new translation matrix.
-func X32Mat3x3Trans(vec *vpmatrix2.X32Vec2) *X32Mat3x3 {
+func X32Mat3x3Trans(vec *vpvec2.X32Vec2) *X32Mat3x3 {
 	return &X32Mat3x3{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vec[0], vec[1], vpnumber.X32Const1}
 }
 
@@ -252,8 +253,8 @@ func (mat *X32Mat3x3) Inv() *X32Mat3x3 {
 
 // MulVec performs a multiplication of a vector by a 3x3 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *X32Mat3x3) MulVec(vec *X32Vec3) *X32Vec3 {
-	var ret X32Vec3
+func (mat *X32Mat3x3) MulVec(vec *vpvec3.X32Vec3) *vpvec3.X32Vec3 {
+	var ret vpvec3.X32Vec3
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + vpnumber.X32Mul(mat.Get(2, i), vec[2])
@@ -268,8 +269,8 @@ func (mat *X32Mat3x3) MulVec(vec *X32Vec3) *X32Vec3 {
 // position vector of length 2 (a point in a plane) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X32Mat3x3) MulVecPos(vec *vpmatrix2.X32Vec2) *vpmatrix2.X32Vec2 {
-	var ret vpmatrix2.X32Vec2
+func (mat *X32Mat3x3) MulVecPos(vec *vpvec2.X32Vec2) *vpvec2.X32Vec2 {
+	var ret vpvec2.X32Vec2
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + mat.Get(2, i)
@@ -284,8 +285,8 @@ func (mat *X32Mat3x3) MulVecPos(vec *vpmatrix2.X32Vec2) *vpmatrix2.X32Vec2 {
 // direction vector of length 2 (a point in a plane) is passed. This allow geometric
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X32Mat3x3) MulVecDir(vec *vpmatrix2.X32Vec2) *vpmatrix2.X32Vec2 {
-	var ret vpmatrix2.X32Vec2
+func (mat *X32Mat3x3) MulVecDir(vec *vpvec2.X32Vec2) *vpvec2.X32Vec2 {
+	var ret vpvec2.X32Vec2
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1])

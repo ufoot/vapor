@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
 )
 
 // X64Mat2 is a matrix containing 2x2 fixed point 64 bit values.
@@ -243,8 +244,8 @@ func (mat *X64Mat2) Inv() *X64Mat2 {
 
 // MulVec performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *X64Mat2) MulVec(vec *X64Vec2) *X64Vec2 {
-	var ret X64Vec2
+func (mat *X64Mat2) MulVec(vec *vpvec2.X64Vec2) *vpvec2.X64Vec2 {
+	var ret vpvec2.X64Vec2
 
 	for i := range vec {
 		ret[i] = vpnumber.X64Mul(mat.Get(0, i), vec[0]) + vpnumber.X64Mul(mat.Get(1, i), vec[1])

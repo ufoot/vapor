@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
 )
 
 // X32Mat2 is a matrix containing 2x2 fixed point 32 bit values.
@@ -243,8 +244,8 @@ func (mat *X32Mat2) Inv() *X32Mat2 {
 
 // MulVec performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *X32Mat2) MulVec(vec *X32Vec2) *X32Vec2 {
-	var ret X32Vec2
+func (mat *X32Mat2) MulVec(vec *vpvec2.X32Vec2) *vpvec2.X32Vec2 {
+	var ret vpvec2.X32Vec2
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1])

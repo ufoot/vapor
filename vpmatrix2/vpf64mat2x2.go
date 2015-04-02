@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
 )
 
 // F64Mat2 is a matrix containing 2x2 float64 values.
@@ -243,8 +244,8 @@ func (mat *F64Mat2) Inv() *F64Mat2 {
 
 // MulVec performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *F64Mat2) MulVec(vec *F64Vec2) *F64Vec2 {
-	var ret F64Vec2
+func (mat *F64Mat2) MulVec(vec *vpvec2.F64Vec2) *vpvec2.F64Vec2 {
+	var ret vpvec2.F64Vec2
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1]

@@ -21,7 +21,8 @@ package vpmatrix4
 
 import (
 	"github.com/ufoot/vapor/vpmath"
-	"github.com/ufoot/vapor/vpmatrix3"
+	"github.com/ufoot/vapor/vpvec3"
+	"github.com/ufoot/vapor/vpvec4"
 	"github.com/ufoot/vapor/vpnumber"
 	"math/rand"
 	"testing"
@@ -161,13 +162,13 @@ func TestX32Mat4x4Aff(t *testing.T) {
 	t2 := vpnumber.F32ToX32(8.5)
 	t3 := vpnumber.F32ToX32(10.5)
 
-	v1 := X32Vec4New(p1, p2, p3, vpnumber.X32Const1)
-	vt := vpmatrix3.X32Vec3New(t1, t2, t3)
+	v1 := vpvec4.X32Vec4New(p1, p2, p3, vpnumber.X32Const1)
+	vt := vpvec3.X32Vec3New(t1, t2, t3)
 	mt := X32Mat4x4Trans(vt)
 	t.Logf("translation mat4x4 for %s is %s", vt.String(), mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat4x4 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
-	v3 := X32Vec4New(p1+t1, p2+t2, p3+t3, vpnumber.X32Const1)
+	v3 := vpvec4.X32Vec4New(p1+t1, p2+t2, p3+t3, vpnumber.X32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x4 MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -186,7 +187,7 @@ func TestX32Mat4x4Aff(t *testing.T) {
 	t.Logf("rotation mat4x4 for PI/2 is %s", mr.String())
 	v2 = mr.MulVec(v1)
 	t.Logf("mat4x4 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = X32Vec4New(v1[0], -v1[2], v1[1], vpnumber.X32Const1)
+	v3 = vpvec4.X32Vec4New(v1[0], -v1[2], v1[1], vpnumber.X32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x4 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -205,7 +206,7 @@ func TestX32Mat4x4Aff(t *testing.T) {
 	t.Logf("rotation mat4x4 for PI/2 is %s", mr.String())
 	v2 = mr.MulVec(v1)
 	t.Logf("mat4x4 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = X32Vec4New(v1[2], v1[1], -v1[0], vpnumber.X32Const1)
+	v3 = vpvec4.X32Vec4New(v1[2], v1[1], -v1[0], vpnumber.X32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x4 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -224,7 +225,7 @@ func TestX32Mat4x4Aff(t *testing.T) {
 	t.Logf("rotation mat4x4 for PI/2 is %s", mr.String())
 	v2 = mr.MulVec(v1)
 	t.Logf("mat4x4 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = X32Vec4New(-v1[1], v1[0], v1[2], vpnumber.X32Const1)
+	v3 = vpvec4.X32Vec4New(-v1[1], v1[0], v1[2], vpnumber.X32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x4 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
