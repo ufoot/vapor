@@ -26,7 +26,7 @@ import (
 	"testing"
 )
 
-func TestX32Mat2Math(t *testing.T) {
+func TestX32Mat2x2Math(t *testing.T) {
 	var x11 = vpnumber.F32ToX32(3.0)
 	var x12 = vpnumber.F32ToX32(-11.0)
 	var x21 = vpnumber.F32ToX32(9.0)
@@ -39,9 +39,9 @@ func TestX32Mat2Math(t *testing.T) {
 
 	var xmul = vpnumber.F32ToX32(10.0)
 
-	var m1, m2, m3, m4 *X32Mat2
+	var m1, m2, m3, m4 *X32Mat2x2
 
-	m1 = X32Mat2New(x11, x12, x21, x22)
+	m1 = X32Mat2x2New(x11, x12, x21, x22)
 	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -71,26 +71,26 @@ func TestX32Mat2Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = X32Mat2New(x51, x52, x61, x62)
-	m3 = X32Mat2Add(m1, m2)
-	m4 = X32Mat2New(x11+x51, x12+x52, x21+x61, x22+x62)
+	m2 = X32Mat2x2New(x51, x52, x61, x62)
+	m3 = X32Mat2x2Add(m1, m2)
+	m4 = X32Mat2x2New(x11+x51, x12+x52, x21+x61, x22+x62)
 	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
-	m3 = X32Mat2Sub(m1, m2)
-	m4 = X32Mat2New(x11-x51, x12-x52, x21-x61, x22-x62)
+	m3 = X32Mat2x2Sub(m1, m2)
+	m4 = X32Mat2x2New(x11-x51, x12-x52, x21-x61, x22-x62)
 	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
-	m3 = X32Mat2MulScale(m1, xmul)
-	m4 = X32Mat2New(vpnumber.X32Mul(x11, xmul), vpnumber.X32Mul(x12, xmul), vpnumber.X32Mul(x21, xmul), vpnumber.X32Mul(x22, xmul))
+	m3 = X32Mat2x2MulScale(m1, xmul)
+	m4 = X32Mat2x2New(vpnumber.X32Mul(x11, xmul), vpnumber.X32Mul(x12, xmul), vpnumber.X32Mul(x21, xmul), vpnumber.X32Mul(x22, xmul))
 	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
 
-	m3 = X32Mat2DivScale(m3, xmul)
+	m3 = X32Mat2x2DivScale(m3, xmul)
 	if !m3.IsSimilar(m1) {
 		t.Error("DivScale error")
 	}
@@ -103,8 +103,8 @@ func TestX32Mat2Math(t *testing.T) {
 	m3.DivScale(0)
 }
 
-func invertableX32Mat2() *X32Mat2 {
-	var ret X32Mat2
+func invertableX32Mat2x2() *X32Mat2x2 {
+	var ret X32Mat2x2
 
 	for vpnumber.X32Abs(ret.Det()) < vpnumber.X32Const1 {
 		for i := range ret {
@@ -115,10 +115,10 @@ func invertableX32Mat2() *X32Mat2 {
 	return &ret
 }
 
-func TestX32Mat2Comp(t *testing.T) {
-	m1 := invertableX32Mat2()
-	m2 := X32Mat2Inv(m1)
-	id := X32Mat2Identity()
+func TestX32Mat2x2Comp(t *testing.T) {
+	m1 := invertableX32Mat2x2()
+	m2 := X32Mat2x2Inv(m1)
+	id := X32Mat2x2Identity()
 
 	m2.MulComp(m1)
 	if m2.IsSimilar(id) {
@@ -128,12 +128,12 @@ func TestX32Mat2Comp(t *testing.T) {
 	}
 }
 
-func TestX32Mat2Aff(t *testing.T) {
+func TestX32Mat2x2Aff(t *testing.T) {
 	p1 := vpnumber.F32ToX32(3.0)
 	t1 := vpnumber.F32ToX32(6.0)
 
 	v1 := vpvec2.X32Vec2New(p1, vpnumber.X32Const1)
-	mt := X32Mat2Trans(t1)
+	mt := X32Mat2x2Trans(t1)
 	t.Logf("translation mat2 for %f is %s", vpnumber.X32ToF32(p1), mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
@@ -153,44 +153,44 @@ func TestX32Mat2Aff(t *testing.T) {
 	}
 }
 
-func TestX32Mat2JSON(t *testing.T) {
-	m1 := invertableX32Mat2()
-	m2 := X32Mat2Identity()
+func TestX32Mat2x2JSON(t *testing.T) {
+	m1 := invertableX32Mat2x2()
+	m2 := X32Mat2x2Identity()
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for X32Mat2 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for X32Mat2x2 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for X32Mat2")
+		t.Error("unable to encode JSON for X32Mat2x2")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for X32Mat2, but json is not correct")
+		t.Error("able to decode JSON for X32Mat2x2, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for X32Mat2")
+		t.Error("unable to decode JSON for X32Mat2x2")
 	}
 	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled matrix is different from original")
 	}
 }
 
-func BenchmarkX32Mat2Add(b *testing.B) {
-	mat := X32Mat2New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
+func BenchmarkX32Mat2x2Add(b *testing.B) {
+	mat := X32Mat2x2New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
 	}
 }
 
-func BenchmarkX32Mat2Inv(b *testing.B) {
-	mat := invertableX32Mat2()
+func BenchmarkX32Mat2x2Inv(b *testing.B) {
+	mat := invertableX32Mat2x2()
 
 	for i := 0; i < b.N; i++ {
-		_ = X32Mat2Inv(mat)
+		_ = X32Mat2x2Inv(mat)
 	}
 }

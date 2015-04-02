@@ -23,7 +23,7 @@ import (
 	"testing"
 )
 
-func TestI32Mat2Math(t *testing.T) {
+func TestI32Mat2x2Math(t *testing.T) {
 	const i11 = 3
 	const i12 = 4
 	const i21 = -5
@@ -34,9 +34,9 @@ func TestI32Mat2Math(t *testing.T) {
 	const i61 = 25
 	const i62 = 121
 
-	var m1, m2, m3, m4 *I32Mat2
+	var m1, m2, m3, m4 *I32Mat2x2
 
-	m1 = I32Mat2New(i11, i12, i21, i22)
+	m1 = I32Mat2x2New(i11, i12, i21, i22)
 
 	m2 = m1.ToI64().ToI32()
 	if *m1 != *m2 {
@@ -63,40 +63,40 @@ func TestI32Mat2Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = I32Mat2New(i51, i52, i61, i62)
-	m3 = I32Mat2Add(m1, m2)
-	m4 = I32Mat2New(i11+i51, i12+i52, i21+i61, i22+i62)
+	m2 = I32Mat2x2New(i51, i52, i61, i62)
+	m3 = I32Mat2x2Add(m1, m2)
+	m4 = I32Mat2x2New(i11+i51, i12+i52, i21+i61, i22+i62)
 	if *m3 != *m4 {
 		t.Error("Add error")
 	}
 
-	m3 = I32Mat2Sub(m1, m2)
-	m4 = I32Mat2New(i11-i51, i12-i52, i21-i61, i22-i62)
+	m3 = I32Mat2x2Sub(m1, m2)
+	m4 = I32Mat2x2New(i11-i51, i12-i52, i21-i61, i22-i62)
 	if *m3 != *m4 {
 		t.Error("Sub error")
 	}
 }
 
-func TestI32Mat2JSON(t *testing.T) {
-	m1 := I32Mat2Identity()
-	var m2 I32Mat2
+func TestI32Mat2x2JSON(t *testing.T) {
+	m1 := I32Mat2x2Identity()
+	var m2 I32Mat2x2
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for I32Mat2 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for I32Mat2x2 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for I32Mat2")
+		t.Error("unable to encode JSON for I32Mat2x2")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for I32Mat2, but json is not correct")
+		t.Error("able to decode JSON for I32Mat2x2, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for I32Mat2")
+		t.Error("unable to decode JSON for I32Mat2x2")
 	}
 	if *m1 != m2 {
 		t.Error("unmarshalled matrix is different from original")
