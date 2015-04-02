@@ -25,25 +25,25 @@ import (
 	"github.com/ufoot/vapor/vpsys"
 )
 
-// I64Mat3 is a matrix containing 3x3 int64 values.
+// I64Mat3x3 is a matrix containing 3x3 int64 values.
 // Can hold the values of a point in a plane.
-type I64Mat3 [9]int64
+type I64Mat3x3 [9]int64
 
-// I64Mat3New creates a new matrix containing 3x3 int64 values.
+// I64Mat3x3New creates a new matrix containing 3x3 int64 values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func I64Mat3New(i1, i2, i3, i4, i5, i6, i7, i8, i9 int64) *I64Mat3 {
-	return &I64Mat3{i1, i2, i3, i4, i5, i6, i7, i8, i9}
+func I64Mat3x3New(i1, i2, i3, i4, i5, i6, i7, i8, i9 int64) *I64Mat3x3 {
+	return &I64Mat3x3{i1, i2, i3, i4, i5, i6, i7, i8, i9}
 }
 
-// I64Mat3Identity creates a new identity matrix.
-func I64Mat3Identity() *I64Mat3 {
-	return &I64Mat3{vpnumber.I64Const1, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const1, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const1}
+// I64Mat3x3Identity creates a new identity matrix.
+func I64Mat3x3Identity() *I64Mat3x3 {
+	return &I64Mat3x3{vpnumber.I64Const1, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const1, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const1}
 }
 
 // ToI32 converts the matrix to an int32 matrix.
-func (mat *I64Mat3) ToI32() *I32Mat3 {
-	var ret I32Mat3
+func (mat *I64Mat3x3) ToI32() *I32Mat3x3 {
+	var ret I32Mat3x3
 
 	for i, v := range mat {
 		ret[i] = int32(v)
@@ -53,8 +53,8 @@ func (mat *I64Mat3) ToI32() *I32Mat3 {
 }
 
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
-func (mat *I64Mat3) ToX32() *X32Mat3 {
-	var ret X32Mat3
+func (mat *I64Mat3x3) ToX32() *X32Mat3x3 {
+	var ret X32Mat3x3
 
 	for i, v := range mat {
 		ret[i] = vpnumber.I64ToX32(v)
@@ -64,8 +64,8 @@ func (mat *I64Mat3) ToX32() *X32Mat3 {
 }
 
 // ToX64 converts the matrix to a fixed point number matrix on 64 bits.
-func (mat *I64Mat3) ToX64() *X64Mat3 {
-	var ret X64Mat3
+func (mat *I64Mat3x3) ToX64() *X64Mat3x3 {
+	var ret X64Mat3x3
 
 	for i, v := range mat {
 		ret[i] = vpnumber.I64ToX64(v)
@@ -75,8 +75,8 @@ func (mat *I64Mat3) ToX64() *X64Mat3 {
 }
 
 // ToF32 converts the matrix to a float32 matrix.
-func (mat *I64Mat3) ToF32() *F32Mat3 {
-	var ret F32Mat3
+func (mat *I64Mat3x3) ToF32() *F32Mat3x3 {
+	var ret F32Mat3x3
 
 	for i, v := range mat {
 		ret[i] = float32(v)
@@ -86,8 +86,8 @@ func (mat *I64Mat3) ToF32() *F32Mat3 {
 }
 
 // ToF64 converts the matrix to a float64 matrix.
-func (mat *I64Mat3) ToF64() *F64Mat3 {
-	var ret F64Mat3
+func (mat *I64Mat3x3) ToF64() *F64Mat3x3 {
+	var ret F64Mat3x3
 
 	for i, v := range mat {
 		ret[i] = float64(v)
@@ -97,17 +97,17 @@ func (mat *I64Mat3) ToF64() *F64Mat3 {
 }
 
 // Set sets the value of the matrix for a given column and row.
-func (mat *I64Mat3) Set(col, row int, val int64) {
+func (mat *I64Mat3x3) Set(col, row int, val int64) {
 	mat[col*3+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
-func (mat *I64Mat3) Get(col, row int) int64 {
+func (mat *I64Mat3x3) Get(col, row int) int64 {
 	return mat[col*3+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (mat *I64Mat3) MarshalJSON() ([]byte, error) {
+func (mat *I64Mat3x3) MarshalJSON() ([]byte, error) {
 	var tmpArray [3][3]int64
 
 	for col := range tmpArray {
@@ -118,19 +118,19 @@ func (mat *I64Mat3) MarshalJSON() ([]byte, error) {
 
 	ret, err := json.Marshal(tmpArray)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal I64Mat3")
+		return nil, vpsys.ErrorChain(err, "unable to marshal I64Mat3x3")
 	}
 
 	return ret, nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
-func (mat *I64Mat3) UnmarshalJSON(data []byte) error {
+func (mat *I64Mat3x3) UnmarshalJSON(data []byte) error {
 	var tmpArray [3][3]int64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal I64Mat3")
+		return vpsys.ErrorChain(err, "unable to unmarshal I64Mat3x3")
 	}
 
 	for col := range tmpArray {
@@ -143,7 +143,7 @@ func (mat *I64Mat3) UnmarshalJSON(data []byte) error {
 }
 
 // String returns a readable form of the matrix.
-func (mat *I64Mat3) String() string {
+func (mat *I64Mat3x3) String() string {
 	buf, err := mat.MarshalJSON()
 
 	if err != nil {
@@ -156,7 +156,7 @@ func (mat *I64Mat3) String() string {
 
 // Add adds operand to the matrix.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *I64Mat3) Add(op *I64Mat3) *I64Mat3 {
+func (mat *I64Mat3x3) Add(op *I64Mat3x3) *I64Mat3x3 {
 	for i, v := range op {
 		mat[i] += v
 	}
@@ -166,7 +166,7 @@ func (mat *I64Mat3) Add(op *I64Mat3) *I64Mat3 {
 
 // Sub substracts operand from the matrix.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *I64Mat3) Sub(op *I64Mat3) *I64Mat3 {
+func (mat *I64Mat3x3) Sub(op *I64Mat3x3) *I64Mat3x3 {
 	for i, v := range op {
 		mat[i] -= v
 	}
@@ -174,9 +174,9 @@ func (mat *I64Mat3) Sub(op *I64Mat3) *I64Mat3 {
 	return mat
 }
 
-// I64Mat3Add adds two matrices.
+// I64Mat3x3Add adds two matrices.
 // Args are left untouched, a pointer on a new object is returned.
-func I64Mat3Add(mata, matb *I64Mat3) *I64Mat3 {
+func I64Mat3x3Add(mata, matb *I64Mat3x3) *I64Mat3x3 {
 	var ret = *mata
 
 	_ = ret.Add(matb)
@@ -184,9 +184,9 @@ func I64Mat3Add(mata, matb *I64Mat3) *I64Mat3 {
 	return &ret
 }
 
-// I64Mat3Sub substracts matrix b from matrix a.
+// I64Mat3x3Sub substracts matrix b from matrix a.
 // Args are left untouched, a pointer on a new object is returned.
-func I64Mat3Sub(mata, matb *I64Mat3) *I64Mat3 {
+func I64Mat3x3Sub(mata, matb *I64Mat3x3) *I64Mat3x3 {
 	var ret = *mata
 
 	_ = ret.Sub(matb)
