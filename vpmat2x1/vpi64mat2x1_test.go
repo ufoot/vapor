@@ -25,18 +25,14 @@ import (
 
 func TestI64Mat2x1Math(t *testing.T) {
 	const i11 = 3
-	const i12 = 4
 	const i21 = -5
-	const i22 = -6
 
 	const i51 = -12
-	const i52 = -13
 	const i61 = 25
-	const i62 = 121
 
 	var m1, m2, m3, m4 *I64Mat2x1
 
-	m1 = I64Mat2x1New(i11, i12, i21, i22)
+	m1 = I64Mat2x1New(i11, i21)
 
 	m2 = m1.ToI32().ToI64()
 	if *m1 != *m2 {
@@ -63,15 +59,15 @@ func TestI64Mat2x1Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = I64Mat2x1New(i51, i52, i61, i62)
+	m2 = I64Mat2x1New(i51, i61)
 	m3 = I64Mat2x1Add(m1, m2)
-	m4 = I64Mat2x1New(i11+i51, i12+i52, i21+i61, i22+i62)
+	m4 = I64Mat2x1New(i11+i51, i21+i61)
 	if *m3 != *m4 {
 		t.Error("Add error")
 	}
 
 	m3 = I64Mat2x1Sub(m1, m2)
-	m4 = I64Mat2x1New(i11-i51, i12-i52, i21-i61, i22-i62)
+	m4 = I64Mat2x1New(i11-i51, i21-i61)
 	if *m3 != *m4 {
 		t.Error("Sub error")
 	}

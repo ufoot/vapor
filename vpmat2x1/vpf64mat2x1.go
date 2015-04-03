@@ -131,7 +131,7 @@ func (mat *F64Mat2x1) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *F64Mat2x1) UnmarshalJSON(data []byte) error {
-	var tmpArray [2][2]float64
+	var tmpArray [2][1]float64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {

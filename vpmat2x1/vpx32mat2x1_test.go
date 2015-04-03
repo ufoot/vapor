@@ -21,27 +21,22 @@ package vpmat2x1
 
 import (
 	"github.com/ufoot/vapor/vpnumber"
-	"github.com/ufoot/vapor/vpvec2"
 	"math/rand"
 	"testing"
 )
 
 func TestX32Mat2x1Math(t *testing.T) {
 	var x11 = vpnumber.F32ToX32(3.0)
-	var x12 = vpnumber.F32ToX32(-11.0)
 	var x21 = vpnumber.F32ToX32(9.0)
-	var x22 = vpnumber.F32ToX32(-12.0)
 
 	var x51 = vpnumber.F32ToX32(-4.5)
-	var x52 = vpnumber.F32ToX32(6.0)
 	var x61 = vpnumber.F32ToX32(1.1)
-	var x62 = vpnumber.F32ToX32(-4.0)
 
 	var xmul = vpnumber.F32ToX32(10.0)
 
 	var m1, m2, m3, m4 *X32Mat2x1
 
-	m1 = X32Mat2x1New(x11, x12, x21, x22)
+	m1 = X32Mat2x1New(x11, x21)
 	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -71,21 +66,21 @@ func TestX32Mat2x1Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = X32Mat2x1New(x51, x52, x61, x62)
+	m2 = X32Mat2x1New(x51, x61)
 	m3 = X32Mat2x1Add(m1, m2)
-	m4 = X32Mat2x1New(x11+x51, x12+x52, x21+x61, x22+x62)
+	m4 = X32Mat2x1New(x11+x51, x21+x61)
 	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
 	m3 = X32Mat2x1Sub(m1, m2)
-	m4 = X32Mat2x1New(x11-x51, x12-x52, x21-x61, x22-x62)
+	m4 = X32Mat2x1New(x11-x51, x21-x61)
 	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = X32Mat2x1MulScale(m1, xmul)
-	m4 = X32Mat2x1New(vpnumber.X32Mul(x11, xmul), vpnumber.X32Mul(x12, xmul), vpnumber.X32Mul(x21, xmul), vpnumber.X32Mul(x22, xmul))
+	m4 = X32Mat2x1New(vpnumber.X32Mul(x11, xmul), vpnumber.X32Mul(x21, xmul))
 	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
@@ -132,15 +127,8 @@ func TestX32Mat2x1Aff(t *testing.T) {
 	p1 := vpnumber.F32ToX32(3.0)
 	t1 := vpnumber.F32ToX32(6.0)
 
-	v1 := vpvec2.X32Vec2New(p1, vpnumber.X32Const1)
 	mt := X32Mat2x1Trans(t1)
 	t.Logf("translation mat2 for %f is %s", vpnumber.X32ToF32(p1), mt.String())
-	v2 := mt.MulVec(v1)
-	t.Logf("mat2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
-	v3 := vpvec2.X32Vec2New(p1+t1, vpnumber.X32Const1)
-	if !v2.IsSimilar(v3) {
-		t.Errorf("mat2 MulVec error v2=%s v3=%s", v2.String(), v3.String())
-	}
 	v2pos := mt.MulVecPos(p1)
 	v3pos := p1 + t1
 	if !vpnumber.X32IsSimilar(v2pos, v3pos) {
@@ -180,7 +168,7 @@ func TestX32Mat2x1JSON(t *testing.T) {
 }
 
 func BenchmarkX32Mat2x1Add(b *testing.B) {
-	mat := X32Mat2x1New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
+	mat := X32Mat2x1New(vpnumber.X32Const1, vpnumber.X32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)

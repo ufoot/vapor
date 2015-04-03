@@ -27,18 +27,18 @@ import (
 
 // I64Mat2x1 is a matrix containing 2x1 int64 values.
 // Can hold the values of a point in a plane.
-type I64Mat2x1 [4]int64
+type I64Mat2x1 [2]int64
 
 // I64Mat2x1New creates a new matrix containing 2x1 int64 values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func I64Mat2x1New(i1, i2, i3, i4 int64) *I64Mat2x1 {
-	return &I64Mat2x1{i1, i2, i3, i4}
+func I64Mat2x1New(i1, i2 int64) *I64Mat2x1 {
+	return &I64Mat2x1{i1, i2}
 }
 
 // I64Mat2x1Identity creates a new identity matrix.
 func I64Mat2x1Identity() *I64Mat2x1 {
-	return &I64Mat2x1{vpnumber.I64Const1, vpnumber.I64Const0, vpnumber.I64Const0, vpnumber.I64Const1}
+	return &I64Mat2x1{vpnumber.I64Const1, vpnumber.I64Const0}
 }
 
 // ToI32 converts the matrix to an int32 matrix.
@@ -98,21 +98,21 @@ func (mat *I64Mat2x1) ToF64() *F64Mat2x1 {
 
 // Set sets the value of the matrix for a given column and row.
 func (mat *I64Mat2x1) Set(col, row int, val int64) {
-	mat[col*2+row] = val
+	mat[col+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
 func (mat *I64Mat2x1) Get(col, row int) int64 {
-	return mat[col*2+row]
+	return mat[col+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *I64Mat2x1) MarshalJSON() ([]byte, error) {
-	var tmpArray [2][2]int64
+	var tmpArray [2][1]int64
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			tmpArray[col][row] = mat[col*2+row]
+			tmpArray[col][row] = mat[col+row]
 		}
 	}
 
@@ -126,7 +126,7 @@ func (mat *I64Mat2x1) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *I64Mat2x1) UnmarshalJSON(data []byte) error {
-	var tmpArray [2][2]int64
+	var tmpArray [2][1]int64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
@@ -135,7 +135,7 @@ func (mat *I64Mat2x1) UnmarshalJSON(data []byte) error {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			mat[col*2+row] = tmpArray[col][row]
+			mat[col+row] = tmpArray[col][row]
 		}
 	}
 

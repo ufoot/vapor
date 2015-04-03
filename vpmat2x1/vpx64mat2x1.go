@@ -113,7 +113,7 @@ func (mat *X64Mat2x1) Get(col, row int) vpnumber.X64 {
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *X64Mat2x1) MarshalJSON() ([]byte, error) {
-	var tmpArray [2][2]int64
+	var tmpArray [2][1]int64
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
@@ -131,7 +131,7 @@ func (mat *X64Mat2x1) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *X64Mat2x1) UnmarshalJSON(data []byte) error {
-	var tmpArray [2][2]int64
+	var tmpArray [2][1]int64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
