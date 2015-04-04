@@ -25,7 +25,6 @@ import (
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec3"
-	"github.com/ufoot/vapor/vpvec4"
 )
 
 // X64Mat4x3 is a matrix containing 4x3 fixed point 64 bit values.
@@ -41,36 +40,36 @@ func X64Mat4x3New(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12 vpnumber.X64
 
 // X64Mat4x3Identity creates a new identity matrix.
 func X64Mat4x3Identity() *X64Mat4x3 {
-	return &X64Mat4x3{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+	return &X64Mat4x3{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0}
 }
 
 // X64Mat4x3Trans creates a new translation matrix.
 func X64Mat4x3Trans(vec *vpvec3.X64Vec3) *X64Mat4x3 {
-	return &X64Mat4x3{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vec[0], vec[1], vec[2], vpnumber.X64Const1}
+	return &X64Mat4x3{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vec[0], vec[1], vec[2]}
 }
 
 // X64Mat4x3RotX creates a new rotation matrix.
 // The rotation is done in 3D over the x (1st) axis.
 // Angle is given in radians.
 func X64Mat4x3RotX(r vpnumber.X64) *X64Mat4x3 {
-	return &X64Mat4x3{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpmath.X64Cos(r), vpmath.X64Sin(r), vpnumber.X64Const0, vpnumber.X64Const0, -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+	return &X64Mat4x3{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpmath.X64Cos(r), vpmath.X64Sin(r), vpnumber.X64Const0, -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0}
 }
 
 // X64Mat4x3RotY creates a new rotation matrix.
 // The rotation is done in 3D over the y (2nd) axis.
 // Angle is given in radians.
 func X64Mat4x3RotY(r vpnumber.X64) *X64Mat4x3 {
-	return &X64Mat4x3{vpmath.X64Cos(r), vpnumber.X64Const0, -vpmath.X64Sin(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpmath.X64Sin(r), vpnumber.X64Const0, vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+	return &X64Mat4x3{vpmath.X64Cos(r), vpnumber.X64Const0, -vpmath.X64Sin(r), vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpmath.X64Sin(r), vpnumber.X64Const0, vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0}
 }
 
 // X64Mat4x3RotZ creates a new rotation matrix.
 // The rotation is done in 3D over the z (3rd) axis.
 // Angle is given in radians.
 func X64Mat4x3RotZ(r vpnumber.X64) *X64Mat4x3 {
-	return &X64Mat4x3{vpmath.X64Cos(r), vpmath.X64Sin(r), vpnumber.X64Const0, vpnumber.X64Const0, -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+	return &X64Mat4x3{vpmath.X64Cos(r), vpmath.X64Sin(r), vpnumber.X64Const0, -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0}
 }
 
-// ToX32 converts the matrix to a fixed point number matrix on 64 bits.
+// ToX64 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *X64Mat4x3) ToX32() *X32Mat4x3 {
 	var ret X32Mat4x3
 
@@ -81,7 +80,7 @@ func (mat *X64Mat4x3) ToX32() *X32Mat4x3 {
 	return &ret
 }
 
-// ToF32 converts the matrix to a float32 matrix.
+// ToF64 converts the matrix to a float64 matrix.
 func (mat *X64Mat4x3) ToF32() *F32Mat4x3 {
 	var ret F32Mat4x3
 
@@ -105,12 +104,12 @@ func (mat *X64Mat4x3) ToF64() *F64Mat4x3 {
 
 // Set sets the value of the matrix for a given column and row.
 func (mat *X64Mat4x3) Set(col, row int, val vpnumber.X64) {
-	mat[col*4+row] = val
+	mat[col*3+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
 func (mat *X64Mat4x3) Get(col, row int) vpnumber.X64 {
-	return mat[col*4+row]
+	return mat[col*3+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
@@ -119,7 +118,7 @@ func (mat *X64Mat4x3) MarshalJSON() ([]byte, error) {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			tmpArray[col][row] = int64(mat[col*4+row])
+			tmpArray[col][row] = int64(mat[col*3+row])
 		}
 	}
 
@@ -142,7 +141,7 @@ func (mat *X64Mat4x3) UnmarshalJSON(data []byte) error {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			mat[col*4+row] = vpnumber.X64(tmpArray[col][row])
+			mat[col*3+row] = vpnumber.X64(tmpArray[col][row])
 		}
 	}
 
@@ -212,14 +211,6 @@ func (mat *X64Mat4x3) IsSimilar(op *X64Mat4x3) bool {
 	return ret
 }
 
-// Transpose inverts rows and columns (matrix transposition).
-// It modifies the matrix, and returns a pointer on it.
-func (mat *X64Mat4x3) Transpose(op *X64Mat4x3) *X64Mat4x3 {
-	*mat = *X64Mat4x3Transpose(op)
-
-	return mat
-}
-
 // MulComp multiplies the matrix by another matrix (composition).
 // It modifies the matrix, and returns a pointer on it.
 func (mat *X64Mat4x3) MulComp(op *X64Mat4x3) *X64Mat4x3 {
@@ -230,7 +221,7 @@ func (mat *X64Mat4x3) MulComp(op *X64Mat4x3) *X64Mat4x3 {
 
 // Det returns the matrix determinant.
 func (mat *X64Mat4x3) Det() vpnumber.X64 {
-	return vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(2, 1), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(2, 1), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(2, 2), mat.Get(3, 0)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(2, 2), mat.Get(3, 0)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(2, 0), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(2, 0), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(2, 2), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(2, 2), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 3), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 3), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(2, 0), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(2, 0), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(2, 1), mat.Get(3, 2)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(2, 1), mat.Get(3, 2)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 3), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 3), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 0), mat.Get(3, 3)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 0), mat.Get(3, 3)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 1), mat.Get(3, 3)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 1), mat.Get(3, 3)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 2), mat.Get(3, 3)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 2), mat.Get(3, 3))
+	return -vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 0)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 0)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 1)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 1)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 2)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 2))
 }
 
 // Inv inverts the matrix.
@@ -241,18 +232,6 @@ func (mat *X64Mat4x3) Inv() *X64Mat4x3 {
 	*mat = *X64Mat4x3Inv(mat)
 
 	return mat
-}
-
-// MulVec performs a multiplication of a vector by a 4x3 matrix,
-// considering the vector is a column vector (matrix left, vector right).
-func (mat *X64Mat4x3) MulVec(vec *vpvec4.X64Vec4) *vpvec4.X64Vec4 {
-	var ret vpvec4.X64Vec4
-
-	for i := range vec {
-		ret[i] = vpnumber.X64Mul(mat.Get(0, i), vec[0]) + vpnumber.X64Mul(mat.Get(1, i), vec[1]) + vpnumber.X64Mul(mat.Get(2, i), vec[2]) + vpnumber.X64Mul(mat.Get(3, i), vec[3])
-	}
-
-	return &ret
 }
 
 // MulVecPos performs a multiplication of a vector by a 4x3 matrix,
@@ -327,29 +306,18 @@ func X64Mat4x3DivScale(mat *X64Mat4x3, factor vpnumber.X64) *X64Mat4x3 {
 	return &ret
 }
 
-// X64Mat4x3Transpose inverts rows and columns (matrix transposition).
-// Args is left untouched, a pointer on a new object is returned.
-func X64Mat4x3Transpose(mat *X64Mat4x3) *X64Mat4x3 {
-	var ret X64Mat4x3
-
-	for c := 0; c < 4; c++ {
-		for r := 0; r < 4; r++ {
-			ret.Set(c, r, mat.Get(r, c))
-		}
-	}
-
-	return &ret
-}
-
 // X64Mat4x3MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func X64Mat4x3MulComp(a, b *X64Mat4x3) *X64Mat4x3 {
 	var ret X64Mat4x3
 
-	for c := 0; c < 4; c++ {
-		for r := 0; r < 4; r++ {
-			ret.Set(c, r, vpnumber.X64Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X64Mul(a.Get(1, r), b.Get(c, 1))+vpnumber.X64Mul(a.Get(2, r), b.Get(c, 2))+vpnumber.X64Mul(a.Get(3, r), b.Get(c, 3)))
+	for c := 0; c < 3; c++ {
+		for r := 0; r < 3; r++ {
+			ret.Set(c, r, vpnumber.X64Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X64Mul(a.Get(1, r), b.Get(c, 1))+vpnumber.X64Mul(a.Get(2, r), b.Get(c, 2)))
 		}
+	}
+	for r := 0; r < 3; r++ {
+		ret.Set(3, r, vpnumber.X64Mul(a.Get(0, r), b.Get(3, 0))+vpnumber.X64Mul(a.Get(1, r), b.Get(3, 1))+vpnumber.X64Mul(a.Get(2, r), b.Get(3, 2))+a.Get(3, r))
 	}
 
 	return &ret
@@ -361,22 +329,18 @@ func X64Mat4x3MulComp(a, b *X64Mat4x3) *X64Mat4x3 {
 // Args is left untouched, a pointer on a new object is returned.
 func X64Mat4x3Inv(mat *X64Mat4x3) *X64Mat4x3 {
 	ret := X64Mat4x3{
-		vpnumber.X64Muln(mat.Get(1, 2), mat.Get(2, 3), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(1, 3), mat.Get(2, 2), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(1, 3), mat.Get(2, 1), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(1, 1), mat.Get(2, 3), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(1, 2), mat.Get(2, 1), mat.Get(3, 3)) + vpnumber.X64Muln(mat.Get(1, 1), mat.Get(2, 2), mat.Get(3, 3)),
-		vpnumber.X64Muln(mat.Get(0, 3), mat.Get(2, 2), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(2, 3), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(2, 1), mat.Get(3, 2)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(2, 3), mat.Get(3, 2)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(2, 1), mat.Get(3, 3)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(2, 2), mat.Get(3, 3)),
-		vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(3, 3)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(3, 3)),
-		vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(2, 1)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(2, 1)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(2, 2)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(2, 2)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 3)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 3)),
-		vpnumber.X64Muln(mat.Get(1, 3), mat.Get(2, 2), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(1, 2), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(1, 3), mat.Get(2, 0), mat.Get(3, 2)) + vpnumber.X64Muln(mat.Get(1, 0), mat.Get(2, 3), mat.Get(3, 2)) + vpnumber.X64Muln(mat.Get(1, 2), mat.Get(2, 0), mat.Get(3, 3)) - vpnumber.X64Muln(mat.Get(1, 0), mat.Get(2, 2), mat.Get(3, 3)),
-		vpnumber.X64Muln(mat.Get(0, 2), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(2, 2), mat.Get(3, 0)) + vpnumber.X64Muln(mat.Get(0, 3), mat.Get(2, 0), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(2, 3), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(2, 0), mat.Get(3, 3)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(2, 2), mat.Get(3, 3)),
-		vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(3, 2)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(3, 2)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(3, 3)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(3, 3)),
-		vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 3), mat.Get(2, 0)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 2), mat.Get(2, 0)) + vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(2, 2)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(2, 2)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 3)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 3)),
-		vpnumber.X64Muln(mat.Get(1, 1), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(1, 3), mat.Get(2, 1), mat.Get(3, 0)) + vpnumber.X64Muln(mat.Get(1, 3), mat.Get(2, 0), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(1, 0), mat.Get(2, 3), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(1, 1), mat.Get(2, 0), mat.Get(3, 3)) + vpnumber.X64Muln(mat.Get(1, 0), mat.Get(2, 1), mat.Get(3, 3)),
-		vpnumber.X64Muln(mat.Get(0, 3), mat.Get(2, 1), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(2, 3), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(2, 0), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(2, 3), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(2, 0), mat.Get(3, 3)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(2, 1), mat.Get(3, 3)),
-		vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(3, 0)) + vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(3, 3)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(3, 3)),
-		vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 1), mat.Get(2, 0)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 3), mat.Get(2, 0)) - vpnumber.X64Muln(mat.Get(0, 3), mat.Get(1, 0), mat.Get(2, 1)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 3), mat.Get(2, 1)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 3)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 3)),
+		-vpnumber.X64Mul(mat.Get(1, 2), mat.Get(2, 1)) + vpnumber.X64Mul(mat.Get(1, 1), mat.Get(2, 2)),
+		vpnumber.X64Mul(mat.Get(0, 2), mat.Get(2, 1)) - vpnumber.X64Mul(mat.Get(0, 1), mat.Get(2, 2)),
+		-vpnumber.X64Mul(mat.Get(0, 2), mat.Get(1, 1)) + vpnumber.X64Mul(mat.Get(0, 1), mat.Get(1, 2)),
+		vpnumber.X64Mul(mat.Get(1, 2), mat.Get(2, 0)) - vpnumber.X64Mul(mat.Get(1, 0), mat.Get(2, 2)),
+		-vpnumber.X64Mul(mat.Get(0, 2), mat.Get(2, 0)) + vpnumber.X64Mul(mat.Get(0, 0), mat.Get(2, 2)),
+		vpnumber.X64Mul(mat.Get(0, 2), mat.Get(1, 0)) - vpnumber.X64Mul(mat.Get(0, 0), mat.Get(1, 2)),
+		-vpnumber.X64Mul(mat.Get(1, 1), mat.Get(2, 0)) + vpnumber.X64Mul(mat.Get(1, 0), mat.Get(2, 1)),
+		vpnumber.X64Mul(mat.Get(0, 1), mat.Get(2, 0)) - vpnumber.X64Mul(mat.Get(0, 0), mat.Get(2, 1)),
+		-vpnumber.X64Mul(mat.Get(0, 1), mat.Get(1, 0)) + vpnumber.X64Mul(mat.Get(0, 0), mat.Get(1, 1)),
 		vpnumber.X64Muln(mat.Get(1, 2), mat.Get(2, 1), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(1, 1), mat.Get(2, 2), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(1, 2), mat.Get(2, 0), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(1, 0), mat.Get(2, 2), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(1, 1), mat.Get(2, 0), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(1, 0), mat.Get(2, 1), mat.Get(3, 2)),
 		vpnumber.X64Muln(mat.Get(0, 1), mat.Get(2, 2), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(2, 1), mat.Get(3, 0)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(2, 0), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(2, 2), mat.Get(3, 1)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(2, 0), mat.Get(3, 2)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(2, 1), mat.Get(3, 2)),
 		vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(3, 0)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(3, 1)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(3, 2)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(3, 2)),
-		vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 0)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 0)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 1)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 1)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 2)) + vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 2)),
 	}
 
 	det := mat.Det()
