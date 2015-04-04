@@ -25,7 +25,6 @@ import (
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec2"
-	"github.com/ufoot/vapor/vpvec3"
 )
 
 // X64Mat3x2 is a matrix containing 3x2 fixed point 64 bit values.
@@ -35,25 +34,25 @@ type X64Mat3x2 [6]vpnumber.X64
 // X64Mat3x2New creates a new matrix containing 3x2 fixed point 64 bit values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func X64Mat3x2New(x1, x2, x3, x4, x5, x6, x7, x8, x9 vpnumber.X64) *X64Mat3x2 {
-	return &X64Mat3x2{x1, x2, x3, x4, x5, x6, x7, x8, x9}
+func X64Mat3x2New(x1, x2, x3, x4, x5, x6 vpnumber.X64) *X64Mat3x2 {
+	return &X64Mat3x2{x1, x2, x3, x4, x5, x6}
 }
 
 // X64Mat3x2Identity creates a new identity matrix.
 func X64Mat3x2Identity() *X64Mat3x2 {
-	return &X64Mat3x2{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+	return &X64Mat3x2{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0}
 }
 
 // X64Mat3x2Trans creates a new translation matrix.
 func X64Mat3x2Trans(vec *vpvec2.X64Vec2) *X64Mat3x2 {
-	return &X64Mat3x2{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vec[0], vec[1], vpnumber.X64Const1}
+	return &X64Mat3x2{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vec[0], vec[1]}
 }
 
 // X64Mat3x2Rot creates a new rotation matrix.
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.
 func X64Mat3x2Rot(r vpnumber.X64) *X64Mat3x2 {
-	return &X64Mat3x2{vpmath.X64Cos(r), vpmath.X64Sin(r), vpnumber.X64Const0, -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+	return &X64Mat3x2{vpmath.X64Cos(r), vpmath.X64Sin(r), -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0}
 }
 
 // ToX32 converts the matrix to a fixed point number matrix on 64 bits.
@@ -91,21 +90,21 @@ func (mat *X64Mat3x2) ToF64() *F64Mat3x2 {
 
 // Set sets the value of the matrix for a given column and row.
 func (mat *X64Mat3x2) Set(col, row int, val vpnumber.X64) {
-	mat[col*3+row] = val
+	mat[col*2+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
 func (mat *X64Mat3x2) Get(col, row int) vpnumber.X64 {
-	return mat[col*3+row]
+	return mat[col*2+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *X64Mat3x2) MarshalJSON() ([]byte, error) {
-	var tmpArray [3][3]int64
+	var tmpArray [3][2]int64
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			tmpArray[col][row] = int64(mat[col*3+row])
+			tmpArray[col][row] = int64(mat[col*2+row])
 		}
 	}
 
@@ -119,7 +118,7 @@ func (mat *X64Mat3x2) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *X64Mat3x2) UnmarshalJSON(data []byte) error {
-	var tmpArray [3][3]int64
+	var tmpArray [3][2]int64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
@@ -128,7 +127,7 @@ func (mat *X64Mat3x2) UnmarshalJSON(data []byte) error {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			mat[col*3+row] = vpnumber.X64(tmpArray[col][row])
+			mat[col*2+row] = vpnumber.X64(tmpArray[col][row])
 		}
 	}
 
@@ -198,14 +197,6 @@ func (mat *X64Mat3x2) IsSimilar(op *X64Mat3x2) bool {
 	return ret
 }
 
-// Transpose inverts rows and columns (matrix transposition).
-// It modifies the matrix, and returns a pointer on it.
-func (mat *X64Mat3x2) Transpose(op *X64Mat3x2) *X64Mat3x2 {
-	*mat = *X64Mat3x2Transpose(op)
-
-	return mat
-}
-
 // MulComp multiplies the matrix by another matrix (composition).
 // It modifies the matrix, and returns a pointer on it.
 func (mat *X64Mat3x2) MulComp(op *X64Mat3x2) *X64Mat3x2 {
@@ -216,7 +207,7 @@ func (mat *X64Mat3x2) MulComp(op *X64Mat3x2) *X64Mat3x2 {
 
 // Det returns the matrix determinant.
 func (mat *X64Mat3x2) Det() vpnumber.X64 {
-	return vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 2)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 0)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 1)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 1)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 2)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 0))
+	return vpnumber.X64Mul(mat.Get(0, 0), mat.Get(1, 1)) - vpnumber.X64Mul(mat.Get(0, 1), mat.Get(1, 0))
 }
 
 // Inv inverts the matrix.
@@ -227,18 +218,6 @@ func (mat *X64Mat3x2) Inv() *X64Mat3x2 {
 	*mat = *X64Mat3x2Inv(mat)
 
 	return mat
-}
-
-// MulVec performs a multiplication of a vector by a 3x2 matrix,
-// considering the vector is a column vector (matrix left, vector right).
-func (mat *X64Mat3x2) MulVec(vec *vpvec3.X64Vec3) *vpvec3.X64Vec3 {
-	var ret vpvec3.X64Vec3
-
-	for i := range vec {
-		ret[i] = vpnumber.X64Mul(mat.Get(0, i), vec[0]) + vpnumber.X64Mul(mat.Get(1, i), vec[1]) + vpnumber.X64Mul(mat.Get(2, i), vec[2])
-	}
-
-	return &ret
 }
 
 // MulVecPos performs a multiplication of a vector by a 3x2 matrix,
@@ -313,29 +292,18 @@ func X64Mat3x2DivScale(mat *X64Mat3x2, factor vpnumber.X64) *X64Mat3x2 {
 	return &ret
 }
 
-// X64Mat3x2Transpose inverts rows and columns (matrix transposition).
-// Args is left untouched, a pointer on a new object is returned.
-func X64Mat3x2Transpose(mat *X64Mat3x2) *X64Mat3x2 {
-	var ret X64Mat3x2
-
-	for c := 0; c < 3; c++ {
-		for r := 0; r < 3; r++ {
-			ret.Set(c, r, mat.Get(r, c))
-		}
-	}
-
-	return &ret
-}
-
 // X64Mat3x2MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func X64Mat3x2MulComp(a, b *X64Mat3x2) *X64Mat3x2 {
 	var ret X64Mat3x2
 
-	for c := 0; c < 3; c++ {
-		for r := 0; r < 3; r++ {
-			ret.Set(c, r, vpnumber.X64Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X64Mul(a.Get(1, r), b.Get(c, 1))+vpnumber.X64Mul(a.Get(2, r), b.Get(c, 2)))
+	for c := 0; c < 2; c++ {
+		for r := 0; r < 2; r++ {
+			ret.Set(c, r, vpnumber.X64Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X64Mul(a.Get(1, r), b.Get(c, 1)))
 		}
+	}
+	for r := 0; r < 2; r++ {
+		ret.Set(2, r, vpnumber.X64Mul(a.Get(0, r), b.Get(2, 0))+vpnumber.X64Mul(a.Get(1, r), b.Get(2, 1))+a.Get(2, r))
 	}
 
 	return &ret
@@ -347,15 +315,12 @@ func X64Mat3x2MulComp(a, b *X64Mat3x2) *X64Mat3x2 {
 // Args is left untouched, a pointer on a new object is returned.
 func X64Mat3x2Inv(mat *X64Mat3x2) *X64Mat3x2 {
 	ret := X64Mat3x2{
-		vpnumber.X64Mul(mat.Get(1, 1), mat.Get(2, 2)) - vpnumber.X64Mul(mat.Get(1, 2), mat.Get(2, 1)),
-		vpnumber.X64Mul(mat.Get(0, 2), mat.Get(2, 1)) - vpnumber.X64Mul(mat.Get(0, 1), mat.Get(2, 2)),
-		vpnumber.X64Mul(mat.Get(0, 1), mat.Get(1, 2)) - vpnumber.X64Mul(mat.Get(0, 2), mat.Get(1, 1)),
-		vpnumber.X64Mul(mat.Get(1, 2), mat.Get(2, 0)) - vpnumber.X64Mul(mat.Get(1, 0), mat.Get(2, 2)),
-		vpnumber.X64Mul(mat.Get(0, 0), mat.Get(2, 2)) - vpnumber.X64Mul(mat.Get(0, 2), mat.Get(2, 0)),
-		vpnumber.X64Mul(mat.Get(0, 2), mat.Get(1, 0)) - vpnumber.X64Mul(mat.Get(0, 0), mat.Get(1, 2)),
+		mat.Get(1, 1),
+		-mat.Get(0, 1),
+		-mat.Get(1, 0),
+		mat.Get(0, 0),
 		vpnumber.X64Mul(mat.Get(1, 0), mat.Get(2, 1)) - vpnumber.X64Mul(mat.Get(1, 1), mat.Get(2, 0)),
 		vpnumber.X64Mul(mat.Get(0, 1), mat.Get(2, 0)) - vpnumber.X64Mul(mat.Get(0, 0), mat.Get(2, 1)),
-		vpnumber.X64Mul(mat.Get(0, 0), mat.Get(1, 1)) - vpnumber.X64Mul(mat.Get(0, 1), mat.Get(1, 0)),
 	}
 
 	det := mat.Det()

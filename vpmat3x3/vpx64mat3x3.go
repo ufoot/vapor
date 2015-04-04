@@ -56,28 +56,6 @@ func X64Mat3x3Rot(r vpnumber.X64) *X64Mat3x3 {
 	return &X64Mat3x3{vpmath.X64Cos(r), vpmath.X64Sin(r), vpnumber.X64Const0, -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
-// ToI32 converts the matrix to an int32 matrix.
-func (mat *X64Mat3x3) ToI32() *I32Mat3x3 {
-	var ret I32Mat3x3
-
-	for i, v := range mat {
-		ret[i] = vpnumber.X64ToI32(v)
-	}
-
-	return &ret
-}
-
-// ToI64 converts the matrix to an int32 matrix.
-func (mat *X64Mat3x3) ToI64() *I64Mat3x3 {
-	var ret I64Mat3x3
-
-	for i, v := range mat {
-		ret[i] = vpnumber.X64ToI64(v)
-	}
-
-	return &ret
-}
-
 // ToX32 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *X64Mat3x3) ToX32() *X32Mat3x3 {
 	var ret X32Mat3x3

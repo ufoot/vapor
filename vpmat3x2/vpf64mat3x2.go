@@ -206,7 +206,7 @@ func (mat *F64Mat3x2) MulComp(op *F64Mat3x2) *F64Mat3x2 {
 
 // Det returns the matrix determinant.
 func (mat *F64Mat3x2) Det() float64 {
-	return mat.Get(0, 0)*mat.Get(1, 1) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(0, 1)*mat.Get(1, 0)
+	return mat.Get(0, 0)*mat.Get(1, 1) - mat.Get(0, 1)*mat.Get(1, 0)
 }
 
 // Inv inverts the matrix.
