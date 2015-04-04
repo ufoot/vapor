@@ -20,6 +20,7 @@
 package vpmat4x3
 
 import (
+	"github.com/ufoot/vapor/vpmat4x3"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpvec3"
 	"github.com/ufoot/vapor/vpvec4"
@@ -148,12 +149,6 @@ func TestF64Mat4x3Aff(t *testing.T) {
 	vt := vpvec3.F64Vec3New(t1, t2, t3)
 	mt := F64Mat4x3Trans(vt)
 	t.Logf("translation mat4x3 for %s is %s", vt.String(), mt.String())
-	v2 := mt.MulVec(v1)
-	t.Logf("mat4x3 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
-	v3 := vpvec4.F64Vec4New(p1+t1, p2+t2, p3+t3, vpnumber.F64Const1)
-	if !v2.IsSimilar(v3) {
-		t.Errorf("mat4x3 MulVec error v2=%s v3=%s", v2.String(), v3.String())
-	}
 	v2pos := mt.MulVecPos(v1.ToVec3())
 	v3pos := v1.ToVec3().Add(vt)
 	if !v2pos.IsSimilar(v3pos) {
@@ -166,8 +161,9 @@ func TestF64Mat4x3Aff(t *testing.T) {
 	}
 
 	mr := F64Mat4x3RotX(math.Pi / 2)
+	mrCheck := vpmat4x4.F64Mat4x4RotX(math.Pi / 2)
 	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
-	v2 = mr.MulVec(v1)
+	v2 := mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
 	v3 = vpvec4.F64Vec4New(v1[0], -v1[2], v1[1], vpnumber.F64Const1)
 	if !v2.IsSimilar(v3) {
@@ -185,8 +181,9 @@ func TestF64Mat4x3Aff(t *testing.T) {
 	}
 
 	mr = F64Mat4x3RotY(math.Pi / 2)
+	mrCheck = vpmat4x4.F64Mat4x4RotY(math.Pi / 2)
 	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
-	v2 = mr.MulVec(v1)
+	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
 	v3 = vpvec4.F64Vec4New(v1[2], v1[1], -v1[0], vpnumber.F64Const1)
 	if !v2.IsSimilar(v3) {
@@ -204,8 +201,9 @@ func TestF64Mat4x3Aff(t *testing.T) {
 	}
 
 	mr = F64Mat4x3RotZ(math.Pi / 2)
+	mrCheck = vpmat4x4.F64Mat4x4RotZ(math.Pi / 2)
 	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
-	v2 = mr.MulVec(v1)
+	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
 	v3 = vpvec4.F64Vec4New(-v1[1], v1[0], v1[2], vpnumber.F64Const1)
 	if !v2.IsSimilar(v3) {

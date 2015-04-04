@@ -243,18 +243,6 @@ func (mat *F32Mat4x3) Inv() *F32Mat4x3 {
 	return mat
 }
 
-// MulVec performs a multiplication of a vector by a 4x3 matrix,
-// considering the vector is a column vector (matrix left, vector right).
-func (mat *F32Mat4x3) MulVec(vec *vpvec4.F32Vec4) *vpvec4.F32Vec4 {
-	var ret vpvec4.F32Vec4
-
-	for i := range vec {
-		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2] + mat.Get(3, i)*vec[3]
-	}
-
-	return &ret
-}
-
 // MulVecPos performs a multiplication of a vector by a 4x3 matrix,
 // considering the vector is a column vector (matrix left, vector right).
 // The last member of the vector is assumed to be 1, so in practice a
