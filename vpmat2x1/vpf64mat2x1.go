@@ -46,28 +46,6 @@ func F64Mat2x1Trans(f float64) *F64Mat2x1 {
 	return &F64Mat2x1{vpnumber.F64Const1, f}
 }
 
-// ToI32 converts the matrix to an int32 matrix.
-func (mat *F64Mat2x1) ToI32() *I32Mat2x1 {
-	var ret I32Mat2x1
-
-	for i, v := range mat {
-		ret[i] = int32(v)
-	}
-
-	return &ret
-}
-
-// ToI64 converts the matrix to an int64 matrix.
-func (mat *F64Mat2x1) ToI64() *I64Mat2x1 {
-	var ret I64Mat2x1
-
-	for i, v := range mat {
-		ret[i] = int64(v)
-	}
-
-	return &ret
-}
-
 // ToX32 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *F64Mat2x1) ToX32() *X32Mat2x1 {
 	var ret X32Mat2x1

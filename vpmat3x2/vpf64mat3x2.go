@@ -54,28 +54,6 @@ func F64Mat3x2Rot(r float64) *F64Mat3x2 {
 	return &F64Mat3x2{math.Cos(r), math.Sin(r), -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
-// ToI32 converts the matrix to an int32 matrix.
-func (mat *F64Mat3x2) ToI32() *I32Mat3x2 {
-	var ret I32Mat3x2
-
-	for i, v := range mat {
-		ret[i] = int32(v)
-	}
-
-	return &ret
-}
-
-// ToI64 converts the matrix to an int64 matrix.
-func (mat *F64Mat3x2) ToI64() *I64Mat3x2 {
-	var ret I64Mat3x2
-
-	for i, v := range mat {
-		ret[i] = int64(v)
-	}
-
-	return &ret
-}
-
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
 func (mat *F64Mat3x2) ToX32() *X32Mat3x2 {
 	var ret X32Mat3x2

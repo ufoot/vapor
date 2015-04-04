@@ -47,28 +47,6 @@ func X64Mat2x2Trans(x vpnumber.X64) *X64Mat2x2 {
 	return &X64Mat2x2{vpnumber.X64Const1, vpnumber.X64Const0, x, vpnumber.X64Const1}
 }
 
-// ToI32 converts the matrix to an int32 matrix.
-func (mat *X64Mat2x2) ToI32() *I32Mat2x2 {
-	var ret I32Mat2x2
-
-	for i, v := range mat {
-		ret[i] = vpnumber.X64ToI32(v)
-	}
-
-	return &ret
-}
-
-// ToI64 converts the matrix to an int32 matrix.
-func (mat *X64Mat2x2) ToI64() *I64Mat2x2 {
-	var ret I64Mat2x2
-
-	for i, v := range mat {
-		ret[i] = vpnumber.X64ToI64(v)
-	}
-
-	return &ret
-}
-
 // ToX32 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *X64Mat2x2) ToX32() *X32Mat2x2 {
 	var ret X32Mat2x2
