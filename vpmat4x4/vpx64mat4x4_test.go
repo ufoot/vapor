@@ -72,16 +72,6 @@ func TestX64Mat4x4Math(t *testing.T) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
-	m2 = m1.ToI32().ToX64()
-	if !m1.IsSimilar(m2) {
-		t.Error("I32 conversion error")
-	}
-
-	m2 = m1.ToI64().ToX64()
-	if !m1.IsSimilar(m2) {
-		t.Error("I64 conversion error")
-	}
-
 	m2 = m1.ToX32().ToX64()
 	if !m1.IsSimilar(m2) {
 		t.Error("X32 conversion error")
