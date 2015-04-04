@@ -30,13 +30,13 @@ import (
 
 // F64Mat4x3 is a matrix containing 4x3 float64 values.
 // Can be used in 3D matrix transformations.
-type F64Mat4x3 [16]float64
+type F64Mat4x3 [12]float64
 
 // F64Mat4x3New creates a new matrix containing 4x3 float64 values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func F64Mat4x3New(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16 float64) *F64Mat4x3 {
-	return &F64Mat4x3{f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16}
+func F64Mat4x3New(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12 float64) *F64Mat4x3 {
+	return &F64Mat4x3{f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12}
 }
 
 // F64Mat4x3Identity creates a new identity matrix.

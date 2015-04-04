@@ -30,13 +30,13 @@ import (
 
 // X64Mat4x3 is a matrix containing 4x3 fixed point 64 bit values.
 // Can be used in 3D matrix transformations.
-type X64Mat4x3 [16]vpnumber.X64
+type X64Mat4x3 [12]vpnumber.X64
 
 // X64Mat4x3New creates a new matrix containing 4x3 fixed point 64 bit values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func X64Mat4x3New(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16 vpnumber.X64) *X64Mat4x3 {
-	return &X64Mat4x3{x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12, x13, x14, x15, x16}
+func X64Mat4x3New(x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12 vpnumber.X64) *X64Mat4x3 {
+	return &X64Mat4x3{x1, x2, x3, x4, x5, x6, x7, x8, x9, x10, x11, x12}
 }
 
 // X64Mat4x3Identity creates a new identity matrix.

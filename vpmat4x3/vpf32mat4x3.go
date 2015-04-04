@@ -30,44 +30,44 @@ import (
 
 // F32Mat4x3 is a matrix containing 4x3 float32 values.
 // Can be used in 3D matrix transformations.
-type F32Mat4x3 [16]float32
+type F32Mat4x3 [12]float32
 
 // F32Mat4x3New creates a new matrix containing 4x3 float32 values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func F32Mat4x3New(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16 float32) *F32Mat4x3 {
-	return &F32Mat4x3{f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16}
+func F32Mat4x3New(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12 float32) *F32Mat4x3 {
+	return &F32Mat4x3{f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12}
 }
 
 // F32Mat4x3Identity creates a new identity matrix.
 func F32Mat4x3Identity() *F32Mat4x3 {
-	return &F32Mat4x3{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
+	return &F32Mat4x3{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0}
 }
 
 // F32Mat4x3Trans creates a new translation matrix.
 func F32Mat4x3Trans(vec *vpvec3.F32Vec3) *F32Mat4x3 {
-	return &F32Mat4x3{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vec[0], vec[1], vec[2], vpnumber.F32Const1}
+	return &F32Mat4x3{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vec[0], vec[1], vec[2]}
 }
 
 // F32Mat4x3RotX creates a new rotation matrix.
 // The rotation is done in 3D over the x (1st) axis.
 // Angle is given in radians.
 func F32Mat4x3RotX(r float32) *F32Mat4x3 {
-	return &F32Mat4x3{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, float32(math.Cos(float64(r))), float32(math.Sin(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, -float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
+	return &F32Mat4x3{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, float32(math.Cos(float64(r))), float32(math.Sin(float64(r))), vpnumber.F32Const0, -float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0}
 }
 
 // F32Mat4x3RotY creates a new rotation matrix.
 // The rotation is done in 3D over the y (2nd) axis.
 // Angle is given in radians.
 func F32Mat4x3RotY(r float32) *F32Mat4x3 {
-	return &F32Mat4x3{float32(math.Cos(float64(r))), vpnumber.F32Const0, -float32(math.Sin(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, float32(math.Sin(float64(r))), vpnumber.F32Const0, float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
+	return &F32Mat4x3{float32(math.Cos(float64(r))), vpnumber.F32Const0, -float32(math.Sin(float64(r))), vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, float32(math.Sin(float64(r))), vpnumber.F32Const0, float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0}
 }
 
 // F32Mat4x3RotZ creates a new rotation matrix.
 // The rotation is done in 3D over the z (3rd) axis.
 // Angle is given in radians.
 func F32Mat4x3RotZ(r float32) *F32Mat4x3 {
-	return &F32Mat4x3{float32(math.Cos(float64(r))), float32(math.Sin(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, -float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
+	return &F32Mat4x3{float32(math.Cos(float64(r))), float32(math.Sin(float64(r))), vpnumber.F32Const0, -float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0}
 }
 
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
@@ -105,21 +105,21 @@ func (mat *F32Mat4x3) ToF64() *F64Mat4x3 {
 
 // Set sets the value of the matrix for a given column and row.
 func (mat *F32Mat4x3) Set(col, row int, val float32) {
-	mat[col*4+row] = val
+	mat[col*3+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
 func (mat *F32Mat4x3) Get(col, row int) float32 {
-	return mat[col*4+row]
+	return mat[col*3+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *F32Mat4x3) MarshalJSON() ([]byte, error) {
-	var tmpArray [4][4]float32
+	var tmpArray [4][3]float32
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			tmpArray[col][row] = mat[col*4+row]
+			tmpArray[col][row] = mat[col*3+row]
 		}
 	}
 
@@ -133,7 +133,7 @@ func (mat *F32Mat4x3) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *F32Mat4x3) UnmarshalJSON(data []byte) error {
-	var tmpArray [4][4]float32
+	var tmpArray [4][3]float32
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
@@ -142,7 +142,7 @@ func (mat *F32Mat4x3) UnmarshalJSON(data []byte) error {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			mat[col*4+row] = tmpArray[col][row]
+			mat[col*3+row] = tmpArray[col][row]
 		}
 	}
 
@@ -346,10 +346,13 @@ func F32Mat4x3Transpose(mat *F32Mat4x3) *F32Mat4x3 {
 func F32Mat4x3MulComp(a, b *F32Mat4x3) *F32Mat4x3 {
 	var ret F32Mat4x3
 
-	for c := 0; c < 4; c++ {
-		for r := 0; r < 4; r++ {
-			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1)+a.Get(2, r)*b.Get(c, 2)+a.Get(3, r)*b.Get(c, 3))
+	for c := 0; c < 3; c++ {
+		for r := 0; r < 3; r++ {
+			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1)+a.Get(2, r)*b.Get(c, 2))
 		}
+	}
+	for r := 0; r < 3; r++ {
+		ret.Set(3, r, a.Get(0, r)*b.Get(3, 0)+a.Get(1, r)*b.Get(3, 1)+a.Get(2, r)*b.Get(3, 2)+a.Get(3, r))
 	}
 
 	return &ret
@@ -361,22 +364,18 @@ func F32Mat4x3MulComp(a, b *F32Mat4x3) *F32Mat4x3 {
 // Args is left untouched, a pointer on a new object is returned.
 func F32Mat4x3Inv(mat *F32Mat4x3) *F32Mat4x3 {
 	ret := F32Mat4x3{
-		mat.Get(1, 2)*mat.Get(2, 3)*mat.Get(3, 1) - mat.Get(1, 3)*mat.Get(2, 2)*mat.Get(3, 1) + mat.Get(1, 3)*mat.Get(2, 1)*mat.Get(3, 2) - mat.Get(1, 1)*mat.Get(2, 3)*mat.Get(3, 2) - mat.Get(1, 2)*mat.Get(2, 1)*mat.Get(3, 3) + mat.Get(1, 1)*mat.Get(2, 2)*mat.Get(3, 3),
-		mat.Get(0, 3)*mat.Get(2, 2)*mat.Get(3, 1) - mat.Get(0, 2)*mat.Get(2, 3)*mat.Get(3, 1) - mat.Get(0, 3)*mat.Get(2, 1)*mat.Get(3, 2) + mat.Get(0, 1)*mat.Get(2, 3)*mat.Get(3, 2) + mat.Get(0, 2)*mat.Get(2, 1)*mat.Get(3, 3) - mat.Get(0, 1)*mat.Get(2, 2)*mat.Get(3, 3),
-		mat.Get(0, 2)*mat.Get(1, 3)*mat.Get(3, 1) - mat.Get(0, 3)*mat.Get(1, 2)*mat.Get(3, 1) + mat.Get(0, 3)*mat.Get(1, 1)*mat.Get(3, 2) - mat.Get(0, 1)*mat.Get(1, 3)*mat.Get(3, 2) - mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(3, 3) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(3, 3),
-		mat.Get(0, 3)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 2)*mat.Get(1, 3)*mat.Get(2, 1) - mat.Get(0, 3)*mat.Get(1, 1)*mat.Get(2, 2) + mat.Get(0, 1)*mat.Get(1, 3)*mat.Get(2, 2) + mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 3) - mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 3),
-		mat.Get(1, 3)*mat.Get(2, 2)*mat.Get(3, 0) - mat.Get(1, 2)*mat.Get(2, 3)*mat.Get(3, 0) - mat.Get(1, 3)*mat.Get(2, 0)*mat.Get(3, 2) + mat.Get(1, 0)*mat.Get(2, 3)*mat.Get(3, 2) + mat.Get(1, 2)*mat.Get(2, 0)*mat.Get(3, 3) - mat.Get(1, 0)*mat.Get(2, 2)*mat.Get(3, 3),
-		mat.Get(0, 2)*mat.Get(2, 3)*mat.Get(3, 0) - mat.Get(0, 3)*mat.Get(2, 2)*mat.Get(3, 0) + mat.Get(0, 3)*mat.Get(2, 0)*mat.Get(3, 2) - mat.Get(0, 0)*mat.Get(2, 3)*mat.Get(3, 2) - mat.Get(0, 2)*mat.Get(2, 0)*mat.Get(3, 3) + mat.Get(0, 0)*mat.Get(2, 2)*mat.Get(3, 3),
-		mat.Get(0, 3)*mat.Get(1, 2)*mat.Get(3, 0) - mat.Get(0, 2)*mat.Get(1, 3)*mat.Get(3, 0) - mat.Get(0, 3)*mat.Get(1, 0)*mat.Get(3, 2) + mat.Get(0, 0)*mat.Get(1, 3)*mat.Get(3, 2) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(3, 3) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(3, 3),
-		mat.Get(0, 2)*mat.Get(1, 3)*mat.Get(2, 0) - mat.Get(0, 3)*mat.Get(1, 2)*mat.Get(2, 0) + mat.Get(0, 3)*mat.Get(1, 0)*mat.Get(2, 2) - mat.Get(0, 0)*mat.Get(1, 3)*mat.Get(2, 2) - mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 3) + mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 3),
-		mat.Get(1, 1)*mat.Get(2, 3)*mat.Get(3, 0) - mat.Get(1, 3)*mat.Get(2, 1)*mat.Get(3, 0) + mat.Get(1, 3)*mat.Get(2, 0)*mat.Get(3, 1) - mat.Get(1, 0)*mat.Get(2, 3)*mat.Get(3, 1) - mat.Get(1, 1)*mat.Get(2, 0)*mat.Get(3, 3) + mat.Get(1, 0)*mat.Get(2, 1)*mat.Get(3, 3),
-		mat.Get(0, 3)*mat.Get(2, 1)*mat.Get(3, 0) - mat.Get(0, 1)*mat.Get(2, 3)*mat.Get(3, 0) - mat.Get(0, 3)*mat.Get(2, 0)*mat.Get(3, 1) + mat.Get(0, 0)*mat.Get(2, 3)*mat.Get(3, 1) + mat.Get(0, 1)*mat.Get(2, 0)*mat.Get(3, 3) - mat.Get(0, 0)*mat.Get(2, 1)*mat.Get(3, 3),
-		mat.Get(0, 1)*mat.Get(1, 3)*mat.Get(3, 0) - mat.Get(0, 3)*mat.Get(1, 1)*mat.Get(3, 0) + mat.Get(0, 3)*mat.Get(1, 0)*mat.Get(3, 1) - mat.Get(0, 0)*mat.Get(1, 3)*mat.Get(3, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(3, 3) + mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(3, 3),
-		mat.Get(0, 3)*mat.Get(1, 1)*mat.Get(2, 0) - mat.Get(0, 1)*mat.Get(1, 3)*mat.Get(2, 0) - mat.Get(0, 3)*mat.Get(1, 0)*mat.Get(2, 1) + mat.Get(0, 0)*mat.Get(1, 3)*mat.Get(2, 1) + mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 3) - mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 3),
+		-mat.Get(1, 2)*mat.Get(2, 1) + mat.Get(1, 1)*mat.Get(2, 2),
+		mat.Get(0, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(2, 2),
+		-mat.Get(0, 2)*mat.Get(1, 1) + mat.Get(0, 1)*mat.Get(1, 2),
+		mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(1, 0)*mat.Get(2, 2),
+		-mat.Get(0, 2)*mat.Get(2, 0) + mat.Get(0, 0)*mat.Get(2, 2),
+		mat.Get(0, 2)*mat.Get(1, 0) - mat.Get(0, 0)*mat.Get(1, 2),
+		-mat.Get(1, 1)*mat.Get(2, 0) + mat.Get(1, 0)*mat.Get(2, 1),
+		mat.Get(0, 1)*mat.Get(2, 0) - mat.Get(0, 0)*mat.Get(2, 1),
+		-mat.Get(0, 1)*mat.Get(1, 0) + mat.Get(0, 0)*mat.Get(1, 1),
 		mat.Get(1, 2)*mat.Get(2, 1)*mat.Get(3, 0) - mat.Get(1, 1)*mat.Get(2, 2)*mat.Get(3, 0) - mat.Get(1, 2)*mat.Get(2, 0)*mat.Get(3, 1) + mat.Get(1, 0)*mat.Get(2, 2)*mat.Get(3, 1) + mat.Get(1, 1)*mat.Get(2, 0)*mat.Get(3, 2) - mat.Get(1, 0)*mat.Get(2, 1)*mat.Get(3, 2),
 		mat.Get(0, 1)*mat.Get(2, 2)*mat.Get(3, 0) - mat.Get(0, 2)*mat.Get(2, 1)*mat.Get(3, 0) + mat.Get(0, 2)*mat.Get(2, 0)*mat.Get(3, 1) - mat.Get(0, 0)*mat.Get(2, 2)*mat.Get(3, 1) - mat.Get(0, 1)*mat.Get(2, 0)*mat.Get(3, 2) + mat.Get(0, 0)*mat.Get(2, 1)*mat.Get(3, 2),
 		mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(3, 0) - mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(3, 0) - mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(3, 1) + mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(3, 1) + mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(3, 2) - mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(3, 2),
-		mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 0) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 2) + mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 2),
 	}
 
 	det := mat.Det()
