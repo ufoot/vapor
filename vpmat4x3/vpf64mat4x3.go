@@ -24,7 +24,6 @@ import (
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec3"
-	"github.com/ufoot/vapor/vpvec4"
 	"math"
 )
 
@@ -41,33 +40,33 @@ func F64Mat4x3New(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12 float64) *F6
 
 // F64Mat4x3Identity creates a new identity matrix.
 func F64Mat4x3Identity() *F64Mat4x3 {
-	return &F64Mat4x3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
+	return &F64Mat4x3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // F64Mat4x3Trans creates a new translation matrix.
 func F64Mat4x3Trans(vec *vpvec3.F64Vec3) *F64Mat4x3 {
-	return &F64Mat4x3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vec[0], vec[1], vec[2], vpnumber.F64Const1}
+	return &F64Mat4x3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vec[0], vec[1], vec[2]}
 }
 
 // F64Mat4x3RotX creates a new rotation matrix.
 // The rotation is done in 3D over the x (1st) axis.
 // Angle is given in radians.
 func F64Mat4x3RotX(r float64) *F64Mat4x3 {
-	return &F64Mat4x3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, math.Cos(r), math.Sin(r), vpnumber.F64Const0, vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
+	return &F64Mat4x3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, math.Cos(r), math.Sin(r), vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // F64Mat4x3RotY creates a new rotation matrix.
 // The rotation is done in 3D over the y (2nd) axis.
 // Angle is given in radians.
 func F64Mat4x3RotY(r float64) *F64Mat4x3 {
-	return &F64Mat4x3{math.Cos(r), vpnumber.F64Const0, -math.Sin(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, math.Sin(r), vpnumber.F64Const0, math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
+	return &F64Mat4x3{math.Cos(r), vpnumber.F64Const0, -math.Sin(r), vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, math.Sin(r), vpnumber.F64Const0, math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // F64Mat4x3RotZ creates a new rotation matrix.
 // The rotation is done in 3D over the z (3rd) axis.
 // Angle is given in radians.
 func F64Mat4x3RotZ(r float64) *F64Mat4x3 {
-	return &F64Mat4x3{math.Cos(r), math.Sin(r), vpnumber.F64Const0, vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
+	return &F64Mat4x3{math.Cos(r), math.Sin(r), vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
@@ -105,12 +104,12 @@ func (mat *F64Mat4x3) ToF32() *F32Mat4x3 {
 
 // Set sets the value of the matrix for a given column and row.
 func (mat *F64Mat4x3) Set(col, row int, val float64) {
-	mat[col*4+row] = val
+	mat[col*3+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
 func (mat *F64Mat4x3) Get(col, row int) float64 {
-	return mat[col*4+row]
+	return mat[col*3+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
@@ -119,7 +118,7 @@ func (mat *F64Mat4x3) MarshalJSON() ([]byte, error) {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			tmpArray[col][row] = mat[col*4+row]
+			tmpArray[col][row] = mat[col*3+row]
 		}
 	}
 
@@ -142,7 +141,7 @@ func (mat *F64Mat4x3) UnmarshalJSON(data []byte) error {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			mat[col*4+row] = tmpArray[col][row]
+			mat[col*3+row] = tmpArray[col][row]
 		}
 	}
 
@@ -212,14 +211,6 @@ func (mat *F64Mat4x3) IsSimilar(op *F64Mat4x3) bool {
 	return ret
 }
 
-// Transpose inverts rows and columns (matrix transposition).
-// It modifies the matrix, and returns a pointer on it.
-func (mat *F64Mat4x3) Transpose(op *F64Mat4x3) *F64Mat4x3 {
-	*mat = *F64Mat4x3Transpose(op)
-
-	return mat
-}
-
 // MulComp multiplies the matrix by another matrix (composition).
 // It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat4x3) MulComp(op *F64Mat4x3) *F64Mat4x3 {
@@ -230,7 +221,7 @@ func (mat *F64Mat4x3) MulComp(op *F64Mat4x3) *F64Mat4x3 {
 
 // Det returns the matrix determinant.
 func (mat *F64Mat4x3) Det() float64 {
-	return mat.Get(0, 3)*mat.Get(1, 2)*mat.Get(2, 1)*mat.Get(3, 0) - mat.Get(0, 2)*mat.Get(1, 3)*mat.Get(2, 1)*mat.Get(3, 0) - mat.Get(0, 3)*mat.Get(1, 1)*mat.Get(2, 2)*mat.Get(3, 0) + mat.Get(0, 1)*mat.Get(1, 3)*mat.Get(2, 2)*mat.Get(3, 0) + mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 3)*mat.Get(3, 0) - mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 3)*mat.Get(3, 0) - mat.Get(0, 3)*mat.Get(1, 2)*mat.Get(2, 0)*mat.Get(3, 1) + mat.Get(0, 2)*mat.Get(1, 3)*mat.Get(2, 0)*mat.Get(3, 1) + mat.Get(0, 3)*mat.Get(1, 0)*mat.Get(2, 2)*mat.Get(3, 1) - mat.Get(0, 0)*mat.Get(1, 3)*mat.Get(2, 2)*mat.Get(3, 1) - mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 3)*mat.Get(3, 1) + mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 3)*mat.Get(3, 1) + mat.Get(0, 3)*mat.Get(1, 1)*mat.Get(2, 0)*mat.Get(3, 2) - mat.Get(0, 1)*mat.Get(1, 3)*mat.Get(2, 0)*mat.Get(3, 2) - mat.Get(0, 3)*mat.Get(1, 0)*mat.Get(2, 1)*mat.Get(3, 2) + mat.Get(0, 0)*mat.Get(1, 3)*mat.Get(2, 1)*mat.Get(3, 2) + mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 3)*mat.Get(3, 2) - mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 3)*mat.Get(3, 2) - mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 0)*mat.Get(3, 3) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0)*mat.Get(3, 3) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 1)*mat.Get(3, 3) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 1)*mat.Get(3, 3) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 2)*mat.Get(3, 3) + mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 2)*mat.Get(3, 3)
+	return -mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 0) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 2) + mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 2)
 }
 
 // Inv inverts the matrix.
@@ -241,18 +232,6 @@ func (mat *F64Mat4x3) Inv() *F64Mat4x3 {
 	*mat = *F64Mat4x3Inv(mat)
 
 	return mat
-}
-
-// MulVec performs a multiplication of a vector by a 4x3 matrix,
-// considering the vector is a column vector (matrix left, vector right).
-func (mat *F64Mat4x3) MulVec(vec *vpvec4.F64Vec4) *vpvec4.F64Vec4 {
-	var ret vpvec4.F64Vec4
-
-	for i := range vec {
-		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2] + mat.Get(3, i)*vec[3]
-	}
-
-	return &ret
 }
 
 // MulVecPos performs a multiplication of a vector by a 4x3 matrix,
@@ -327,29 +306,18 @@ func F64Mat4x3DivScale(mat *F64Mat4x3, factor float64) *F64Mat4x3 {
 	return &ret
 }
 
-// F64Mat4x3Transpose inverts rows and columns (matrix transposition).
-// Args is left untouched, a pointer on a new object is returned.
-func F64Mat4x3Transpose(mat *F64Mat4x3) *F64Mat4x3 {
-	var ret F64Mat4x3
-
-	for c := 0; c < 4; c++ {
-		for r := 0; r < 4; r++ {
-			ret.Set(c, r, mat.Get(r, c))
-		}
-	}
-
-	return &ret
-}
-
 // F64Mat4x3MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func F64Mat4x3MulComp(a, b *F64Mat4x3) *F64Mat4x3 {
 	var ret F64Mat4x3
 
-	for c := 0; c < 4; c++ {
-		for r := 0; r < 4; r++ {
-			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1)+a.Get(2, r)*b.Get(c, 2)+a.Get(3, r)*b.Get(c, 3))
+	for c := 0; c < 3; c++ {
+		for r := 0; r < 3; r++ {
+			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1)+a.Get(2, r)*b.Get(c, 2))
 		}
+	}
+	for r := 0; r < 3; r++ {
+		ret.Set(3, r, a.Get(0, r)*b.Get(3, 0)+a.Get(1, r)*b.Get(3, 1)+a.Get(2, r)*b.Get(3, 2)+a.Get(3, r))
 	}
 
 	return &ret
@@ -361,22 +329,18 @@ func F64Mat4x3MulComp(a, b *F64Mat4x3) *F64Mat4x3 {
 // Args is left untouched, a pointer on a new object is returned.
 func F64Mat4x3Inv(mat *F64Mat4x3) *F64Mat4x3 {
 	ret := F64Mat4x3{
-		mat.Get(1, 2)*mat.Get(2, 3)*mat.Get(3, 1) - mat.Get(1, 3)*mat.Get(2, 2)*mat.Get(3, 1) + mat.Get(1, 3)*mat.Get(2, 1)*mat.Get(3, 2) - mat.Get(1, 1)*mat.Get(2, 3)*mat.Get(3, 2) - mat.Get(1, 2)*mat.Get(2, 1)*mat.Get(3, 3) + mat.Get(1, 1)*mat.Get(2, 2)*mat.Get(3, 3),
-		mat.Get(0, 3)*mat.Get(2, 2)*mat.Get(3, 1) - mat.Get(0, 2)*mat.Get(2, 3)*mat.Get(3, 1) - mat.Get(0, 3)*mat.Get(2, 1)*mat.Get(3, 2) + mat.Get(0, 1)*mat.Get(2, 3)*mat.Get(3, 2) + mat.Get(0, 2)*mat.Get(2, 1)*mat.Get(3, 3) - mat.Get(0, 1)*mat.Get(2, 2)*mat.Get(3, 3),
-		mat.Get(0, 2)*mat.Get(1, 3)*mat.Get(3, 1) - mat.Get(0, 3)*mat.Get(1, 2)*mat.Get(3, 1) + mat.Get(0, 3)*mat.Get(1, 1)*mat.Get(3, 2) - mat.Get(0, 1)*mat.Get(1, 3)*mat.Get(3, 2) - mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(3, 3) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(3, 3),
-		mat.Get(0, 3)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 2)*mat.Get(1, 3)*mat.Get(2, 1) - mat.Get(0, 3)*mat.Get(1, 1)*mat.Get(2, 2) + mat.Get(0, 1)*mat.Get(1, 3)*mat.Get(2, 2) + mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 3) - mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 3),
-		mat.Get(1, 3)*mat.Get(2, 2)*mat.Get(3, 0) - mat.Get(1, 2)*mat.Get(2, 3)*mat.Get(3, 0) - mat.Get(1, 3)*mat.Get(2, 0)*mat.Get(3, 2) + mat.Get(1, 0)*mat.Get(2, 3)*mat.Get(3, 2) + mat.Get(1, 2)*mat.Get(2, 0)*mat.Get(3, 3) - mat.Get(1, 0)*mat.Get(2, 2)*mat.Get(3, 3),
-		mat.Get(0, 2)*mat.Get(2, 3)*mat.Get(3, 0) - mat.Get(0, 3)*mat.Get(2, 2)*mat.Get(3, 0) + mat.Get(0, 3)*mat.Get(2, 0)*mat.Get(3, 2) - mat.Get(0, 0)*mat.Get(2, 3)*mat.Get(3, 2) - mat.Get(0, 2)*mat.Get(2, 0)*mat.Get(3, 3) + mat.Get(0, 0)*mat.Get(2, 2)*mat.Get(3, 3),
-		mat.Get(0, 3)*mat.Get(1, 2)*mat.Get(3, 0) - mat.Get(0, 2)*mat.Get(1, 3)*mat.Get(3, 0) - mat.Get(0, 3)*mat.Get(1, 0)*mat.Get(3, 2) + mat.Get(0, 0)*mat.Get(1, 3)*mat.Get(3, 2) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(3, 3) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(3, 3),
-		mat.Get(0, 2)*mat.Get(1, 3)*mat.Get(2, 0) - mat.Get(0, 3)*mat.Get(1, 2)*mat.Get(2, 0) + mat.Get(0, 3)*mat.Get(1, 0)*mat.Get(2, 2) - mat.Get(0, 0)*mat.Get(1, 3)*mat.Get(2, 2) - mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 3) + mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 3),
-		mat.Get(1, 1)*mat.Get(2, 3)*mat.Get(3, 0) - mat.Get(1, 3)*mat.Get(2, 1)*mat.Get(3, 0) + mat.Get(1, 3)*mat.Get(2, 0)*mat.Get(3, 1) - mat.Get(1, 0)*mat.Get(2, 3)*mat.Get(3, 1) - mat.Get(1, 1)*mat.Get(2, 0)*mat.Get(3, 3) + mat.Get(1, 0)*mat.Get(2, 1)*mat.Get(3, 3),
-		mat.Get(0, 3)*mat.Get(2, 1)*mat.Get(3, 0) - mat.Get(0, 1)*mat.Get(2, 3)*mat.Get(3, 0) - mat.Get(0, 3)*mat.Get(2, 0)*mat.Get(3, 1) + mat.Get(0, 0)*mat.Get(2, 3)*mat.Get(3, 1) + mat.Get(0, 1)*mat.Get(2, 0)*mat.Get(3, 3) - mat.Get(0, 0)*mat.Get(2, 1)*mat.Get(3, 3),
-		mat.Get(0, 1)*mat.Get(1, 3)*mat.Get(3, 0) - mat.Get(0, 3)*mat.Get(1, 1)*mat.Get(3, 0) + mat.Get(0, 3)*mat.Get(1, 0)*mat.Get(3, 1) - mat.Get(0, 0)*mat.Get(1, 3)*mat.Get(3, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(3, 3) + mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(3, 3),
-		mat.Get(0, 3)*mat.Get(1, 1)*mat.Get(2, 0) - mat.Get(0, 1)*mat.Get(1, 3)*mat.Get(2, 0) - mat.Get(0, 3)*mat.Get(1, 0)*mat.Get(2, 1) + mat.Get(0, 0)*mat.Get(1, 3)*mat.Get(2, 1) + mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 3) - mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 3),
+		-mat.Get(1, 2)*mat.Get(2, 1) + mat.Get(1, 1)*mat.Get(2, 2),
+		mat.Get(0, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(2, 2),
+		-mat.Get(0, 2)*mat.Get(1, 1) + mat.Get(0, 1)*mat.Get(1, 2),
+		mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(1, 0)*mat.Get(2, 2),
+		-mat.Get(0, 2)*mat.Get(2, 0) + mat.Get(0, 0)*mat.Get(2, 2),
+		mat.Get(0, 2)*mat.Get(1, 0) - mat.Get(0, 0)*mat.Get(1, 2),
+		-mat.Get(1, 1)*mat.Get(2, 0) + mat.Get(1, 0)*mat.Get(2, 1),
+		mat.Get(0, 1)*mat.Get(2, 0) - mat.Get(0, 0)*mat.Get(2, 1),
+		-mat.Get(0, 1)*mat.Get(1, 0) + mat.Get(0, 0)*mat.Get(1, 1),
 		mat.Get(1, 2)*mat.Get(2, 1)*mat.Get(3, 0) - mat.Get(1, 1)*mat.Get(2, 2)*mat.Get(3, 0) - mat.Get(1, 2)*mat.Get(2, 0)*mat.Get(3, 1) + mat.Get(1, 0)*mat.Get(2, 2)*mat.Get(3, 1) + mat.Get(1, 1)*mat.Get(2, 0)*mat.Get(3, 2) - mat.Get(1, 0)*mat.Get(2, 1)*mat.Get(3, 2),
 		mat.Get(0, 1)*mat.Get(2, 2)*mat.Get(3, 0) - mat.Get(0, 2)*mat.Get(2, 1)*mat.Get(3, 0) + mat.Get(0, 2)*mat.Get(2, 0)*mat.Get(3, 1) - mat.Get(0, 0)*mat.Get(2, 2)*mat.Get(3, 1) - mat.Get(0, 1)*mat.Get(2, 0)*mat.Get(3, 2) + mat.Get(0, 0)*mat.Get(2, 1)*mat.Get(3, 2),
 		mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(3, 0) - mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(3, 0) - mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(3, 1) + mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(3, 1) + mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(3, 2) - mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(3, 2),
-		mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 0) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 2) + mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 2),
 	}
 
 	det := mat.Det()
