@@ -70,28 +70,6 @@ func X32Mat4x4RotZ(r vpnumber.X32) *X32Mat4x4 {
 	return &X32Mat4x4{vpmath.X32Cos(r), vpmath.X32Sin(r), vpnumber.X32Const0, vpnumber.X32Const0, -vpmath.X32Sin(r), vpmath.X32Cos(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
 }
 
-// ToI32 converts the matrix to an int32 matrix.
-func (mat *X32Mat4x4) ToI32() *I32Mat4x4 {
-	var ret I32Mat4x4
-
-	for i, v := range mat {
-		ret[i] = vpnumber.X32ToI32(v)
-	}
-
-	return &ret
-}
-
-// ToI64 converts the matrix to an int32 matrix.
-func (mat *X32Mat4x4) ToI64() *I64Mat4x4 {
-	var ret I64Mat4x4
-
-	for i, v := range mat {
-		ret[i] = vpnumber.X32ToI64(v)
-	}
-
-	return &ret
-}
-
 // ToX64 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *X32Mat4x4) ToX64() *X64Mat4x4 {
 	var ret X64Mat4x4
