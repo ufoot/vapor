@@ -32,54 +32,36 @@ func TestF64Mat4x3Math(t *testing.T) {
 	const f11 = 13.0
 	const f12 = 23.0
 	const f13 = 33.0
-	const f14 = 43.0
 	const f21 = -14.0
 	const f22 = -24.0
 	const f23 = -34.0
-	const f24 = -44.0
 	const f31 = 11.0
 	const f32 = 21.0
 	const f33 = 31.0
-	const f34 = 41.0
 	const f41 = 110.0
 	const f42 = 210.0
 	const f43 = 310.0
-	const f44 = 410.0
 
 	const f51 = -64.15
 	const f52 = -74.25
 	const f53 = -84.35
-	const f54 = -94.45
 	const f61 = 66.4
 	const f62 = 76.3
 	const f63 = 86.2
-	const f64 = 96.1
 	const f71 = 62.4
 	const f72 = 72.3
 	const f73 = 82.2
-	const f74 = 92.1
 	const f81 = -630.01
 	const f82 = -730.02
 	const f83 = -830.03
-	const f84 = -930.04
 
 	const fmul = 10.0
 
 	var m1, m2, m3, m4 *F64Mat4x3
 
-	m1 = F64Mat4x3New(f11, f12, f13, f14, f21, f22, f23, f24, f31, f32, f33, f34, f41, f42, f43, f44)
+	m1 = F64Mat4x3New(f11, f12, f13, f21, f22, f23, f31, f32, f33, f41, f42, f43)
 	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
-	}
-
-	m2 = m1.ToI32().ToF64()
-	if !m1.IsSimilar(m2) {
-		t.Error("I32 conversion error")
-	}
-
-	m2 = m1.ToI64().ToF64()
-	if !m1.IsSimilar(m2) {
-		t.Error("I64 conversion error")
 	}
 
 	m2 = m1.ToX32().ToF64()
@@ -97,21 +79,21 @@ func TestF64Mat4x3Math(t *testing.T) {
 		t.Error("F32 conversion error")
 	}
 
-	m2 = F64Mat4x3New(f51, f52, f53, f54, f61, f62, f63, f64, f71, f72, f73, f74, f81, f82, f83, f84)
+	m2 = F64Mat4x3New(f51, f52, f53, f61, f62, f63, f71, f72, f73, f81, f82, f83)
 	m3 = F64Mat4x3Add(m1, m2)
-	m4 = F64Mat4x3New(f11+f51, f12+f52, f13+f53, f14+f54, f21+f61, f22+f62, f23+f63, f24+f64, f31+f71, f32+f72, f33+f73, f34+f74, f41+f81, f42+f82, f43+f83, f44+f84)
+	m4 = F64Mat4x3New(f11+f51, f12+f52, f13+f53, f21+f61, f22+f62, f23+f63, f31+f71, f32+f72, f33+f73, f41+f81, f42+f82, f43+f83)
 	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
 	m3 = F64Mat4x3Sub(m1, m2)
-	m4 = F64Mat4x3New(f11-f51, f12-f52, f13-f53, f14-f54, f21-f61, f22-f62, f23-f63, f24-f64, f31-f71, f32-f72, f33-f73, f34-f74, f41-f81, f42-f82, f43-f83, f44-f84)
+	m4 = F64Mat4x3New(f11-f51, f12-f52, f13-f53, f21-f61, f22-f62, f23-f63, f31-f71, f32-f72, f33-f73, f41-f81, f42-f82, f43-f83)
 	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = F64Mat4x3MulScale(m1, fmul)
-	m4 = F64Mat4x3New(f11*fmul, f12*fmul, f13*fmul, f14*fmul, f21*fmul, f22*fmul, f23*fmul, f24*fmul, f31*fmul, f32*fmul, f33*fmul, f34*fmul, f41*fmul, f42*fmul, f43*fmul, f44*fmul)
+	m4 = F64Mat4x3New(f11*fmul, f12*fmul, f13*fmul, f21*fmul, f22*fmul, f23*fmul, f31*fmul, f32*fmul, f33*fmul, f41*fmul, f42*fmul, f43*fmul)
 	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
