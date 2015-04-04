@@ -30,7 +30,7 @@ import (
 
 // X64Mat3x2 is a matrix containing 3x2 fixed point 64 bit values.
 // Can hold the values of a point in space.
-type X64Mat3x2 [9]vpnumber.X64
+type X64Mat3x2 [6]vpnumber.X64
 
 // X64Mat3x2New creates a new matrix containing 3x2 fixed point 64 bit values.
 // The column-major (OpenGL notation) mode is used,

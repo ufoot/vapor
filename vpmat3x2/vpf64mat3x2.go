@@ -24,36 +24,34 @@ import (
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec2"
-	"github.com/ufoot/vapor/vpvec3"
 	"math"
 )
 
 // F64Mat3x2 is a matrix containing 3x2 float64 values.
-// Can hold the values of a point in space.
-type F64Mat3x2 [9]float64
+type F64Mat3x2 [6]float64
 
 // F64Mat3x2New creates a new matrix containing 3x2 float64 values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func F64Mat3x2New(f1, f2, f3, f4, f5, f6, f7, f8, f9 float64) *F64Mat3x2 {
-	return &F64Mat3x2{f1, f2, f3, f4, f5, f6, f7, f8, f9}
+func F64Mat3x2New(f1, f2, f3, f4, f5, f6 float64) *F64Mat3x2 {
+	return &F64Mat3x2{f1, f2, f3, f4, f5, f6}
 }
 
 // F64Mat3x2Identity creates a new identity matrix.
 func F64Mat3x2Identity() *F64Mat3x2 {
-	return &F64Mat3x2{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
+	return &F64Mat3x2{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // F64Mat3x2Trans creates a new translation matrix.
 func F64Mat3x2Trans(vec *vpvec2.F64Vec2) *F64Mat3x2 {
-	return &F64Mat3x2{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vec[0], vec[1], vpnumber.F64Const1}
+	return &F64Mat3x2{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vec[0], vec[1]}
 }
 
 // F64Mat3x2Rot creates a new rotation matrix.
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.
 func F64Mat3x2Rot(r float64) *F64Mat3x2 {
-	return &F64Mat3x2{math.Cos(r), math.Sin(r), vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
+	return &F64Mat3x2{math.Cos(r), math.Sin(r), -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // ToI32 converts the matrix to an int32 matrix.
@@ -113,21 +111,21 @@ func (mat *F64Mat3x2) ToF32() *F32Mat3x2 {
 
 // Set sets the value of the matrix for a given column and row.
 func (mat *F64Mat3x2) Set(col, row int, val float64) {
-	mat[col*3+row] = val
+	mat[col*2+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
 func (mat *F64Mat3x2) Get(col, row int) float64 {
-	return mat[col*3+row]
+	return mat[col*2+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *F64Mat3x2) MarshalJSON() ([]byte, error) {
-	var tmpArray [3][3]float64
+	var tmpArray [3][2]float64
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			tmpArray[col][row] = mat[col*3+row]
+			tmpArray[col][row] = mat[col*2+row]
 		}
 	}
 
@@ -141,7 +139,7 @@ func (mat *F64Mat3x2) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *F64Mat3x2) UnmarshalJSON(data []byte) error {
-	var tmpArray [3][3]float64
+	var tmpArray [3][2]float64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
@@ -150,7 +148,7 @@ func (mat *F64Mat3x2) UnmarshalJSON(data []byte) error {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			mat[col*3+row] = tmpArray[col][row]
+			mat[col*2+row] = tmpArray[col][row]
 		}
 	}
 
@@ -220,14 +218,6 @@ func (mat *F64Mat3x2) IsSimilar(op *F64Mat3x2) bool {
 	return ret
 }
 
-// Transpose inverts rows and columns (matrix transposition).
-// It modifies the matrix, and returns a pointer on it.
-func (mat *F64Mat3x2) Transpose(op *F64Mat3x2) *F64Mat3x2 {
-	*mat = *F64Mat3x2Transpose(op)
-
-	return mat
-}
-
 // MulComp multiplies the matrix by another matrix (composition).
 // It modifies the matrix, and returns a pointer on it.
 func (mat *F64Mat3x2) MulComp(op *F64Mat3x2) *F64Mat3x2 {
@@ -238,7 +228,7 @@ func (mat *F64Mat3x2) MulComp(op *F64Mat3x2) *F64Mat3x2 {
 
 // Det returns the matrix determinant.
 func (mat *F64Mat3x2) Det() float64 {
-	return mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 2) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 2) - mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 0)
+	return mat.Get(0, 0)*mat.Get(1, 1) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(0, 1)*mat.Get(1, 0)
 }
 
 // Inv inverts the matrix.
@@ -249,18 +239,6 @@ func (mat *F64Mat3x2) Inv() *F64Mat3x2 {
 	*mat = *F64Mat3x2Inv(mat)
 
 	return mat
-}
-
-// MulVec performs a multiplication of a vector by a 3x2 matrix,
-// considering the vector is a column vector (matrix left, vector right).
-func (mat *F64Mat3x2) MulVec(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
-	var ret vpvec3.F64Vec3
-
-	for i := range vec {
-		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2]
-	}
-
-	return &ret
 }
 
 // MulVecPos performs a multiplication of a vector by a 3x2 matrix,
@@ -335,29 +313,18 @@ func F64Mat3x2DivScale(mat *F64Mat3x2, factor float64) *F64Mat3x2 {
 	return &ret
 }
 
-// F64Mat3x2Transpose inverts rows and columns (matrix transposition).
-// Args is left untouched, a pointer on a new object is returned.
-func F64Mat3x2Transpose(mat *F64Mat3x2) *F64Mat3x2 {
-	var ret F64Mat3x2
-
-	for c := 0; c < 3; c++ {
-		for r := 0; r < 3; r++ {
-			ret.Set(c, r, mat.Get(r, c))
-		}
-	}
-
-	return &ret
-}
-
 // F64Mat3x2MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func F64Mat3x2MulComp(a, b *F64Mat3x2) *F64Mat3x2 {
 	var ret F64Mat3x2
 
-	for c := 0; c < 3; c++ {
-		for r := 0; r < 3; r++ {
-			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1)+a.Get(2, r)*b.Get(c, 2))
+	for c := 0; c < 2; c++ {
+		for r := 0; r < 2; r++ {
+			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1))
 		}
+	}
+	for r := 0; r < 2; r++ {
+		ret.Set(2, r, a.Get(0, r)*b.Get(2, 0)+a.Get(1, r)*b.Get(2, 1)+a.Get(2, r))
 	}
 
 	return &ret
@@ -369,15 +336,12 @@ func F64Mat3x2MulComp(a, b *F64Mat3x2) *F64Mat3x2 {
 // Args is left untouched, a pointer on a new object is returned.
 func F64Mat3x2Inv(mat *F64Mat3x2) *F64Mat3x2 {
 	ret := F64Mat3x2{
-		mat.Get(1, 1)*mat.Get(2, 2) - mat.Get(1, 2)*mat.Get(2, 1),
-		mat.Get(0, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(2, 2),
-		mat.Get(0, 1)*mat.Get(1, 2) - mat.Get(0, 2)*mat.Get(1, 1),
-		mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(1, 0)*mat.Get(2, 2),
-		mat.Get(0, 0)*mat.Get(2, 2) - mat.Get(0, 2)*mat.Get(2, 0),
-		mat.Get(0, 2)*mat.Get(1, 0) - mat.Get(0, 0)*mat.Get(1, 2),
+		mat.Get(1, 1),
+		-mat.Get(0, 1),
+		-mat.Get(1, 0),
+		mat.Get(0, 0),
 		mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(1, 1)*mat.Get(2, 0),
 		mat.Get(0, 1)*mat.Get(2, 0) - mat.Get(0, 0)*mat.Get(2, 1),
-		mat.Get(0, 0)*mat.Get(1, 1) - mat.Get(0, 1)*mat.Get(1, 0),
 	}
 
 	det := mat.Det()

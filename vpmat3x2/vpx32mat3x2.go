@@ -30,7 +30,7 @@ import (
 
 // X32Mat3x2 is a matrix containing 3x2 fixed point 32 bit values.
 // Can hold the values of a point in space.
-type X32Mat3x2 [9]vpnumber.X32
+type X32Mat3x2 [6]vpnumber.X32
 
 // X32Mat3x2New creates a new matrix containing 3x2 fixed point 32 bit values.
 // The column-major (OpenGL notation) mode is used,

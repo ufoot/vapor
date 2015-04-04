@@ -20,6 +20,7 @@
 package vpmat3x2
 
 import (
+	"github.com/ufoot/vapor/vpmat3x3"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpvec3"
@@ -31,29 +32,23 @@ import (
 func TestF64Mat3x2Math(t *testing.T) {
 	const f11 = 3.0
 	const f12 = 333.0
-	const f13 = 31.0
 	const f21 = -4.0
 	const f22 = -24.0
-	const f23 = -4.0
 	const f31 = 1.0
 	const f32 = 11.0
-	const f33 = 1.0
 
 	const f51 = -4.5
 	const f52 = -4.2
-	const f53 = -4.5
 	const f61 = 6.0
 	const f62 = 4.0
-	const f63 = 3.0
 	const f71 = 2.0
 	const f72 = 2.0
-	const f73 = 1.0
 
 	const fmul = 10.0
 
 	var m1, m2, m3, m4 *F64Mat3x2
 
-	m1 = F64Mat3x2New(f11, f12, f13, f21, f22, f23, f31, f32, f33)
+	m1 = F64Mat3x2New(f11, f12, f21, f22, f31, f32)
 	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -83,21 +78,21 @@ func TestF64Mat3x2Math(t *testing.T) {
 		t.Error("F32 conversion error")
 	}
 
-	m2 = F64Mat3x2New(f51, f52, f53, f61, f62, f63, f71, f72, f73)
+	m2 = F64Mat3x2New(f51, f52, f61, f62, f71, f72)
 	m3 = F64Mat3x2Add(m1, m2)
-	m4 = F64Mat3x2New(f11+f51, f12+f52, f13+f53, f21+f61, f22+f62, f23+f63, f31+f71, f32+f72, f33+f73)
+	m4 = F64Mat3x2New(f11+f51, f12+f52, f21+f61, f22+f62, f31+f71, f32+f72)
 	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
 	m3 = F64Mat3x2Sub(m1, m2)
-	m4 = F64Mat3x2New(f11-f51, f12-f52, f13-f53, f21-f61, f22-f62, f23-f63, f31-f71, f32-f72, f33-f73)
+	m4 = F64Mat3x2New(f11-f51, f12-f52, f21-f61, f22-f62, f31-f71, f32-f72)
 	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = F64Mat3x2MulScale(m1, fmul)
-	m4 = F64Mat3x2New(f11*fmul, f12*fmul, f13*fmul, f21*fmul, f22*fmul, f23*fmul, f31*fmul, f32*fmul, f33*fmul)
+	m4 = F64Mat3x2New(f11*fmul, f12*fmul, f21*fmul, f22*fmul, f31*fmul, f32*fmul)
 	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
@@ -150,12 +145,6 @@ func TestF64Mat3x2Aff(t *testing.T) {
 	vt := vpvec2.F64Vec2New(t1, t2)
 	mt := F64Mat3x2Trans(vt)
 	t.Logf("translation mat3x2 for %s is %s", vt.String(), mt.String())
-	v2 := mt.MulVec(v1)
-	t.Logf("mat3x2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
-	v3 := vpvec3.F64Vec3New(p1+t1, p2+t2, vpnumber.F64Const1)
-	if !v2.IsSimilar(v3) {
-		t.Errorf("mat3x2 translation MulVec error v2=%s v3=%s", v2.String(), v3.String())
-	}
 	v2pos := mt.MulVecPos(v1.ToVec2())
 	v3pos := v1.ToVec2().Add(vt)
 	if !v2pos.IsSimilar(v3pos) {
@@ -168,10 +157,11 @@ func TestF64Mat3x2Aff(t *testing.T) {
 	}
 
 	mr := F64Mat3x2Rot(math.Pi / 2)
+	mrCheck := vpmat3x3.F64Mat3x3Rot(math.Pi / 2)
 	t.Logf("rotation mat3x2 for PI/2 is %s", mr.String())
-	v2 = mr.MulVec(v1)
+	v2 := mrCheck.MulVec(v1)
 	t.Logf("mat3x2 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = vpvec3.F64Vec3New(-v1[1], v1[0], vpnumber.F64Const1)
+	v3 := vpvec3.F64Vec3New(-v1[1], v1[0], vpnumber.F64Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat3x2 rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -214,7 +204,7 @@ func TestF64Mat3x2JSON(t *testing.T) {
 }
 
 func BenchmarkF64Mat3x2Add(b *testing.B) {
-	mat := F64Mat3x2New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
+	mat := F64Mat3x2New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
