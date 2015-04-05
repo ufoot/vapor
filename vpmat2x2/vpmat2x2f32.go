@@ -90,6 +90,42 @@ func (mat *F32) Get(col, row int) float32 {
 	return mat[col*2+row]
 }
 
+// SetCol sets a column to the values contained in a vector.
+func (mat *F32) SetCol(col int, vec *vpvec2.F32) {
+	for row, val := range vec {
+		mat[col*2+row] = val
+	}
+}
+
+// GetCol gets a column and returns it in a vector.
+func (mat *F32) GetCol(col int) *vpvec2.F32 {
+	var ret vpvec2.F32
+
+	for row := range ret {
+		ret[row] = mat[col*2+row]
+	}
+
+	return &ret
+}
+
+// SetRow sets a row to the values contained in a vector.
+func (mat *F32) SetRow(row int, vec *vpvec2.F32) {
+	for col, val := range vec {
+		mat[col*2+row] = val
+	}
+}
+
+// GetRow gets a row and returns it in a vector.
+func (mat *F32) GetRow(row int) *vpvec2.F32 {
+	var ret vpvec2.F32
+
+	for col := range ret {
+		ret[col] = mat[col*2+row]
+	}
+
+	return &ret
+}
+
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *F32) MarshalJSON() ([]byte, error) {
 	var tmpArray [2][2]float32

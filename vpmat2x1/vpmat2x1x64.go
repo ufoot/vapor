@@ -91,8 +91,8 @@ func (mat *X64) Get(col, row int) vpnumber.X64 {
 }
 
 // SetCol sets a column to the values contained in a vector.
-func (mat *X64) SetCol(col int, val vpnumber.X64) {
-	mat[col] = val
+func (mat *X64) SetCol(col int, vec vpnumber.X64) {
+	mat[col] = vec
 }
 
 // GetCol gets a column and returns it in a vector.
@@ -101,12 +101,12 @@ func (mat *X64) GetCol(col int) vpnumber.X64 {
 }
 
 // SetRow sets a row to the values contained in a vector.
-func (mat *X64) SetRow(col int, val *vpvec2.X64) {
-	*mat = X64(*val)
+func (mat *X64) SetRow(vec *vpvec2.X64) {
+	*mat = X64(*vec)
 }
 
 // GetRow gets a row and returns it in a vector.
-func (mat *X64) GetRow(col int) *vpvec2.X64 {
+func (mat *X64) GetRow() *vpvec2.X64 {
 	ret := vpvec2.X64(*mat)
 
 	return &ret

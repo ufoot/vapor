@@ -91,8 +91,8 @@ func (mat *X32) Get(col, row int) vpnumber.X32 {
 }
 
 // SetCol sets a column to the values contained in a vector.
-func (mat *X32) SetCol(col int, val vpnumber.X32) {
-	mat[col] = val
+func (mat *X32) SetCol(col int, vec vpnumber.X32) {
+	mat[col] = vec
 }
 
 // GetCol gets a column and returns it in a vector.
@@ -101,12 +101,12 @@ func (mat *X32) GetCol(col int) vpnumber.X32 {
 }
 
 // SetRow sets a row to the values contained in a vector.
-func (mat *X32) SetRow(col int, val *vpvec2.X32) {
-	*mat = X32(*val)
+func (mat *X32) SetRow(vec *vpvec2.X32) {
+	*mat = X32(*vec)
 }
 
 // GetRow gets a row and returns it in a vector.
-func (mat *X32) GetRow(col int) *vpvec2.X32 {
+func (mat *X32) GetRow() *vpvec2.X32 {
 	ret := vpvec2.X32(*mat)
 
 	return &ret

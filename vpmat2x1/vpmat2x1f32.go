@@ -91,8 +91,8 @@ func (mat *F32) Get(col, row int) float32 {
 }
 
 // SetCol sets a column to the values contained in a vector.
-func (mat *F32) SetCol(col int, val float32) {
-	mat[col] = val
+func (mat *F32) SetCol(col int, vec float32) {
+	mat[col] = vec
 }
 
 // GetCol gets a column and returns it in a vector.
@@ -101,12 +101,12 @@ func (mat *F32) GetCol(col int) float32 {
 }
 
 // SetRow sets a row to the values contained in a vector.
-func (mat *F32) SetRow(col int, val *vpvec2.F32) {
-	*mat = F32(*val)
+func (mat *F32) SetRow(vec *vpvec2.F32) {
+	*mat = F32(*vec)
 }
 
 // GetRow gets a row and returns it in a vector.
-func (mat *F32) GetRow(col int) *vpvec2.F32 {
+func (mat *F32) GetRow() *vpvec2.F32 {
 	ret := vpvec2.F32(*mat)
 
 	return &ret
