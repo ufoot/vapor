@@ -207,7 +207,7 @@ func (mat *X32) MulComp(op *X32) *X32 {
 
 // Det returns the matrix determinant.
 func (mat *X32) Det() vpnumber.X32 {
-	return vpnumber.X32Mul(mat.Get(0, 0), mat.Get(1, 1)) - vpnumber.X32Mul(mat.Get(0, 1), mat.Get(1, 0))
+	return vpnumber.X32Mul(mat[Col0Row0], mat[Col1Row1]) - vpnumber.X32Mul(mat[Col0Row1], mat[Col1Row0])
 }
 
 // Inv inverts the matrix.
@@ -239,7 +239,7 @@ func (mat *X32) MulVec(vec *vpvec2.X32) *vpvec2.X32 {
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
 func (mat *X32) MulVecPos(vec vpnumber.X32) vpnumber.X32 {
-	return vpnumber.X32Mul(mat.Get(0, 0), vec) + mat.Get(1, 0)
+	return vpnumber.X32Mul(mat[Col0Row0], vec) + mat[Col1Row0]
 }
 
 // MulVecDir performs a multiplication of a vector by a 2x2 matrix,
@@ -249,7 +249,7 @@ func (mat *X32) MulVecPos(vec vpnumber.X32) vpnumber.X32 {
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
 func (mat *X32) MulVecDir(vec vpnumber.X32) vpnumber.X32 {
-	return vpnumber.X32Mul(mat.Get(0, 0), vec)
+	return vpnumber.X32Mul(mat[Col0Row0], vec)
 }
 
 // X32Add adds two matrices.
@@ -326,10 +326,10 @@ func X32MulComp(a, b *X32) *X32 {
 // Args is left untouched, a pointer on a new object is returned.
 func X32Inv(mat *X32) *X32 {
 	ret := X32{
-		mat.Get(1, 1),
-		-mat.Get(0, 1),
-		-mat.Get(1, 0),
-		mat.Get(0, 0),
+		mat[Col1Row1],
+		-mat[Col0Row1],
+		-mat[Col1Row0],
+		mat[Col0Row0],
 	}
 
 	det := mat.Det()

@@ -198,7 +198,7 @@ func (mat *F32) MulComp(op *F32) *F32 {
 
 // Det returns the matrix determinant.
 func (mat *F32) Det() float32 {
-	return mat.Get(0, 0)
+	return mat[Col0Row0]
 }
 
 // Inv inverts the matrix.
@@ -218,7 +218,7 @@ func (mat *F32) Inv() *F32 {
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
 func (mat *F32) MulVecPos(vec float32) float32 {
-	return mat.Get(0, 0)*vec + mat.Get(1, 0)
+	return mat[Col0Row0]*vec + mat[Col1Row0]
 }
 
 // MulVecDir performs a multiplication of a vector by a 2x1 matrix,
@@ -228,7 +228,7 @@ func (mat *F32) MulVecPos(vec float32) float32 {
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
 func (mat *F32) MulVecDir(vec float32) float32 {
-	return mat.Get(0, 0) * vec
+	return mat[Col0Row0] * vec
 }
 
 // F32Add adds two matrices.
@@ -276,8 +276,8 @@ func F32DivScale(mat *F32, factor float32) *F32 {
 func F32MulComp(a, b *F32) *F32 {
 	var ret F32
 
-	ret.Set(0, 0, a.Get(0, 0)*b.Get(0, 0))
-	ret.Set(1, 0, a.Get(0, 0)*b.Get(1, 0)+a.Get(1, 0))
+	ret.Set(0, 0, a[Col0Row0]*b[Col0Row0])
+	ret.Set(1, 0, a[Col0Row0]*b[Col1Row0]+a[Col1Row0])
 
 	return &ret
 }
@@ -289,7 +289,7 @@ func F32MulComp(a, b *F32) *F32 {
 func F32Inv(mat *F32) *F32 {
 	ret := F32{
 		vpnumber.F32Const1,
-		-mat.Get(1, 0),
+		-mat[Col1Row0],
 	}
 
 	det := mat.Det()

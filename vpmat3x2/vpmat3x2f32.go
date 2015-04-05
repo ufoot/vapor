@@ -206,7 +206,7 @@ func (mat *F32) MulComp(op *F32) *F32 {
 
 // Det returns the matrix determinant.
 func (mat *F32) Det() float32 {
-	return mat.Get(0, 0)*mat.Get(1, 1) - mat.Get(0, 1)*mat.Get(1, 0)
+	return mat[Col0Row0]*mat[Col1Row1] - mat[Col0Row1]*mat[Col1Row0]
 }
 
 // Inv inverts the matrix.
@@ -302,7 +302,7 @@ func F32MulComp(a, b *F32) *F32 {
 		}
 	}
 	for r := 0; r < 2; r++ {
-		ret.Set(2, r, a.Get(0, r)*b.Get(2, 0)+a.Get(1, r)*b.Get(2, 1)+a.Get(2, r))
+		ret.Set(2, r, a.Get(0, r)*b[Col2Row0]+a.Get(1, r)*b[Col2Row1]+a.Get(2, r))
 	}
 
 	return &ret
@@ -314,12 +314,12 @@ func F32MulComp(a, b *F32) *F32 {
 // Args is left untouched, a pointer on a new object is returned.
 func F32Inv(mat *F32) *F32 {
 	ret := F32{
-		mat.Get(1, 1),
-		-mat.Get(0, 1),
-		-mat.Get(1, 0),
-		mat.Get(0, 0),
-		mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(1, 1)*mat.Get(2, 0),
-		mat.Get(0, 1)*mat.Get(2, 0) - mat.Get(0, 0)*mat.Get(2, 1),
+		mat[Col1Row1],
+		-mat[Col0Row1],
+		-mat[Col1Row0],
+		mat[Col0Row0],
+		mat[Col1Row0]*mat[Col2Row1] - mat[Col1Row1]*mat[Col2Row0],
+		mat[Col0Row1]*mat[Col2Row0] - mat[Col0Row0]*mat[Col2Row1],
 	}
 
 	det := mat.Det()

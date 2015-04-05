@@ -221,7 +221,7 @@ func (mat *F64) MulComp(op *F64) *F64 {
 
 // Det returns the matrix determinant.
 func (mat *F64) Det() float64 {
-	return -mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 0) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 2) + mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 2)
+	return -mat[Col0Row2]*mat[Col1Row1]*mat[Col2Row0] + mat[Col0Row1]*mat[Col1Row2]*mat[Col2Row0] + mat[Col0Row2]*mat[Col1Row0]*mat[Col2Row1] - mat[Col0Row0]*mat[Col1Row2]*mat[Col2Row1] - mat[Col0Row1]*mat[Col1Row0]*mat[Col2Row2] + mat[Col0Row0]*mat[Col1Row1]*mat[Col2Row2]
 }
 
 // Inv inverts the matrix.
@@ -317,7 +317,7 @@ func F64MulComp(a, b *F64) *F64 {
 		}
 	}
 	for r := 0; r < 3; r++ {
-		ret.Set(3, r, a.Get(0, r)*b.Get(3, 0)+a.Get(1, r)*b.Get(3, 1)+a.Get(2, r)*b.Get(3, 2)+a.Get(3, r))
+		ret.Set(3, r, a.Get(0, r)*b[Col3Row0]+a.Get(1, r)*b[Col3Row1]+a.Get(2, r)*b[Col3Row2]+a.Get(3, r))
 	}
 
 	return &ret
@@ -329,18 +329,18 @@ func F64MulComp(a, b *F64) *F64 {
 // Args is left untouched, a pointer on a new object is returned.
 func F64Inv(mat *F64) *F64 {
 	ret := F64{
-		-mat.Get(1, 2)*mat.Get(2, 1) + mat.Get(1, 1)*mat.Get(2, 2),
-		mat.Get(0, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(2, 2),
-		-mat.Get(0, 2)*mat.Get(1, 1) + mat.Get(0, 1)*mat.Get(1, 2),
-		mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(1, 0)*mat.Get(2, 2),
-		-mat.Get(0, 2)*mat.Get(2, 0) + mat.Get(0, 0)*mat.Get(2, 2),
-		mat.Get(0, 2)*mat.Get(1, 0) - mat.Get(0, 0)*mat.Get(1, 2),
-		-mat.Get(1, 1)*mat.Get(2, 0) + mat.Get(1, 0)*mat.Get(2, 1),
-		mat.Get(0, 1)*mat.Get(2, 0) - mat.Get(0, 0)*mat.Get(2, 1),
-		-mat.Get(0, 1)*mat.Get(1, 0) + mat.Get(0, 0)*mat.Get(1, 1),
-		mat.Get(1, 2)*mat.Get(2, 1)*mat.Get(3, 0) - mat.Get(1, 1)*mat.Get(2, 2)*mat.Get(3, 0) - mat.Get(1, 2)*mat.Get(2, 0)*mat.Get(3, 1) + mat.Get(1, 0)*mat.Get(2, 2)*mat.Get(3, 1) + mat.Get(1, 1)*mat.Get(2, 0)*mat.Get(3, 2) - mat.Get(1, 0)*mat.Get(2, 1)*mat.Get(3, 2),
-		mat.Get(0, 1)*mat.Get(2, 2)*mat.Get(3, 0) - mat.Get(0, 2)*mat.Get(2, 1)*mat.Get(3, 0) + mat.Get(0, 2)*mat.Get(2, 0)*mat.Get(3, 1) - mat.Get(0, 0)*mat.Get(2, 2)*mat.Get(3, 1) - mat.Get(0, 1)*mat.Get(2, 0)*mat.Get(3, 2) + mat.Get(0, 0)*mat.Get(2, 1)*mat.Get(3, 2),
-		mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(3, 0) - mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(3, 0) - mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(3, 1) + mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(3, 1) + mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(3, 2) - mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(3, 2),
+		-mat[Col1Row2]*mat[Col2Row1] + mat[Col1Row1]*mat[Col2Row2],
+		mat[Col0Row2]*mat[Col2Row1] - mat[Col0Row1]*mat[Col2Row2],
+		-mat[Col0Row2]*mat[Col1Row1] + mat[Col0Row1]*mat[Col1Row2],
+		mat[Col1Row2]*mat[Col2Row0] - mat[Col1Row0]*mat[Col2Row2],
+		-mat[Col0Row2]*mat[Col2Row0] + mat[Col0Row0]*mat[Col2Row2],
+		mat[Col0Row2]*mat[Col1Row0] - mat[Col0Row0]*mat[Col1Row2],
+		-mat[Col1Row1]*mat[Col2Row0] + mat[Col1Row0]*mat[Col2Row1],
+		mat[Col0Row1]*mat[Col2Row0] - mat[Col0Row0]*mat[Col2Row1],
+		-mat[Col0Row1]*mat[Col1Row0] + mat[Col0Row0]*mat[Col1Row1],
+		mat[Col1Row2]*mat[Col2Row1]*mat[Col3Row0] - mat[Col1Row1]*mat[Col2Row2]*mat[Col3Row0] - mat[Col1Row2]*mat[Col2Row0]*mat[Col3Row1] + mat[Col1Row0]*mat[Col2Row2]*mat[Col3Row1] + mat[Col1Row1]*mat[Col2Row0]*mat[Col3Row2] - mat[Col1Row0]*mat[Col2Row1]*mat[Col3Row2],
+		mat[Col0Row1]*mat[Col2Row2]*mat[Col3Row0] - mat[Col0Row2]*mat[Col2Row1]*mat[Col3Row0] + mat[Col0Row2]*mat[Col2Row0]*mat[Col3Row1] - mat[Col0Row0]*mat[Col2Row2]*mat[Col3Row1] - mat[Col0Row1]*mat[Col2Row0]*mat[Col3Row2] + mat[Col0Row0]*mat[Col2Row1]*mat[Col3Row2],
+		mat[Col0Row2]*mat[Col1Row1]*mat[Col3Row0] - mat[Col0Row1]*mat[Col1Row2]*mat[Col3Row0] - mat[Col0Row2]*mat[Col1Row0]*mat[Col3Row1] + mat[Col0Row0]*mat[Col1Row2]*mat[Col3Row1] + mat[Col0Row1]*mat[Col1Row0]*mat[Col3Row2] - mat[Col0Row0]*mat[Col1Row1]*mat[Col3Row2],
 	}
 
 	det := mat.Det()

@@ -207,7 +207,7 @@ func (mat *F32) MulComp(op *F32) *F32 {
 
 // Det returns the matrix determinant.
 func (mat *F32) Det() float32 {
-	return mat.Get(0, 0)*mat.Get(1, 1) - mat.Get(0, 1)*mat.Get(1, 0)
+	return mat[Col0Row0]*mat[Col1Row1] - mat[Col0Row1]*mat[Col1Row0]
 }
 
 // Inv inverts the matrix.
@@ -239,7 +239,7 @@ func (mat *F32) MulVec(vec *vpvec2.F32) *vpvec2.F32 {
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
 func (mat *F32) MulVecPos(vec float32) float32 {
-	return mat.Get(0, 0)*vec + mat.Get(1, 0)
+	return mat[Col0Row0]*vec + mat[Col1Row0]
 }
 
 // MulVecDir performs a multiplication of a vector by a 2x2 matrix,
@@ -249,7 +249,7 @@ func (mat *F32) MulVecPos(vec float32) float32 {
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
 func (mat *F32) MulVecDir(vec float32) float32 {
-	return mat.Get(0, 0) * vec
+	return mat[Col0Row0] * vec
 }
 
 // F32Add adds two matrices.
@@ -326,10 +326,10 @@ func F32MulComp(a, b *F32) *F32 {
 // Args is left untouched, a pointer on a new object is returned.
 func F32Inv(mat *F32) *F32 {
 	ret := F32{
-		mat.Get(1, 1),
-		-mat.Get(0, 1),
-		-mat.Get(1, 0),
-		mat.Get(0, 0),
+		mat[Col1Row1],
+		-mat[Col0Row1],
+		-mat[Col1Row0],
+		mat[Col0Row0],
 	}
 
 	det := mat.Det()

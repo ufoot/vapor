@@ -216,7 +216,7 @@ func (mat *F64) MulComp(op *F64) *F64 {
 
 // Det returns the matrix determinant.
 func (mat *F64) Det() float64 {
-	return mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 2) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 2) - mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 0)
+	return mat[Col0Row0]*mat[Col1Row1]*mat[Col2Row2] + mat[Col0Row1]*mat[Col1Row2]*mat[Col2Row0] + mat[Col0Row2]*mat[Col1Row0]*mat[Col2Row1] - mat[Col0Row0]*mat[Col1Row2]*mat[Col2Row1] - mat[Col0Row1]*mat[Col1Row0]*mat[Col2Row2] - mat[Col0Row2]*mat[Col1Row1]*mat[Col2Row0]
 }
 
 // Inv inverts the matrix.
@@ -347,15 +347,15 @@ func F64MulComp(a, b *F64) *F64 {
 // Args is left untouched, a pointer on a new object is returned.
 func F64Inv(mat *F64) *F64 {
 	ret := F64{
-		mat.Get(1, 1)*mat.Get(2, 2) - mat.Get(1, 2)*mat.Get(2, 1),
-		mat.Get(0, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(2, 2),
-		mat.Get(0, 1)*mat.Get(1, 2) - mat.Get(0, 2)*mat.Get(1, 1),
-		mat.Get(1, 2)*mat.Get(2, 0) - mat.Get(1, 0)*mat.Get(2, 2),
-		mat.Get(0, 0)*mat.Get(2, 2) - mat.Get(0, 2)*mat.Get(2, 0),
-		mat.Get(0, 2)*mat.Get(1, 0) - mat.Get(0, 0)*mat.Get(1, 2),
-		mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(1, 1)*mat.Get(2, 0),
-		mat.Get(0, 1)*mat.Get(2, 0) - mat.Get(0, 0)*mat.Get(2, 1),
-		mat.Get(0, 0)*mat.Get(1, 1) - mat.Get(0, 1)*mat.Get(1, 0),
+		mat[Col1Row1]*mat[Col2Row2] - mat[Col1Row2]*mat[Col2Row1],
+		mat[Col0Row2]*mat[Col2Row1] - mat[Col0Row1]*mat[Col2Row2],
+		mat[Col0Row1]*mat[Col1Row2] - mat[Col0Row2]*mat[Col1Row1],
+		mat[Col1Row2]*mat[Col2Row0] - mat[Col1Row0]*mat[Col2Row2],
+		mat[Col0Row0]*mat[Col2Row2] - mat[Col0Row2]*mat[Col2Row0],
+		mat[Col0Row2]*mat[Col1Row0] - mat[Col0Row0]*mat[Col1Row2],
+		mat[Col1Row0]*mat[Col2Row1] - mat[Col1Row1]*mat[Col2Row0],
+		mat[Col0Row1]*mat[Col2Row0] - mat[Col0Row0]*mat[Col2Row1],
+		mat[Col0Row0]*mat[Col1Row1] - mat[Col0Row1]*mat[Col1Row0],
 	}
 
 	det := mat.Det()

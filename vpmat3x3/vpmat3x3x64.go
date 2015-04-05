@@ -216,7 +216,7 @@ func (mat *X64) MulComp(op *X64) *X64 {
 
 // Det returns the matrix determinant.
 func (mat *X64) Det() vpnumber.X64 {
-	return vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 1), mat.Get(2, 2)) + vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 2), mat.Get(2, 0)) + vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 0), mat.Get(2, 1)) - vpnumber.X64Muln(mat.Get(0, 0), mat.Get(1, 2), mat.Get(2, 1)) - vpnumber.X64Muln(mat.Get(0, 1), mat.Get(1, 0), mat.Get(2, 2)) - vpnumber.X64Muln(mat.Get(0, 2), mat.Get(1, 1), mat.Get(2, 0))
+	return vpnumber.X64Muln(mat[Col0Row0], mat[Col1Row1], mat[Col2Row2]) + vpnumber.X64Muln(mat[Col0Row1], mat[Col1Row2], mat[Col2Row0]) + vpnumber.X64Muln(mat[Col0Row2], mat[Col1Row0], mat[Col2Row1]) - vpnumber.X64Muln(mat[Col0Row0], mat[Col1Row2], mat[Col2Row1]) - vpnumber.X64Muln(mat[Col0Row1], mat[Col1Row0], mat[Col2Row2]) - vpnumber.X64Muln(mat[Col0Row2], mat[Col1Row1], mat[Col2Row0])
 }
 
 // Inv inverts the matrix.
@@ -347,15 +347,15 @@ func X64MulComp(a, b *X64) *X64 {
 // Args is left untouched, a pointer on a new object is returned.
 func X64Inv(mat *X64) *X64 {
 	ret := X64{
-		vpnumber.X64Mul(mat.Get(1, 1), mat.Get(2, 2)) - vpnumber.X64Mul(mat.Get(1, 2), mat.Get(2, 1)),
-		vpnumber.X64Mul(mat.Get(0, 2), mat.Get(2, 1)) - vpnumber.X64Mul(mat.Get(0, 1), mat.Get(2, 2)),
-		vpnumber.X64Mul(mat.Get(0, 1), mat.Get(1, 2)) - vpnumber.X64Mul(mat.Get(0, 2), mat.Get(1, 1)),
-		vpnumber.X64Mul(mat.Get(1, 2), mat.Get(2, 0)) - vpnumber.X64Mul(mat.Get(1, 0), mat.Get(2, 2)),
-		vpnumber.X64Mul(mat.Get(0, 0), mat.Get(2, 2)) - vpnumber.X64Mul(mat.Get(0, 2), mat.Get(2, 0)),
-		vpnumber.X64Mul(mat.Get(0, 2), mat.Get(1, 0)) - vpnumber.X64Mul(mat.Get(0, 0), mat.Get(1, 2)),
-		vpnumber.X64Mul(mat.Get(1, 0), mat.Get(2, 1)) - vpnumber.X64Mul(mat.Get(1, 1), mat.Get(2, 0)),
-		vpnumber.X64Mul(mat.Get(0, 1), mat.Get(2, 0)) - vpnumber.X64Mul(mat.Get(0, 0), mat.Get(2, 1)),
-		vpnumber.X64Mul(mat.Get(0, 0), mat.Get(1, 1)) - vpnumber.X64Mul(mat.Get(0, 1), mat.Get(1, 0)),
+		vpnumber.X64Mul(mat[Col1Row1], mat[Col2Row2]) - vpnumber.X64Mul(mat[Col1Row2], mat[Col2Row1]),
+		vpnumber.X64Mul(mat[Col0Row2], mat[Col2Row1]) - vpnumber.X64Mul(mat[Col0Row1], mat[Col2Row2]),
+		vpnumber.X64Mul(mat[Col0Row1], mat[Col1Row2]) - vpnumber.X64Mul(mat[Col0Row2], mat[Col1Row1]),
+		vpnumber.X64Mul(mat[Col1Row2], mat[Col2Row0]) - vpnumber.X64Mul(mat[Col1Row0], mat[Col2Row2]),
+		vpnumber.X64Mul(mat[Col0Row0], mat[Col2Row2]) - vpnumber.X64Mul(mat[Col0Row2], mat[Col2Row0]),
+		vpnumber.X64Mul(mat[Col0Row2], mat[Col1Row0]) - vpnumber.X64Mul(mat[Col0Row0], mat[Col1Row2]),
+		vpnumber.X64Mul(mat[Col1Row0], mat[Col2Row1]) - vpnumber.X64Mul(mat[Col1Row1], mat[Col2Row0]),
+		vpnumber.X64Mul(mat[Col0Row1], mat[Col2Row0]) - vpnumber.X64Mul(mat[Col0Row0], mat[Col2Row1]),
+		vpnumber.X64Mul(mat[Col0Row0], mat[Col1Row1]) - vpnumber.X64Mul(mat[Col0Row1], mat[Col1Row0]),
 	}
 
 	det := mat.Det()

@@ -207,7 +207,7 @@ func (mat *X32) MulComp(op *X32) *X32 {
 
 // Det returns the matrix determinant.
 func (mat *X32) Det() vpnumber.X32 {
-	return vpnumber.X32Mul(mat.Get(0, 0), mat.Get(1, 1)) - vpnumber.X32Mul(mat.Get(0, 1), mat.Get(1, 0))
+	return vpnumber.X32Mul(mat[Col0Row0], mat[Col1Row1]) - vpnumber.X32Mul(mat[Col0Row1], mat[Col1Row0])
 }
 
 // Inv inverts the matrix.
@@ -303,7 +303,7 @@ func X32MulComp(a, b *X32) *X32 {
 		}
 	}
 	for r := 0; r < 2; r++ {
-		ret.Set(2, r, vpnumber.X32Mul(a.Get(0, r), b.Get(2, 0))+vpnumber.X32Mul(a.Get(1, r), b.Get(2, 1))+a.Get(2, r))
+		ret.Set(2, r, vpnumber.X32Mul(a.Get(0, r), b[Col2Row0])+vpnumber.X32Mul(a.Get(1, r), b[Col2Row1])+a.Get(2, r))
 	}
 
 	return &ret
@@ -315,12 +315,12 @@ func X32MulComp(a, b *X32) *X32 {
 // Args is left untouched, a pointer on a new object is returned.
 func X32Inv(mat *X32) *X32 {
 	ret := X32{
-		mat.Get(1, 1),
-		-mat.Get(0, 1),
-		-mat.Get(1, 0),
-		mat.Get(0, 0),
-		vpnumber.X32Mul(mat.Get(1, 0), mat.Get(2, 1)) - vpnumber.X32Mul(mat.Get(1, 1), mat.Get(2, 0)),
-		vpnumber.X32Mul(mat.Get(0, 1), mat.Get(2, 0)) - vpnumber.X32Mul(mat.Get(0, 0), mat.Get(2, 1)),
+		mat[Col1Row1],
+		-mat[Col0Row1],
+		-mat[Col1Row0],
+		mat[Col0Row0],
+		vpnumber.X32Mul(mat[Col1Row0], mat[Col2Row1]) - vpnumber.X32Mul(mat[Col1Row1], mat[Col2Row0]),
+		vpnumber.X32Mul(mat[Col0Row1], mat[Col2Row0]) - vpnumber.X32Mul(mat[Col0Row0], mat[Col2Row1]),
 	}
 
 	det := mat.Det()

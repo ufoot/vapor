@@ -207,7 +207,7 @@ func (mat *X64) MulComp(op *X64) *X64 {
 
 // Det returns the matrix determinant.
 func (mat *X64) Det() vpnumber.X64 {
-	return vpnumber.X64Mul(mat.Get(0, 0), mat.Get(1, 1)) - vpnumber.X64Mul(mat.Get(0, 1), mat.Get(1, 0))
+	return vpnumber.X64Mul(mat[Col0Row0], mat[Col1Row1]) - vpnumber.X64Mul(mat[Col0Row1], mat[Col1Row0])
 }
 
 // Inv inverts the matrix.
@@ -303,7 +303,7 @@ func X64MulComp(a, b *X64) *X64 {
 		}
 	}
 	for r := 0; r < 2; r++ {
-		ret.Set(2, r, vpnumber.X64Mul(a.Get(0, r), b.Get(2, 0))+vpnumber.X64Mul(a.Get(1, r), b.Get(2, 1))+a.Get(2, r))
+		ret.Set(2, r, vpnumber.X64Mul(a.Get(0, r), b[Col2Row0])+vpnumber.X64Mul(a.Get(1, r), b[Col2Row1])+a.Get(2, r))
 	}
 
 	return &ret
@@ -315,12 +315,12 @@ func X64MulComp(a, b *X64) *X64 {
 // Args is left untouched, a pointer on a new object is returned.
 func X64Inv(mat *X64) *X64 {
 	ret := X64{
-		mat.Get(1, 1),
-		-mat.Get(0, 1),
-		-mat.Get(1, 0),
-		mat.Get(0, 0),
-		vpnumber.X64Mul(mat.Get(1, 0), mat.Get(2, 1)) - vpnumber.X64Mul(mat.Get(1, 1), mat.Get(2, 0)),
-		vpnumber.X64Mul(mat.Get(0, 1), mat.Get(2, 0)) - vpnumber.X64Mul(mat.Get(0, 0), mat.Get(2, 1)),
+		mat[Col1Row1],
+		-mat[Col0Row1],
+		-mat[Col1Row0],
+		mat[Col0Row0],
+		vpnumber.X64Mul(mat[Col1Row0], mat[Col2Row1]) - vpnumber.X64Mul(mat[Col1Row1], mat[Col2Row0]),
+		vpnumber.X64Mul(mat[Col0Row1], mat[Col2Row0]) - vpnumber.X64Mul(mat[Col0Row0], mat[Col2Row1]),
 	}
 
 	det := mat.Det()

@@ -198,7 +198,7 @@ func (mat *X64) MulComp(op *X64) *X64 {
 
 // Det returns the matrix determinant.
 func (mat *X64) Det() vpnumber.X64 {
-	return mat.Get(0, 0)
+	return mat[Col0Row0]
 }
 
 // Inv inverts the matrix.
@@ -219,7 +219,7 @@ func (mat *X64) Inv() *X64 {
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
 func (mat *X64) MulVecPos(vec vpnumber.X64) vpnumber.X64 {
-	return vpnumber.X64Mul(mat.Get(0, 0), vec) + mat.Get(1, 0)
+	return vpnumber.X64Mul(mat[Col0Row0], vec) + mat[Col1Row0]
 }
 
 // MulVecDir performs a multiplication of a vector by a 2x1 matrix,
@@ -229,7 +229,7 @@ func (mat *X64) MulVecPos(vec vpnumber.X64) vpnumber.X64 {
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
 func (mat *X64) MulVecDir(vec vpnumber.X64) vpnumber.X64 {
-	return vpnumber.X64Mul(mat.Get(0, 0), vec)
+	return vpnumber.X64Mul(mat[Col0Row0], vec)
 }
 
 // X64Add adds two matrices.
@@ -277,8 +277,8 @@ func X64DivScale(mat *X64, factor vpnumber.X64) *X64 {
 func X64MulComp(a, b *X64) *X64 {
 	var ret X64
 
-	ret.Set(0, 0, vpnumber.X64Mul(a.Get(0, 0), b.Get(0, 0)))
-	ret.Set(1, 0, vpnumber.X64Mul(a.Get(0, 0), b.Get(1, 0))+a.Get(1, 0))
+	ret.Set(0, 0, vpnumber.X64Mul(a[Col0Row0], b[Col0Row0]))
+	ret.Set(1, 0, vpnumber.X64Mul(a[Col0Row0], b[Col1Row0])+a[Col1Row0])
 
 	return &ret
 }
@@ -290,7 +290,7 @@ func X64MulComp(a, b *X64) *X64 {
 func X64Inv(mat *X64) *X64 {
 	ret := X64{
 		vpnumber.X64Const1,
-		-mat.Get(1, 0),
+		-mat[Col1Row0],
 	}
 
 	det := mat.Det()
