@@ -22,12 +22,11 @@ package vpvec3
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
-	"github.com/ufoot/vapor/vpsys"
 )
 
 // I32 is a vector containing 3 int32 values.
 // Can hold the values of a point in a plane.
-type I32 [3]int32
+type I32 [Size]int32
 
 // I32New creates a new vector containing 3 int32 values.
 func I32New(i1, i2, i3 int32) *I32 {
@@ -89,33 +88,9 @@ func (vec *I32) ToF64() *F64 {
 	return &ret
 }
 
-// MarshalJSON implements the json.Marshaler interface.
-func (vec *I32) MarshalJSON() ([]byte, error) {
-	ret, err := json.Marshal([3]int32(*vec))
-	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal I32")
-	}
-
-	return ret, nil
-}
-
-// UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *I32) UnmarshalJSON(data []byte) error {
-	var tmpArray [3]int32
-
-	err := json.Unmarshal(data, &tmpArray)
-	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal I32")
-	}
-
-	*vec = I32(tmpArray)
-
-	return nil
-}
-
 // String returns a readable form of the vector.
 func (vec *I32) String() string {
-	buf, err := vec.MarshalJSON()
+	buf, err := json.Marshal(vec)
 
 	if err != nil {
 		// Catching & ignoring error

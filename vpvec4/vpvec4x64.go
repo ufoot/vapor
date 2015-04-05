@@ -23,13 +23,12 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpmath"
 	"github.com/ufoot/vapor/vpnumber"
-	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec3"
 )
 
 // X64 is a vector containing 4 fixed point 64 bit values.
 // Can be used in 3D matrix transformations.
-type X64 [4]vpnumber.X64
+type X64 [Size]vpnumber.X64
 
 // X64New creates a new vector containing 4 fixed point 64 bit values.
 func X64New(x1, x2, x3, x4 vpnumber.X64) *X64 {
@@ -102,41 +101,9 @@ func (vec *X64) ToF64() *F64 {
 	return &ret
 }
 
-// MarshalJSON implements the json.Marshaler interface.
-func (vec *X64) MarshalJSON() ([]byte, error) {
-	var tmpArray [4]int64
-
-	for i := range tmpArray {
-		tmpArray[i] = int64(vec[i])
-	}
-
-	ret, err := json.Marshal(tmpArray)
-	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal X64")
-	}
-
-	return ret, nil
-}
-
-// UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *X64) UnmarshalJSON(data []byte) error {
-	var tmpArray [4]int64
-
-	err := json.Unmarshal(data, &tmpArray)
-	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal X64")
-	}
-
-	for i := range tmpArray {
-		vec[i] = vpnumber.X64(tmpArray[i])
-	}
-
-	return nil
-}
-
 // String returns a readable form of the vector.
 func (vec *X64) String() string {
-	buf, err := vec.ToF64().MarshalJSON()
+	buf, err := json.Marshal(vec.ToF64())
 
 	if err != nil {
 		// Catching & ignoring error

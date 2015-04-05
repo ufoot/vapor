@@ -22,14 +22,13 @@ package vpvec3
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
-	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec2"
 	"math"
 )
 
 // F32 is a vector containing 3 float32 values.
 // Can hold the values of a point in space.
-type F32 [3]float32
+type F32 [Size]float32
 
 // F32New creates a new vector containing 3 float32 values.
 func F32New(f1, f2, f3 float32) *F32 {
@@ -102,33 +101,9 @@ func (vec *F32) ToF64() *F64 {
 	return &ret
 }
 
-// MarshalJSON implements the json.Marshaler interface.
-func (vec *F32) MarshalJSON() ([]byte, error) {
-	ret, err := json.Marshal([3]float32(*vec))
-	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal F32")
-	}
-
-	return ret, nil
-}
-
-// UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *F32) UnmarshalJSON(data []byte) error {
-	var tmpArray [3]float32
-
-	err := json.Unmarshal(data, &tmpArray)
-	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal F32")
-	}
-
-	*vec = F32(tmpArray)
-
-	return nil
-}
-
 // String returns a readable form of the vector.
 func (vec *F32) String() string {
-	buf, err := vec.MarshalJSON()
+	buf, err := json.Marshal(vec)
 
 	if err != nil {
 		// Catching & ignoring error

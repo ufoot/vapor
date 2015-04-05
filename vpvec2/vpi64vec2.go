@@ -22,12 +22,11 @@ package vpvec2
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
-	"github.com/ufoot/vapor/vpsys"
 )
 
 // I64 is a vector containing 2 int64 values.
 // Can hold the values of a point in a plane.
-type I64 [2]int64
+type I64 [Size]int64
 
 // I64New creates a new vector containing 2 int64 values.
 func I64New(i1, i2 int64) *I64 {
@@ -89,33 +88,9 @@ func (vec *I64) ToF64() *F64 {
 	return &ret
 }
 
-// MarshalJSON implements the json.Marshaler interface.
-func (vec *I64) MarshalJSON() ([]byte, error) {
-	ret, err := json.Marshal([2]int64(*vec))
-	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal I64")
-	}
-
-	return ret, nil
-}
-
-// UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *I64) UnmarshalJSON(data []byte) error {
-	var tmpArray [2]int64
-
-	err := json.Unmarshal(data, &tmpArray)
-	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal I64")
-	}
-
-	*vec = I64(tmpArray)
-
-	return nil
-}
-
 // String returns a readable form of the vector.
 func (vec *I64) String() string {
-	buf, err := vec.MarshalJSON()
+	buf, err := json.Marshal(vec)
 
 	if err != nil {
 		// Catching & ignoring error

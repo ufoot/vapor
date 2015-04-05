@@ -20,6 +20,7 @@
 package vpvec2
 
 import (
+	"encoding/json"
 	"testing"
 )
 
@@ -86,17 +87,17 @@ func TestI32JSON(t *testing.T) {
 	var err error
 	var jsonBuf []byte
 
-	jsonBuf, err = m1.MarshalJSON()
+	jsonBuf, err = json.Marshal(m1)
 	if err == nil {
 		t.Logf("encoded JSON for I32 is \"%s\"", string(jsonBuf))
 	} else {
 		t.Error("unable to encode JSON for I32")
 	}
-	err = m2.UnmarshalJSON([]byte("nawak"))
+	err = json.Unmarshal([]byte("nawak"), m2)
 	if err == nil {
 		t.Error("able to decode JSON for I32, but json is not correct")
 	}
-	err = m2.UnmarshalJSON(jsonBuf)
+	err = json.Unmarshal(jsonBuf, m2)
 	if err != nil {
 		t.Error("unable to decode JSON for I32")
 	}

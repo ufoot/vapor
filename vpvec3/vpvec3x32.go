@@ -23,13 +23,12 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpmath"
 	"github.com/ufoot/vapor/vpnumber"
-	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec2"
 )
 
 // X32 is a vector containing 3 fixed point 32 bit values.
 // Can hold the values of a point in space.
-type X32 [3]vpnumber.X32
+type X32 [Size]vpnumber.X32
 
 // X32New creates a new vector containing 3 fixed point 32 bit values.
 func X32New(x1, x2, x3 vpnumber.X32) *X32 {
@@ -102,41 +101,9 @@ func (vec *X32) ToF64() *F64 {
 	return &ret
 }
 
-// MarshalJSON implements the json.Marshaler interface.
-func (vec *X32) MarshalJSON() ([]byte, error) {
-	var tmpArray [3]int32
-
-	for i := range tmpArray {
-		tmpArray[i] = int32(vec[i])
-	}
-
-	ret, err := json.Marshal(tmpArray)
-	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal X32")
-	}
-
-	return ret, nil
-}
-
-// UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *X32) UnmarshalJSON(data []byte) error {
-	var tmpArray [3]int32
-
-	err := json.Unmarshal(data, &tmpArray)
-	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal X32")
-	}
-
-	for i := range tmpArray {
-		vec[i] = vpnumber.X32(tmpArray[i])
-	}
-
-	return nil
-}
-
 // String returns a readable form of the vector.
 func (vec *X32) String() string {
-	buf, err := vec.ToF32().MarshalJSON()
+	buf, err := json.Marshal(vec.ToF32())
 
 	if err != nil {
 		// Catching & ignoring error
