@@ -28,7 +28,7 @@ import (
 
 // F32 is a matrix containing 2x2 float32 values.
 // Can hold the values of a point in a plane.
-type F32 [4]float32
+type F32 [Size]float32
 
 // F32New creates a new matrix containing 2x2 float32 values.
 // The column-major (OpenGL notation) mode is used,
@@ -128,7 +128,7 @@ func (mat *F32) GetRow(row int) *vpvec2.F32 {
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *F32) MarshalJSON() ([]byte, error) {
-	var tmpArray [2][2]float32
+	var tmpArray [Width][Height]float32
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
@@ -146,7 +146,7 @@ func (mat *F32) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *F32) UnmarshalJSON(data []byte) error {
-	var tmpArray [2][2]float32
+	var tmpArray [Width][Height]float32
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {

@@ -28,7 +28,7 @@ import (
 )
 
 // F32 is a matrix containing 3x2 float32 values.
-type F32 [6]float32
+type F32 [Size]float32
 
 // F32New creates a new matrix containing 3x2 float32 values.
 // The column-major (OpenGL notation) mode is used,
@@ -99,7 +99,7 @@ func (mat *F32) Get(col, row int) float32 {
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *F32) MarshalJSON() ([]byte, error) {
-	var tmpArray [3][2]float32
+	var tmpArray [Width][Height]float32
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
@@ -117,7 +117,7 @@ func (mat *F32) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *F32) UnmarshalJSON(data []byte) error {
-	var tmpArray [3][2]float32
+	var tmpArray [Width][Height]float32
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {

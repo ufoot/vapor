@@ -30,7 +30,7 @@ import (
 
 // X32 is a matrix containing 4x4 fixed point 32 bit values.
 // Can be used in 3D matrix transformations.
-type X32 [16]vpnumber.X32
+type X32 [Size]vpnumber.X32
 
 // X32New creates a new matrix containing 4x4 fixed point 32 bit values.
 // The column-major (OpenGL notation) mode is used,
@@ -115,7 +115,7 @@ func (mat *X32) Get(col, row int) vpnumber.X32 {
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *X32) MarshalJSON() ([]byte, error) {
-	var tmpArray [4][4]int32
+	var tmpArray [Width][Height]int32
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
@@ -133,7 +133,7 @@ func (mat *X32) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *X32) UnmarshalJSON(data []byte) error {
-	var tmpArray [4][4]int32
+	var tmpArray [Width][Height]int32
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {

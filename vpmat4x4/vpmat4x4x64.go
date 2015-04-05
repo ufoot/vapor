@@ -30,7 +30,7 @@ import (
 
 // X64 is a matrix containing 4x4 fixed point 64 bit values.
 // Can be used in 3D matrix transformations.
-type X64 [16]vpnumber.X64
+type X64 [Size]vpnumber.X64
 
 // X64New creates a new matrix containing 4x4 fixed point 64 bit values.
 // The column-major (OpenGL notation) mode is used,
@@ -115,7 +115,7 @@ func (mat *X64) Get(col, row int) vpnumber.X64 {
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *X64) MarshalJSON() ([]byte, error) {
-	var tmpArray [4][4]int64
+	var tmpArray [Width][Height]int64
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
@@ -133,7 +133,7 @@ func (mat *X64) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *X64) UnmarshalJSON(data []byte) error {
-	var tmpArray [4][4]int64
+	var tmpArray [Width][Height]int64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {

@@ -30,7 +30,7 @@ import (
 
 // F64 is a matrix containing 3x3 float64 values.
 // Can hold the values of a point in space.
-type F64 [9]float64
+type F64 [Size]float64
 
 // F64New creates a new matrix containing 3x3 float64 values.
 // The column-major (OpenGL notation) mode is used,
@@ -101,7 +101,7 @@ func (mat *F64) Get(col, row int) float64 {
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *F64) MarshalJSON() ([]byte, error) {
-	var tmpArray [3][3]float64
+	var tmpArray [Width][Height]float64
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
@@ -119,7 +119,7 @@ func (mat *F64) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *F64) UnmarshalJSON(data []byte) error {
-	var tmpArray [3][3]float64
+	var tmpArray [Width][Height]float64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
