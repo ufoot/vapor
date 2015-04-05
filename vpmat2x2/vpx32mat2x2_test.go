@@ -46,16 +46,6 @@ func TestX32Mat2x2Math(t *testing.T) {
 		t.Error("IsSimilar does not detect equality")
 	}
 
-	m2 = m1.ToI32().ToX32()
-	if !m1.IsSimilar(m2) {
-		t.Error("I32 conversion error")
-	}
-
-	m2 = m1.ToI64().ToX32()
-	if !m1.IsSimilar(m2) {
-		t.Error("I64 conversion error")
-	}
-
 	m2 = m1.ToX64().ToX32()
 	if !m1.IsSimilar(m2) {
 		t.Error("X64 conversion error")
