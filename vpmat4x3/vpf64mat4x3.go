@@ -59,7 +59,7 @@ func F64Mat4x3RotX(r float64) *F64Mat4x3 {
 // The rotation is done in 3D over the y (2nd) axis.
 // Angle is given in radians.
 func F64Mat4x3RotY(r float64) *F64Mat4x3 {
-	return &F64Mat4x3{math.Cos(r), vpnumber.F64Const0, -math.Sin(r), vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, math.Sin(r), vpnumber.F64Const0, math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0}
+	return &F64Mat4x3{math.Cos(r), vpnumber.F64Const0, -math.Sin(r), vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, math.Sin(r), vpnumber.F64Const0, math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // F64Mat4x3RotZ creates a new rotation matrix.
@@ -114,7 +114,7 @@ func (mat *F64Mat4x3) Get(col, row int) float64 {
 
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *F64Mat4x3) MarshalJSON() ([]byte, error) {
-	var tmpArray [4][4]float64
+	var tmpArray [4][3]float64
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
@@ -132,7 +132,7 @@ func (mat *F64Mat4x3) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (mat *F64Mat4x3) UnmarshalJSON(data []byte) error {
-	var tmpArray [4][4]float64
+	var tmpArray [4][3]float64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {

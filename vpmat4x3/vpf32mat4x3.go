@@ -24,7 +24,6 @@ import (
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec3"
-	"github.com/ufoot/vapor/vpvec4"
 	"math"
 )
 

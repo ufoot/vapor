@@ -20,6 +20,7 @@
 package vpmat4x3
 
 import (
+	"github.com/ufoot/vapor/vpmat4x4"
 	"github.com/ufoot/vapor/vpmath"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpvec3"
@@ -32,54 +33,36 @@ func TestX32Mat4x3Math(t *testing.T) {
 	var x11 = vpnumber.F32ToX32(1.0)
 	var x12 = vpnumber.F32ToX32(2.0)
 	var x13 = vpnumber.F32ToX32(3.0)
-	var x14 = vpnumber.F32ToX32(4.0)
 	var x21 = vpnumber.F32ToX32(-1.0)
 	var x22 = vpnumber.F32ToX32(-2.0)
 	var x23 = vpnumber.F32ToX32(-3.0)
-	var x24 = vpnumber.F32ToX32(-4.0)
 	var x31 = vpnumber.F32ToX32(11.0)
 	var x32 = vpnumber.F32ToX32(9.0)
 	var x33 = vpnumber.F32ToX32(8)
-	var x34 = vpnumber.F32ToX32(4.0)
 	var x41 = vpnumber.F32ToX32(1.0)
 	var x42 = vpnumber.F32ToX32(-2.0)
 	var x43 = vpnumber.F32ToX32(3.0)
-	var x44 = vpnumber.F32ToX32(4.0)
 
 	var x51 = vpnumber.F32ToX32(-6.15)
 	var x52 = vpnumber.F32ToX32(-7.25)
 	var x53 = vpnumber.F32ToX32(-8.35)
-	var x54 = vpnumber.F32ToX32(-9.45)
 	var x61 = vpnumber.F32ToX32(6.4)
 	var x62 = vpnumber.F32ToX32(7.3)
 	var x63 = vpnumber.F32ToX32(8.2)
-	var x64 = vpnumber.F32ToX32(6.1)
 	var x71 = vpnumber.F32ToX32(2.4)
 	var x72 = vpnumber.F32ToX32(2.3)
 	var x73 = vpnumber.F32ToX32(8.2)
-	var x74 = vpnumber.F32ToX32(9.1)
 	var x81 = vpnumber.F32ToX32(-6.01)
 	var x82 = vpnumber.F32ToX32(-7.02)
 	var x83 = vpnumber.F32ToX32(-8.03)
-	var x84 = vpnumber.F32ToX32(-9.04)
 
 	var xmul = vpnumber.F32ToX32(10.0)
 
 	var m1, m2, m3, m4 *X32Mat4x3
 
-	m1 = X32Mat4x3New(x11, x12, x13, x14, x21, x22, x23, x24, x31, x32, x33, x34, x41, x42, x43, x44)
+	m1 = X32Mat4x3New(x11, x12, x13, x21, x22, x23, x31, x32, x33, x41, x42, x43)
 	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
-	}
-
-	m2 = m1.ToI32().ToX32()
-	if !m1.IsSimilar(m2) {
-		t.Error("I32 conversion error")
-	}
-
-	m2 = m1.ToI64().ToX32()
-	if !m1.IsSimilar(m2) {
-		t.Error("I64 conversion error")
 	}
 
 	m2 = m1.ToX64().ToX32()
@@ -97,21 +80,21 @@ func TestX32Mat4x3Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = X32Mat4x3New(x51, x52, x53, x54, x61, x62, x63, x64, x71, x72, x73, x74, x81, x82, x83, x84)
+	m2 = X32Mat4x3New(x51, x52, x53, x61, x62, x63, x71, x72, x73, x81, x82, x83)
 	m3 = X32Mat4x3Add(m1, m2)
-	m4 = X32Mat4x3New(x11+x51, x12+x52, x13+x53, x14+x54, x21+x61, x22+x62, x23+x63, x24+x64, x31+x71, x32+x72, x33+x73, x34+x74, x41+x81, x42+x82, x43+x83, x44+x84)
+	m4 = X32Mat4x3New(x11+x51, x12+x52, x13+x53, x21+x61, x22+x62, x23+x63, x31+x71, x32+x72, x33+x73, x41+x81, x42+x82, x43+x83)
 	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
 	m3 = X32Mat4x3Sub(m1, m2)
-	m4 = X32Mat4x3New(x11-x51, x12-x52, x13-x53, x14-x54, x21-x61, x22-x62, x23-x63, x24-x64, x31-x71, x32-x72, x33-x73, x34-x74, x41-x81, x42-x82, x43-x83, x44-x84)
+	m4 = X32Mat4x3New(x11-x51, x12-x52, x13-x53, x21-x61, x22-x62, x23-x63, x31-x71, x32-x72, x33-x73, x41-x81, x42-x82, x43-x83)
 	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
 	m3 = X32Mat4x3MulScale(m1, xmul)
-	m4 = X32Mat4x3New(vpnumber.X32Mul(x11, xmul), vpnumber.X32Mul(x12, xmul), vpnumber.X32Mul(x13, xmul), vpnumber.X32Mul(x14, xmul), vpnumber.X32Mul(x21, xmul), vpnumber.X32Mul(x22, xmul), vpnumber.X32Mul(x23, xmul), vpnumber.X32Mul(x24, xmul), vpnumber.X32Mul(x31, xmul), vpnumber.X32Mul(x32, xmul), vpnumber.X32Mul(x33, xmul), vpnumber.X32Mul(x34, xmul), vpnumber.X32Mul(x41, xmul), vpnumber.X32Mul(x42, xmul), vpnumber.X32Mul(x43, xmul), vpnumber.X32Mul(x44, xmul))
+	m4 = X32Mat4x3New(vpnumber.X32Mul(x11, xmul), vpnumber.X32Mul(x12, xmul), vpnumber.X32Mul(x13, xmul), vpnumber.X32Mul(x21, xmul), vpnumber.X32Mul(x22, xmul), vpnumber.X32Mul(x23, xmul), vpnumber.X32Mul(x31, xmul), vpnumber.X32Mul(x32, xmul), vpnumber.X32Mul(x33, xmul), vpnumber.X32Mul(x41, xmul), vpnumber.X32Mul(x42, xmul), vpnumber.X32Mul(x43, xmul))
 	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
@@ -166,12 +149,6 @@ func TestX32Mat4x3Aff(t *testing.T) {
 	vt := vpvec3.X32Vec3New(t1, t2, t3)
 	mt := X32Mat4x3Trans(vt)
 	t.Logf("translation mat4x3 for %s is %s", vt.String(), mt.String())
-	v2 := mt.MulVec(v1)
-	t.Logf("mat4x3 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
-	v3 := vpvec4.X32Vec4New(p1+t1, p2+t2, p3+t3, vpnumber.X32Const1)
-	if !v2.IsSimilar(v3) {
-		t.Errorf("mat4x3 MulVec error v2=%s v3=%s", v2.String(), v3.String())
-	}
 	v2pos := mt.MulVecPos(v1.ToVec3())
 	v3pos := v1.ToVec3().Add(vt)
 	if !v2pos.IsSimilar(v3pos) {
@@ -184,10 +161,11 @@ func TestX32Mat4x3Aff(t *testing.T) {
 	}
 
 	mr := X32Mat4x3RotX(vpmath.X32ConstPi2)
-	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
-	v2 = mr.MulVec(v1)
+	mrCheck := vpmat4x4.X32Mat4x4RotX(vpmath.X32ConstPi2)
+	t.Logf("rotation X mat4x3 for PI/2 is %s", mr.String())
+	v2 := mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = vpvec4.X32Vec4New(v1[0], -v1[2], v1[1], vpnumber.X32Const1)
+	v3 := vpvec4.X32Vec4New(v1[0], -v1[2], v1[1], vpnumber.X32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x3 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -203,8 +181,9 @@ func TestX32Mat4x3Aff(t *testing.T) {
 	}
 
 	mr = X32Mat4x3RotY(vpmath.X32ConstPi2)
-	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
-	v2 = mr.MulVec(v1)
+	mrCheck = vpmat4x4.X32Mat4x4RotY(vpmath.X32ConstPi2)
+	t.Logf("rotation Y mat4x3 for PI/2 is %s", mr.String())
+	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
 	v3 = vpvec4.X32Vec4New(v1[2], v1[1], -v1[0], vpnumber.X32Const1)
 	if !v2.IsSimilar(v3) {
@@ -222,8 +201,9 @@ func TestX32Mat4x3Aff(t *testing.T) {
 	}
 
 	mr = X32Mat4x3RotZ(vpmath.X32ConstPi2)
-	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
-	v2 = mr.MulVec(v1)
+	mrCheck = vpmat4x4.X32Mat4x4RotZ(vpmath.X32ConstPi2)
+	t.Logf("rotation Z mat4x3 for PI/2 is %s", mr.String())
+	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
 	v3 = vpvec4.X32Vec4New(-v1[1], v1[0], v1[2], vpnumber.X32Const1)
 	if !v2.IsSimilar(v3) {
@@ -268,7 +248,7 @@ func TestX32Mat4x3JSON(t *testing.T) {
 }
 
 func BenchmarkX32Mat4x3Add(b *testing.B) {
-	mat := X32Mat4x3New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
+	mat := X32Mat4x3New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)

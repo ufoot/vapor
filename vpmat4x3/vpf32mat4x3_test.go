@@ -162,7 +162,7 @@ func TestF32Mat4x3Aff(t *testing.T) {
 
 	mr := F32Mat4x3RotX(math.Pi / 2)
 	mrCheck := vpmat4x4.F32Mat4x4RotX(math.Pi / 2)
-	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
+	t.Logf("rotation X mat4x3 for PI/2 is %s", mr.String())
 	v2 := mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
 	v3 := vpvec4.F32Vec4New(v1[0], -v1[2], v1[1], vpnumber.F32Const1)
@@ -182,7 +182,7 @@ func TestF32Mat4x3Aff(t *testing.T) {
 
 	mr = F32Mat4x3RotY(math.Pi / 2)
 	mrCheck = vpmat4x4.F32Mat4x4RotY(math.Pi / 2)
-	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
+	t.Logf("rotation Y mat4x3 for PI/2 is %s", mr.String())
 	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
 	v3 = vpvec4.F32Vec4New(v1[2], v1[1], -v1[0], vpnumber.F32Const1)
@@ -202,7 +202,7 @@ func TestF32Mat4x3Aff(t *testing.T) {
 
 	mr = F32Mat4x3RotZ(math.Pi / 2)
 	mrCheck = vpmat4x4.F32Mat4x4RotZ(math.Pi / 2)
-	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
+	t.Logf("rotation Z mat4x3 for PI/2 is %s", mr.String())
 	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
 	v3 = vpvec4.F32Vec4New(-v1[1], v1[0], v1[2], vpnumber.F32Const1)

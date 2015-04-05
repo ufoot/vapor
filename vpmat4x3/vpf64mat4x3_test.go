@@ -20,7 +20,7 @@
 package vpmat4x3
 
 import (
-	"github.com/ufoot/vapor/vpmat4x3"
+	"github.com/ufoot/vapor/vpmat4x4"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpvec3"
 	"github.com/ufoot/vapor/vpvec4"
@@ -162,10 +162,10 @@ func TestF64Mat4x3Aff(t *testing.T) {
 
 	mr := F64Mat4x3RotX(math.Pi / 2)
 	mrCheck := vpmat4x4.F64Mat4x4RotX(math.Pi / 2)
-	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
+	t.Logf("rotation X mat4x3 for PI/2 is %s", mr.String())
 	v2 := mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = vpvec4.F64Vec4New(v1[0], -v1[2], v1[1], vpnumber.F64Const1)
+	v3 := vpvec4.F64Vec4New(v1[0], -v1[2], v1[1], vpnumber.F64Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x3 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -182,7 +182,7 @@ func TestF64Mat4x3Aff(t *testing.T) {
 
 	mr = F64Mat4x3RotY(math.Pi / 2)
 	mrCheck = vpmat4x4.F64Mat4x4RotY(math.Pi / 2)
-	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
+	t.Logf("rotation Y mat4x3 for PI/2 is %s", mr.String())
 	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
 	v3 = vpvec4.F64Vec4New(v1[2], v1[1], -v1[0], vpnumber.F64Const1)
@@ -202,7 +202,7 @@ func TestF64Mat4x3Aff(t *testing.T) {
 
 	mr = F64Mat4x3RotZ(math.Pi / 2)
 	mrCheck = vpmat4x4.F64Mat4x4RotZ(math.Pi / 2)
-	t.Logf("rotation mat4x3 for PI/2 is %s", mr.String())
+	t.Logf("rotation Z mat4x3 for PI/2 is %s", mr.String())
 	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
 	v3 = vpvec4.F64Vec4New(-v1[1], v1[0], v1[2], vpnumber.F64Const1)
@@ -248,7 +248,7 @@ func TestF64Mat4x3JSON(t *testing.T) {
 }
 
 func BenchmarkF64Mat4x3Add(b *testing.B) {
-	mat := F64Mat4x3New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
+	mat := F64Mat4x3New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
