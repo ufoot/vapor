@@ -25,8 +25,8 @@ import (
 
 func TestConst(t *testing.T) {
 	if Size == 9 {
-		t.Logf("OK, 3x3 matrix size is %f", Size)
+		t.Logf("OK, 3x3 matrix size is %d", Size)
 	} else {
-		t.Errorf("wrong size for 3x3 matrix, got %f should be %f", Size, 9)
+		t.Errorf("wrong size for 3x3 matrix, got %d should be %d", Size, 9)
 	}
 }

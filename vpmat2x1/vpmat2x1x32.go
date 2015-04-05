@@ -211,7 +211,6 @@ func (mat *X32) Inv() *X32 {
 	return mat
 }
 
-// MulVec performs a multiplication of a vector by a 2x1 matrix,
 // MulVecPos performs a multiplication of a vector by a 2x1 matrix,
 // considering the vector is a column vector (matrix left, vector right).
 // The last member of the vector is assumed to be 1, so in practice a

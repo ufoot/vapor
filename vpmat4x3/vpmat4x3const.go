@@ -20,30 +20,30 @@
 package vpmat4x3
 
 const (
-	// Index of colum 0 row 0 in a 4x3 column-major matrix.
+	// Col0Row0 is the index of colum 0 row 0 in a 4x3 column-major matrix.
 	Col0Row0 = iota
-	// Index of colum 0 row 1 in a 4x3 column-major matrix.
+	// Col0Row1 is the index of colum 0 row 1 in a 4x3 column-major matrix.
 	Col0Row1
-	// Index of colum 0 row 2 in a 4x3 column-major matrix.
+	// Col0Row2 is the index of colum 0 row 2 in a 4x3 column-major matrix.
 	Col0Row2
-	// Index of colum 1 row 0 in a 4x3 column-major matrix.
+	// Col1Row0 is the index of colum 1 row 0 in a 4x3 column-major matrix.
 	Col1Row0
-	// Index of colum 1 row 1 in a 4x3 column-major matrix.
+	// Col1Row1 is the index of colum 1 row 1 in a 4x3 column-major matrix.
 	Col1Row1
-	// Index of colum 1 row 2 in a 4x3 column-major matrix.
+	// Col1Row2 is the index of colum 1 row 2 in a 4x3 column-major matrix.
 	Col1Row2
-	// Index of colum 2 row 0 in a 4x3 column-major matrix.
+	// Col2Row0 is the index of colum 2 row 0 in a 4x3 column-major matrix.
 	Col2Row0
-	// Index of colum 2 row 1 in a 4x3 column-major matrix.
+	// Col2Row1 is the index of colum 2 row 1 in a 4x3 column-major matrix.
 	Col2Row1
-	// Index of colum 2 row 2 in a 4x3 column-major matrix.
+	// Col2Row2 is the index of colum 2 row 2 in a 4x3 column-major matrix.
 	Col2Row2
-	// Index of colum 3 row 0 in a 4x3 column-major matrix.
+	// Col3Row0 is the index of colum 3 row 0 in a 4x3 column-major matrix.
 	Col3Row0
-	// Index of colum 3 row 1 in a 4x3 column-major matrix.
+	// Col3Row1 is the index of colum 3 row 1 in a 4x3 column-major matrix.
 	Col3Row1
-	// Index of colum 3 row 2 in a 4x3 column-major matrix.
+	// Col3Row2 is the index of colum 3 row 2 in a 4x3 column-major matrix.
 	Col3Row2
-	// Number of elements in a 4x3 matrix.
+	// Size is the number of elements in a 4x3 matrix.
 	Size
 )

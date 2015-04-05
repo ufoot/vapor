@@ -25,8 +25,8 @@ import (
 
 func TestConst(t *testing.T) {
 	if Size == 12 {
-		t.Logf("OK, 4x3 matrix size is %f", Size)
+		t.Logf("OK, 4x3 matrix size is %d", Size)
 	} else {
-		t.Errorf("wrong size for 4x3 matrix, got %f should be %f", Size, 12)
+		t.Errorf("wrong size for 4x3 matrix, got %d should be %d", Size, 12)
 	}
 }

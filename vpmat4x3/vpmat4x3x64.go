@@ -69,7 +69,7 @@ func X64RotZ(r vpnumber.X64) *X64 {
 	return &X64{vpmath.X64Cos(r), vpmath.X64Sin(r), vpnumber.X64Const0, -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0}
 }
 
-// ToX64 converts the matrix to a fixed point number matrix on 64 bits.
+// ToX32 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *X64) ToX32() *X32 {
 	var ret X32
 
@@ -80,7 +80,7 @@ func (mat *X64) ToX32() *X32 {
 	return &ret
 }
 
-// ToF64 converts the matrix to a float64 matrix.
+// ToF32 converts the matrix to a float64 matrix.
 func (mat *X64) ToF32() *F32 {
 	var ret F32
 

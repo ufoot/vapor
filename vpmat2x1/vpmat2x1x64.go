@@ -46,7 +46,7 @@ func X64Trans(x vpnumber.X64) *X64 {
 	return &X64{vpnumber.X64Const1, x}
 }
 
-// ToX64 converts the matrix to a fixed point number matrix on 64 bits.
+// ToX32 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *X64) ToX32() *X32 {
 	var ret X32
 
@@ -211,7 +211,6 @@ func (mat *X64) Inv() *X64 {
 	return mat
 }
 
-// MulVec performs a multiplication of a vector by a 2x1 matrix,
 // MulVecPos performs a multiplication of a vector by a 2x1 matrix,
 // considering the vector is a column vector (matrix left, vector right).
 // The last member of the vector is assumed to be 1, so in practice a
