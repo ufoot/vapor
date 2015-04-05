@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
 )
 
 // X32 is a matrix containing 2x1 fixed point 32 bit values.
@@ -87,6 +88,28 @@ func (mat *X32) Set(col, row int, val vpnumber.X32) {
 // Get gets the value of the matrix for a given column and row.
 func (mat *X32) Get(col, row int) vpnumber.X32 {
 	return mat[col+row]
+}
+
+// SetCol sets a column to the values contained in a vector.
+func (mat *X32) SetCol(col int, val vpnumber.X32) {
+	mat[col] = val
+}
+
+// GetCol gets a column and returns it in a vector.
+func (mat *X32) GetCol(col int) vpnumber.X32 {
+	return mat[col]
+}
+
+// SetRow sets a row to the values contained in a vector.
+func (mat *X32) SetRow(col int, val *vpvec2.X32) {
+	*mat = X32(*val)
+}
+
+// GetRow gets a row and returns it in a vector.
+func (mat *X32) GetRow(col int) *vpvec2.X32 {
+	ret := vpvec2.X32(*mat)
+
+	return &ret
 }
 
 // MarshalJSON implements the json.Marshaler interface.

@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
 )
 
 // F32 is a matrix containing 2x1 float32 values.
@@ -87,6 +88,28 @@ func (mat *F32) Set(col, row int, val float32) {
 // Get gets the value of the matrix for a given column and row.
 func (mat *F32) Get(col, row int) float32 {
 	return mat[col+row]
+}
+
+// SetCol sets a column to the values contained in a vector.
+func (mat *F32) SetCol(col int, val float32) {
+	mat[col] = val
+}
+
+// GetCol gets a column and returns it in a vector.
+func (mat *F32) GetCol(col int) float32 {
+	return mat[col]
+}
+
+// SetRow sets a row to the values contained in a vector.
+func (mat *F32) SetRow(col int, val *vpvec2.F32) {
+	*mat = F32(*val)
+}
+
+// GetRow gets a row and returns it in a vector.
+func (mat *F32) GetRow(col int) *vpvec2.F32 {
+	ret := vpvec2.F32(*mat)
+
+	return &ret
 }
 
 // MarshalJSON implements the json.Marshaler interface.

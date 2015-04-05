@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
 )
 
 // F64 is a matrix containing 2x1 float64 values.
@@ -87,6 +88,28 @@ func (mat *F64) Set(col, row int, val float64) {
 // Get gets the value of the matrix for a given column and row.
 func (mat *F64) Get(col, row int) float64 {
 	return mat[col+row]
+}
+
+// SetCol sets a column to the values contained in a vector.
+func (mat *F64) SetCol(col int, val float64) {
+	mat[col] = val
+}
+
+// GetCol gets a column and returns it in a vector.
+func (mat *F64) GetCol(col int) float64 {
+	return mat[col]
+}
+
+// SetRow sets a row to the values contained in a vector.
+func (mat *F64) SetRow(col int, val *vpvec2.F64) {
+	*mat = F64(*val)
+}
+
+// GetRow gets a row and returns it in a vector.
+func (mat *F64) GetRow(col int) *vpvec2.F64 {
+	ret := vpvec2.F64(*mat)
+
+	return &ret
 }
 
 // MarshalJSON implements the json.Marshaler interface.

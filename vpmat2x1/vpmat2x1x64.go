@@ -23,6 +23,7 @@ import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
 )
 
 // X64 is a matrix containing 2x1 fixed point 64 bit values.
@@ -87,6 +88,28 @@ func (mat *X64) Set(col, row int, val vpnumber.X64) {
 // Get gets the value of the matrix for a given column and row.
 func (mat *X64) Get(col, row int) vpnumber.X64 {
 	return mat[col+row]
+}
+
+// SetCol sets a column to the values contained in a vector.
+func (mat *X64) SetCol(col int, val vpnumber.X64) {
+	mat[col] = val
+}
+
+// GetCol gets a column and returns it in a vector.
+func (mat *X64) GetCol(col int) vpnumber.X64 {
+	return mat[col]
+}
+
+// SetRow sets a row to the values contained in a vector.
+func (mat *X64) SetRow(col int, val *vpvec2.X64) {
+	*mat = X64(*val)
+}
+
+// GetRow gets a row and returns it in a vector.
+func (mat *X64) GetRow(col int) *vpvec2.X64 {
+	ret := vpvec2.X64(*mat)
+
+	return &ret
 }
 
 // MarshalJSON implements the json.Marshaler interface.
