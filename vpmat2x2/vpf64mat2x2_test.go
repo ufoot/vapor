@@ -27,7 +27,7 @@ import (
 	"testing"
 )
 
-func TestF64Mat2x2Math(t *testing.T) {
+func TestF64Math(t *testing.T) {
 	const f11 = 3.0
 	const f12 = 30.0
 	const f21 = -40.0
@@ -40,9 +40,9 @@ func TestF64Mat2x2Math(t *testing.T) {
 
 	const fmul = 10.0
 
-	var m1, m2, m3, m4 *F64Mat2x2
+	var m1, m2, m3, m4 *F64
 
-	m1 = F64Mat2x2New(f11, f12, f21, f22)
+	m1 = F64New(f11, f12, f21, f22)
 	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -62,26 +62,26 @@ func TestF64Mat2x2Math(t *testing.T) {
 		t.Error("F32 conversion error")
 	}
 
-	m2 = F64Mat2x2New(f51, f52, f61, f62)
-	m3 = F64Mat2x2Add(m1, m2)
-	m4 = F64Mat2x2New(f11+f51, f12+f52, f21+f61, f22+f62)
+	m2 = F64New(f51, f52, f61, f62)
+	m3 = F64Add(m1, m2)
+	m4 = F64New(f11+f51, f12+f52, f21+f61, f22+f62)
 	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
-	m3 = F64Mat2x2Sub(m1, m2)
-	m4 = F64Mat2x2New(f11-f51, f12-f52, f21-f61, f22-f62)
+	m3 = F64Sub(m1, m2)
+	m4 = F64New(f11-f51, f12-f52, f21-f61, f22-f62)
 	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
-	m3 = F64Mat2x2MulScale(m1, fmul)
-	m4 = F64Mat2x2New(f11*fmul, f12*fmul, f21*fmul, f22*fmul)
+	m3 = F64MulScale(m1, fmul)
+	m4 = F64New(f11*fmul, f12*fmul, f21*fmul, f22*fmul)
 	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
 
-	m3 = F64Mat2x2DivScale(m3, fmul)
+	m3 = F64DivScale(m3, fmul)
 	if !m3.IsSimilar(m1) {
 		t.Error("DivScale error")
 	}
@@ -94,8 +94,8 @@ func TestF64Mat2x2Math(t *testing.T) {
 	m3.DivScale(0)
 }
 
-func invertableF64Mat2x2() *F64Mat2x2 {
-	var ret F64Mat2x2
+func invertableF64() *F64 {
+	var ret F64
 
 	for math.Abs(ret.Det()) < 0.25 {
 		for i := range ret {
@@ -106,10 +106,10 @@ func invertableF64Mat2x2() *F64Mat2x2 {
 	return &ret
 }
 
-func TestF64Mat2x2Comp(t *testing.T) {
-	m1 := invertableF64Mat2x2()
-	m2 := F64Mat2x2Inv(m1)
-	id := F64Mat2x2Identity()
+func TestF64Comp(t *testing.T) {
+	m1 := invertableF64()
+	m2 := F64Inv(m1)
+	id := F64Identity()
 
 	m2.MulComp(m1)
 	if m2.IsSimilar(id) {
@@ -119,12 +119,12 @@ func TestF64Mat2x2Comp(t *testing.T) {
 	}
 }
 
-func TestF64Mat2x2Aff(t *testing.T) {
+func TestF64Aff(t *testing.T) {
 	const p1 = 3.0
 	const t1 = 6.0
 
 	v1 := vpvec2.F64Vec2New(p1, vpnumber.F64Const1)
-	mt := F64Mat2x2Trans(t1)
+	mt := F64Trans(t1)
 	t.Logf("translation mat2 for %f is %s", p1, mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
@@ -144,44 +144,44 @@ func TestF64Mat2x2Aff(t *testing.T) {
 	}
 }
 
-func TestF64Mat2x2JSON(t *testing.T) {
-	m1 := invertableF64Mat2x2()
-	m2 := F64Mat2x2Identity()
+func TestF64JSON(t *testing.T) {
+	m1 := invertableF64()
+	m2 := F64Identity()
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for F64Mat2x2 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for F64 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for F64Mat2x2")
+		t.Error("unable to encode JSON for F64")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for F64Mat2x2, but json is not correct")
+		t.Error("able to decode JSON for F64, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for F64Mat2x2")
+		t.Error("unable to decode JSON for F64")
 	}
 	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled matrix is different from original")
 	}
 }
 
-func BenchmarkF64Mat2x2Add(b *testing.B) {
-	mat := F64Mat2x2New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
+func BenchmarkF64Add(b *testing.B) {
+	mat := F64New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
 	}
 }
 
-func BenchmarkF64Mat2x2Inv(b *testing.B) {
-	mat := invertableF64Mat2x2()
+func BenchmarkF64Inv(b *testing.B) {
+	mat := invertableF64()
 
 	for i := 0; i < b.N; i++ {
-		_ = F64Mat2x2Inv(mat)
+		_ = F64Inv(mat)
 	}
 }

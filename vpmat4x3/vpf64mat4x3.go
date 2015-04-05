@@ -27,51 +27,51 @@ import (
 	"math"
 )
 
-// F64Mat4x3 is a matrix containing 4x3 float64 values.
+// F64 is a matrix containing 4x3 float64 values.
 // Can be used in 3D matrix transformations.
-type F64Mat4x3 [12]float64
+type F64 [12]float64
 
-// F64Mat4x3New creates a new matrix containing 4x3 float64 values.
+// F64New creates a new matrix containing 4x3 float64 values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func F64Mat4x3New(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12 float64) *F64Mat4x3 {
-	return &F64Mat4x3{f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12}
+func F64New(f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12 float64) *F64 {
+	return &F64{f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12}
 }
 
-// F64Mat4x3Identity creates a new identity matrix.
-func F64Mat4x3Identity() *F64Mat4x3 {
-	return &F64Mat4x3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
+// F64Identity creates a new identity matrix.
+func F64Identity() *F64 {
+	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
-// F64Mat4x3Trans creates a new translation matrix.
-func F64Mat4x3Trans(vec *vpvec3.F64Vec3) *F64Mat4x3 {
-	return &F64Mat4x3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vec[0], vec[1], vec[2]}
+// F64Trans creates a new translation matrix.
+func F64Trans(vec *vpvec3.F64Vec3) *F64 {
+	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vec[0], vec[1], vec[2]}
 }
 
-// F64Mat4x3RotX creates a new rotation matrix.
+// F64RotX creates a new rotation matrix.
 // The rotation is done in 3D over the x (1st) axis.
 // Angle is given in radians.
-func F64Mat4x3RotX(r float64) *F64Mat4x3 {
-	return &F64Mat4x3{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, math.Cos(r), math.Sin(r), vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
+func F64RotX(r float64) *F64 {
+	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, math.Cos(r), math.Sin(r), vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
-// F64Mat4x3RotY creates a new rotation matrix.
+// F64RotY creates a new rotation matrix.
 // The rotation is done in 3D over the y (2nd) axis.
 // Angle is given in radians.
-func F64Mat4x3RotY(r float64) *F64Mat4x3 {
-	return &F64Mat4x3{math.Cos(r), vpnumber.F64Const0, -math.Sin(r), vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, math.Sin(r), vpnumber.F64Const0, math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
+func F64RotY(r float64) *F64 {
+	return &F64{math.Cos(r), vpnumber.F64Const0, -math.Sin(r), vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, math.Sin(r), vpnumber.F64Const0, math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
-// F64Mat4x3RotZ creates a new rotation matrix.
+// F64RotZ creates a new rotation matrix.
 // The rotation is done in 3D over the z (3rd) axis.
 // Angle is given in radians.
-func F64Mat4x3RotZ(r float64) *F64Mat4x3 {
-	return &F64Mat4x3{math.Cos(r), math.Sin(r), vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
+func F64RotZ(r float64) *F64 {
+	return &F64{math.Cos(r), math.Sin(r), vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
-func (mat *F64Mat4x3) ToX32() *X32Mat4x3 {
-	var ret X32Mat4x3
+func (mat *F64) ToX32() *X32 {
+	var ret X32
 
 	for i, v := range mat {
 		ret[i] = vpnumber.F64ToX32(v)
@@ -81,8 +81,8 @@ func (mat *F64Mat4x3) ToX32() *X32Mat4x3 {
 }
 
 // ToX64 converts the matrix to a fixed point number matrix on 64 bits.
-func (mat *F64Mat4x3) ToX64() *X64Mat4x3 {
-	var ret X64Mat4x3
+func (mat *F64) ToX64() *X64 {
+	var ret X64
 
 	for i, v := range mat {
 		ret[i] = vpnumber.F64ToX64(v)
@@ -92,8 +92,8 @@ func (mat *F64Mat4x3) ToX64() *X64Mat4x3 {
 }
 
 // ToF32 converts the matrix to a float32 matrix.
-func (mat *F64Mat4x3) ToF32() *F32Mat4x3 {
-	var ret F32Mat4x3
+func (mat *F64) ToF32() *F32 {
+	var ret F32
 
 	for i, v := range mat {
 		ret[i] = float32(v)
@@ -103,17 +103,17 @@ func (mat *F64Mat4x3) ToF32() *F32Mat4x3 {
 }
 
 // Set sets the value of the matrix for a given column and row.
-func (mat *F64Mat4x3) Set(col, row int, val float64) {
+func (mat *F64) Set(col, row int, val float64) {
 	mat[col*3+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
-func (mat *F64Mat4x3) Get(col, row int) float64 {
+func (mat *F64) Get(col, row int) float64 {
 	return mat[col*3+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (mat *F64Mat4x3) MarshalJSON() ([]byte, error) {
+func (mat *F64) MarshalJSON() ([]byte, error) {
 	var tmpArray [4][3]float64
 
 	for col := range tmpArray {
@@ -124,19 +124,19 @@ func (mat *F64Mat4x3) MarshalJSON() ([]byte, error) {
 
 	ret, err := json.Marshal(tmpArray)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal F64Mat4x3")
+		return nil, vpsys.ErrorChain(err, "unable to marshal F64")
 	}
 
 	return ret, nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
-func (mat *F64Mat4x3) UnmarshalJSON(data []byte) error {
+func (mat *F64) UnmarshalJSON(data []byte) error {
 	var tmpArray [4][3]float64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal F64Mat4x3")
+		return vpsys.ErrorChain(err, "unable to unmarshal F64")
 	}
 
 	for col := range tmpArray {
@@ -149,7 +149,7 @@ func (mat *F64Mat4x3) UnmarshalJSON(data []byte) error {
 }
 
 // String returns a readable form of the matrix.
-func (mat *F64Mat4x3) String() string {
+func (mat *F64) String() string {
 	buf, err := mat.MarshalJSON()
 
 	if err != nil {
@@ -162,7 +162,7 @@ func (mat *F64Mat4x3) String() string {
 
 // Add adds operand to the matrix.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *F64Mat4x3) Add(op *F64Mat4x3) *F64Mat4x3 {
+func (mat *F64) Add(op *F64) *F64 {
 	for i, v := range op {
 		mat[i] += v
 	}
@@ -172,7 +172,7 @@ func (mat *F64Mat4x3) Add(op *F64Mat4x3) *F64Mat4x3 {
 
 // Sub substracts operand from the matrix.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *F64Mat4x3) Sub(op *F64Mat4x3) *F64Mat4x3 {
+func (mat *F64) Sub(op *F64) *F64 {
 	for i, v := range op {
 		mat[i] -= v
 	}
@@ -182,7 +182,7 @@ func (mat *F64Mat4x3) Sub(op *F64Mat4x3) *F64Mat4x3 {
 
 // MulScale multiplies all values of the matrix by factor.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *F64Mat4x3) MulScale(factor float64) *F64Mat4x3 {
+func (mat *F64) MulScale(factor float64) *F64 {
 	for i, v := range mat {
 		mat[i] = v * factor
 	}
@@ -192,7 +192,7 @@ func (mat *F64Mat4x3) MulScale(factor float64) *F64Mat4x3 {
 
 // DivScale divides all values of the matrix by factor.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *F64Mat4x3) DivScale(factor float64) *F64Mat4x3 {
+func (mat *F64) DivScale(factor float64) *F64 {
 	for i, v := range mat {
 		mat[i] = vpnumber.F64Div(v, factor)
 	}
@@ -202,7 +202,7 @@ func (mat *F64Mat4x3) DivScale(factor float64) *F64Mat4x3 {
 
 // IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
-func (mat *F64Mat4x3) IsSimilar(op *F64Mat4x3) bool {
+func (mat *F64) IsSimilar(op *F64) bool {
 	ret := true
 	for i, v := range mat {
 		ret = ret && vpnumber.F64IsSimilar(v, op[i])
@@ -213,14 +213,14 @@ func (mat *F64Mat4x3) IsSimilar(op *F64Mat4x3) bool {
 
 // MulComp multiplies the matrix by another matrix (composition).
 // It modifies the matrix, and returns a pointer on it.
-func (mat *F64Mat4x3) MulComp(op *F64Mat4x3) *F64Mat4x3 {
-	*mat = *F64Mat4x3MulComp(mat, op)
+func (mat *F64) MulComp(op *F64) *F64 {
+	*mat = *F64MulComp(mat, op)
 
 	return mat
 }
 
 // Det returns the matrix determinant.
-func (mat *F64Mat4x3) Det() float64 {
+func (mat *F64) Det() float64 {
 	return -mat.Get(0, 2)*mat.Get(1, 1)*mat.Get(2, 0) + mat.Get(0, 1)*mat.Get(1, 2)*mat.Get(2, 0) + mat.Get(0, 2)*mat.Get(1, 0)*mat.Get(2, 1) - mat.Get(0, 0)*mat.Get(1, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(1, 0)*mat.Get(2, 2) + mat.Get(0, 0)*mat.Get(1, 1)*mat.Get(2, 2)
 }
 
@@ -228,8 +228,8 @@ func (mat *F64Mat4x3) Det() float64 {
 // Never fails (no division by zero error, never) but if the
 // matrix can't be inverted, result does not make sense.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *F64Mat4x3) Inv() *F64Mat4x3 {
-	*mat = *F64Mat4x3Inv(mat)
+func (mat *F64) Inv() *F64 {
+	*mat = *F64Inv(mat)
 
 	return mat
 }
@@ -240,7 +240,7 @@ func (mat *F64Mat4x3) Inv() *F64Mat4x3 {
 // position vector of length 3 (a point in space) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-func (mat *F64Mat4x3) MulVecPos(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
+func (mat *F64) MulVecPos(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
 	var ret vpvec3.F64Vec3
 
 	for i := range vec {
@@ -256,7 +256,7 @@ func (mat *F64Mat4x3) MulVecPos(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
 // direction vector of length 3 (a point in space) is passed. This allow geometric
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
-func (mat *F64Mat4x3) MulVecDir(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
+func (mat *F64) MulVecDir(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
 	var ret vpvec3.F64Vec3
 
 	for i := range vec {
@@ -266,9 +266,9 @@ func (mat *F64Mat4x3) MulVecDir(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
 	return &ret
 }
 
-// F64Mat4x3Add adds two matrices.
+// F64Add adds two matrices.
 // Args are left untouched, a pointer on a new object is returned.
-func F64Mat4x3Add(mata, matb *F64Mat4x3) *F64Mat4x3 {
+func F64Add(mata, matb *F64) *F64 {
 	var ret = *mata
 
 	_ = ret.Add(matb)
@@ -276,9 +276,9 @@ func F64Mat4x3Add(mata, matb *F64Mat4x3) *F64Mat4x3 {
 	return &ret
 }
 
-// F64Mat4x3Sub substracts matrix b from matrix a.
+// F64Sub substracts matrix b from matrix a.
 // Args are left untouched, a pointer on a new object is returned.
-func F64Mat4x3Sub(mata, matb *F64Mat4x3) *F64Mat4x3 {
+func F64Sub(mata, matb *F64) *F64 {
 	var ret = *mata
 
 	_ = ret.Sub(matb)
@@ -286,9 +286,9 @@ func F64Mat4x3Sub(mata, matb *F64Mat4x3) *F64Mat4x3 {
 	return &ret
 }
 
-// F64Mat4x3MulScale multiplies all values of a matrix by a scalar.
+// F64MulScale multiplies all values of a matrix by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func F64Mat4x3MulScale(mat *F64Mat4x3, factor float64) *F64Mat4x3 {
+func F64MulScale(mat *F64, factor float64) *F64 {
 	var ret = *mat
 
 	_ = ret.MulScale(factor)
@@ -296,9 +296,9 @@ func F64Mat4x3MulScale(mat *F64Mat4x3, factor float64) *F64Mat4x3 {
 	return &ret
 }
 
-// F64Mat4x3DivScale divides all values of a matrix by a scalar.
+// F64DivScale divides all values of a matrix by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func F64Mat4x3DivScale(mat *F64Mat4x3, factor float64) *F64Mat4x3 {
+func F64DivScale(mat *F64, factor float64) *F64 {
 	var ret = *mat
 
 	_ = ret.DivScale(factor)
@@ -306,10 +306,10 @@ func F64Mat4x3DivScale(mat *F64Mat4x3, factor float64) *F64Mat4x3 {
 	return &ret
 }
 
-// F64Mat4x3MulComp multiplies two matrices (composition).
+// F64MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
-func F64Mat4x3MulComp(a, b *F64Mat4x3) *F64Mat4x3 {
-	var ret F64Mat4x3
+func F64MulComp(a, b *F64) *F64 {
+	var ret F64
 
 	for c := 0; c < 3; c++ {
 		for r := 0; r < 3; r++ {
@@ -323,12 +323,12 @@ func F64Mat4x3MulComp(a, b *F64Mat4x3) *F64Mat4x3 {
 	return &ret
 }
 
-// F64Mat4x3Inv inverts a matrix.
+// F64Inv inverts a matrix.
 // Never fails (no division by zero error, never) but if the
 // matrix can't be inverted, result does not make sense.
 // Args is left untouched, a pointer on a new object is returned.
-func F64Mat4x3Inv(mat *F64Mat4x3) *F64Mat4x3 {
-	ret := F64Mat4x3{
+func F64Inv(mat *F64) *F64 {
+	ret := F64{
 		-mat.Get(1, 2)*mat.Get(2, 1) + mat.Get(1, 1)*mat.Get(2, 2),
 		mat.Get(0, 2)*mat.Get(2, 1) - mat.Get(0, 1)*mat.Get(2, 2),
 		-mat.Get(0, 2)*mat.Get(1, 1) + mat.Get(0, 1)*mat.Get(1, 2),

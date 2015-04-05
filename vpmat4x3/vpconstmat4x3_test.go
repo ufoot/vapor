@@ -23,7 +23,7 @@ import (
 	"testing"
 )
 
-func TestConstMat4x3(t *testing.T) {
+func TestConst(t *testing.T) {
 	if Size == 12 {
 		t.Logf("OK, 4x3 matrix size is %f", Size)
 	} else {

@@ -29,7 +29,7 @@ import (
 	"testing"
 )
 
-func TestX64Mat4x3Math(t *testing.T) {
+func TestX64Math(t *testing.T) {
 	var x11 = vpnumber.F64ToX64(13.0)
 	var x12 = vpnumber.F64ToX64(23.0)
 	var x13 = vpnumber.F64ToX64(33.0)
@@ -58,9 +58,9 @@ func TestX64Mat4x3Math(t *testing.T) {
 
 	var xmul = vpnumber.F64ToX64(10.0)
 
-	var m1, m2, m3, m4 *X64Mat4x3
+	var m1, m2, m3, m4 *X64
 
-	m1 = X64Mat4x3New(x11, x12, x13, x21, x22, x23, x31, x32, x33, x41, x42, x43)
+	m1 = X64New(x11, x12, x13, x21, x22, x23, x31, x32, x33, x41, x42, x43)
 	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -80,26 +80,26 @@ func TestX64Mat4x3Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = X64Mat4x3New(x51, x52, x53, x61, x62, x63, x71, x72, x73, x81, x82, x83)
-	m3 = X64Mat4x3Add(m1, m2)
-	m4 = X64Mat4x3New(x11+x51, x12+x52, x13+x53, x21+x61, x22+x62, x23+x63, x31+x71, x32+x72, x33+x73, x41+x81, x42+x82, x43+x83)
+	m2 = X64New(x51, x52, x53, x61, x62, x63, x71, x72, x73, x81, x82, x83)
+	m3 = X64Add(m1, m2)
+	m4 = X64New(x11+x51, x12+x52, x13+x53, x21+x61, x22+x62, x23+x63, x31+x71, x32+x72, x33+x73, x41+x81, x42+x82, x43+x83)
 	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
-	m3 = X64Mat4x3Sub(m1, m2)
-	m4 = X64Mat4x3New(x11-x51, x12-x52, x13-x53, x21-x61, x22-x62, x23-x63, x31-x71, x32-x72, x33-x73, x41-x81, x42-x82, x43-x83)
+	m3 = X64Sub(m1, m2)
+	m4 = X64New(x11-x51, x12-x52, x13-x53, x21-x61, x22-x62, x23-x63, x31-x71, x32-x72, x33-x73, x41-x81, x42-x82, x43-x83)
 	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
-	m3 = X64Mat4x3MulScale(m1, xmul)
-	m4 = X64Mat4x3New(vpnumber.X64Mul(x11, xmul), vpnumber.X64Mul(x12, xmul), vpnumber.X64Mul(x13, xmul), vpnumber.X64Mul(x21, xmul), vpnumber.X64Mul(x22, xmul), vpnumber.X64Mul(x23, xmul), vpnumber.X64Mul(x31, xmul), vpnumber.X64Mul(x32, xmul), vpnumber.X64Mul(x33, xmul), vpnumber.X64Mul(x41, xmul), vpnumber.X64Mul(x42, xmul), vpnumber.X64Mul(x43, xmul))
+	m3 = X64MulScale(m1, xmul)
+	m4 = X64New(vpnumber.X64Mul(x11, xmul), vpnumber.X64Mul(x12, xmul), vpnumber.X64Mul(x13, xmul), vpnumber.X64Mul(x21, xmul), vpnumber.X64Mul(x22, xmul), vpnumber.X64Mul(x23, xmul), vpnumber.X64Mul(x31, xmul), vpnumber.X64Mul(x32, xmul), vpnumber.X64Mul(x33, xmul), vpnumber.X64Mul(x41, xmul), vpnumber.X64Mul(x42, xmul), vpnumber.X64Mul(x43, xmul))
 	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
 
-	m3 = X64Mat4x3DivScale(m3, xmul)
+	m3 = X64DivScale(m3, xmul)
 	if !m3.IsSimilar(m1) {
 		t.Error("DivScale error")
 	}
@@ -112,8 +112,8 @@ func TestX64Mat4x3Math(t *testing.T) {
 	m3.DivScale(0)
 }
 
-func invertableX64Mat4x3() *X64Mat4x3 {
-	var ret X64Mat4x3
+func invertableX64() *X64 {
+	var ret X64
 
 	for vpnumber.X64Abs(ret.Det()) < vpnumber.X64Const1 {
 		for i := range ret {
@@ -124,10 +124,10 @@ func invertableX64Mat4x3() *X64Mat4x3 {
 	return &ret
 }
 
-func TestX64Mat4x3Comp(t *testing.T) {
-	m1 := invertableX64Mat4x3()
-	m2 := X64Mat4x3Inv(m1)
-	id := X64Mat4x3Identity()
+func TestX64Comp(t *testing.T) {
+	m1 := invertableX64()
+	m2 := X64Inv(m1)
+	id := X64Identity()
 
 	m2.MulComp(m1)
 	if m2.IsSimilar(id) {
@@ -137,7 +137,7 @@ func TestX64Mat4x3Comp(t *testing.T) {
 	}
 }
 
-func TestX64Mat4x3Aff(t *testing.T) {
+func TestX64Aff(t *testing.T) {
 	p1 := vpnumber.F64ToX64(3.0)
 	p2 := vpnumber.F64ToX64(4.0)
 	p3 := vpnumber.F64ToX64(5.0)
@@ -147,7 +147,7 @@ func TestX64Mat4x3Aff(t *testing.T) {
 
 	v1 := vpvec4.X64Vec4New(p1, p2, p3, vpnumber.X64Const1)
 	vt := vpvec3.X64Vec3New(t1, t2, t3)
-	mt := X64Mat4x3Trans(vt)
+	mt := X64Trans(vt)
 	t.Logf("translation mat4x3 for %s is %s", vt.String(), mt.String())
 	v2pos := mt.MulVecPos(v1.ToVec3())
 	v3pos := v1.ToVec3().Add(vt)
@@ -160,8 +160,8 @@ func TestX64Mat4x3Aff(t *testing.T) {
 		t.Errorf("mat4x3 MulVecDir error v2dir=%s v3dir=%s", v2dir.String(), v3dir.String())
 	}
 
-	mr := X64Mat4x3RotX(vpmath.X64ConstPi2)
-	mrCheck := vpmat4x4.X64Mat4x4RotX(vpmath.X64ConstPi2)
+	mr := X64RotX(vpmath.X64ConstPi2)
+	mrCheck := vpmat4x4.X64RotX(vpmath.X64ConstPi2)
 	t.Logf("rotation X mat4x3 for PI/2 is %s", mr.String())
 	v2 := mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
@@ -180,8 +180,8 @@ func TestX64Mat4x3Aff(t *testing.T) {
 		t.Errorf("mat4x3 Z rotation MulVecDir error v2dir=%s v3dir=%s", v2dir.String(), v3dir.String())
 	}
 
-	mr = X64Mat4x3RotY(vpmath.X64ConstPi2)
-	mrCheck = vpmat4x4.X64Mat4x4RotY(vpmath.X64ConstPi2)
+	mr = X64RotY(vpmath.X64ConstPi2)
+	mrCheck = vpmat4x4.X64RotY(vpmath.X64ConstPi2)
 	t.Logf("rotation Y mat4x3 for PI/2 is %s", mr.String())
 	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
@@ -200,8 +200,8 @@ func TestX64Mat4x3Aff(t *testing.T) {
 		t.Errorf("mat4x3 Z rotation MulVecDir error v2dir=%s v3dir=%s", v2dir.String(), v3dir.String())
 	}
 
-	mr = X64Mat4x3RotZ(vpmath.X64ConstPi2)
-	mrCheck = vpmat4x4.X64Mat4x4RotZ(vpmath.X64ConstPi2)
+	mr = X64RotZ(vpmath.X64ConstPi2)
+	mrCheck = vpmat4x4.X64RotZ(vpmath.X64ConstPi2)
 	t.Logf("rotation Z mat4x3 for PI/2 is %s", mr.String())
 	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
@@ -221,44 +221,44 @@ func TestX64Mat4x3Aff(t *testing.T) {
 	}
 }
 
-func TestX64Mat4x3JSON(t *testing.T) {
-	m1 := invertableX64Mat4x3()
-	m2 := X64Mat4x3Identity()
+func TestX64JSON(t *testing.T) {
+	m1 := invertableX64()
+	m2 := X64Identity()
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for X64Mat4x3 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for X64 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for X64Mat4x3")
+		t.Error("unable to encode JSON for X64")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for X64Mat4x3, but json is not correct")
+		t.Error("able to decode JSON for X64, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for X64Mat4x3")
+		t.Error("unable to decode JSON for X64")
 	}
 	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled matrix is different from original")
 	}
 }
 
-func BenchmarkX64Mat4x3Add(b *testing.B) {
-	mat := X64Mat4x3New(vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1)
+func BenchmarkX64Add(b *testing.B) {
+	mat := X64New(vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
 	}
 }
 
-func BenchmarkX64Mat4x3Inv(b *testing.B) {
-	mat := invertableX64Mat4x3()
+func BenchmarkX64Inv(b *testing.B) {
+	mat := invertableX64()
 
 	for i := 0; i < b.N; i++ {
-		_ = X64Mat4x3Inv(mat)
+		_ = X64Inv(mat)
 	}
 }

@@ -23,7 +23,7 @@ import (
 	"testing"
 )
 
-func TestConstMat3x2(t *testing.T) {
+func TestConst(t *testing.T) {
 	if Size == 6 {
 		t.Logf("OK, 3x2 matrix size is %f", Size)
 	} else {

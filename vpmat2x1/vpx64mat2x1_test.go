@@ -25,7 +25,7 @@ import (
 	"testing"
 )
 
-func TestX64Mat2x1Math(t *testing.T) {
+func TestX64Math(t *testing.T) {
 	var x11 = vpnumber.F64ToX64(3.0)
 	var x21 = vpnumber.F64ToX64(31.0)
 
@@ -34,9 +34,9 @@ func TestX64Mat2x1Math(t *testing.T) {
 
 	var xmul = vpnumber.F64ToX64(10.0)
 
-	var m1, m2, m3, m4 *X64Mat2x1
+	var m1, m2, m3, m4 *X64
 
-	m1 = X64Mat2x1New(x11, x21)
+	m1 = X64New(x11, x21)
 	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -56,26 +56,26 @@ func TestX64Mat2x1Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = X64Mat2x1New(x51, x61)
-	m3 = X64Mat2x1Add(m1, m2)
-	m4 = X64Mat2x1New(x11+x51, x21+x61)
+	m2 = X64New(x51, x61)
+	m3 = X64Add(m1, m2)
+	m4 = X64New(x11+x51, x21+x61)
 	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
-	m3 = X64Mat2x1Sub(m1, m2)
-	m4 = X64Mat2x1New(x11-x51, x21-x61)
+	m3 = X64Sub(m1, m2)
+	m4 = X64New(x11-x51, x21-x61)
 	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
-	m3 = X64Mat2x1MulScale(m1, xmul)
-	m4 = X64Mat2x1New(vpnumber.X64Mul(x11, xmul), vpnumber.X64Mul(x21, xmul))
+	m3 = X64MulScale(m1, xmul)
+	m4 = X64New(vpnumber.X64Mul(x11, xmul), vpnumber.X64Mul(x21, xmul))
 	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
 
-	m3 = X64Mat2x1DivScale(m3, xmul)
+	m3 = X64DivScale(m3, xmul)
 	if !m3.IsSimilar(m1) {
 		t.Error("DivScale error")
 	}
@@ -88,8 +88,8 @@ func TestX64Mat2x1Math(t *testing.T) {
 	m3.DivScale(0)
 }
 
-func invertableX64Mat2x1() *X64Mat2x1 {
-	var ret X64Mat2x1
+func invertableX64() *X64 {
+	var ret X64
 
 	for vpnumber.X64Abs(ret.Det()) < vpnumber.X64Const1 {
 		for i := range ret {
@@ -100,10 +100,10 @@ func invertableX64Mat2x1() *X64Mat2x1 {
 	return &ret
 }
 
-func TestX64Mat2x1Comp(t *testing.T) {
-	m1 := invertableX64Mat2x1()
-	m2 := X64Mat2x1Inv(m1)
-	id := X64Mat2x1Identity()
+func TestX64Comp(t *testing.T) {
+	m1 := invertableX64()
+	m2 := X64Inv(m1)
+	id := X64Identity()
 
 	m2.MulComp(m1)
 	if m2.IsSimilar(id) {
@@ -113,11 +113,11 @@ func TestX64Mat2x1Comp(t *testing.T) {
 	}
 }
 
-func TestX64Mat2x1Aff(t *testing.T) {
+func TestX64Aff(t *testing.T) {
 	p1 := vpnumber.F64ToX64(3.0)
 	t1 := vpnumber.F64ToX64(6.0)
 
-	mt := X64Mat2x1Trans(t1)
+	mt := X64Trans(t1)
 	t.Logf("translation mat2 for %f is %s", vpnumber.X64ToF64(p1), mt.String())
 	v2pos := mt.MulVecPos(p1)
 	v3pos := p1 + t1
@@ -131,44 +131,44 @@ func TestX64Mat2x1Aff(t *testing.T) {
 	}
 }
 
-func TestX64Mat2x1JSON(t *testing.T) {
-	m1 := invertableX64Mat2x1()
-	m2 := X64Mat2x1Identity()
+func TestX64JSON(t *testing.T) {
+	m1 := invertableX64()
+	m2 := X64Identity()
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for X64Mat2x1 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for X64 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for X64Mat2x1")
+		t.Error("unable to encode JSON for X64")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for X64Mat2x1, but json is not correct")
+		t.Error("able to decode JSON for X64, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for X64Mat2x1")
+		t.Error("unable to decode JSON for X64")
 	}
 	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled matrix is different from original")
 	}
 }
 
-func BenchmarkX64Mat2x1Add(b *testing.B) {
-	mat := X64Mat2x1New(vpnumber.X64Const1, vpnumber.X64Const1)
+func BenchmarkX64Add(b *testing.B) {
+	mat := X64New(vpnumber.X64Const1, vpnumber.X64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
 	}
 }
 
-func BenchmarkX64Mat2x1Inv(b *testing.B) {
-	mat := invertableX64Mat2x1()
+func BenchmarkX64Inv(b *testing.B) {
+	mat := invertableX64()
 
 	for i := 0; i < b.N; i++ {
-		_ = X64Mat2x1Inv(mat)
+		_ = X64Inv(mat)
 	}
 }

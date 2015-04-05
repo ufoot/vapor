@@ -26,30 +26,30 @@ import (
 	"github.com/ufoot/vapor/vpvec2"
 )
 
-// X64Mat2x2 is a matrix containing 2x2 fixed point 64 bit values.
+// X64 is a matrix containing 2x2 fixed point 64 bit values.
 // Can hold the values of a point in a plane.
-type X64Mat2x2 [4]vpnumber.X64
+type X64 [4]vpnumber.X64
 
-// X64Mat2x2New creates a new matrix containing 2x2 fixed point 64 bit values.
+// X64New creates a new matrix containing 2x2 fixed point 64 bit values.
 // The column-major (OpenGL notation) mode is used,
 // first elements fill first column.
-func X64Mat2x2New(x1, x2, x3, x4 vpnumber.X64) *X64Mat2x2 {
-	return &X64Mat2x2{x1, x2, x3, x4}
+func X64New(x1, x2, x3, x4 vpnumber.X64) *X64 {
+	return &X64{x1, x2, x3, x4}
 }
 
-// X64Mat2x2Identity creates a new identity matrix.
-func X64Mat2x2Identity() *X64Mat2x2 {
-	return &X64Mat2x2{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+// X64Identity creates a new identity matrix.
+func X64Identity() *X64 {
+	return &X64{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
-// X64Mat2x2Trans creates a new translation matrix.
-func X64Mat2x2Trans(x vpnumber.X64) *X64Mat2x2 {
-	return &X64Mat2x2{vpnumber.X64Const1, vpnumber.X64Const0, x, vpnumber.X64Const1}
+// X64Trans creates a new translation matrix.
+func X64Trans(x vpnumber.X64) *X64 {
+	return &X64{vpnumber.X64Const1, vpnumber.X64Const0, x, vpnumber.X64Const1}
 }
 
 // ToX32 converts the matrix to a fixed point number matrix on 64 bits.
-func (mat *X64Mat2x2) ToX32() *X32Mat2x2 {
-	var ret X32Mat2x2
+func (mat *X64) ToX32() *X32 {
+	var ret X32
 
 	for i, v := range mat {
 		ret[i] = vpnumber.X64ToX32(v)
@@ -59,8 +59,8 @@ func (mat *X64Mat2x2) ToX32() *X32Mat2x2 {
 }
 
 // ToF32 converts the matrix to a float32 matrix.
-func (mat *X64Mat2x2) ToF32() *F32Mat2x2 {
-	var ret F32Mat2x2
+func (mat *X64) ToF32() *F32 {
+	var ret F32
 
 	for i, v := range mat {
 		ret[i] = vpnumber.X64ToF32(v)
@@ -70,8 +70,8 @@ func (mat *X64Mat2x2) ToF32() *F32Mat2x2 {
 }
 
 // ToF64 converts the matrix to a float64 matrix.
-func (mat *X64Mat2x2) ToF64() *F64Mat2x2 {
-	var ret F64Mat2x2
+func (mat *X64) ToF64() *F64 {
+	var ret F64
 
 	for i, v := range mat {
 		ret[i] = vpnumber.X64ToF64(v)
@@ -81,17 +81,17 @@ func (mat *X64Mat2x2) ToF64() *F64Mat2x2 {
 }
 
 // Set sets the value of the matrix for a given column and row.
-func (mat *X64Mat2x2) Set(col, row int, val vpnumber.X64) {
+func (mat *X64) Set(col, row int, val vpnumber.X64) {
 	mat[col*2+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
-func (mat *X64Mat2x2) Get(col, row int) vpnumber.X64 {
+func (mat *X64) Get(col, row int) vpnumber.X64 {
 	return mat[col*2+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (mat *X64Mat2x2) MarshalJSON() ([]byte, error) {
+func (mat *X64) MarshalJSON() ([]byte, error) {
 	var tmpArray [2][2]int64
 
 	for col := range tmpArray {
@@ -102,19 +102,19 @@ func (mat *X64Mat2x2) MarshalJSON() ([]byte, error) {
 
 	ret, err := json.Marshal(tmpArray)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal X64Mat2x2")
+		return nil, vpsys.ErrorChain(err, "unable to marshal X64")
 	}
 
 	return ret, nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
-func (mat *X64Mat2x2) UnmarshalJSON(data []byte) error {
+func (mat *X64) UnmarshalJSON(data []byte) error {
 	var tmpArray [2][2]int64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal X64Mat2x2")
+		return vpsys.ErrorChain(err, "unable to unmarshal X64")
 	}
 
 	for col := range tmpArray {
@@ -127,7 +127,7 @@ func (mat *X64Mat2x2) UnmarshalJSON(data []byte) error {
 }
 
 // String returns a readable form of the matrix.
-func (mat *X64Mat2x2) String() string {
+func (mat *X64) String() string {
 	buf, err := mat.ToF64().MarshalJSON()
 
 	if err != nil {
@@ -140,7 +140,7 @@ func (mat *X64Mat2x2) String() string {
 
 // Add adds operand to the matrix.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *X64Mat2x2) Add(op *X64Mat2x2) *X64Mat2x2 {
+func (mat *X64) Add(op *X64) *X64 {
 	for i, v := range op {
 		mat[i] += v
 	}
@@ -150,7 +150,7 @@ func (mat *X64Mat2x2) Add(op *X64Mat2x2) *X64Mat2x2 {
 
 // Sub substracts operand from the matrix.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *X64Mat2x2) Sub(op *X64Mat2x2) *X64Mat2x2 {
+func (mat *X64) Sub(op *X64) *X64 {
 	for i, v := range op {
 		mat[i] -= v
 	}
@@ -160,7 +160,7 @@ func (mat *X64Mat2x2) Sub(op *X64Mat2x2) *X64Mat2x2 {
 
 // MulScale multiplies all values of the matrix by factor.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *X64Mat2x2) MulScale(factor vpnumber.X64) *X64Mat2x2 {
+func (mat *X64) MulScale(factor vpnumber.X64) *X64 {
 	for i, v := range mat {
 		mat[i] = vpnumber.X64Mul(v, factor)
 	}
@@ -170,7 +170,7 @@ func (mat *X64Mat2x2) MulScale(factor vpnumber.X64) *X64Mat2x2 {
 
 // DivScale divides all values of the matrix by factor.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *X64Mat2x2) DivScale(factor vpnumber.X64) *X64Mat2x2 {
+func (mat *X64) DivScale(factor vpnumber.X64) *X64 {
 	for i, v := range mat {
 		mat[i] = vpnumber.X64Div(v, factor)
 	}
@@ -180,7 +180,7 @@ func (mat *X64Mat2x2) DivScale(factor vpnumber.X64) *X64Mat2x2 {
 
 // IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
-func (mat *X64Mat2x2) IsSimilar(op *X64Mat2x2) bool {
+func (mat *X64) IsSimilar(op *X64) bool {
 	ret := true
 	for i, v := range mat {
 		ret = ret && vpnumber.X64IsSimilar(v, op[i])
@@ -191,22 +191,22 @@ func (mat *X64Mat2x2) IsSimilar(op *X64Mat2x2) bool {
 
 // Transpose inverts rows and columns (matrix transposition).
 // It modifies the matrix, and returns a pointer on it.
-func (mat *X64Mat2x2) Transpose(op *X64Mat2x2) *X64Mat2x2 {
-	*mat = *X64Mat2x2Transpose(op)
+func (mat *X64) Transpose(op *X64) *X64 {
+	*mat = *X64Transpose(op)
 
 	return mat
 }
 
 // MulComp multiplies the matrix by another matrix (composition).
 // It modifies the matrix, and returns a pointer on it.
-func (mat *X64Mat2x2) MulComp(op *X64Mat2x2) *X64Mat2x2 {
-	*mat = *X64Mat2x2MulComp(mat, op)
+func (mat *X64) MulComp(op *X64) *X64 {
+	*mat = *X64MulComp(mat, op)
 
 	return mat
 }
 
 // Det returns the matrix determinant.
-func (mat *X64Mat2x2) Det() vpnumber.X64 {
+func (mat *X64) Det() vpnumber.X64 {
 	return vpnumber.X64Mul(mat.Get(0, 0), mat.Get(1, 1)) - vpnumber.X64Mul(mat.Get(0, 1), mat.Get(1, 0))
 }
 
@@ -214,15 +214,15 @@ func (mat *X64Mat2x2) Det() vpnumber.X64 {
 // Never fails (no division by zero error, never) but if the
 // matrix can't be inverted, result does not make sense.
 // It modifies the matrix, and returns a pointer on it.
-func (mat *X64Mat2x2) Inv() *X64Mat2x2 {
-	*mat = *X64Mat2x2Inv(mat)
+func (mat *X64) Inv() *X64 {
+	*mat = *X64Inv(mat)
 
 	return mat
 }
 
 // MulVec performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *X64Mat2x2) MulVec(vec *vpvec2.X64Vec2) *vpvec2.X64Vec2 {
+func (mat *X64) MulVec(vec *vpvec2.X64Vec2) *vpvec2.X64Vec2 {
 	var ret vpvec2.X64Vec2
 
 	for i := range vec {
@@ -238,7 +238,7 @@ func (mat *X64Mat2x2) MulVec(vec *vpvec2.X64Vec2) *vpvec2.X64Vec2 {
 // position vector of length 1 (here, a scalar) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X64Mat2x2) MulVecPos(vec vpnumber.X64) vpnumber.X64 {
+func (mat *X64) MulVecPos(vec vpnumber.X64) vpnumber.X64 {
 	return vpnumber.X64Mul(mat.Get(0, 0), vec) + mat.Get(1, 0)
 }
 
@@ -248,13 +248,13 @@ func (mat *X64Mat2x2) MulVecPos(vec vpnumber.X64) vpnumber.X64 {
 // direction vector of length 1 (here, a scalar) is passed. This allow geometric
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X64Mat2x2) MulVecDir(vec vpnumber.X64) vpnumber.X64 {
+func (mat *X64) MulVecDir(vec vpnumber.X64) vpnumber.X64 {
 	return vpnumber.X64Mul(mat.Get(0, 0), vec)
 }
 
-// X64Mat2x2Add adds two matrices.
+// X64Add adds two matrices.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Mat2x2Add(mata, matb *X64Mat2x2) *X64Mat2x2 {
+func X64Add(mata, matb *X64) *X64 {
 	var ret = *mata
 
 	_ = ret.Add(matb)
@@ -262,9 +262,9 @@ func X64Mat2x2Add(mata, matb *X64Mat2x2) *X64Mat2x2 {
 	return &ret
 }
 
-// X64Mat2x2Sub substracts matrix b from matrix a.
+// X64Sub substracts matrix b from matrix a.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Mat2x2Sub(mata, matb *X64Mat2x2) *X64Mat2x2 {
+func X64Sub(mata, matb *X64) *X64 {
 	var ret = *mata
 
 	_ = ret.Sub(matb)
@@ -272,9 +272,9 @@ func X64Mat2x2Sub(mata, matb *X64Mat2x2) *X64Mat2x2 {
 	return &ret
 }
 
-// X64Mat2x2MulScale multiplies all values of a matrix by a scalar.
+// X64MulScale multiplies all values of a matrix by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Mat2x2MulScale(mat *X64Mat2x2, factor vpnumber.X64) *X64Mat2x2 {
+func X64MulScale(mat *X64, factor vpnumber.X64) *X64 {
 	var ret = *mat
 
 	_ = ret.MulScale(factor)
@@ -282,9 +282,9 @@ func X64Mat2x2MulScale(mat *X64Mat2x2, factor vpnumber.X64) *X64Mat2x2 {
 	return &ret
 }
 
-// X64Mat2x2DivScale divides all values of a matrix by a scalar.
+// X64DivScale divides all values of a matrix by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Mat2x2DivScale(mat *X64Mat2x2, factor vpnumber.X64) *X64Mat2x2 {
+func X64DivScale(mat *X64, factor vpnumber.X64) *X64 {
 	var ret = *mat
 
 	_ = ret.DivScale(factor)
@@ -292,10 +292,10 @@ func X64Mat2x2DivScale(mat *X64Mat2x2, factor vpnumber.X64) *X64Mat2x2 {
 	return &ret
 }
 
-// X64Mat2x2Transpose inverts rows and columns (matrix transposition).
+// X64Transpose inverts rows and columns (matrix transposition).
 // Args is left untouched, a pointer on a new object is returned.
-func X64Mat2x2Transpose(mat *X64Mat2x2) *X64Mat2x2 {
-	var ret X64Mat2x2
+func X64Transpose(mat *X64) *X64 {
+	var ret X64
 
 	for c := 0; c < 2; c++ {
 		for r := 0; r < 2; r++ {
@@ -306,10 +306,10 @@ func X64Mat2x2Transpose(mat *X64Mat2x2) *X64Mat2x2 {
 	return &ret
 }
 
-// X64Mat2x2MulComp multiplies two matrices (composition).
+// X64MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
-func X64Mat2x2MulComp(a, b *X64Mat2x2) *X64Mat2x2 {
-	var ret X64Mat2x2
+func X64MulComp(a, b *X64) *X64 {
+	var ret X64
 
 	for c := 0; c < 2; c++ {
 		for r := 0; r < 2; r++ {
@@ -320,12 +320,12 @@ func X64Mat2x2MulComp(a, b *X64Mat2x2) *X64Mat2x2 {
 	return &ret
 }
 
-// X64Mat2x2Inv inverts a matrix.
+// X64Inv inverts a matrix.
 // Never fails (no division by zero error, never) but if the
 // matrix can't be inverted, result does not make sense.
 // Args is left untouched, a pointer on a new object is returned.
-func X64Mat2x2Inv(mat *X64Mat2x2) *X64Mat2x2 {
-	ret := X64Mat2x2{
+func X64Inv(mat *X64) *X64 {
+	ret := X64{
 		mat.Get(1, 1),
 		-mat.Get(0, 1),
 		-mat.Get(1, 0),

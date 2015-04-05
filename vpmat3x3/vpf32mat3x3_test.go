@@ -28,7 +28,7 @@ import (
 	"testing"
 )
 
-func TestF32Mat3x3Math(t *testing.T) {
+func TestF32Math(t *testing.T) {
 	const f11 = 3.0
 	const f12 = 333.0
 	const f13 = 31.0
@@ -51,9 +51,9 @@ func TestF32Mat3x3Math(t *testing.T) {
 
 	const fmul = 10.0
 
-	var m1, m2, m3, m4 *F32Mat3x3
+	var m1, m2, m3, m4 *F32
 
-	m1 = F32Mat3x3New(f11, f12, f13, f21, f22, f23, f31, f32, f33)
+	m1 = F32New(f11, f12, f13, f21, f22, f23, f31, f32, f33)
 	if !m1.IsSimilar(m1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -73,26 +73,26 @@ func TestF32Mat3x3Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	m2 = F32Mat3x3New(f51, f52, f53, f61, f62, f63, f71, f72, f73)
-	m3 = F32Mat3x3Add(m1, m2)
-	m4 = F32Mat3x3New(f11+f51, f12+f52, f13+f53, f21+f61, f22+f62, f23+f63, f31+f71, f32+f72, f33+f73)
+	m2 = F32New(f51, f52, f53, f61, f62, f63, f71, f72, f73)
+	m3 = F32Add(m1, m2)
+	m4 = F32New(f11+f51, f12+f52, f13+f53, f21+f61, f22+f62, f23+f63, f31+f71, f32+f72, f33+f73)
 	if !m3.IsSimilar(m4) {
 		t.Error("Add error")
 	}
 
-	m3 = F32Mat3x3Sub(m1, m2)
-	m4 = F32Mat3x3New(f11-f51, f12-f52, f13-f53, f21-f61, f22-f62, f23-f63, f31-f71, f32-f72, f33-f73)
+	m3 = F32Sub(m1, m2)
+	m4 = F32New(f11-f51, f12-f52, f13-f53, f21-f61, f22-f62, f23-f63, f31-f71, f32-f72, f33-f73)
 	if !m3.IsSimilar(m4) {
 		t.Error("Sub error")
 	}
 
-	m3 = F32Mat3x3MulScale(m1, fmul)
-	m4 = F32Mat3x3New(f11*fmul, f12*fmul, f13*fmul, f21*fmul, f22*fmul, f23*fmul, f31*fmul, f32*fmul, f33*fmul)
+	m3 = F32MulScale(m1, fmul)
+	m4 = F32New(f11*fmul, f12*fmul, f13*fmul, f21*fmul, f22*fmul, f23*fmul, f31*fmul, f32*fmul, f33*fmul)
 	if !m3.IsSimilar(m4) {
 		t.Error("MulScale error")
 	}
 
-	m3 = F32Mat3x3DivScale(m3, fmul)
+	m3 = F32DivScale(m3, fmul)
 	if !m3.IsSimilar(m1) {
 		t.Error("DivScale error")
 	}
@@ -105,8 +105,8 @@ func TestF32Mat3x3Math(t *testing.T) {
 	m3.DivScale(0)
 }
 
-func invertableF32Mat3x3() *F32Mat3x3 {
-	var ret F32Mat3x3
+func invertableF32() *F32 {
+	var ret F32
 
 	for math.Abs(float64(ret.Det())) < 0.5 {
 		for i := range ret {
@@ -117,10 +117,10 @@ func invertableF32Mat3x3() *F32Mat3x3 {
 	return &ret
 }
 
-func TestF32Mat3x3Comp(t *testing.T) {
-	m1 := invertableF32Mat3x3()
-	m2 := F32Mat3x3Inv(m1)
-	id := F32Mat3x3Identity()
+func TestF32Comp(t *testing.T) {
+	m1 := invertableF32()
+	m2 := F32Inv(m1)
+	id := F32Identity()
 
 	m2.MulComp(m1)
 	if m2.IsSimilar(id) {
@@ -130,7 +130,7 @@ func TestF32Mat3x3Comp(t *testing.T) {
 	}
 }
 
-func TestF32Mat3x3Aff(t *testing.T) {
+func TestF32Aff(t *testing.T) {
 	const p1 = 3.0
 	const p2 = 4.0
 	const t1 = 6.5
@@ -138,7 +138,7 @@ func TestF32Mat3x3Aff(t *testing.T) {
 
 	v1 := vpvec3.F32Vec3New(p1, p2, vpnumber.F32Const1)
 	vt := vpvec2.F32Vec2New(t1, t2)
-	mt := F32Mat3x3Trans(vt)
+	mt := F32Trans(vt)
 	t.Logf("translation mat3x3 for %s is %s", vt.String(), mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat3x3 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
@@ -157,7 +157,7 @@ func TestF32Mat3x3Aff(t *testing.T) {
 		t.Errorf("mat3x3 translation MulVecDir error v2dir=%s v3dir=%s", v2dir.String(), v3dir.String())
 	}
 
-	mr := F32Mat3x3Rot(math.Pi / 2)
+	mr := F32Rot(math.Pi / 2)
 	t.Logf("rotation mat3x3 for PI/2 is %s", mr.String())
 	v2 = mr.MulVec(v1)
 	t.Logf("mat3x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
@@ -177,44 +177,44 @@ func TestF32Mat3x3Aff(t *testing.T) {
 	}
 }
 
-func TestF32Mat3x3JSON(t *testing.T) {
-	m1 := invertableF32Mat3x3()
-	m2 := F32Mat3x3Identity()
+func TestF32JSON(t *testing.T) {
+	m1 := invertableF32()
+	m2 := F32Identity()
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for F32Mat3x3 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for F32 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for F32Mat3x3")
+		t.Error("unable to encode JSON for F32")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for F32Mat3x3, but json is not correct")
+		t.Error("able to decode JSON for F32, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for F32Mat3x3")
+		t.Error("unable to decode JSON for F32")
 	}
 	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled matrix is different from original")
 	}
 }
 
-func BenchmarkF32Mat3x3Add(b *testing.B) {
-	mat := F32Mat3x3New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
+func BenchmarkF32Add(b *testing.B) {
+	mat := F32New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = mat.Add(mat)
 	}
 }
 
-func BenchmarkF32Mat3x3Inv(b *testing.B) {
-	mat := invertableF32Mat3x3()
+func BenchmarkF32Inv(b *testing.B) {
+	mat := invertableF32()
 
 	for i := 0; i < b.N; i++ {
-		_ = F32Mat3x3Inv(mat)
+		_ = F32Inv(mat)
 	}
 }
