@@ -275,10 +275,8 @@ func X64DivScale(mat *X64, factor vpnumber.X64) *X64 {
 // X64MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func X64MulComp(a, b *X64) *X64 {
-	var ret X64
-
-	ret.Set(0, 0, vpnumber.X64Mul(a[Col0Row0], b[Col0Row0]))
-	ret.Set(1, 0, vpnumber.X64Mul(a[Col0Row0], b[Col1Row0])+a[Col1Row0])
+	ret := X64{vpnumber.X64Mul(a[Col0Row0], b[Col0Row0]),
+		vpnumber.X64Mul(a[Col0Row0], b[Col1Row0]) + a[Col1Row0]}
 
 	return &ret
 }

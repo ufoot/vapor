@@ -274,10 +274,8 @@ func F64DivScale(mat *F64, factor float64) *F64 {
 // F64MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func F64MulComp(a, b *F64) *F64 {
-	var ret F64
-
-	ret.Set(0, 0, a[Col0Row0]*b[Col0Row0])
-	ret.Set(1, 0, a[Col0Row0]*b[Col1Row0]+a[Col1Row0])
+	ret := F64{a[Col0Row0] * b[Col0Row0],
+		a[Col0Row0]*b[Col1Row0] + a[Col1Row0]}
 
 	return &ret
 }

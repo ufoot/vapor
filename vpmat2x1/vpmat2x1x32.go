@@ -275,10 +275,8 @@ func X32DivScale(mat *X32, factor vpnumber.X32) *X32 {
 // X32MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func X32MulComp(a, b *X32) *X32 {
-	var ret X32
-
-	ret.Set(0, 0, vpnumber.X32Mul(a[Col0Row0], b[Col0Row0]))
-	ret.Set(1, 0, vpnumber.X32Mul(a[Col0Row0], b[Col1Row0])+a[Col1Row0])
+	ret := X32{vpnumber.X32Mul(a[Col0Row0], b[Col0Row0]),
+		vpnumber.X32Mul(a[Col0Row0], b[Col1Row0]) + a[Col1Row0]}
 
 	return &ret
 }

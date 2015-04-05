@@ -274,10 +274,8 @@ func F32DivScale(mat *F32, factor float32) *F32 {
 // F32MulComp multiplies two matrices (composition).
 // Args are left untouched, a pointer on a new object is returned.
 func F32MulComp(a, b *F32) *F32 {
-	var ret F32
-
-	ret.Set(0, 0, a[Col0Row0]*b[Col0Row0])
-	ret.Set(1, 0, a[Col0Row0]*b[Col1Row0]+a[Col1Row0])
+	ret := F32{a[Col0Row0] * b[Col0Row0],
+		a[Col0Row0]*b[Col1Row0] + a[Col1Row0]}
 
 	return &ret
 }
