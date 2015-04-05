@@ -82,18 +82,18 @@ func (mat *X32) ToF64() *F64 {
 
 // Set sets the value of the matrix for a given column and row.
 func (mat *X32) Set(col, row int, val vpnumber.X32) {
-	mat[col*2+row] = val
+	mat[col*Height+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
 func (mat *X32) Get(col, row int) vpnumber.X32 {
-	return mat[col*2+row]
+	return mat[col*Height+row]
 }
 
 // SetCol sets a column to the values contained in a vector.
 func (mat *X32) SetCol(col int, vec *vpvec2.X32) {
 	for row, val := range vec {
-		mat[col*2+row] = val
+		mat[col*Height+row] = val
 	}
 }
 
@@ -102,7 +102,7 @@ func (mat *X32) GetCol(col int) *vpvec2.X32 {
 	var ret vpvec2.X32
 
 	for row := range ret {
-		ret[row] = mat[col*2+row]
+		ret[row] = mat[col*Height+row]
 	}
 
 	return &ret
@@ -111,7 +111,7 @@ func (mat *X32) GetCol(col int) *vpvec2.X32 {
 // SetRow sets a row to the values contained in a vector.
 func (mat *X32) SetRow(row int, vec *vpvec2.X32) {
 	for col, val := range vec {
-		mat[col*2+row] = val
+		mat[col*Height+row] = val
 	}
 }
 
@@ -120,7 +120,7 @@ func (mat *X32) GetRow(row int) *vpvec2.X32 {
 	var ret vpvec2.X32
 
 	for col := range ret {
-		ret[col] = mat[col*2+row]
+		ret[col] = mat[col*Height+row]
 	}
 
 	return &ret
@@ -132,7 +132,7 @@ func (mat *X32) MarshalJSON() ([]byte, error) {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			tmpArray[col][row] = int32(mat[col*2+row])
+			tmpArray[col][row] = int32(mat[col*Height+row])
 		}
 	}
 
@@ -155,7 +155,7 @@ func (mat *X32) UnmarshalJSON(data []byte) error {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			mat[col*2+row] = vpnumber.X32(tmpArray[col][row])
+			mat[col*Height+row] = vpnumber.X32(tmpArray[col][row])
 		}
 	}
 

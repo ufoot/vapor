@@ -105,12 +105,12 @@ func (mat *F64) ToF32() *F32 {
 
 // Set sets the value of the matrix for a given column and row.
 func (mat *F64) Set(col, row int, val float64) {
-	mat[col*4+row] = val
+	mat[col*Height+row] = val
 }
 
 // Get gets the value of the matrix for a given column and row.
 func (mat *F64) Get(col, row int) float64 {
-	return mat[col*4+row]
+	return mat[col*Height+row]
 }
 
 // MarshalJSON implements the json.Marshaler interface.
@@ -119,7 +119,7 @@ func (mat *F64) MarshalJSON() ([]byte, error) {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			tmpArray[col][row] = mat[col*4+row]
+			tmpArray[col][row] = mat[col*Height+row]
 		}
 	}
 
@@ -142,7 +142,7 @@ func (mat *F64) UnmarshalJSON(data []byte) error {
 
 	for col := range tmpArray {
 		for row := range tmpArray[col] {
-			mat[col*4+row] = tmpArray[col][row]
+			mat[col*Height+row] = tmpArray[col][row]
 		}
 	}
 

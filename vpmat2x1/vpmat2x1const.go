@@ -20,14 +20,14 @@
 package vpmat2x1
 
 const (
-	// Col0Row0 is the index of colum 0 row 0 in a 2x1 column-major matrix.
+	// Col0Row0 is the index of column 0 row 0 in a 2x1 column-major matrix.
 	Col0Row0 = iota
-	// Col1Row0 is the index of colum 1 row 0 in a 2x1 column-major matrix.
+	// Col1Row0 is the index of column 1 row 0 in a 2x1 column-major matrix.
 	Col1Row0
 	// Size is the number of elements in a 2x1 matrix.
 	Size
 	// Width is the width a 2x1 matrix (max column index is Width-1).
-	Width=2
+	Width = 2
 	// Height is the width a 2x1 matrix (max row index is Height-1).
-	Height=1
+	Height = 1
 )

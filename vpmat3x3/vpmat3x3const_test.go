@@ -29,4 +29,8 @@ func TestConst(t *testing.T) {
 	} else {
 		t.Errorf("wrong size for 3x3 matrix, got %d should be %d", Size, 9)
 	}
+
+	if Width*Height != Size {
+		t.Errorf("wrong widht/height/size for 3x3 matrix, %d * %d != %d", Width, Height, Size)
+	}
 }
