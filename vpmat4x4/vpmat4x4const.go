@@ -54,4 +54,8 @@ const (
 	Col3Row3
 	// Size is the number of elements in a 4x4 matrix.
 	Size
+	// Width is the width a 4x4 matrix (max column index is Width-1).
+	Width=4
+	// Height is the width a 4x4 matrix (max row index is Height-1).
+	Height=4
 )

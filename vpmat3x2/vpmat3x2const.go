@@ -34,4 +34,8 @@ const (
 	Col2Row1
 	// Size is the number of elements in a 3x2 matrix.
 	Size
+	// Width is the width a 3x2 matrix (max column index is Width-1).
+	Width=3
+	// Height is the width a 3x2 matrix (max row index is Height-1).
+	Height=2
 )
