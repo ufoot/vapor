@@ -297,12 +297,12 @@ func X64DivScale(mat *X64, factor vpnumber.X64) *X64 {
 func X64MulComp(a, b *X64) *X64 {
 	var ret X64
 
-	for c := 0; c < 2; c++ {
-		for r := 0; r < 2; r++ {
+	for c := 0; c < Width-1; c++ {
+		for r := 0; r < Height; r++ {
 			ret.Set(c, r, vpnumber.X64Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X64Mul(a.Get(1, r), b.Get(c, 1)))
 		}
 	}
-	for r := 0; r < 2; r++ {
+	for r := 0; r < Height; r++ {
 		ret.Set(2, r, vpnumber.X64Mul(a.Get(0, r), b[Col2Row0])+vpnumber.X64Mul(a.Get(1, r), b[Col2Row1])+a.Get(2, r))
 	}
 

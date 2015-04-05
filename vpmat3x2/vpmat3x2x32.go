@@ -297,12 +297,12 @@ func X32DivScale(mat *X32, factor vpnumber.X32) *X32 {
 func X32MulComp(a, b *X32) *X32 {
 	var ret X32
 
-	for c := 0; c < 2; c++ {
-		for r := 0; r < 2; r++ {
+	for c := 0; c < Width-1; c++ {
+		for r := 0; r < Height; r++ {
 			ret.Set(c, r, vpnumber.X32Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X32Mul(a.Get(1, r), b.Get(c, 1)))
 		}
 	}
-	for r := 0; r < 2; r++ {
+	for r := 0; r < Height; r++ {
 		ret.Set(2, r, vpnumber.X32Mul(a.Get(0, r), b[Col2Row0])+vpnumber.X32Mul(a.Get(1, r), b[Col2Row1])+a.Get(2, r))
 	}
 

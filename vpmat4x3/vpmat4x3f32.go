@@ -319,7 +319,7 @@ func F32DivScale(mat *F32, factor float32) *F32 {
 func F32Transpose(mat *F32) *F32 {
 	var ret F32
 
-	for c := 0; c < 4; c++ {
+	for c := 0; c < Width; c++ {
 		for r := 0; r < 4; r++ {
 			ret.Set(c, r, mat.Get(r, c))
 		}
@@ -333,12 +333,12 @@ func F32Transpose(mat *F32) *F32 {
 func F32MulComp(a, b *F32) *F32 {
 	var ret F32
 
-	for c := 0; c < 3; c++ {
-		for r := 0; r < 3; r++ {
+	for c := 0; c < Width-1; c++ {
+		for r := 0; r < Height; r++ {
 			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1)+a.Get(2, r)*b.Get(c, 2))
 		}
 	}
-	for r := 0; r < 3; r++ {
+	for r := 0; r < Height; r++ {
 		ret.Set(3, r, a.Get(0, r)*b[Col3Row0]+a.Get(1, r)*b[Col3Row1]+a.Get(2, r)*b[Col3Row2]+a.Get(3, r))
 	}
 

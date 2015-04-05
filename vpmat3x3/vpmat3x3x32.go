@@ -318,8 +318,8 @@ func X32DivScale(mat *X32, factor vpnumber.X32) *X32 {
 func X32Transpose(mat *X32) *X32 {
 	var ret X32
 
-	for c := 0; c < 3; c++ {
-		for r := 0; r < 3; r++ {
+	for c := 0; c < Width; c++ {
+		for r := 0; r < Height; r++ {
 			ret.Set(c, r, mat.Get(r, c))
 		}
 	}
@@ -332,8 +332,8 @@ func X32Transpose(mat *X32) *X32 {
 func X32MulComp(a, b *X32) *X32 {
 	var ret X32
 
-	for c := 0; c < 3; c++ {
-		for r := 0; r < 3; r++ {
+	for c := 0; c < Width; c++ {
+		for r := 0; r < Height; r++ {
 			ret.Set(c, r, vpnumber.X32Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X32Mul(a.Get(1, r), b.Get(c, 1))+vpnumber.X32Mul(a.Get(2, r), b.Get(c, 2)))
 		}
 	}

@@ -332,8 +332,8 @@ func F64DivScale(mat *F64, factor float64) *F64 {
 func F64Transpose(mat *F64) *F64 {
 	var ret F64
 
-	for c := 0; c < 4; c++ {
-		for r := 0; r < 4; r++ {
+	for c := 0; c < Width; c++ {
+		for r := 0; r < Height; r++ {
 			ret.Set(c, r, mat.Get(r, c))
 		}
 	}
@@ -346,8 +346,8 @@ func F64Transpose(mat *F64) *F64 {
 func F64MulComp(a, b *F64) *F64 {
 	var ret F64
 
-	for c := 0; c < 4; c++ {
-		for r := 0; r < 4; r++ {
+	for c := 0; c < Width; c++ {
+		for r := 0; r < Height; r++ {
 			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1)+a.Get(2, r)*b.Get(c, 2)+a.Get(3, r)*b.Get(c, 3))
 		}
 	}

@@ -296,12 +296,12 @@ func F32DivScale(mat *F32, factor float32) *F32 {
 func F32MulComp(a, b *F32) *F32 {
 	var ret F32
 
-	for c := 0; c < 2; c++ {
-		for r := 0; r < 2; r++ {
+	for c := 0; c < Width-1; c++ {
+		for r := 0; r < Height; r++ {
 			ret.Set(c, r, a.Get(0, r)*b.Get(c, 0)+a.Get(1, r)*b.Get(c, 1))
 		}
 	}
-	for r := 0; r < 2; r++ {
+	for r := 0; r < Height; r++ {
 		ret.Set(2, r, a.Get(0, r)*b[Col2Row0]+a.Get(1, r)*b[Col2Row1]+a.Get(2, r))
 	}
 

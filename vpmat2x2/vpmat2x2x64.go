@@ -333,8 +333,8 @@ func X64DivScale(mat *X64, factor vpnumber.X64) *X64 {
 func X64Transpose(mat *X64) *X64 {
 	var ret X64
 
-	for c := 0; c < 2; c++ {
-		for r := 0; r < 2; r++ {
+	for c := 0; c < Width; c++ {
+		for r := 0; r < Height; r++ {
 			ret.Set(c, r, mat.Get(r, c))
 		}
 	}
@@ -347,8 +347,8 @@ func X64Transpose(mat *X64) *X64 {
 func X64MulComp(a, b *X64) *X64 {
 	var ret X64
 
-	for c := 0; c < 2; c++ {
-		for r := 0; r < 2; r++ {
+	for c := 0; c < Width; c++ {
+		for r := 0; r < Height; r++ {
 			ret.Set(c, r, vpnumber.X64Mul(a.Get(0, r), b.Get(c, 0))+vpnumber.X64Mul(a.Get(1, r), b.Get(c, 1)))
 		}
 	}
