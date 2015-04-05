@@ -45,7 +45,7 @@ func X32Identity() *X32 {
 }
 
 // X32Trans creates a new translation matrix.
-func X32Trans(vec *vpvec2.X32Vec2) *X32 {
+func X32Trans(vec *vpvec2.X32) *X32 {
 	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vec[0], vec[1], vpnumber.X32Const1}
 }
 
@@ -231,8 +231,8 @@ func (mat *X32) Inv() *X32 {
 
 // MulVec performs a multiplication of a vector by a 3x3 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *X32) MulVec(vec *vpvec3.X32Vec3) *vpvec3.X32Vec3 {
-	var ret vpvec3.X32Vec3
+func (mat *X32) MulVec(vec *vpvec3.X32) *vpvec3.X32 {
+	var ret vpvec3.X32
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + vpnumber.X32Mul(mat.Get(2, i), vec[2])
@@ -247,8 +247,8 @@ func (mat *X32) MulVec(vec *vpvec3.X32Vec3) *vpvec3.X32Vec3 {
 // position vector of length 2 (a point in a plane) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X32) MulVecPos(vec *vpvec2.X32Vec2) *vpvec2.X32Vec2 {
-	var ret vpvec2.X32Vec2
+func (mat *X32) MulVecPos(vec *vpvec2.X32) *vpvec2.X32 {
+	var ret vpvec2.X32
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + mat.Get(2, i)
@@ -263,8 +263,8 @@ func (mat *X32) MulVecPos(vec *vpvec2.X32Vec2) *vpvec2.X32Vec2 {
 // direction vector of length 2 (a point in a plane) is passed. This allow geometric
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X32) MulVecDir(vec *vpvec2.X32Vec2) *vpvec2.X32Vec2 {
-	var ret vpvec2.X32Vec2
+func (mat *X32) MulVecDir(vec *vpvec2.X32) *vpvec2.X32 {
+	var ret vpvec2.X32
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1])

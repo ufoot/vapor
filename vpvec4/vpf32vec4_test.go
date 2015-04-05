@@ -24,7 +24,7 @@ import (
 	"testing"
 )
 
-func TestF32Vec4Math(t *testing.T) {
+func TestF32Math(t *testing.T) {
 	const f1 = 3.0
 	const f2 = -4.0
 	const f3 = 1.0
@@ -39,10 +39,10 @@ func TestF32Vec4Math(t *testing.T) {
 	const fsqmag = 126.0
 	const flength = 11.225
 
-	var v1, v2, v3, v4 *F32Vec4
+	var v1, v2, v3, v4 *F32
 	var f float32
 
-	v1 = F32Vec4New(f1, f2, f3, f4)
+	v1 = F32New(f1, f2, f3, f4)
 	if !v1.IsSimilar(v1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -72,32 +72,32 @@ func TestF32Vec4Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	v2 = F32Vec4New(f5, f6, f7, f8)
-	v3 = F32Vec4Add(v1, v2)
-	v4 = F32Vec4New(f1+f5, f2+f6, f3+f7, f4+f8)
+	v2 = F32New(f5, f6, f7, f8)
+	v3 = F32Add(v1, v2)
+	v4 = F32New(f1+f5, f2+f6, f3+f7, f4+f8)
 	if !v3.IsSimilar(v4) {
 		t.Error("Add error")
 	}
 
-	v3 = F32Vec4Sub(v1, v2)
-	v4 = F32Vec4New(f1-f5, f2-f6, f3-f7, f4-f8)
+	v3 = F32Sub(v1, v2)
+	v4 = F32New(f1-f5, f2-f6, f3-f7, f4-f8)
 	if !v3.IsSimilar(v4) {
 		t.Error("Sub error")
 	}
 
-	v3 = F32Vec4Add(v1, F32Vec4Neg(v2))
-	v4 = F32Vec4Sub(v1, v2)
+	v3 = F32Add(v1, F32Neg(v2))
+	v4 = F32Sub(v1, v2)
 	if !v3.IsSimilar(v4) {
 		t.Error("Neg error")
 	}
 
-	v3 = F32Vec4MulScale(v1, fmul)
-	v4 = F32Vec4New(f1*fmul, f2*fmul, f3*fmul, f4*fmul)
+	v3 = F32MulScale(v1, fmul)
+	v4 = F32New(f1*fmul, f2*fmul, f3*fmul, f4*fmul)
 	if !v3.IsSimilar(v4) {
 		t.Error("MulScale error")
 	}
 
-	v3 = F32Vec4DivScale(v3, fmul)
+	v3 = F32DivScale(v3, fmul)
 	if !v3.IsSimilar(v1) {
 		t.Error("DivScale error")
 	}
@@ -119,7 +119,7 @@ func TestF32Vec4Math(t *testing.T) {
 		t.Error("Length error", f, flength)
 	}
 
-	v3 = F32Vec4Normalize(v1)
+	v3 = F32Normalize(v1)
 	f = v3.Length()
 	if f != vpnumber.F32Const1 {
 		t.Error("Normalize error", f)
@@ -132,42 +132,42 @@ func TestF32Vec4Math(t *testing.T) {
 	}
 }
 
-func TestF32Vec4JSON(t *testing.T) {
-	m1 := F32Vec4New(0.1, 0.2, 0.3, 0.4)
-	m2 := F32Vec4New(1.0, 0.0, 0.0, 0.0)
+func TestF32JSON(t *testing.T) {
+	m1 := F32New(0.1, 0.2, 0.3, 0.4)
+	m2 := F32New(1.0, 0.0, 0.0, 0.0)
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for F32Vec4 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for F32 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for F32Vec4")
+		t.Error("unable to encode JSON for F32")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for F32Vec4, but json is not correct")
+		t.Error("able to decode JSON for F32, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for F32Vec4")
+		t.Error("unable to decode JSON for F32")
 	}
 	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled vector is different from original")
 	}
 }
 
-func BenchmarkF32Vec4Add(b *testing.B) {
-	vec := F32Vec4New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
+func BenchmarkF32Add(b *testing.B) {
+	vec := F32New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = vec.Add(vec)
 	}
 }
 
-func BenchmarkF32Vec4Normalize(b *testing.B) {
-	vec := F32Vec4New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
+func BenchmarkF32Normalize(b *testing.B) {
+	vec := F32New(vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = vec.Normalize()

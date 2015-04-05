@@ -222,8 +222,8 @@ func (mat *X64) Inv() *X64 {
 
 // MulVec performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *X64) MulVec(vec *vpvec2.X64Vec2) *vpvec2.X64Vec2 {
-	var ret vpvec2.X64Vec2
+func (mat *X64) MulVec(vec *vpvec2.X64) *vpvec2.X64 {
+	var ret vpvec2.X64
 
 	for i := range vec {
 		ret[i] = vpnumber.X64Mul(mat.Get(0, i), vec[0]) + vpnumber.X64Mul(mat.Get(1, i), vec[1])

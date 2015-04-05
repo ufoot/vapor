@@ -24,7 +24,7 @@ import (
 	"testing"
 )
 
-func TestX32Vec3Math(t *testing.T) {
+func TestX32Math(t *testing.T) {
 	var x1 = vpnumber.F32ToX32(3.0)
 	var x2 = vpnumber.F32ToX32(-4.0)
 	var x3 = vpnumber.F32ToX32(1.0)
@@ -37,10 +37,10 @@ func TestX32Vec3Math(t *testing.T) {
 	var xsqmag = vpnumber.F32ToX32(26.0)
 	var xlength = vpnumber.F32ToX32(5.099)
 
-	var v1, v2, v3, v4, v5 *X32Vec3
+	var v1, v2, v3, v4, v5 *X32
 	var x vpnumber.X32
 
-	v1 = X32Vec3New(x1, x2, x3)
+	v1 = X32New(x1, x2, x3)
 	if !v1.IsSimilar(v1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -70,32 +70,32 @@ func TestX32Vec3Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	v2 = X32Vec3New(x5, x6, x7)
-	v3 = X32Vec3Add(v1, v2)
-	v4 = X32Vec3New(x1+x5, x2+x6, x3+x7)
+	v2 = X32New(x5, x6, x7)
+	v3 = X32Add(v1, v2)
+	v4 = X32New(x1+x5, x2+x6, x3+x7)
 	if !v3.IsSimilar(v4) {
 		t.Error("Add error")
 	}
 
-	v3 = X32Vec3Sub(v1, v2)
-	v4 = X32Vec3New(x1-x5, x2-x6, x3-x7)
+	v3 = X32Sub(v1, v2)
+	v4 = X32New(x1-x5, x2-x6, x3-x7)
 	if !v3.IsSimilar(v4) {
 		t.Error("Sub error")
 	}
 
-	v3 = X32Vec3Add(v1, X32Vec3Neg(v2))
-	v4 = X32Vec3Sub(v1, v2)
+	v3 = X32Add(v1, X32Neg(v2))
+	v4 = X32Sub(v1, v2)
 	if !v3.IsSimilar(v4) {
 		t.Error("Neg error")
 	}
 
-	v3 = X32Vec3MulScale(v1, xmul)
-	v4 = X32Vec3New(vpnumber.X32Mul(x1, xmul), vpnumber.X32Mul(x2, xmul), vpnumber.X32Mul(x3, xmul))
+	v3 = X32MulScale(v1, xmul)
+	v4 = X32New(vpnumber.X32Mul(x1, xmul), vpnumber.X32Mul(x2, xmul), vpnumber.X32Mul(x3, xmul))
 	if !v3.IsSimilar(v4) {
 		t.Error("MulScale error")
 	}
 
-	v3 = X32Vec3DivScale(v3, xmul)
+	v3 = X32DivScale(v3, xmul)
 	if !v3.IsSimilar(v1) {
 		t.Error("DivScale error")
 	}
@@ -117,7 +117,7 @@ func TestX32Vec3Math(t *testing.T) {
 		t.Error("Length error", x, xlength)
 	}
 
-	v3 = X32Vec3Normalize(v1)
+	v3 = X32Normalize(v1)
 	x = v3.Length()
 	if !vpnumber.X32IsSimilar(x, vpnumber.X32Const1) {
 		t.Error("Normalize error", x)
@@ -129,51 +129,51 @@ func TestX32Vec3Math(t *testing.T) {
 		t.Error("Dot error")
 	}
 
-	v3 = X32Vec3Cross(v1, v2).Normalize()
-	v4 = X32Vec3Cross(v2, v3).Normalize()
-	v5 = X32Vec3Cross(v4, v2).Normalize()
+	v3 = X32Cross(v1, v2).Normalize()
+	v4 = X32Cross(v2, v3).Normalize()
+	v5 = X32Cross(v4, v2).Normalize()
 	t.Log("Cross product %s x %s = %s", v4.String(), v2.String(), v5.String())
 	if !v3.IsSimilar(v5) {
 		t.Error("Cross error")
 	}
 }
 
-func TestX32Vec3JSON(t *testing.T) {
-	m1 := X32Vec3New(vpnumber.I32ToX32(10), vpnumber.I32ToX32(20), vpnumber.I32ToX32(30))
-	m2 := X32Vec3New(vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0)
+func TestX32JSON(t *testing.T) {
+	m1 := X32New(vpnumber.I32ToX32(10), vpnumber.I32ToX32(20), vpnumber.I32ToX32(30))
+	m2 := X32New(vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0)
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for X32Vec3 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for X32 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for X32Vec3")
+		t.Error("unable to encode JSON for X32")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for X32Vec3, but json is not correct")
+		t.Error("able to decode JSON for X32, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for X32Vec3")
+		t.Error("unable to decode JSON for X32")
 	}
 	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled vector is different from original")
 	}
 }
 
-func BenchmarkX32Vec3Add(b *testing.B) {
-	vec := X32Vec3New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
+func BenchmarkX32Add(b *testing.B) {
+	vec := X32New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = vec.Add(vec)
 	}
 }
 
-func BenchmarkX32Vec3Normalize(b *testing.B) {
-	vec := X32Vec3New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
+func BenchmarkX32Normalize(b *testing.B) {
+	vec := X32New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = vec.Normalize()

@@ -44,7 +44,7 @@ func X32Identity() *X32 {
 }
 
 // X32Trans creates a new translation matrix.
-func X32Trans(vec *vpvec2.X32Vec2) *X32 {
+func X32Trans(vec *vpvec2.X32) *X32 {
 	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vec[0], vec[1]}
 }
 
@@ -226,8 +226,8 @@ func (mat *X32) Inv() *X32 {
 // position vector of length 2 (a point in a plane) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X32) MulVecPos(vec *vpvec2.X32Vec2) *vpvec2.X32Vec2 {
-	var ret vpvec2.X32Vec2
+func (mat *X32) MulVecPos(vec *vpvec2.X32) *vpvec2.X32 {
+	var ret vpvec2.X32
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + mat.Get(2, i)
@@ -242,8 +242,8 @@ func (mat *X32) MulVecPos(vec *vpvec2.X32Vec2) *vpvec2.X32Vec2 {
 // direction vector of length 2 (a point in a plane) is passed. This allow geometric
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X32) MulVecDir(vec *vpvec2.X32Vec2) *vpvec2.X32Vec2 {
-	var ret vpvec2.X32Vec2
+func (mat *X32) MulVecDir(vec *vpvec2.X32) *vpvec2.X32 {
+	var ret vpvec2.X32
 
 	for i := range vec {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1])

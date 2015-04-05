@@ -26,18 +26,18 @@ import (
 	"math"
 )
 
-// F32Vec2 is a vector containing 2 float32 values.
+// F32 is a vector containing 2 float32 values.
 // Can hold the values of a point in a plane.
-type F32Vec2 [2]float32
+type F32 [2]float32
 
-// F32Vec2New creates a new vector containing 2 float32 values.
-func F32Vec2New(f1, f2 float32) *F32Vec2 {
-	return &F32Vec2{f1, f2}
+// F32New creates a new vector containing 2 float32 values.
+func F32New(f1, f2 float32) *F32 {
+	return &F32{f1, f2}
 }
 
 // ToI32 converts the vector to an int32 vector.
-func (vec *F32Vec2) ToI32() *I32Vec2 {
-	var ret I32Vec2
+func (vec *F32) ToI32() *I32 {
+	var ret I32
 
 	for i, v := range vec {
 		ret[i] = int32(v)
@@ -47,8 +47,8 @@ func (vec *F32Vec2) ToI32() *I32Vec2 {
 }
 
 // ToI64 converts the vector to an int64 vector.
-func (vec *F32Vec2) ToI64() *I64Vec2 {
-	var ret I64Vec2
+func (vec *F32) ToI64() *I64 {
+	var ret I64
 
 	for i, v := range vec {
 		ret[i] = int64(v)
@@ -58,8 +58,8 @@ func (vec *F32Vec2) ToI64() *I64Vec2 {
 }
 
 // ToX32 converts the vector to a fixed point number vector on 32 bits.
-func (vec *F32Vec2) ToX32() *X32Vec2 {
-	var ret X32Vec2
+func (vec *F32) ToX32() *X32 {
+	var ret X32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.F32ToX32(v)
@@ -69,8 +69,8 @@ func (vec *F32Vec2) ToX32() *X32Vec2 {
 }
 
 // ToX64 converts the vector to a fixed point number vector on 64 bits.
-func (vec *F32Vec2) ToX64() *X64Vec2 {
-	var ret X64Vec2
+func (vec *F32) ToX64() *X64 {
+	var ret X64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.F32ToX64(v)
@@ -80,8 +80,8 @@ func (vec *F32Vec2) ToX64() *X64Vec2 {
 }
 
 // ToF64 converts the vector to a float64 vector.
-func (vec *F32Vec2) ToF64() *F64Vec2 {
-	var ret F64Vec2
+func (vec *F32) ToF64() *F64 {
+	var ret F64
 
 	for i, v := range vec {
 		ret[i] = float64(v)
@@ -91,31 +91,31 @@ func (vec *F32Vec2) ToF64() *F64Vec2 {
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (vec *F32Vec2) MarshalJSON() ([]byte, error) {
+func (vec *F32) MarshalJSON() ([]byte, error) {
 	ret, err := json.Marshal([2]float32(*vec))
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal F32Vec2")
+		return nil, vpsys.ErrorChain(err, "unable to marshal F32")
 	}
 
 	return ret, nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *F32Vec2) UnmarshalJSON(data []byte) error {
+func (vec *F32) UnmarshalJSON(data []byte) error {
 	var tmpArray [2]float32
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal F32Vec2")
+		return vpsys.ErrorChain(err, "unable to unmarshal F32")
 	}
 
-	*vec = F32Vec2(tmpArray)
+	*vec = F32(tmpArray)
 
 	return nil
 }
 
 // String returns a readable form of the vector.
-func (vec *F32Vec2) String() string {
+func (vec *F32) String() string {
 	buf, err := vec.MarshalJSON()
 
 	if err != nil {
@@ -128,7 +128,7 @@ func (vec *F32Vec2) String() string {
 
 // Add adds operand to the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F32Vec2) Add(op *F32Vec2) *F32Vec2 {
+func (vec *F32) Add(op *F32) *F32 {
 	for i, v := range op {
 		vec[i] += v
 	}
@@ -138,7 +138,7 @@ func (vec *F32Vec2) Add(op *F32Vec2) *F32Vec2 {
 
 // Sub substracts operand from the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F32Vec2) Sub(op *F32Vec2) *F32Vec2 {
+func (vec *F32) Sub(op *F32) *F32 {
 	for i, v := range op {
 		vec[i] -= v
 	}
@@ -148,7 +148,7 @@ func (vec *F32Vec2) Sub(op *F32Vec2) *F32Vec2 {
 
 // Neg changes the sign of all vector members.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F32Vec2) Neg() *F32Vec2 {
+func (vec *F32) Neg() *F32 {
 	for i, v := range vec {
 		vec[i] = -v
 	}
@@ -158,7 +158,7 @@ func (vec *F32Vec2) Neg() *F32Vec2 {
 
 // MulScale multiplies all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F32Vec2) MulScale(factor float32) *F32Vec2 {
+func (vec *F32) MulScale(factor float32) *F32 {
 	for i, v := range vec {
 		vec[i] = v * factor
 	}
@@ -168,7 +168,7 @@ func (vec *F32Vec2) MulScale(factor float32) *F32Vec2 {
 
 // DivScale divides all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F32Vec2) DivScale(factor float32) *F32Vec2 {
+func (vec *F32) DivScale(factor float32) *F32 {
 	for i, v := range vec {
 		vec[i] = vpnumber.F32Div(v, factor)
 	}
@@ -179,7 +179,7 @@ func (vec *F32Vec2) DivScale(factor float32) *F32Vec2 {
 // SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func (vec *F32Vec2) SqMag() float32 {
+func (vec *F32) SqMag() float32 {
 	var sq float32
 
 	for _, v := range vec {
@@ -190,13 +190,13 @@ func (vec *F32Vec2) SqMag() float32 {
 }
 
 // Length returns the length of the vector.
-func (vec *F32Vec2) Length() float32 {
+func (vec *F32) Length() float32 {
 	return float32(math.Sqrt(float64(vec.SqMag())))
 }
 
 // Normalize scales the vector so that its length is 1.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F32Vec2) Normalize() *F32Vec2 {
+func (vec *F32) Normalize() *F32 {
 	vec.DivScale(vec.Length())
 
 	return vec
@@ -204,7 +204,7 @@ func (vec *F32Vec2) Normalize() *F32Vec2 {
 
 // IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
-func (vec *F32Vec2) IsSimilar(op *F32Vec2) bool {
+func (vec *F32) IsSimilar(op *F32) bool {
 	ret := true
 	for i, v := range vec {
 		ret = ret && vpnumber.F32IsSimilar(v, op[i])
@@ -214,7 +214,7 @@ func (vec *F32Vec2) IsSimilar(op *F32Vec2) bool {
 }
 
 // Dot returns the the dot product of two vectors.
-func (vec *F32Vec2) Dot(op *F32Vec2) float32 {
+func (vec *F32) Dot(op *F32) float32 {
 	var dot float32
 
 	for i, v := range op {
@@ -224,9 +224,9 @@ func (vec *F32Vec2) Dot(op *F32Vec2) float32 {
 	return dot
 }
 
-// F32Vec2Add adds two vectors.
+// F32Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
-func F32Vec2Add(veca, vecb *F32Vec2) *F32Vec2 {
+func F32Add(veca, vecb *F32) *F32 {
 	var ret = *veca
 
 	_ = ret.Add(vecb)
@@ -234,9 +234,9 @@ func F32Vec2Add(veca, vecb *F32Vec2) *F32Vec2 {
 	return &ret
 }
 
-// F32Vec2Sub substracts vector b from vector a.
+// F32Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
-func F32Vec2Sub(veca, vecb *F32Vec2) *F32Vec2 {
+func F32Sub(veca, vecb *F32) *F32 {
 	var ret = *veca
 
 	_ = ret.Sub(vecb)
@@ -244,9 +244,9 @@ func F32Vec2Sub(veca, vecb *F32Vec2) *F32Vec2 {
 	return &ret
 }
 
-// F32Vec2Neg changes the sign of all vector members.
+// F32Neg changes the sign of all vector members.
 // Arg is left untouched, a pointer on a new object is returned.
-func F32Vec2Neg(vec *F32Vec2) *F32Vec2 {
+func F32Neg(vec *F32) *F32 {
 	var ret = *vec
 
 	_ = ret.Neg()
@@ -254,9 +254,9 @@ func F32Vec2Neg(vec *F32Vec2) *F32Vec2 {
 	return &ret
 }
 
-// F32Vec2MulScale multiplies all values of a vector by a scalar.
+// F32MulScale multiplies all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func F32Vec2MulScale(vec *F32Vec2, factor float32) *F32Vec2 {
+func F32MulScale(vec *F32, factor float32) *F32 {
 	var ret = *vec
 
 	_ = ret.MulScale(factor)
@@ -264,9 +264,9 @@ func F32Vec2MulScale(vec *F32Vec2, factor float32) *F32Vec2 {
 	return &ret
 }
 
-// F32Vec2DivScale divides all values of a vector by a scalar.
+// F32DivScale divides all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func F32Vec2DivScale(vec *F32Vec2, factor float32) *F32Vec2 {
+func F32DivScale(vec *F32, factor float32) *F32 {
 	var ret = *vec
 
 	_ = ret.DivScale(factor)
@@ -274,9 +274,9 @@ func F32Vec2DivScale(vec *F32Vec2, factor float32) *F32Vec2 {
 	return &ret
 }
 
-// F32Vec2Normalize scales a vector so that its length is 1.
+// F32Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
-func F32Vec2Normalize(vec *F32Vec2) *F32Vec2 {
+func F32Normalize(vec *F32) *F32 {
 	var ret = *vec
 
 	_ = ret.Normalize()

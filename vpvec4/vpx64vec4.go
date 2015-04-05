@@ -27,29 +27,29 @@ import (
 	"github.com/ufoot/vapor/vpvec3"
 )
 
-// X64Vec4 is a vector containing 4 fixed point 64 bit values.
+// X64 is a vector containing 4 fixed point 64 bit values.
 // Can be used in 3D matrix transformations.
-type X64Vec4 [4]vpnumber.X64
+type X64 [4]vpnumber.X64
 
-// X64Vec4New creates a new vector containing 4 fixed point 64 bit values.
-func X64Vec4New(x1, x2, x3, x4 vpnumber.X64) *X64Vec4 {
-	return &X64Vec4{x1, x2, x3, x4}
+// X64New creates a new vector containing 4 fixed point 64 bit values.
+func X64New(x1, x2, x3, x4 vpnumber.X64) *X64 {
+	return &X64{x1, x2, x3, x4}
 }
 
-// X64Vec4FromVec3 creates a new vector from a smaller one,
+// X64FromVec3 creates a new vector from a smaller one,
 // by appending a value at its end.
-func X64Vec4FromVec3(vec *vpvec3.X64Vec3, x vpnumber.X64) *X64Vec4 {
-	return &X64Vec4{vec[0], vec[1], vec[2], x}
+func X64FromVec3(vec *vpvec3.X64, x vpnumber.X64) *X64 {
+	return &X64{vec[0], vec[1], vec[2], x}
 }
 
 // ToVec3 creates a smaller vector by removing the last value.
-func (vec *X64Vec4) ToVec3() *vpvec3.X64Vec3 {
-	return &vpvec3.X64Vec3{vec[0], vec[1], vec[2]}
+func (vec *X64) ToVec3() *vpvec3.X64 {
+	return &vpvec3.X64{vec[0], vec[1], vec[2]}
 }
 
 // ToI32 converts the vector to an int32 vector.
-func (vec *X64Vec4) ToI32() *I32Vec4 {
-	var ret I32Vec4
+func (vec *X64) ToI32() *I32 {
+	var ret I32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X64ToI32(v)
@@ -59,8 +59,8 @@ func (vec *X64Vec4) ToI32() *I32Vec4 {
 }
 
 // ToI64 converts the vector to an int32 vector.
-func (vec *X64Vec4) ToI64() *I64Vec4 {
-	var ret I64Vec4
+func (vec *X64) ToI64() *I64 {
+	var ret I64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X64ToI64(v)
@@ -70,8 +70,8 @@ func (vec *X64Vec4) ToI64() *I64Vec4 {
 }
 
 // ToX32 converts the vector to a fixed point number vector on 64 bits.
-func (vec *X64Vec4) ToX32() *X32Vec4 {
-	var ret X32Vec4
+func (vec *X64) ToX32() *X32 {
+	var ret X32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X64ToX32(v)
@@ -81,8 +81,8 @@ func (vec *X64Vec4) ToX32() *X32Vec4 {
 }
 
 // ToF32 converts the vector to a float32 vector.
-func (vec *X64Vec4) ToF32() *F32Vec4 {
-	var ret F32Vec4
+func (vec *X64) ToF32() *F32 {
+	var ret F32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X64ToF32(v)
@@ -92,8 +92,8 @@ func (vec *X64Vec4) ToF32() *F32Vec4 {
 }
 
 // ToF64 converts the vector to a float64 vector.
-func (vec *X64Vec4) ToF64() *F64Vec4 {
-	var ret F64Vec4
+func (vec *X64) ToF64() *F64 {
+	var ret F64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X64ToF64(v)
@@ -103,7 +103,7 @@ func (vec *X64Vec4) ToF64() *F64Vec4 {
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (vec *X64Vec4) MarshalJSON() ([]byte, error) {
+func (vec *X64) MarshalJSON() ([]byte, error) {
 	var tmpArray [4]int64
 
 	for i := range tmpArray {
@@ -112,19 +112,19 @@ func (vec *X64Vec4) MarshalJSON() ([]byte, error) {
 
 	ret, err := json.Marshal(tmpArray)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal X64Vec4")
+		return nil, vpsys.ErrorChain(err, "unable to marshal X64")
 	}
 
 	return ret, nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *X64Vec4) UnmarshalJSON(data []byte) error {
+func (vec *X64) UnmarshalJSON(data []byte) error {
 	var tmpArray [4]int64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal X64Vec4")
+		return vpsys.ErrorChain(err, "unable to unmarshal X64")
 	}
 
 	for i := range tmpArray {
@@ -135,7 +135,7 @@ func (vec *X64Vec4) UnmarshalJSON(data []byte) error {
 }
 
 // String returns a readable form of the vector.
-func (vec *X64Vec4) String() string {
+func (vec *X64) String() string {
 	buf, err := vec.ToF64().MarshalJSON()
 
 	if err != nil {
@@ -148,7 +148,7 @@ func (vec *X64Vec4) String() string {
 
 // Add adds operand to the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec4) Add(op *X64Vec4) *X64Vec4 {
+func (vec *X64) Add(op *X64) *X64 {
 	for i, v := range op {
 		vec[i] += v
 	}
@@ -158,7 +158,7 @@ func (vec *X64Vec4) Add(op *X64Vec4) *X64Vec4 {
 
 // Sub substracts operand from the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec4) Sub(op *X64Vec4) *X64Vec4 {
+func (vec *X64) Sub(op *X64) *X64 {
 	for i, v := range op {
 		vec[i] -= v
 	}
@@ -168,7 +168,7 @@ func (vec *X64Vec4) Sub(op *X64Vec4) *X64Vec4 {
 
 // Neg changes the sign of all vector members.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec4) Neg() *X64Vec4 {
+func (vec *X64) Neg() *X64 {
 	for i, v := range vec {
 		vec[i] = -v
 	}
@@ -178,7 +178,7 @@ func (vec *X64Vec4) Neg() *X64Vec4 {
 
 // MulScale multiplies all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec4) MulScale(factor vpnumber.X64) *X64Vec4 {
+func (vec *X64) MulScale(factor vpnumber.X64) *X64 {
 	for i, v := range vec {
 		vec[i] = vpnumber.X64Mul(v, factor)
 	}
@@ -188,7 +188,7 @@ func (vec *X64Vec4) MulScale(factor vpnumber.X64) *X64Vec4 {
 
 // DivScale divides all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec4) DivScale(factor vpnumber.X64) *X64Vec4 {
+func (vec *X64) DivScale(factor vpnumber.X64) *X64 {
 	for i, v := range vec {
 		vec[i] = vpnumber.X64Div(v, factor)
 	}
@@ -199,7 +199,7 @@ func (vec *X64Vec4) DivScale(factor vpnumber.X64) *X64Vec4 {
 // SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func (vec *X64Vec4) SqMag() vpnumber.X64 {
+func (vec *X64) SqMag() vpnumber.X64 {
 	var sq vpnumber.X64
 
 	for _, v := range vec {
@@ -210,13 +210,13 @@ func (vec *X64Vec4) SqMag() vpnumber.X64 {
 }
 
 // Length returns the length of the vector.
-func (vec *X64Vec4) Length() vpnumber.X64 {
+func (vec *X64) Length() vpnumber.X64 {
 	return vpmath.X64Sqrt(vec.SqMag())
 }
 
 // Normalize scales the vector so that its length is 1.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec4) Normalize() *X64Vec4 {
+func (vec *X64) Normalize() *X64 {
 	vec.DivScale(vec.Length())
 
 	return vec
@@ -224,7 +224,7 @@ func (vec *X64Vec4) Normalize() *X64Vec4 {
 
 // IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
-func (vec *X64Vec4) IsSimilar(op *X64Vec4) bool {
+func (vec *X64) IsSimilar(op *X64) bool {
 	ret := true
 	for i, v := range vec {
 		ret = ret && vpnumber.X64IsSimilar(v, op[i])
@@ -234,7 +234,7 @@ func (vec *X64Vec4) IsSimilar(op *X64Vec4) bool {
 }
 
 // Dot returns the the dot product of two vectors.
-func (vec *X64Vec4) Dot(op *X64Vec4) vpnumber.X64 {
+func (vec *X64) Dot(op *X64) vpnumber.X64 {
 	var dot vpnumber.X64
 
 	for i, v := range op {
@@ -244,9 +244,9 @@ func (vec *X64Vec4) Dot(op *X64Vec4) vpnumber.X64 {
 	return dot
 }
 
-// X64Vec4Add adds two vectors.
+// X64Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Vec4Add(veca, vecb *X64Vec4) *X64Vec4 {
+func X64Add(veca, vecb *X64) *X64 {
 	var ret = *veca
 
 	_ = ret.Add(vecb)
@@ -254,9 +254,9 @@ func X64Vec4Add(veca, vecb *X64Vec4) *X64Vec4 {
 	return &ret
 }
 
-// X64Vec4Sub substracts vector b from vector a.
+// X64Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Vec4Sub(veca, vecb *X64Vec4) *X64Vec4 {
+func X64Sub(veca, vecb *X64) *X64 {
 	var ret = *veca
 
 	_ = ret.Sub(vecb)
@@ -264,9 +264,9 @@ func X64Vec4Sub(veca, vecb *X64Vec4) *X64Vec4 {
 	return &ret
 }
 
-// X64Vec4Neg changes the sign of all vector members.
+// X64Neg changes the sign of all vector members.
 // Arg is left untouched, a pointer on a new object is returned.
-func X64Vec4Neg(vec *X64Vec4) *X64Vec4 {
+func X64Neg(vec *X64) *X64 {
 	var ret = *vec
 
 	_ = ret.Neg()
@@ -274,9 +274,9 @@ func X64Vec4Neg(vec *X64Vec4) *X64Vec4 {
 	return &ret
 }
 
-// X64Vec4MulScale multiplies all values of a vector by a scalar.
+// X64MulScale multiplies all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Vec4MulScale(vec *X64Vec4, factor vpnumber.X64) *X64Vec4 {
+func X64MulScale(vec *X64, factor vpnumber.X64) *X64 {
 	var ret = *vec
 
 	_ = ret.MulScale(factor)
@@ -284,9 +284,9 @@ func X64Vec4MulScale(vec *X64Vec4, factor vpnumber.X64) *X64Vec4 {
 	return &ret
 }
 
-// X64Vec4DivScale divides all values of a vector by a scalar.
+// X64DivScale divides all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Vec4DivScale(vec *X64Vec4, factor vpnumber.X64) *X64Vec4 {
+func X64DivScale(vec *X64, factor vpnumber.X64) *X64 {
 	var ret = *vec
 
 	_ = ret.DivScale(factor)
@@ -294,9 +294,9 @@ func X64Vec4DivScale(vec *X64Vec4, factor vpnumber.X64) *X64Vec4 {
 	return &ret
 }
 
-// X64Vec4Normalize scales a vector so that its length is 1.
+// X64Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
-func X64Vec4Normalize(vec *X64Vec4) *X64Vec4 {
+func X64Normalize(vec *X64) *X64 {
 	var ret = *vec
 
 	_ = ret.Normalize()

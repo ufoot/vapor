@@ -23,7 +23,7 @@ import (
 	"testing"
 )
 
-func TestI32Vec4Math(t *testing.T) {
+func TestI32Math(t *testing.T) {
 	const i1 = 0
 	const i2 = -4
 	const i3 = 42
@@ -34,9 +34,9 @@ func TestI32Vec4Math(t *testing.T) {
 	const i7 = 222
 	const i8 = -1
 
-	var v1, v2, v3, v4 *I32Vec4
+	var v1, v2, v3, v4 *I32
 
-	v1 = I32Vec4New(i1, i2, i3, i4)
+	v1 = I32New(i1, i2, i3, i4)
 
 	v2 = v1.ToI64().ToI32()
 	if *v1 != *v2 {
@@ -63,46 +63,46 @@ func TestI32Vec4Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	v2 = I32Vec4New(i5, i6, i7, i8)
-	v3 = I32Vec4Add(v1, v2)
-	v4 = I32Vec4New(i1+i5, i2+i6, i3+i7, i4+i8)
+	v2 = I32New(i5, i6, i7, i8)
+	v3 = I32Add(v1, v2)
+	v4 = I32New(i1+i5, i2+i6, i3+i7, i4+i8)
 	if *v3 != *v4 {
 		t.Error("Add error")
 	}
 
-	v3 = I32Vec4Sub(v1, v2)
-	v4 = I32Vec4New(i1-i5, i2-i6, i3-i7, i4-i8)
+	v3 = I32Sub(v1, v2)
+	v4 = I32New(i1-i5, i2-i6, i3-i7, i4-i8)
 	if *v3 != *v4 {
 		t.Error("Sub error")
 	}
 
-	v3 = I32Vec4Add(v1, I32Vec4Neg(v2))
-	v4 = I32Vec4Sub(v1, v2)
+	v3 = I32Add(v1, I32Neg(v2))
+	v4 = I32Sub(v1, v2)
 	if *v3 != *v4 {
 		t.Error("Neg error")
 	}
 }
 
-func TestI32Vec4JSON(t *testing.T) {
-	m1 := I32Vec4New(10, 20, 30, 40)
-	m2 := I32Vec4New(1, 0, 0, 0)
+func TestI32JSON(t *testing.T) {
+	m1 := I32New(10, 20, 30, 40)
+	m2 := I32New(1, 0, 0, 0)
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for I32Vec4 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for I32 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for I32Vec4")
+		t.Error("unable to encode JSON for I32")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for I32Vec4, but json is not correct")
+		t.Error("able to decode JSON for I32, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for I32Vec4")
+		t.Error("unable to decode JSON for I32")
 	}
 	if *m1 != *m2 {
 		t.Error("unmarshalled vector is different from original")

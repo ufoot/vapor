@@ -25,18 +25,18 @@ import (
 	"github.com/ufoot/vapor/vpsys"
 )
 
-// I32Vec2 is a vector containing 2 int32 values.
+// I32 is a vector containing 2 int32 values.
 // Can hold the values of a point in a plane.
-type I32Vec2 [2]int32
+type I32 [2]int32
 
-// I32Vec2New creates a new vector containing 2 int32 values.
-func I32Vec2New(i1, i2 int32) *I32Vec2 {
-	return &I32Vec2{i1, i2}
+// I32New creates a new vector containing 2 int32 values.
+func I32New(i1, i2 int32) *I32 {
+	return &I32{i1, i2}
 }
 
 // ToI64 converts the vector to an int64 vector.
-func (vec *I32Vec2) ToI64() *I64Vec2 {
-	var ret I64Vec2
+func (vec *I32) ToI64() *I64 {
+	var ret I64
 
 	for i, v := range vec {
 		ret[i] = int64(v)
@@ -46,8 +46,8 @@ func (vec *I32Vec2) ToI64() *I64Vec2 {
 }
 
 // ToX32 converts the vector to a fixed point number vector on 32 bits.
-func (vec *I32Vec2) ToX32() *X32Vec2 {
-	var ret X32Vec2
+func (vec *I32) ToX32() *X32 {
+	var ret X32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.I32ToX32(v)
@@ -57,8 +57,8 @@ func (vec *I32Vec2) ToX32() *X32Vec2 {
 }
 
 // ToX64 converts the vector to a fixed point number vector on 64 bits.
-func (vec *I32Vec2) ToX64() *X64Vec2 {
-	var ret X64Vec2
+func (vec *I32) ToX64() *X64 {
+	var ret X64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.I32ToX64(v)
@@ -68,8 +68,8 @@ func (vec *I32Vec2) ToX64() *X64Vec2 {
 }
 
 // ToF32 converts the vector to a float32 vector.
-func (vec *I32Vec2) ToF32() *F32Vec2 {
-	var ret F32Vec2
+func (vec *I32) ToF32() *F32 {
+	var ret F32
 
 	for i, v := range vec {
 		ret[i] = float32(v)
@@ -79,8 +79,8 @@ func (vec *I32Vec2) ToF32() *F32Vec2 {
 }
 
 // ToF64 converts the vector to a float64 vector.
-func (vec *I32Vec2) ToF64() *F64Vec2 {
-	var ret F64Vec2
+func (vec *I32) ToF64() *F64 {
+	var ret F64
 
 	for i, v := range vec {
 		ret[i] = float64(v)
@@ -90,31 +90,31 @@ func (vec *I32Vec2) ToF64() *F64Vec2 {
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (vec *I32Vec2) MarshalJSON() ([]byte, error) {
+func (vec *I32) MarshalJSON() ([]byte, error) {
 	ret, err := json.Marshal([2]int32(*vec))
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal I32Vec2")
+		return nil, vpsys.ErrorChain(err, "unable to marshal I32")
 	}
 
 	return ret, nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *I32Vec2) UnmarshalJSON(data []byte) error {
+func (vec *I32) UnmarshalJSON(data []byte) error {
 	var tmpArray [2]int32
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal I32Vec2")
+		return vpsys.ErrorChain(err, "unable to unmarshal I32")
 	}
 
-	*vec = I32Vec2(tmpArray)
+	*vec = I32(tmpArray)
 
 	return nil
 }
 
 // String returns a readable form of the vector.
-func (vec *I32Vec2) String() string {
+func (vec *I32) String() string {
 	buf, err := vec.MarshalJSON()
 
 	if err != nil {
@@ -127,7 +127,7 @@ func (vec *I32Vec2) String() string {
 
 // Add adds operand to the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *I32Vec2) Add(op *I32Vec2) *I32Vec2 {
+func (vec *I32) Add(op *I32) *I32 {
 	for i, v := range op {
 		vec[i] += v
 	}
@@ -137,7 +137,7 @@ func (vec *I32Vec2) Add(op *I32Vec2) *I32Vec2 {
 
 // Sub substracts operand from the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *I32Vec2) Sub(op *I32Vec2) *I32Vec2 {
+func (vec *I32) Sub(op *I32) *I32 {
 	for i, v := range op {
 		vec[i] -= v
 	}
@@ -147,7 +147,7 @@ func (vec *I32Vec2) Sub(op *I32Vec2) *I32Vec2 {
 
 // Neg changes the sign of all vector members.
 // It modifies the vector, and returns a pointer on it.
-func (vec *I32Vec2) Neg() *I32Vec2 {
+func (vec *I32) Neg() *I32 {
 	for i, v := range vec {
 		vec[i] = -v
 	}
@@ -155,9 +155,9 @@ func (vec *I32Vec2) Neg() *I32Vec2 {
 	return vec
 }
 
-// I32Vec2Add adds two vectors.
+// I32Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
-func I32Vec2Add(veca, vecb *I32Vec2) *I32Vec2 {
+func I32Add(veca, vecb *I32) *I32 {
 	var ret = *veca
 
 	_ = ret.Add(vecb)
@@ -165,9 +165,9 @@ func I32Vec2Add(veca, vecb *I32Vec2) *I32Vec2 {
 	return &ret
 }
 
-// I32Vec2Sub substracts vector b from vector a.
+// I32Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
-func I32Vec2Sub(veca, vecb *I32Vec2) *I32Vec2 {
+func I32Sub(veca, vecb *I32) *I32 {
 	var ret = *veca
 
 	_ = ret.Sub(vecb)
@@ -175,9 +175,9 @@ func I32Vec2Sub(veca, vecb *I32Vec2) *I32Vec2 {
 	return &ret
 }
 
-// I32Vec2Neg changes the sign of all vector members.
+// I32Neg changes the sign of all vector members.
 // Arg is left untouched, a pointer on a new object is returned.
-func I32Vec2Neg(vec *I32Vec2) *I32Vec2 {
+func I32Neg(vec *I32) *I32 {
 	var ret = *vec
 
 	_ = ret.Neg()

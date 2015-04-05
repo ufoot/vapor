@@ -145,8 +145,8 @@ func TestX64Aff(t *testing.T) {
 	t2 := vpnumber.F64ToX64(8.5)
 	t3 := vpnumber.F64ToX64(10.5)
 
-	v1 := vpvec4.X64Vec4New(p1, p2, p3, vpnumber.X64Const1)
-	vt := vpvec3.X64Vec3New(t1, t2, t3)
+	v1 := vpvec4.X64New(p1, p2, p3, vpnumber.X64Const1)
+	vt := vpvec3.X64New(t1, t2, t3)
 	mt := X64Trans(vt)
 	t.Logf("translation mat4x3 for %s is %s", vt.String(), mt.String())
 	v2pos := mt.MulVecPos(v1.ToVec3())
@@ -165,7 +165,7 @@ func TestX64Aff(t *testing.T) {
 	t.Logf("rotation X mat4x3 for PI/2 is %s", mr.String())
 	v2 := mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 := vpvec4.X64Vec4New(v1[0], -v1[2], v1[1], vpnumber.X64Const1)
+	v3 := vpvec4.X64New(v1[0], -v1[2], v1[1], vpnumber.X64Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x3 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -185,7 +185,7 @@ func TestX64Aff(t *testing.T) {
 	t.Logf("rotation Y mat4x3 for PI/2 is %s", mr.String())
 	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = vpvec4.X64Vec4New(v1[2], v1[1], -v1[0], vpnumber.X64Const1)
+	v3 = vpvec4.X64New(v1[2], v1[1], -v1[0], vpnumber.X64Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x3 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -205,7 +205,7 @@ func TestX64Aff(t *testing.T) {
 	t.Logf("rotation Z mat4x3 for PI/2 is %s", mr.String())
 	v2 = mrCheck.MulVec(v1)
 	t.Logf("mat4x3 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = vpvec4.X64Vec4New(-v1[1], v1[0], v1[2], vpnumber.X64Const1)
+	v3 = vpvec4.X64New(-v1[1], v1[0], v1[2], vpnumber.X64Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x3 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}

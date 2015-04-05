@@ -27,29 +27,29 @@ import (
 	"github.com/ufoot/vapor/vpvec2"
 )
 
-// X32Vec3 is a vector containing 3 fixed point 32 bit values.
+// X32 is a vector containing 3 fixed point 32 bit values.
 // Can hold the values of a point in space.
-type X32Vec3 [3]vpnumber.X32
+type X32 [3]vpnumber.X32
 
-// X32Vec3New creates a new vector containing 3 fixed point 32 bit values.
-func X32Vec3New(x1, x2, x3 vpnumber.X32) *X32Vec3 {
-	return &X32Vec3{x1, x2, x3}
+// X32New creates a new vector containing 3 fixed point 32 bit values.
+func X32New(x1, x2, x3 vpnumber.X32) *X32 {
+	return &X32{x1, x2, x3}
 }
 
-// X32Vec3FromVec2 creates a new vector from a smaller one,
+// X32FromVec2 creates a new vector from a smaller one,
 // by appending a value at its end.
-func X32Vec3FromVec2(vec *vpvec2.X32Vec2, x vpnumber.X32) *X32Vec3 {
-	return &X32Vec3{vec[0], vec[1], x}
+func X32FromVec2(vec *vpvec2.X32, x vpnumber.X32) *X32 {
+	return &X32{vec[0], vec[1], x}
 }
 
 // ToVec2 creates a smaller vector by removing the last value.
-func (vec *X32Vec3) ToVec2() *vpvec2.X32Vec2 {
-	return &vpvec2.X32Vec2{vec[0], vec[1]}
+func (vec *X32) ToVec2() *vpvec2.X32 {
+	return &vpvec2.X32{vec[0], vec[1]}
 }
 
 // ToI32 converts the vector to an int32 vector.
-func (vec *X32Vec3) ToI32() *I32Vec3 {
-	var ret I32Vec3
+func (vec *X32) ToI32() *I32 {
+	var ret I32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X32ToI32(v)
@@ -59,8 +59,8 @@ func (vec *X32Vec3) ToI32() *I32Vec3 {
 }
 
 // ToI64 converts the vector to an int32 vector.
-func (vec *X32Vec3) ToI64() *I64Vec3 {
-	var ret I64Vec3
+func (vec *X32) ToI64() *I64 {
+	var ret I64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X32ToI64(v)
@@ -70,8 +70,8 @@ func (vec *X32Vec3) ToI64() *I64Vec3 {
 }
 
 // ToX64 converts the vector to a fixed point number vector on 64 bits.
-func (vec *X32Vec3) ToX64() *X64Vec3 {
-	var ret X64Vec3
+func (vec *X32) ToX64() *X64 {
+	var ret X64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X32ToX64(v)
@@ -81,8 +81,8 @@ func (vec *X32Vec3) ToX64() *X64Vec3 {
 }
 
 // ToF32 converts the vector to a float32 vector.
-func (vec *X32Vec3) ToF32() *F32Vec3 {
-	var ret F32Vec3
+func (vec *X32) ToF32() *F32 {
+	var ret F32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X32ToF32(v)
@@ -92,8 +92,8 @@ func (vec *X32Vec3) ToF32() *F32Vec3 {
 }
 
 // ToF64 converts the vector to a float64 vector.
-func (vec *X32Vec3) ToF64() *F64Vec3 {
-	var ret F64Vec3
+func (vec *X32) ToF64() *F64 {
+	var ret F64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X32ToF64(v)
@@ -103,7 +103,7 @@ func (vec *X32Vec3) ToF64() *F64Vec3 {
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (vec *X32Vec3) MarshalJSON() ([]byte, error) {
+func (vec *X32) MarshalJSON() ([]byte, error) {
 	var tmpArray [3]int32
 
 	for i := range tmpArray {
@@ -112,19 +112,19 @@ func (vec *X32Vec3) MarshalJSON() ([]byte, error) {
 
 	ret, err := json.Marshal(tmpArray)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal X32Vec3")
+		return nil, vpsys.ErrorChain(err, "unable to marshal X32")
 	}
 
 	return ret, nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *X32Vec3) UnmarshalJSON(data []byte) error {
+func (vec *X32) UnmarshalJSON(data []byte) error {
 	var tmpArray [3]int32
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal X32Vec3")
+		return vpsys.ErrorChain(err, "unable to unmarshal X32")
 	}
 
 	for i := range tmpArray {
@@ -135,7 +135,7 @@ func (vec *X32Vec3) UnmarshalJSON(data []byte) error {
 }
 
 // String returns a readable form of the vector.
-func (vec *X32Vec3) String() string {
+func (vec *X32) String() string {
 	buf, err := vec.ToF32().MarshalJSON()
 
 	if err != nil {
@@ -148,7 +148,7 @@ func (vec *X32Vec3) String() string {
 
 // Add adds operand to the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X32Vec3) Add(op *X32Vec3) *X32Vec3 {
+func (vec *X32) Add(op *X32) *X32 {
 	for i, v := range op {
 		vec[i] += v
 	}
@@ -158,7 +158,7 @@ func (vec *X32Vec3) Add(op *X32Vec3) *X32Vec3 {
 
 // Sub substracts operand from the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X32Vec3) Sub(op *X32Vec3) *X32Vec3 {
+func (vec *X32) Sub(op *X32) *X32 {
 	for i, v := range op {
 		vec[i] -= v
 	}
@@ -168,7 +168,7 @@ func (vec *X32Vec3) Sub(op *X32Vec3) *X32Vec3 {
 
 // Neg changes the sign of all vector members.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X32Vec3) Neg() *X32Vec3 {
+func (vec *X32) Neg() *X32 {
 	for i, v := range vec {
 		vec[i] = -v
 	}
@@ -178,7 +178,7 @@ func (vec *X32Vec3) Neg() *X32Vec3 {
 
 // MulScale multiplies all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X32Vec3) MulScale(factor vpnumber.X32) *X32Vec3 {
+func (vec *X32) MulScale(factor vpnumber.X32) *X32 {
 	for i, v := range vec {
 		vec[i] = vpnumber.X32Mul(v, factor)
 	}
@@ -188,7 +188,7 @@ func (vec *X32Vec3) MulScale(factor vpnumber.X32) *X32Vec3 {
 
 // DivScale divides all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X32Vec3) DivScale(factor vpnumber.X32) *X32Vec3 {
+func (vec *X32) DivScale(factor vpnumber.X32) *X32 {
 	for i, v := range vec {
 		vec[i] = vpnumber.X32Div(v, factor)
 	}
@@ -199,7 +199,7 @@ func (vec *X32Vec3) DivScale(factor vpnumber.X32) *X32Vec3 {
 // SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func (vec *X32Vec3) SqMag() vpnumber.X32 {
+func (vec *X32) SqMag() vpnumber.X32 {
 	var sq vpnumber.X32
 
 	for _, v := range vec {
@@ -210,13 +210,13 @@ func (vec *X32Vec3) SqMag() vpnumber.X32 {
 }
 
 // Length returns the length of the vector.
-func (vec *X32Vec3) Length() vpnumber.X32 {
+func (vec *X32) Length() vpnumber.X32 {
 	return vpmath.X32Sqrt(vec.SqMag())
 }
 
 // Normalize scales the vector so that its length is 1.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X32Vec3) Normalize() *X32Vec3 {
+func (vec *X32) Normalize() *X32 {
 	vec.DivScale(vec.Length())
 
 	return vec
@@ -224,7 +224,7 @@ func (vec *X32Vec3) Normalize() *X32Vec3 {
 
 // IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
-func (vec *X32Vec3) IsSimilar(op *X32Vec3) bool {
+func (vec *X32) IsSimilar(op *X32) bool {
 	ret := true
 	for i, v := range vec {
 		ret = ret && vpnumber.X32IsSimilar(v, op[i])
@@ -234,7 +234,7 @@ func (vec *X32Vec3) IsSimilar(op *X32Vec3) bool {
 }
 
 // Dot returns the the dot product of two vectors.
-func (vec *X32Vec3) Dot(op *X32Vec3) vpnumber.X32 {
+func (vec *X32) Dot(op *X32) vpnumber.X32 {
 	var dot vpnumber.X32
 
 	for i, v := range op {
@@ -246,15 +246,15 @@ func (vec *X32Vec3) Dot(op *X32Vec3) vpnumber.X32 {
 
 // Cross returns the the cross product of two vectors.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X32Vec3) Cross(op *X32Vec3) *X32Vec3 {
-	*vec = *X32Vec3Cross(vec, op)
+func (vec *X32) Cross(op *X32) *X32 {
+	*vec = *X32Cross(vec, op)
 
 	return vec
 }
 
-// X32Vec3Add adds two vectors.
+// X32Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
-func X32Vec3Add(veca, vecb *X32Vec3) *X32Vec3 {
+func X32Add(veca, vecb *X32) *X32 {
 	var ret = *veca
 
 	_ = ret.Add(vecb)
@@ -262,9 +262,9 @@ func X32Vec3Add(veca, vecb *X32Vec3) *X32Vec3 {
 	return &ret
 }
 
-// X32Vec3Sub substracts vector b from vector a.
+// X32Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
-func X32Vec3Sub(veca, vecb *X32Vec3) *X32Vec3 {
+func X32Sub(veca, vecb *X32) *X32 {
 	var ret = *veca
 
 	_ = ret.Sub(vecb)
@@ -272,9 +272,9 @@ func X32Vec3Sub(veca, vecb *X32Vec3) *X32Vec3 {
 	return &ret
 }
 
-// X32Vec3Neg changes the sign of all vector members.
+// X32Neg changes the sign of all vector members.
 // Arg is left untouched, a pointer on a new object is returned.
-func X32Vec3Neg(vec *X32Vec3) *X32Vec3 {
+func X32Neg(vec *X32) *X32 {
 	var ret = *vec
 
 	_ = ret.Neg()
@@ -282,9 +282,9 @@ func X32Vec3Neg(vec *X32Vec3) *X32Vec3 {
 	return &ret
 }
 
-// X32Vec3MulScale multiplies all values of a vector by a scalar.
+// X32MulScale multiplies all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func X32Vec3MulScale(vec *X32Vec3, factor vpnumber.X32) *X32Vec3 {
+func X32MulScale(vec *X32, factor vpnumber.X32) *X32 {
 	var ret = *vec
 
 	_ = ret.MulScale(factor)
@@ -292,9 +292,9 @@ func X32Vec3MulScale(vec *X32Vec3, factor vpnumber.X32) *X32Vec3 {
 	return &ret
 }
 
-// X32Vec3DivScale divides all values of a vector by a scalar.
+// X32DivScale divides all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func X32Vec3DivScale(vec *X32Vec3, factor vpnumber.X32) *X32Vec3 {
+func X32DivScale(vec *X32, factor vpnumber.X32) *X32 {
 	var ret = *vec
 
 	_ = ret.DivScale(factor)
@@ -302,9 +302,9 @@ func X32Vec3DivScale(vec *X32Vec3, factor vpnumber.X32) *X32Vec3 {
 	return &ret
 }
 
-// X32Vec3Normalize scales a vector so that its length is 1.
+// X32Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
-func X32Vec3Normalize(vec *X32Vec3) *X32Vec3 {
+func X32Normalize(vec *X32) *X32 {
 	var ret = *vec
 
 	_ = ret.Normalize()
@@ -312,10 +312,10 @@ func X32Vec3Normalize(vec *X32Vec3) *X32Vec3 {
 	return &ret
 }
 
-// X32Vec3Cross returns the the cross product of two vectors.
+// X32Cross returns the the cross product of two vectors.
 // Args are left untouched, a pointer on a new object is returned.
-func X32Vec3Cross(veca, vecb *X32Vec3) *X32Vec3 {
-	var ret = X32Vec3{vpnumber.X32Mul(veca[1], vecb[2]) - vpnumber.X32Mul(veca[2], vecb[1]), vpnumber.X32Mul(veca[2], vecb[0]) - vpnumber.X32Mul(veca[0], vecb[2]), vpnumber.X32Mul(veca[0], vecb[1]) - vpnumber.X32Mul(veca[1], vecb[0])}
+func X32Cross(veca, vecb *X32) *X32 {
+	var ret = X32{vpnumber.X32Mul(veca[1], vecb[2]) - vpnumber.X32Mul(veca[2], vecb[1]), vpnumber.X32Mul(veca[2], vecb[0]) - vpnumber.X32Mul(veca[0], vecb[2]), vpnumber.X32Mul(veca[0], vecb[1]) - vpnumber.X32Mul(veca[1], vecb[0])}
 
 	return &ret
 }

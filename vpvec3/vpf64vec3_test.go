@@ -24,7 +24,7 @@ import (
 	"testing"
 )
 
-func TestF64Vec3Math(t *testing.T) {
+func TestF64Math(t *testing.T) {
 	const f1 = 3.0
 	const f2 = -4.0
 	const f3 = 1.0
@@ -37,10 +37,10 @@ func TestF64Vec3Math(t *testing.T) {
 	const fsqmag = 26.0
 	const flength = 5.099019
 
-	var v1, v2, v3, v4, v5 *F64Vec3
+	var v1, v2, v3, v4, v5 *F64
 	var f float64
 
-	v1 = F64Vec3New(f1, f2, f3)
+	v1 = F64New(f1, f2, f3)
 	if !v1.IsSimilar(v1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -70,32 +70,32 @@ func TestF64Vec3Math(t *testing.T) {
 		t.Error("F32 conversion error")
 	}
 
-	v2 = F64Vec3New(f5, f6, f7)
-	v3 = F64Vec3Add(v1, v2)
-	v4 = F64Vec3New(f1+f5, f2+f6, f3+f7)
+	v2 = F64New(f5, f6, f7)
+	v3 = F64Add(v1, v2)
+	v4 = F64New(f1+f5, f2+f6, f3+f7)
 	if !v3.IsSimilar(v4) {
 		t.Error("Add error")
 	}
 
-	v3 = F64Vec3Sub(v1, v2)
-	v4 = F64Vec3New(f1-f5, f2-f6, f3-f7)
+	v3 = F64Sub(v1, v2)
+	v4 = F64New(f1-f5, f2-f6, f3-f7)
 	if !v3.IsSimilar(v4) {
 		t.Error("Sub error")
 	}
 
-	v3 = F64Vec3Add(v1, F64Vec3Neg(v2))
-	v4 = F64Vec3Sub(v1, v2)
+	v3 = F64Add(v1, F64Neg(v2))
+	v4 = F64Sub(v1, v2)
 	if !v3.IsSimilar(v4) {
 		t.Error("Neg error")
 	}
 
-	v3 = F64Vec3MulScale(v1, fmul)
-	v4 = F64Vec3New(f1*fmul, f2*fmul, f3*fmul)
+	v3 = F64MulScale(v1, fmul)
+	v4 = F64New(f1*fmul, f2*fmul, f3*fmul)
 	if !v3.IsSimilar(v4) {
 		t.Error("MulScale error")
 	}
 
-	v3 = F64Vec3DivScale(v3, fmul)
+	v3 = F64DivScale(v3, fmul)
 	if !v3.IsSimilar(v1) {
 		t.Error("DivScale error")
 	}
@@ -117,7 +117,7 @@ func TestF64Vec3Math(t *testing.T) {
 		t.Error("Length error", f, flength)
 	}
 
-	v3 = F64Vec3Normalize(v1)
+	v3 = F64Normalize(v1)
 	f = v3.Length()
 	if f != vpnumber.F64Const1 {
 		t.Error("Normalize error", f)
@@ -129,51 +129,51 @@ func TestF64Vec3Math(t *testing.T) {
 		t.Error("Dot error")
 	}
 
-	v3 = F64Vec3Cross(v1, v2).Normalize()
-	v4 = F64Vec3Cross(v2, v3).Normalize()
-	v5 = F64Vec3Cross(v4, v2).Normalize()
+	v3 = F64Cross(v1, v2).Normalize()
+	v4 = F64Cross(v2, v3).Normalize()
+	v5 = F64Cross(v4, v2).Normalize()
 	t.Log("Cross product %s x %s = %s", v4.String(), v2.String(), v5.String())
 	if !v3.IsSimilar(v5) {
 		t.Error("Cross error")
 	}
 }
 
-func TestF64Vec3JSON(t *testing.T) {
-	m1 := F64Vec3New(0.1, 0.2, 0.3)
-	m2 := F64Vec3New(1.0, 0.0, 0.0)
+func TestF64JSON(t *testing.T) {
+	m1 := F64New(0.1, 0.2, 0.3)
+	m2 := F64New(1.0, 0.0, 0.0)
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for F64Vec3 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for F64 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for F64Vec3")
+		t.Error("unable to encode JSON for F64")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for F64Vec3, but json is not correct")
+		t.Error("able to decode JSON for F64, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for F64Vec3")
+		t.Error("unable to decode JSON for F64")
 	}
 	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled vector is different from original")
 	}
 }
 
-func BenchmarkF64Vec3Add(b *testing.B) {
-	vec := F64Vec3New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
+func BenchmarkF64Add(b *testing.B) {
+	vec := F64New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = vec.Add(vec)
 	}
 }
 
-func BenchmarkF64Vec3Normalize(b *testing.B) {
-	vec := F64Vec3New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
+func BenchmarkF64Normalize(b *testing.B) {
+	vec := F64New(vpnumber.F64Const1, vpnumber.F64Const1, vpnumber.F64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = vec.Normalize()

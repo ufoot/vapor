@@ -122,12 +122,12 @@ func TestX64Aff(t *testing.T) {
 	p1 := vpnumber.F64ToX64(3.0)
 	t1 := vpnumber.F64ToX64(6.0)
 
-	v1 := vpvec2.X64Vec2New(p1, vpnumber.X64Const1)
+	v1 := vpvec2.X64New(p1, vpnumber.X64Const1)
 	mt := X64Trans(t1)
 	t.Logf("translation mat2 for %f is %s", vpnumber.X64ToF64(p1), mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
-	v3 := vpvec2.X64Vec2New(p1+t1, vpnumber.X64Const1)
+	v3 := vpvec2.X64New(p1+t1, vpnumber.X64Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat2 MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}

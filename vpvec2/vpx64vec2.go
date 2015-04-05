@@ -26,18 +26,18 @@ import (
 	"github.com/ufoot/vapor/vpsys"
 )
 
-// X64Vec2 is a vector containing 2 fixed point 64 bit values.
+// X64 is a vector containing 2 fixed point 64 bit values.
 // Can hold the values of a point in a plane.
-type X64Vec2 [2]vpnumber.X64
+type X64 [2]vpnumber.X64
 
-// X64Vec2New creates a new vector containing 2 fixed point 64 bit values.
-func X64Vec2New(x1, x2 vpnumber.X64) *X64Vec2 {
-	return &X64Vec2{x1, x2}
+// X64New creates a new vector containing 2 fixed point 64 bit values.
+func X64New(x1, x2 vpnumber.X64) *X64 {
+	return &X64{x1, x2}
 }
 
 // ToI32 converts the vector to an int32 vector.
-func (vec *X64Vec2) ToI32() *I32Vec2 {
-	var ret I32Vec2
+func (vec *X64) ToI32() *I32 {
+	var ret I32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X64ToI32(v)
@@ -47,8 +47,8 @@ func (vec *X64Vec2) ToI32() *I32Vec2 {
 }
 
 // ToI64 converts the vector to an int32 vector.
-func (vec *X64Vec2) ToI64() *I64Vec2 {
-	var ret I64Vec2
+func (vec *X64) ToI64() *I64 {
+	var ret I64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X64ToI64(v)
@@ -58,8 +58,8 @@ func (vec *X64Vec2) ToI64() *I64Vec2 {
 }
 
 // ToX32 converts the vector to a fixed point number vector on 64 bits.
-func (vec *X64Vec2) ToX32() *X32Vec2 {
-	var ret X32Vec2
+func (vec *X64) ToX32() *X32 {
+	var ret X32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X64ToX32(v)
@@ -69,8 +69,8 @@ func (vec *X64Vec2) ToX32() *X32Vec2 {
 }
 
 // ToF32 converts the vector to a float32 vector.
-func (vec *X64Vec2) ToF32() *F32Vec2 {
-	var ret F32Vec2
+func (vec *X64) ToF32() *F32 {
+	var ret F32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X64ToF32(v)
@@ -80,8 +80,8 @@ func (vec *X64Vec2) ToF32() *F32Vec2 {
 }
 
 // ToF64 converts the vector to a float64 vector.
-func (vec *X64Vec2) ToF64() *F64Vec2 {
-	var ret F64Vec2
+func (vec *X64) ToF64() *F64 {
+	var ret F64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.X64ToF64(v)
@@ -91,7 +91,7 @@ func (vec *X64Vec2) ToF64() *F64Vec2 {
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (vec *X64Vec2) MarshalJSON() ([]byte, error) {
+func (vec *X64) MarshalJSON() ([]byte, error) {
 	var tmpArray [2]int64
 
 	for i := range tmpArray {
@@ -100,19 +100,19 @@ func (vec *X64Vec2) MarshalJSON() ([]byte, error) {
 
 	ret, err := json.Marshal(tmpArray)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal X64Vec2")
+		return nil, vpsys.ErrorChain(err, "unable to marshal X64")
 	}
 
 	return ret, nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *X64Vec2) UnmarshalJSON(data []byte) error {
+func (vec *X64) UnmarshalJSON(data []byte) error {
 	var tmpArray [2]int64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal X64Vec2")
+		return vpsys.ErrorChain(err, "unable to unmarshal X64")
 	}
 
 	for i := range tmpArray {
@@ -123,7 +123,7 @@ func (vec *X64Vec2) UnmarshalJSON(data []byte) error {
 }
 
 // String returns a readable form of the vector.
-func (vec *X64Vec2) String() string {
+func (vec *X64) String() string {
 	buf, err := vec.ToF64().MarshalJSON()
 
 	if err != nil {
@@ -136,7 +136,7 @@ func (vec *X64Vec2) String() string {
 
 // Add adds operand to the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec2) Add(op *X64Vec2) *X64Vec2 {
+func (vec *X64) Add(op *X64) *X64 {
 	for i, v := range op {
 		vec[i] += v
 	}
@@ -146,7 +146,7 @@ func (vec *X64Vec2) Add(op *X64Vec2) *X64Vec2 {
 
 // Sub substracts operand from the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec2) Sub(op *X64Vec2) *X64Vec2 {
+func (vec *X64) Sub(op *X64) *X64 {
 	for i, v := range op {
 		vec[i] -= v
 	}
@@ -156,7 +156,7 @@ func (vec *X64Vec2) Sub(op *X64Vec2) *X64Vec2 {
 
 // Neg changes the sign of all vector members.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec2) Neg() *X64Vec2 {
+func (vec *X64) Neg() *X64 {
 	for i, v := range vec {
 		vec[i] = -v
 	}
@@ -166,7 +166,7 @@ func (vec *X64Vec2) Neg() *X64Vec2 {
 
 // MulScale multiplies all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec2) MulScale(factor vpnumber.X64) *X64Vec2 {
+func (vec *X64) MulScale(factor vpnumber.X64) *X64 {
 	for i, v := range vec {
 		vec[i] = vpnumber.X64Mul(v, factor)
 	}
@@ -176,7 +176,7 @@ func (vec *X64Vec2) MulScale(factor vpnumber.X64) *X64Vec2 {
 
 // DivScale divides all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec2) DivScale(factor vpnumber.X64) *X64Vec2 {
+func (vec *X64) DivScale(factor vpnumber.X64) *X64 {
 	for i, v := range vec {
 		vec[i] = vpnumber.X64Div(v, factor)
 	}
@@ -187,7 +187,7 @@ func (vec *X64Vec2) DivScale(factor vpnumber.X64) *X64Vec2 {
 // SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func (vec *X64Vec2) SqMag() vpnumber.X64 {
+func (vec *X64) SqMag() vpnumber.X64 {
 	var sq vpnumber.X64
 
 	for _, v := range vec {
@@ -198,13 +198,13 @@ func (vec *X64Vec2) SqMag() vpnumber.X64 {
 }
 
 // Length returns the length of the vector.
-func (vec *X64Vec2) Length() vpnumber.X64 {
+func (vec *X64) Length() vpnumber.X64 {
 	return vpmath.X64Sqrt(vec.SqMag())
 }
 
 // Normalize scales the vector so that its length is 1.
 // It modifies the vector, and returns a pointer on it.
-func (vec *X64Vec2) Normalize() *X64Vec2 {
+func (vec *X64) Normalize() *X64 {
 	vec.DivScale(vec.Length())
 
 	return vec
@@ -212,7 +212,7 @@ func (vec *X64Vec2) Normalize() *X64Vec2 {
 
 // IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
-func (vec *X64Vec2) IsSimilar(op *X64Vec2) bool {
+func (vec *X64) IsSimilar(op *X64) bool {
 	ret := true
 	for i, v := range vec {
 		ret = ret && vpnumber.X64IsSimilar(v, op[i])
@@ -222,7 +222,7 @@ func (vec *X64Vec2) IsSimilar(op *X64Vec2) bool {
 }
 
 // Dot returns the the dot product of two vectors.
-func (vec *X64Vec2) Dot(op *X64Vec2) vpnumber.X64 {
+func (vec *X64) Dot(op *X64) vpnumber.X64 {
 	var dot vpnumber.X64
 
 	for i, v := range op {
@@ -232,9 +232,9 @@ func (vec *X64Vec2) Dot(op *X64Vec2) vpnumber.X64 {
 	return dot
 }
 
-// X64Vec2Add adds two vectors.
+// X64Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Vec2Add(veca, vecb *X64Vec2) *X64Vec2 {
+func X64Add(veca, vecb *X64) *X64 {
 	var ret = *veca
 
 	_ = ret.Add(vecb)
@@ -242,9 +242,9 @@ func X64Vec2Add(veca, vecb *X64Vec2) *X64Vec2 {
 	return &ret
 }
 
-// X64Vec2Sub substracts vector b from vector a.
+// X64Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Vec2Sub(veca, vecb *X64Vec2) *X64Vec2 {
+func X64Sub(veca, vecb *X64) *X64 {
 	var ret = *veca
 
 	_ = ret.Sub(vecb)
@@ -252,9 +252,9 @@ func X64Vec2Sub(veca, vecb *X64Vec2) *X64Vec2 {
 	return &ret
 }
 
-// X64Vec2Neg changes the sign of all vector members.
+// X64Neg changes the sign of all vector members.
 // Arg is left untouched, a pointer on a new object is returned.
-func X64Vec2Neg(vec *X64Vec2) *X64Vec2 {
+func X64Neg(vec *X64) *X64 {
 	var ret = *vec
 
 	_ = ret.Neg()
@@ -262,9 +262,9 @@ func X64Vec2Neg(vec *X64Vec2) *X64Vec2 {
 	return &ret
 }
 
-// X64Vec2MulScale multiplies all values of a vector by a scalar.
+// X64MulScale multiplies all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Vec2MulScale(vec *X64Vec2, factor vpnumber.X64) *X64Vec2 {
+func X64MulScale(vec *X64, factor vpnumber.X64) *X64 {
 	var ret = *vec
 
 	_ = ret.MulScale(factor)
@@ -272,9 +272,9 @@ func X64Vec2MulScale(vec *X64Vec2, factor vpnumber.X64) *X64Vec2 {
 	return &ret
 }
 
-// X64Vec2DivScale divides all values of a vector by a scalar.
+// X64DivScale divides all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func X64Vec2DivScale(vec *X64Vec2, factor vpnumber.X64) *X64Vec2 {
+func X64DivScale(vec *X64, factor vpnumber.X64) *X64 {
 	var ret = *vec
 
 	_ = ret.DivScale(factor)
@@ -282,9 +282,9 @@ func X64Vec2DivScale(vec *X64Vec2, factor vpnumber.X64) *X64Vec2 {
 	return &ret
 }
 
-// X64Vec2Normalize scales a vector so that its length is 1.
+// X64Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
-func X64Vec2Normalize(vec *X64Vec2) *X64Vec2 {
+func X64Normalize(vec *X64) *X64 {
 	var ret = *vec
 
 	_ = ret.Normalize()

@@ -45,7 +45,7 @@ func F64Identity() *F64 {
 }
 
 // F64Trans creates a new translation matrix.
-func F64Trans(vec *vpvec3.F64Vec3) *F64 {
+func F64Trans(vec *vpvec3.F64) *F64 {
 	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vec[0], vec[1], vec[2], vpnumber.F64Const1}
 }
 
@@ -245,8 +245,8 @@ func (mat *F64) Inv() *F64 {
 
 // MulVec performs a multiplication of a vector by a 4x4 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *F64) MulVec(vec *vpvec4.F64Vec4) *vpvec4.F64Vec4 {
-	var ret vpvec4.F64Vec4
+func (mat *F64) MulVec(vec *vpvec4.F64) *vpvec4.F64 {
+	var ret vpvec4.F64
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2] + mat.Get(3, i)*vec[3]
@@ -261,8 +261,8 @@ func (mat *F64) MulVec(vec *vpvec4.F64Vec4) *vpvec4.F64Vec4 {
 // position vector of length 3 (a point in space) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-func (mat *F64) MulVecPos(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
-	var ret vpvec3.F64Vec3
+func (mat *F64) MulVecPos(vec *vpvec3.F64) *vpvec3.F64 {
+	var ret vpvec3.F64
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2] + mat.Get(3, i)
@@ -277,8 +277,8 @@ func (mat *F64) MulVecPos(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
 // direction vector of length 3 (a point in space) is passed. This allow geometric
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
-func (mat *F64) MulVecDir(vec *vpvec3.F64Vec3) *vpvec3.F64Vec3 {
-	var ret vpvec3.F64Vec3
+func (mat *F64) MulVecDir(vec *vpvec3.F64) *vpvec3.F64 {
+	var ret vpvec3.F64
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2]

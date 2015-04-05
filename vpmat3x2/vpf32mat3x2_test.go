@@ -131,8 +131,8 @@ func TestF32Aff(t *testing.T) {
 	const t1 = 6.5
 	const t2 = 8.5
 
-	v1 := vpvec3.F32Vec3New(p1, p2, vpnumber.F32Const1)
-	vt := vpvec2.F32Vec2New(t1, t2)
+	v1 := vpvec3.F32New(p1, p2, vpnumber.F32Const1)
+	vt := vpvec2.F32New(t1, t2)
 	mt := F32Trans(vt)
 	t.Logf("translation mat3x2 for %s is %s", vt.String(), mt.String())
 	v2pos := mt.MulVecPos(v1.ToVec2())
@@ -151,7 +151,7 @@ func TestF32Aff(t *testing.T) {
 	t.Logf("rotation mat3x2 for PI/2 is %s", mr.String())
 	v2 := mrCheck.MulVec(v1)
 	t.Logf("mat3x2 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 := vpvec3.F32Vec3New(-v1[1], v1[0], vpnumber.F32Const1)
+	v3 := vpvec3.F32New(-v1[1], v1[0], vpnumber.F32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat3x2 rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}

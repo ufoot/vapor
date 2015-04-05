@@ -25,18 +25,18 @@ import (
 	"github.com/ufoot/vapor/vpsys"
 )
 
-// I64Vec2 is a vector containing 2 int64 values.
+// I64 is a vector containing 2 int64 values.
 // Can hold the values of a point in a plane.
-type I64Vec2 [2]int64
+type I64 [2]int64
 
-// I64Vec2New creates a new vector containing 2 int64 values.
-func I64Vec2New(i1, i2 int64) *I64Vec2 {
-	return &I64Vec2{i1, i2}
+// I64New creates a new vector containing 2 int64 values.
+func I64New(i1, i2 int64) *I64 {
+	return &I64{i1, i2}
 }
 
 // ToI32 converts the vector to an int32 vector.
-func (vec *I64Vec2) ToI32() *I32Vec2 {
-	var ret I32Vec2
+func (vec *I64) ToI32() *I32 {
+	var ret I32
 
 	for i, v := range vec {
 		ret[i] = int32(v)
@@ -46,8 +46,8 @@ func (vec *I64Vec2) ToI32() *I32Vec2 {
 }
 
 // ToX32 converts the vector to a fixed point number vector on 32 bits.
-func (vec *I64Vec2) ToX32() *X32Vec2 {
-	var ret X32Vec2
+func (vec *I64) ToX32() *X32 {
+	var ret X32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.I64ToX32(v)
@@ -57,8 +57,8 @@ func (vec *I64Vec2) ToX32() *X32Vec2 {
 }
 
 // ToX64 converts the vector to a fixed point number vector on 64 bits.
-func (vec *I64Vec2) ToX64() *X64Vec2 {
-	var ret X64Vec2
+func (vec *I64) ToX64() *X64 {
+	var ret X64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.I64ToX64(v)
@@ -68,8 +68,8 @@ func (vec *I64Vec2) ToX64() *X64Vec2 {
 }
 
 // ToF32 converts the vector to a float32 vector.
-func (vec *I64Vec2) ToF32() *F32Vec2 {
-	var ret F32Vec2
+func (vec *I64) ToF32() *F32 {
+	var ret F32
 
 	for i, v := range vec {
 		ret[i] = float32(v)
@@ -79,8 +79,8 @@ func (vec *I64Vec2) ToF32() *F32Vec2 {
 }
 
 // ToF64 converts the vector to a float64 vector.
-func (vec *I64Vec2) ToF64() *F64Vec2 {
-	var ret F64Vec2
+func (vec *I64) ToF64() *F64 {
+	var ret F64
 
 	for i, v := range vec {
 		ret[i] = float64(v)
@@ -90,31 +90,31 @@ func (vec *I64Vec2) ToF64() *F64Vec2 {
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (vec *I64Vec2) MarshalJSON() ([]byte, error) {
+func (vec *I64) MarshalJSON() ([]byte, error) {
 	ret, err := json.Marshal([2]int64(*vec))
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal I64Vec2")
+		return nil, vpsys.ErrorChain(err, "unable to marshal I64")
 	}
 
 	return ret, nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *I64Vec2) UnmarshalJSON(data []byte) error {
+func (vec *I64) UnmarshalJSON(data []byte) error {
 	var tmpArray [2]int64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal I64Vec2")
+		return vpsys.ErrorChain(err, "unable to unmarshal I64")
 	}
 
-	*vec = I64Vec2(tmpArray)
+	*vec = I64(tmpArray)
 
 	return nil
 }
 
 // String returns a readable form of the vector.
-func (vec *I64Vec2) String() string {
+func (vec *I64) String() string {
 	buf, err := vec.MarshalJSON()
 
 	if err != nil {
@@ -127,7 +127,7 @@ func (vec *I64Vec2) String() string {
 
 // Add adds operand to the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *I64Vec2) Add(op *I64Vec2) *I64Vec2 {
+func (vec *I64) Add(op *I64) *I64 {
 	for i, v := range op {
 		vec[i] += v
 	}
@@ -137,7 +137,7 @@ func (vec *I64Vec2) Add(op *I64Vec2) *I64Vec2 {
 
 // Sub substracts operand from the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *I64Vec2) Sub(op *I64Vec2) *I64Vec2 {
+func (vec *I64) Sub(op *I64) *I64 {
 	for i, v := range op {
 		vec[i] -= v
 	}
@@ -147,7 +147,7 @@ func (vec *I64Vec2) Sub(op *I64Vec2) *I64Vec2 {
 
 // Neg changes the sign of all vector members.
 // It modifies the vector, and returns a pointer on it.
-func (vec *I64Vec2) Neg() *I64Vec2 {
+func (vec *I64) Neg() *I64 {
 	for i, v := range vec {
 		vec[i] = -v
 	}
@@ -155,9 +155,9 @@ func (vec *I64Vec2) Neg() *I64Vec2 {
 	return vec
 }
 
-// I64Vec2Add adds two vectors.
+// I64Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
-func I64Vec2Add(veca, vecb *I64Vec2) *I64Vec2 {
+func I64Add(veca, vecb *I64) *I64 {
 	var ret = *veca
 
 	_ = ret.Add(vecb)
@@ -165,9 +165,9 @@ func I64Vec2Add(veca, vecb *I64Vec2) *I64Vec2 {
 	return &ret
 }
 
-// I64Vec2Sub substracts vector b from vector a.
+// I64Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
-func I64Vec2Sub(veca, vecb *I64Vec2) *I64Vec2 {
+func I64Sub(veca, vecb *I64) *I64 {
 	var ret = *veca
 
 	_ = ret.Sub(vecb)
@@ -175,9 +175,9 @@ func I64Vec2Sub(veca, vecb *I64Vec2) *I64Vec2 {
 	return &ret
 }
 
-// I64Vec2Neg changes the sign of all vector members.
+// I64Neg changes the sign of all vector members.
 // Arg is left untouched, a pointer on a new object is returned.
-func I64Vec2Neg(vec *I64Vec2) *I64Vec2 {
+func I64Neg(vec *I64) *I64 {
 	var ret = *vec
 
 	_ = ret.Neg()

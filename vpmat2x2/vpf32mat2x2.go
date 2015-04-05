@@ -222,8 +222,8 @@ func (mat *F32) Inv() *F32 {
 
 // MulVec performs a multiplication of a vector by a 2x2 matrix,
 // considering the vector is a column vector (matrix left, vector right).
-func (mat *F32) MulVec(vec *vpvec2.F32Vec2) *vpvec2.F32Vec2 {
-	var ret vpvec2.F32Vec2
+func (mat *F32) MulVec(vec *vpvec2.F32) *vpvec2.F32 {
+	var ret vpvec2.F32
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1]

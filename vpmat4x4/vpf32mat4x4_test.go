@@ -152,13 +152,13 @@ func TestF32Aff(t *testing.T) {
 	const t2 = 8.5
 	const t3 = 10.5
 
-	v1 := vpvec4.F32Vec4New(p1, p2, p3, vpnumber.F32Const1)
-	vt := vpvec3.F32Vec3New(t1, t2, t3)
+	v1 := vpvec4.F32New(p1, p2, p3, vpnumber.F32Const1)
+	vt := vpvec3.F32New(t1, t2, t3)
 	mt := F32Trans(vt)
 	t.Logf("translation mat4x4 for %s is %s", vt.String(), mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat4x4 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())
-	v3 := vpvec4.F32Vec4New(p1+t1, p2+t2, p3+t3, vpnumber.F32Const1)
+	v3 := vpvec4.F32New(p1+t1, p2+t2, p3+t3, vpnumber.F32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x4 MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -177,7 +177,7 @@ func TestF32Aff(t *testing.T) {
 	t.Logf("rotation mat4x4 for PI/2 is %s", mr.String())
 	v2 = mr.MulVec(v1)
 	t.Logf("mat4x4 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = vpvec4.F32Vec4New(v1[0], -v1[2], v1[1], vpnumber.F32Const1)
+	v3 = vpvec4.F32New(v1[0], -v1[2], v1[1], vpnumber.F32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x4 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -196,7 +196,7 @@ func TestF32Aff(t *testing.T) {
 	t.Logf("rotation mat4x4 for PI/2 is %s", mr.String())
 	v2 = mr.MulVec(v1)
 	t.Logf("mat4x4 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = vpvec4.F32Vec4New(v1[2], v1[1], -v1[0], vpnumber.F32Const1)
+	v3 = vpvec4.F32New(v1[2], v1[1], -v1[0], vpnumber.F32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x4 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}
@@ -215,7 +215,7 @@ func TestF32Aff(t *testing.T) {
 	t.Logf("rotation mat4x4 for PI/2 is %s", mr.String())
 	v2 = mr.MulVec(v1)
 	t.Logf("mat4x4 MulVec %s * %s = %s", mr.String(), v1.String(), v2.String())
-	v3 = vpvec4.F32Vec4New(-v1[1], v1[0], v1[2], vpnumber.F32Const1)
+	v3 = vpvec4.F32New(-v1[1], v1[0], v1[2], vpnumber.F32Const1)
 	if !v2.IsSimilar(v3) {
 		t.Errorf("mat4x4 Z rotation MulVec error v2=%s v3=%s", v2.String(), v3.String())
 	}

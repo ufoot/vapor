@@ -44,7 +44,7 @@ func X64Identity() *X64 {
 }
 
 // X64Trans creates a new translation matrix.
-func X64Trans(vec *vpvec3.X64Vec3) *X64 {
+func X64Trans(vec *vpvec3.X64) *X64 {
 	return &X64{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vec[0], vec[1], vec[2]}
 }
 
@@ -240,8 +240,8 @@ func (mat *X64) Inv() *X64 {
 // position vector of length 3 (a point in space) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X64) MulVecPos(vec *vpvec3.X64Vec3) *vpvec3.X64Vec3 {
-	var ret vpvec3.X64Vec3
+func (mat *X64) MulVecPos(vec *vpvec3.X64) *vpvec3.X64 {
+	var ret vpvec3.X64
 
 	for i := range vec {
 		ret[i] = vpnumber.X64Mul(mat.Get(0, i), vec[0]) + vpnumber.X64Mul(mat.Get(1, i), vec[1]) + vpnumber.X64Mul(mat.Get(2, i), vec[2]) + mat.Get(3, i)
@@ -256,8 +256,8 @@ func (mat *X64) MulVecPos(vec *vpvec3.X64Vec3) *vpvec3.X64Vec3 {
 // direction vector of length 3 (a point in space) is passed. This allow geometric
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
-func (mat *X64) MulVecDir(vec *vpvec3.X64Vec3) *vpvec3.X64Vec3 {
-	var ret vpvec3.X64Vec3
+func (mat *X64) MulVecDir(vec *vpvec3.X64) *vpvec3.X64 {
+	var ret vpvec3.X64
 
 	for i := range vec {
 		ret[i] = vpnumber.X64Mul(mat.Get(0, i), vec[0]) + vpnumber.X64Mul(mat.Get(1, i), vec[1]) + vpnumber.X64Mul(mat.Get(2, i), vec[2])

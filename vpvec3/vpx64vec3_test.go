@@ -24,7 +24,7 @@ import (
 	"testing"
 )
 
-func TestX64Vec3Math(t *testing.T) {
+func TestX64Math(t *testing.T) {
 	var x1 = vpnumber.F64ToX64(3.0)
 	var x2 = vpnumber.F64ToX64(-4.0)
 	var x3 = vpnumber.F64ToX64(1.0)
@@ -37,10 +37,10 @@ func TestX64Vec3Math(t *testing.T) {
 	var xsqmag = vpnumber.F64ToX64(26.0)
 	var xlength = vpnumber.F64ToX64(5.099019)
 
-	var v1, v2, v3, v4, v5 *X64Vec3
+	var v1, v2, v3, v4, v5 *X64
 	var x vpnumber.X64
 
-	v1 = X64Vec3New(x1, x2, x3)
+	v1 = X64New(x1, x2, x3)
 	if !v1.IsSimilar(v1) {
 		t.Error("IsSimilar does not detect equality")
 	}
@@ -70,32 +70,32 @@ func TestX64Vec3Math(t *testing.T) {
 		t.Error("F64 conversion error")
 	}
 
-	v2 = X64Vec3New(x5, x6, x7)
-	v3 = X64Vec3Add(v1, v2)
-	v4 = X64Vec3New(x1+x5, x2+x6, x3+x7)
+	v2 = X64New(x5, x6, x7)
+	v3 = X64Add(v1, v2)
+	v4 = X64New(x1+x5, x2+x6, x3+x7)
 	if !v3.IsSimilar(v4) {
 		t.Error("Add error")
 	}
 
-	v3 = X64Vec3Sub(v1, v2)
-	v4 = X64Vec3New(x1-x5, x2-x6, x3-x7)
+	v3 = X64Sub(v1, v2)
+	v4 = X64New(x1-x5, x2-x6, x3-x7)
 	if !v3.IsSimilar(v4) {
 		t.Error("Sub error")
 	}
 
-	v3 = X64Vec3Add(v1, X64Vec3Neg(v2))
-	v4 = X64Vec3Sub(v1, v2)
+	v3 = X64Add(v1, X64Neg(v2))
+	v4 = X64Sub(v1, v2)
 	if !v3.IsSimilar(v4) {
 		t.Error("Neg error")
 	}
 
-	v3 = X64Vec3MulScale(v1, xmul)
-	v4 = X64Vec3New(vpnumber.X64Mul(x1, xmul), vpnumber.X64Mul(x2, xmul), vpnumber.X64Mul(x3, xmul))
+	v3 = X64MulScale(v1, xmul)
+	v4 = X64New(vpnumber.X64Mul(x1, xmul), vpnumber.X64Mul(x2, xmul), vpnumber.X64Mul(x3, xmul))
 	if !v3.IsSimilar(v4) {
 		t.Error("MulScale error")
 	}
 
-	v3 = X64Vec3DivScale(v3, xmul)
+	v3 = X64DivScale(v3, xmul)
 	if !v3.IsSimilar(v1) {
 		t.Error("DivScale error")
 	}
@@ -117,7 +117,7 @@ func TestX64Vec3Math(t *testing.T) {
 		t.Error("Length error", x, xlength)
 	}
 
-	v3 = X64Vec3Normalize(v1)
+	v3 = X64Normalize(v1)
 	x = v3.Length()
 	if !vpnumber.X64IsSimilar(x, vpnumber.X64Const1) {
 		t.Error("Normalize error", x)
@@ -129,51 +129,51 @@ func TestX64Vec3Math(t *testing.T) {
 		t.Error("Dot error")
 	}
 
-	v3 = X64Vec3Cross(v1, v2).Normalize()
-	v4 = X64Vec3Cross(v2, v3).Normalize()
-	v5 = X64Vec3Cross(v4, v2).Normalize()
+	v3 = X64Cross(v1, v2).Normalize()
+	v4 = X64Cross(v2, v3).Normalize()
+	v5 = X64Cross(v4, v2).Normalize()
 	t.Log("Cross product %s x %s = %s", v4.String(), v2.String(), v5.String())
 	if !v3.IsSimilar(v5) {
 		t.Error("Cross error")
 	}
 }
 
-func TestX64Vec3JSON(t *testing.T) {
-	m1 := X64Vec3New(vpnumber.I64ToX64(10), vpnumber.I64ToX64(20), vpnumber.I64ToX64(30))
-	m2 := X64Vec3New(vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0)
+func TestX64JSON(t *testing.T) {
+	m1 := X64New(vpnumber.I64ToX64(10), vpnumber.I64ToX64(20), vpnumber.I64ToX64(30))
+	m2 := X64New(vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0)
 
 	var err error
 	var jsonBuf []byte
 
 	jsonBuf, err = m1.MarshalJSON()
 	if err == nil {
-		t.Logf("encoded JSON for X64Vec3 is \"%s\"", string(jsonBuf))
+		t.Logf("encoded JSON for X64 is \"%s\"", string(jsonBuf))
 	} else {
-		t.Error("unable to encode JSON for X64Vec3")
+		t.Error("unable to encode JSON for X64")
 	}
 	err = m2.UnmarshalJSON([]byte("nawak"))
 	if err == nil {
-		t.Error("able to decode JSON for X64Vec3, but json is not correct")
+		t.Error("able to decode JSON for X64, but json is not correct")
 	}
 	err = m2.UnmarshalJSON(jsonBuf)
 	if err != nil {
-		t.Error("unable to decode JSON for X64Vec3")
+		t.Error("unable to decode JSON for X64")
 	}
 	if !m1.IsSimilar(m2) {
 		t.Error("unmarshalled vector is different from original")
 	}
 }
 
-func BenchmarkX64Vec3Add(b *testing.B) {
-	vec := X64Vec3New(vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1)
+func BenchmarkX64Add(b *testing.B) {
+	vec := X64New(vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = vec.Add(vec)
 	}
 }
 
-func BenchmarkX64Vec3Normalize(b *testing.B) {
-	vec := X64Vec3New(vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1)
+func BenchmarkX64Normalize(b *testing.B) {
+	vec := X64New(vpnumber.X64Const1, vpnumber.X64Const1, vpnumber.X64Const1)
 
 	for i := 0; i < b.N; i++ {
 		_ = vec.Normalize()

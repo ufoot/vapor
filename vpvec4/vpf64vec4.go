@@ -27,29 +27,29 @@ import (
 	"math"
 )
 
-// F64Vec4 is a vector containing 4 float64 values.
+// F64 is a vector containing 4 float64 values.
 // Can be used in 3D matrix transformations.
-type F64Vec4 [4]float64
+type F64 [4]float64
 
-// F64Vec4New creates a new vector containing 4 float64 values.
-func F64Vec4New(f1, f2, f3, f4 float64) *F64Vec4 {
-	return &F64Vec4{f1, f2, f3, f4}
+// F64New creates a new vector containing 4 float64 values.
+func F64New(f1, f2, f3, f4 float64) *F64 {
+	return &F64{f1, f2, f3, f4}
 }
 
-// F64Vec4FromVec3 creates a new vector from a smaller one,
+// F64FromVec3 creates a new vector from a smaller one,
 // by appending a value at its end.
-func F64Vec4FromVec3(vec *vpvec3.F64Vec3, f float64) *F64Vec4 {
-	return &F64Vec4{vec[0], vec[1], vec[2], f}
+func F64FromVec3(vec *vpvec3.F64, f float64) *F64 {
+	return &F64{vec[0], vec[1], vec[2], f}
 }
 
 // ToVec3 creates a smaller vector by removing the last value.
-func (vec *F64Vec4) ToVec3() *vpvec3.F64Vec3 {
-	return &vpvec3.F64Vec3{vec[0], vec[1], vec[2]}
+func (vec *F64) ToVec3() *vpvec3.F64 {
+	return &vpvec3.F64{vec[0], vec[1], vec[2]}
 }
 
 // ToI32 converts the vector to an int32 vector.
-func (vec *F64Vec4) ToI32() *I32Vec4 {
-	var ret I32Vec4
+func (vec *F64) ToI32() *I32 {
+	var ret I32
 
 	for i, v := range vec {
 		ret[i] = int32(v)
@@ -59,8 +59,8 @@ func (vec *F64Vec4) ToI32() *I32Vec4 {
 }
 
 // ToI64 converts the vector to an int64 vector.
-func (vec *F64Vec4) ToI64() *I64Vec4 {
-	var ret I64Vec4
+func (vec *F64) ToI64() *I64 {
+	var ret I64
 
 	for i, v := range vec {
 		ret[i] = int64(v)
@@ -70,8 +70,8 @@ func (vec *F64Vec4) ToI64() *I64Vec4 {
 }
 
 // ToX32 converts the vector to a fixed point number vector on 32 bits.
-func (vec *F64Vec4) ToX32() *X32Vec4 {
-	var ret X32Vec4
+func (vec *F64) ToX32() *X32 {
+	var ret X32
 
 	for i, v := range vec {
 		ret[i] = vpnumber.F64ToX32(v)
@@ -81,8 +81,8 @@ func (vec *F64Vec4) ToX32() *X32Vec4 {
 }
 
 // ToX64 converts the vector to a fixed point number vector on 64 bits.
-func (vec *F64Vec4) ToX64() *X64Vec4 {
-	var ret X64Vec4
+func (vec *F64) ToX64() *X64 {
+	var ret X64
 
 	for i, v := range vec {
 		ret[i] = vpnumber.F64ToX64(v)
@@ -92,8 +92,8 @@ func (vec *F64Vec4) ToX64() *X64Vec4 {
 }
 
 // ToF32 converts the vector to a float32 vector.
-func (vec *F64Vec4) ToF32() *F32Vec4 {
-	var ret F32Vec4
+func (vec *F64) ToF32() *F32 {
+	var ret F32
 
 	for i, v := range vec {
 		ret[i] = float32(v)
@@ -103,31 +103,31 @@ func (vec *F64Vec4) ToF32() *F32Vec4 {
 }
 
 // MarshalJSON implements the json.Marshaler interface.
-func (vec *F64Vec4) MarshalJSON() ([]byte, error) {
+func (vec *F64) MarshalJSON() ([]byte, error) {
 	ret, err := json.Marshal([4]float64(*vec))
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal F64Vec4")
+		return nil, vpsys.ErrorChain(err, "unable to marshal F64")
 	}
 
 	return ret, nil
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
-func (vec *F64Vec4) UnmarshalJSON(data []byte) error {
+func (vec *F64) UnmarshalJSON(data []byte) error {
 	var tmpArray [4]float64
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal F64Vec4")
+		return vpsys.ErrorChain(err, "unable to unmarshal F64")
 	}
 
-	*vec = F64Vec4(tmpArray)
+	*vec = F64(tmpArray)
 
 	return nil
 }
 
 // String returns a readable form of the vector.
-func (vec *F64Vec4) String() string {
+func (vec *F64) String() string {
 	buf, err := vec.MarshalJSON()
 
 	if err != nil {
@@ -140,7 +140,7 @@ func (vec *F64Vec4) String() string {
 
 // Add adds operand to the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F64Vec4) Add(op *F64Vec4) *F64Vec4 {
+func (vec *F64) Add(op *F64) *F64 {
 	for i, v := range op {
 		vec[i] += v
 	}
@@ -150,7 +150,7 @@ func (vec *F64Vec4) Add(op *F64Vec4) *F64Vec4 {
 
 // Sub substracts operand from the vector.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F64Vec4) Sub(op *F64Vec4) *F64Vec4 {
+func (vec *F64) Sub(op *F64) *F64 {
 	for i, v := range op {
 		vec[i] -= v
 	}
@@ -160,7 +160,7 @@ func (vec *F64Vec4) Sub(op *F64Vec4) *F64Vec4 {
 
 // Neg changes the sign of all vector members.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F64Vec4) Neg() *F64Vec4 {
+func (vec *F64) Neg() *F64 {
 	for i, v := range vec {
 		vec[i] = -v
 	}
@@ -170,7 +170,7 @@ func (vec *F64Vec4) Neg() *F64Vec4 {
 
 // MulScale multiplies all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F64Vec4) MulScale(factor float64) *F64Vec4 {
+func (vec *F64) MulScale(factor float64) *F64 {
 	for i, v := range vec {
 		vec[i] = v * factor
 	}
@@ -180,7 +180,7 @@ func (vec *F64Vec4) MulScale(factor float64) *F64Vec4 {
 
 // DivScale divides all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F64Vec4) DivScale(factor float64) *F64Vec4 {
+func (vec *F64) DivScale(factor float64) *F64 {
 	for i, v := range vec {
 		vec[i] = vpnumber.F64Div(v, factor)
 	}
@@ -191,7 +191,7 @@ func (vec *F64Vec4) DivScale(factor float64) *F64Vec4 {
 // SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
-func (vec *F64Vec4) SqMag() float64 {
+func (vec *F64) SqMag() float64 {
 	var sq float64
 
 	for _, v := range vec {
@@ -202,13 +202,13 @@ func (vec *F64Vec4) SqMag() float64 {
 }
 
 // Length returns the length of the vector.
-func (vec *F64Vec4) Length() float64 {
+func (vec *F64) Length() float64 {
 	return math.Sqrt(vec.SqMag())
 }
 
 // Normalize scales the vector so that its length is 1.
 // It modifies the vector, and returns a pointer on it.
-func (vec *F64Vec4) Normalize() *F64Vec4 {
+func (vec *F64) Normalize() *F64 {
 	vec.DivScale(vec.Length())
 
 	return vec
@@ -216,7 +216,7 @@ func (vec *F64Vec4) Normalize() *F64Vec4 {
 
 // IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
-func (vec *F64Vec4) IsSimilar(op *F64Vec4) bool {
+func (vec *F64) IsSimilar(op *F64) bool {
 	ret := true
 	for i, v := range vec {
 		ret = ret && vpnumber.F64IsSimilar(v, op[i])
@@ -226,7 +226,7 @@ func (vec *F64Vec4) IsSimilar(op *F64Vec4) bool {
 }
 
 // Dot returns the the dot product of two vectors.
-func (vec *F64Vec4) Dot(op *F64Vec4) float64 {
+func (vec *F64) Dot(op *F64) float64 {
 	var dot float64
 
 	for i, v := range op {
@@ -236,9 +236,9 @@ func (vec *F64Vec4) Dot(op *F64Vec4) float64 {
 	return dot
 }
 
-// F64Vec4Add adds two vectors.
+// F64Add adds two vectors.
 // Args are left untouched, a pointer on a new object is returned.
-func F64Vec4Add(veca, vecb *F64Vec4) *F64Vec4 {
+func F64Add(veca, vecb *F64) *F64 {
 	var ret = *veca
 
 	_ = ret.Add(vecb)
@@ -246,9 +246,9 @@ func F64Vec4Add(veca, vecb *F64Vec4) *F64Vec4 {
 	return &ret
 }
 
-// F64Vec4Sub substracts vector b from vector a.
+// F64Sub substracts vector b from vector a.
 // Args are left untouched, a pointer on a new object is returned.
-func F64Vec4Sub(veca, vecb *F64Vec4) *F64Vec4 {
+func F64Sub(veca, vecb *F64) *F64 {
 	var ret = *veca
 
 	_ = ret.Sub(vecb)
@@ -256,9 +256,9 @@ func F64Vec4Sub(veca, vecb *F64Vec4) *F64Vec4 {
 	return &ret
 }
 
-// F64Vec4Neg changes the sign of all vector members.
+// F64Neg changes the sign of all vector members.
 // Arg is left untouched, a pointer on a new object is returned.
-func F64Vec4Neg(vec *F64Vec4) *F64Vec4 {
+func F64Neg(vec *F64) *F64 {
 	var ret = *vec
 
 	_ = ret.Neg()
@@ -266,9 +266,9 @@ func F64Vec4Neg(vec *F64Vec4) *F64Vec4 {
 	return &ret
 }
 
-// F64Vec4MulScale multiplies all values of a vector by a scalar.
+// F64MulScale multiplies all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func F64Vec4MulScale(vec *F64Vec4, factor float64) *F64Vec4 {
+func F64MulScale(vec *F64, factor float64) *F64 {
 	var ret = *vec
 
 	_ = ret.MulScale(factor)
@@ -276,9 +276,9 @@ func F64Vec4MulScale(vec *F64Vec4, factor float64) *F64Vec4 {
 	return &ret
 }
 
-// F64Vec4DivScale divides all values of a vector by a scalar.
+// F64DivScale divides all values of a vector by a scalar.
 // Args are left untouched, a pointer on a new object is returned.
-func F64Vec4DivScale(vec *F64Vec4, factor float64) *F64Vec4 {
+func F64DivScale(vec *F64, factor float64) *F64 {
 	var ret = *vec
 
 	_ = ret.DivScale(factor)
@@ -286,9 +286,9 @@ func F64Vec4DivScale(vec *F64Vec4, factor float64) *F64Vec4 {
 	return &ret
 }
 
-// F64Vec4Normalize scales a vector so that its length is 1.
+// F64Normalize scales a vector so that its length is 1.
 // Arg is left untouched, a pointer on a new object is returned.
-func F64Vec4Normalize(vec *F64Vec4) *F64Vec4 {
+func F64Normalize(vec *F64) *F64 {
 	var ret = *vec
 
 	_ = ret.Normalize()

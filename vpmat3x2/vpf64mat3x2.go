@@ -43,7 +43,7 @@ func F64Identity() *F64 {
 }
 
 // F64Trans creates a new translation matrix.
-func F64Trans(vec *vpvec2.F64Vec2) *F64 {
+func F64Trans(vec *vpvec2.F64) *F64 {
 	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vec[0], vec[1]}
 }
 
@@ -225,8 +225,8 @@ func (mat *F64) Inv() *F64 {
 // position vector of length 2 (a point in a plane) is passed. This allow geometric
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
-func (mat *F64) MulVecPos(vec *vpvec2.F64Vec2) *vpvec2.F64Vec2 {
-	var ret vpvec2.F64Vec2
+func (mat *F64) MulVecPos(vec *vpvec2.F64) *vpvec2.F64 {
+	var ret vpvec2.F64
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)
@@ -241,8 +241,8 @@ func (mat *F64) MulVecPos(vec *vpvec2.F64Vec2) *vpvec2.F64Vec2 {
 // direction vector of length 2 (a point in a plane) is passed. This allow geometric
 // transformations such as rotations to be accumulated
 // within the matrix and then performed at once.
-func (mat *F64) MulVecDir(vec *vpvec2.F64Vec2) *vpvec2.F64Vec2 {
-	var ret vpvec2.F64Vec2
+func (mat *F64) MulVecDir(vec *vpvec2.F64) *vpvec2.F64 {
+	var ret vpvec2.F64
 
 	for i := range vec {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1]
