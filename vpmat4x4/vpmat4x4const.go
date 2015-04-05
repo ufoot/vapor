@@ -51,7 +51,7 @@ const (
 	// Index of colum 3 row 2 in a 4x4 column-major matrix.
 	Col3Row2
 	// Index of colum 3 row 3 in a 4x4 column-major matrix.
-	Col3Row4
+	Col3Row3
 	// Number of elements in a 4x4 matrix.
 	Size
 )
