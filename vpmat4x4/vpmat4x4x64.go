@@ -316,7 +316,7 @@ func (mat *X64) MulVecPos(vec *vpvec3.X64) *vpvec3.X64 {
 		ret[i] = vpnumber.X64Mul(mat.Get(0, i), vec[0]) + vpnumber.X64Mul(mat.Get(1, i), vec[1]) + vpnumber.X64Mul(mat.Get(2, i), vec[2]) + mat.Get(3, i)
 	}
 
-	return &ret
+	return ret.DivScale(vpnumber.X64Mul(mat[Col0Row3],vec[0])+vpnumber.X64Mul(mat[Col1Row3],vec[1])+vpnumber.X64Mul(mat[Col2Row3],vec[2])+mat[Col3Row3])
 }
 
 // MulVecDir performs a multiplication of a vector by a 4x4 matrix,

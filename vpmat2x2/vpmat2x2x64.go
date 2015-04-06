@@ -287,7 +287,7 @@ func (mat *X64) MulVec(vec *vpvec2.X64) *vpvec2.X64 {
 // transformations such as rotations and translations to be accumulated
 // within the matrix and then performed at once.
 func (mat *X64) MulVecPos(vec vpnumber.X64) vpnumber.X64 {
-	return vpnumber.X64Mul(mat[Col0Row0], vec) + mat[Col1Row0]
+	return vpnumber.X64Div(vpnumber.X64Mul(mat[Col0Row0], vec) + mat[Col1Row0],vpnumber.X64Mul(mat[Col0Row1],vec)+mat[Col1Row1])
 }
 
 // MulVecDir performs a multiplication of a vector by a 2x2 matrix,

@@ -316,7 +316,7 @@ func (mat *F32) MulVecPos(vec *vpvec3.F32) *vpvec3.F32 {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2] + mat.Get(3, i)
 	}
 
-	return &ret
+	return ret.DivScale(mat[Col0Row3]*vec[0]+mat[Col1Row3]*vec[1]+mat[Col2Row3]*vec[2]+mat[Col3Row3])
 }
 
 // MulVecDir performs a multiplication of a vector by a 4x4 matrix,
