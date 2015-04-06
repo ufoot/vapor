@@ -242,15 +242,20 @@ func TestF32Aff(t *testing.T) {
 }
 
 func TestF32Rebase(t *testing.T) {
+	const cx = 1.5
+	const cy = 2.0
+	const cz = 2.5
 	m1 := invertableF32()
 	var vo1 vpvec3.F32
 	vx1 := vpvec3.F32AxisX()
 	vy1 := vpvec3.F32AxisY()
 	vz1 := vpvec3.F32AxisZ()
+	vp1 := vpvec3.F32Add(vx1, vpvec3.F32Add(vy1, vz1))
 	vo2 := randomVecF32()
-	vx2 := m1.GetCol(0).ToVec3()
-	vy2 := m1.GetCol(1).ToVec3()
-	vz2 := m1.GetCol(2).ToVec3()
+	vx2 := vpvec3.F32Add(m1.GetCol(0).ToVec3(), vo2)
+	vy2 := vpvec3.F32Add(m1.GetCol(1).ToVec3(), vo2)
+	vz2 := vpvec3.F32Add(m1.GetCol(2).ToVec3(), vo2)
+	vp2 := vpvec3.F32Add(vo2, vpvec3.F32Add(vpvec3.F32MulScale(vpvec3.F32Sub(vx2, vo2), cx), vpvec3.F32Add(vpvec3.F32MulScale(vpvec3.F32Sub(vy2, vo2), cy), vpvec3.F32MulScale(vpvec3.F32Sub(vz2, vo2), cz))))
 
 	m2 := F32RebaseOXYZ(vo2, vx2, vy2, vz2)
 	t.Logf("transformation matrix for O=%s X=%s Y=%s Z=%s is M=%s", vo2.String(), vx2.String(), vy2.String(), vz2.String(), m2.String())
@@ -270,6 +275,29 @@ func TestF32Rebase(t *testing.T) {
 	vz3 := m2.MulVecPos(vz1)
 	if !vz3.IsSimilar(vz2) {
 		t.Errorf("vz1 -> vz2 error vz1=%s vz2=%s vz3=%s", vz1.String(), vz2.String(), vz3.String())
+	}
+
+	m2 = F32RebaseOXYZP(vo2, vx2, vy2, vz2, vp2)
+	t.Logf("transformation matrix for O=%s X=%s Y=%s Z=%s P=%s is M=%s", vo2.String(), vx2.String(), vy2.String(), vz2.String(), vp2.String(), m2.String())
+	vo3 = m2.MulVecPos(&vo1)
+	if !vo3.IsSimilar(vo2) {
+		t.Errorf("vo1 -> vo2 error vo1=%s vo2=%s vo3=%s", vo1.String(), vo2.String(), vo3.String())
+	}
+	vx3 = m2.MulVecPos(vx1)
+	if !vx3.IsSimilar(vx2) {
+		t.Errorf("vx1 -> vx2 error vx1=%s vx2=%s vx3=%s", vx1.String(), vx2.String(), vx3.String())
+	}
+	vy3 = m2.MulVecPos(vy1)
+	if !vy3.IsSimilar(vy2) {
+		t.Errorf("vy1 -> vy2 error vy1=%s vy2=%s vy3=%s", vy1.String(), vy2.String(), vy3.String())
+	}
+	vz3 = m2.MulVecPos(vz1)
+	if !vz3.IsSimilar(vz2) {
+		t.Errorf("vz1 -> vz2 error vz1=%s vz2=%s vz3=%s", vz1.String(), vz2.String(), vz3.String())
+	}
+	vp3 := m2.MulVecPos(vp1)
+	if !vp3.IsSimilar(vp2) {
+		t.Errorf("vp1 -> vp2 error vp1=%s vp2=%s vp3=%s", vp1.String(), vp2.String(), vp3.String())
 	}
 }
 

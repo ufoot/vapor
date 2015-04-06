@@ -21,6 +21,7 @@ package vpmat4x4
 
 import (
 	"encoding/json"
+	"github.com/ufoot/vapor/vpmat3x3"
 	"github.com/ufoot/vapor/vpmath"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
@@ -80,6 +81,36 @@ func X32RotZ(r vpnumber.X32) *X32 {
 // basis. It assumes f(a+b) equals f(a)+f(b).
 func X32RebaseOXYZ(Origin, PosX, PosY, PosZ *vpvec3.X32) *X32 {
 	return &X32{PosX[0] - Origin[0], PosX[1] - Origin[1], PosX[2] - Origin[2], vpnumber.X32Const0, PosY[0] - Origin[0], PosY[1] - Origin[1], PosY[2] - Origin[2], vpnumber.X32Const0, PosZ[0] - Origin[0], PosZ[1] - Origin[1], PosZ[2] - Origin[2], vpnumber.X32Const0, Origin[0], Origin[1], Origin[2], vpnumber.X32Const1}
+}
+
+// X32RebaseOXYZP creates a matrix that translates from the default
+// O=(0,0,0), X=(1,0,0), Y=(0,1,0), Z=(0,0,1), P=(1,1,1) basis to the given
+// basis. Note that there can be a projection, so  f(a+b) is not f(a)+f(b).
+func X32RebaseOXYZP(Origin, PosX, PosY, PosZ, PosP *vpvec3.X32) *X32 {
+	var tmpMat vpmat3x3.X32
+	projMat := X32Identity()
+
+	dX := vpvec3.X32Sub(PosX, Origin)
+	dY := vpvec3.X32Sub(PosY, Origin)
+	dZ := vpvec3.X32Sub(PosZ, Origin)
+	dP := vpvec3.X32Sub(PosP, Origin)
+	tmpMat.SetCol(0, vpvec3.X32Sub(dX, dP))
+	tmpMat.SetCol(1, vpvec3.X32Sub(dY, dP))
+	tmpMat.SetCol(2, vpvec3.X32Sub(dZ, dP))
+	tmpMat.Inv()
+	tmpVec := vpvec3.X32Sub(dP, vpvec3.X32Add(dX, vpvec3.X32Add(dY, dZ)))
+	lastRow := tmpMat.MulVec(tmpVec)
+	colX := vpvec3.X32MulScale(dX, vpnumber.X32Const1+lastRow[0])
+	colY := vpvec3.X32MulScale(dY, vpnumber.X32Const1+lastRow[1])
+	colZ := vpvec3.X32MulScale(dZ, vpnumber.X32Const1+lastRow[2])
+	projMat.SetCol(0, vpvec4.X32FromVec3(colX, lastRow[0]))
+	projMat.SetCol(1, vpvec4.X32FromVec3(colY, lastRow[1]))
+	projMat.SetCol(2, vpvec4.X32FromVec3(colZ, lastRow[2]))
+	transMat := X32Trans(Origin)
+
+	ret := X32MulComp(transMat, projMat)
+
+	return ret
 }
 
 // ToX64 converts the matrix to a fixed point number matrix on 64 bits.
@@ -316,7 +347,7 @@ func (mat *X32) MulVecPos(vec *vpvec3.X32) *vpvec3.X32 {
 		ret[i] = vpnumber.X32Mul(mat.Get(0, i), vec[0]) + vpnumber.X32Mul(mat.Get(1, i), vec[1]) + vpnumber.X32Mul(mat.Get(2, i), vec[2]) + mat.Get(3, i)
 	}
 
-	return ret.DivScale(vpnumber.X32Mul(mat[Col0Row3],vec[0])+vpnumber.X32Mul(mat[Col1Row3],vec[1])+vpnumber.X32Mul(mat[Col2Row3],vec[2])+mat[Col3Row3])
+	return ret.DivScale(vpnumber.X32Mul(mat[Col0Row3], vec[0]) + vpnumber.X32Mul(mat[Col1Row3], vec[1]) + vpnumber.X32Mul(mat[Col2Row3], vec[2]) + mat[Col3Row3])
 }
 
 // MulVecDir performs a multiplication of a vector by a 4x4 matrix,

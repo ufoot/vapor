@@ -21,6 +21,7 @@ package vpmat4x4
 
 import (
 	"encoding/json"
+	"github.com/ufoot/vapor/vpmat3x3"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec3"
@@ -80,6 +81,36 @@ func F64RotZ(r float64) *F64 {
 // basis. It assumes f(a+b) equals f(a)+f(b).
 func F64RebaseOXYZ(Origin, PosX, PosY, PosZ *vpvec3.F64) *F64 {
 	return &F64{PosX[0] - Origin[0], PosX[1] - Origin[1], PosX[2] - Origin[2], vpnumber.F64Const0, PosY[0] - Origin[0], PosY[1] - Origin[1], PosY[2] - Origin[2], vpnumber.F64Const0, PosZ[0] - Origin[0], PosZ[1] - Origin[1], PosZ[2] - Origin[2], vpnumber.F64Const0, Origin[0], Origin[1], Origin[2], vpnumber.F64Const1}
+}
+
+// F64RebaseOXYZP creates a matrix that translates from the default
+// O=(0,0,0), X=(1,0,0), Y=(0,1,0), Z=(0,0,1), P=(1,1,1) basis to the given
+// basis. Note that there can be a projection, so  f(a+b) is not f(a)+f(b).
+func F64RebaseOXYZP(Origin, PosX, PosY, PosZ, PosP *vpvec3.F64) *F64 {
+	var tmpMat vpmat3x3.F64
+	projMat := F64Identity()
+
+	dX := vpvec3.F64Sub(PosX, Origin)
+	dY := vpvec3.F64Sub(PosY, Origin)
+	dZ := vpvec3.F64Sub(PosZ, Origin)
+	dP := vpvec3.F64Sub(PosP, Origin)
+	tmpMat.SetCol(0, vpvec3.F64Sub(dX, dP))
+	tmpMat.SetCol(1, vpvec3.F64Sub(dY, dP))
+	tmpMat.SetCol(2, vpvec3.F64Sub(dZ, dP))
+	tmpMat.Inv()
+	tmpVec := vpvec3.F64Sub(dP, vpvec3.F64Add(dX, vpvec3.F64Add(dY, dZ)))
+	lastRow := tmpMat.MulVec(tmpVec)
+	colX := vpvec3.F64MulScale(dX, vpnumber.F64Const1+lastRow[0])
+	colY := vpvec3.F64MulScale(dY, vpnumber.F64Const1+lastRow[1])
+	colZ := vpvec3.F64MulScale(dZ, vpnumber.F64Const1+lastRow[2])
+	projMat.SetCol(0, vpvec4.F64FromVec3(colX, lastRow[0]))
+	projMat.SetCol(1, vpvec4.F64FromVec3(colY, lastRow[1]))
+	projMat.SetCol(2, vpvec4.F64FromVec3(colZ, lastRow[2]))
+	transMat := F64Trans(Origin)
+
+	ret := F64MulComp(transMat, projMat)
+
+	return ret
 }
 
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
@@ -316,7 +347,7 @@ func (mat *F64) MulVecPos(vec *vpvec3.F64) *vpvec3.F64 {
 		ret[i] = mat.Get(0, i)*vec[0] + mat.Get(1, i)*vec[1] + mat.Get(2, i)*vec[2] + mat.Get(3, i)
 	}
 
-	return ret.DivScale(mat[Col0Row3]*vec[0]+mat[Col1Row3]*vec[1]+mat[Col2Row3]*vec[2]+mat[Col3Row3])
+	return ret.DivScale(mat[Col0Row3]*vec[0] + mat[Col1Row3]*vec[1] + mat[Col2Row3]*vec[2] + mat[Col3Row3])
 }
 
 // MulVecDir performs a multiplication of a vector by a 4x4 matrix,
