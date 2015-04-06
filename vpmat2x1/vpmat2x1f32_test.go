@@ -101,6 +101,10 @@ func invertableF32() *F32 {
 	return &ret
 }
 
+func randomVecF32() float32 {
+	return rand.Float32()
+}
+
 func TestF32Comp(t *testing.T) {
 	m1 := invertableF32()
 	m2 := F32Inv(m1)
@@ -129,6 +133,26 @@ func TestF32Aff(t *testing.T) {
 	v3dir := float32(p1)
 	if !vpnumber.F32IsSimilar(v2dir, v3dir) {
 		t.Errorf("mat2 MulVecDir error v2dir=%f v3dir=%f", v2dir, v3dir)
+	}
+}
+
+func TestF32Rebase(t *testing.T) {
+	m1 := invertableF32()
+	var vo1 float32
+	vx1 := vpnumber.F32Const1
+	vo2 := randomVecF32()
+	vx2 := m1.GetCol(0)
+
+	m2 := F32RebaseOX(vo2, vx2)
+	t.Logf("transformation matrix for O=%f X=%f is M=%s", vo2, vx2, m2.String())
+
+	vo3 := m2.MulVecPos(vo1)
+	if !vpnumber.F32IsSimilar(vo3, vo2) {
+		t.Errorf("vo1 -> vo2 error vo1=%f vo2=%f vo3=%f", vo1, vo2, vo3)
+	}
+	vx3 := m2.MulVecPos(vx1)
+	if !vpnumber.F32IsSimilar(vx3, vx2) {
+		t.Errorf("vx1 -> vx2 error vx1=%f vx2=%f vx3=%f", vx1, vx2, vx3)
 	}
 }
 

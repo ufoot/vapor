@@ -106,6 +106,10 @@ func invertableF64() *F64 {
 	return &ret
 }
 
+func randomVecF64() float64 {
+	return rand.Float64()
+}
+
 func TestF64Comp(t *testing.T) {
 	m1 := invertableF64()
 	m2 := F64Inv(m1)
@@ -141,6 +145,26 @@ func TestF64Aff(t *testing.T) {
 	v3dir := float64(p1)
 	if !vpnumber.F64IsSimilar(v2dir, v3dir) {
 		t.Errorf("mat2 MulVecDir error v2dir=%f v3dir=%f", v2dir, v3dir)
+	}
+}
+
+func TestF64Rebase(t *testing.T) {
+	m1 := invertableF64()
+	var vo1 float64
+	vx1 := vpnumber.F64Const1
+	vo2 := randomVecF64()
+	vx2 := m1.GetCol(0)[0]
+
+	m2 := F64RebaseOX(vo2, vx2)
+	t.Logf("transformation matrix for O=%f X=%f is M=%s", vo2, vx2, m2.String())
+
+	vo3 := m2.MulVecPos(vo1)
+	if !vpnumber.F64IsSimilar(vo3, vo2) {
+		t.Errorf("vo1 -> vo2 error vo1=%f vo2=%f vo3=%f", vo1, vo2, vo3)
+	}
+	vx3 := m2.MulVecPos(vx1)
+	if !vpnumber.F64IsSimilar(vx3, vx2) {
+		t.Errorf("vx1 -> vx2 error vx1=%f vx2=%f vx3=%f", vx1, vx2, vx3)
 	}
 }
 

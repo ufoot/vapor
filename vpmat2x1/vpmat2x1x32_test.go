@@ -100,6 +100,10 @@ func invertableX32() *X32 {
 	return &ret
 }
 
+func randomVecX32() vpnumber.X32 {
+	return vpnumber.I32ToX32(rand.Int31n(10)) >> 1
+}
+
 func TestX32Comp(t *testing.T) {
 	m1 := invertableX32()
 	m2 := X32Inv(m1)
@@ -128,6 +132,26 @@ func TestX32Aff(t *testing.T) {
 	v3dir := p1
 	if !vpnumber.X32IsSimilar(v2dir, v3dir) {
 		t.Errorf("mat2 MulVecDir error v2dir=%f v3dir=%f", vpnumber.X32ToF32(v2dir), vpnumber.X32ToF32(v3dir))
+	}
+}
+
+func TestX32Rebase(t *testing.T) {
+	m1 := invertableX32()
+	var vo1 vpnumber.X32
+	vx1 := vpnumber.X32Const1
+	vo2 := randomVecX32()
+	vx2 := m1.GetCol(0)
+
+	m2 := X32RebaseOX(vo2, vx2)
+	t.Logf("transformation matrix for O=%d X=%d is M=%s", vo2, vx2, m2.String())
+
+	vo3 := m2.MulVecPos(vo1)
+	if !vpnumber.X32IsSimilar(vo3, vo2) {
+		t.Errorf("vo1 -> vo2 error vo1=%d vo2=%d vo3=%d", vo1, vo2, vo3)
+	}
+	vx3 := m2.MulVecPos(vx1)
+	if !vpnumber.X32IsSimilar(vx3, vx2) {
+		t.Errorf("vx1 -> vx2 error vx1=%d vx2=%d vx3=%d", vx1, vx2, vx3)
 	}
 }
 
