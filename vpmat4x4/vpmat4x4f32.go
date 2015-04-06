@@ -75,6 +75,13 @@ func F32RotZ(r float32) *F32 {
 	return &F32{float32(math.Cos(float64(r))), float32(math.Sin(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, -float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
+// F32RebaseOXYZ creates a matrix that translates from the default
+// O=(0,0,0), X=(1,0,0), Y=(0,1,0), Z=(0,0,1) basis to the given
+// basis. It assumes f(a+b) equals f(a)+f(b).
+func F32RebaseOXYZ(Origin, PosX, PosY, PosZ *vpvec3.F32) *F32 {
+	return &F32{PosX[0] - Origin[0], PosX[1] - Origin[1], PosX[2] - Origin[2], vpnumber.F32Const0, PosY[0] - Origin[0], PosY[1] - Origin[1], PosY[2] - Origin[2], vpnumber.F32Const0, PosZ[0] - Origin[0], PosZ[1] - Origin[1], PosZ[2] - Origin[2], vpnumber.F32Const0, Origin[0], Origin[1], Origin[2], vpnumber.F32Const1}
+}
+
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
 func (mat *F32) ToX32() *X32 {
 	var ret X32

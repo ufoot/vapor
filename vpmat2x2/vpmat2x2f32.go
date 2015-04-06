@@ -52,6 +52,13 @@ func F32Scale(f float32) *F32 {
 	return &F32{f, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
+// F32RebaseOX creates a matrix that translates from the default
+// O=(0), X=(1) basis to the given
+// basis. It assumes f(a+b) equals f(a)+f(b).
+func F32RebaseOX(Origin, PosX float32) *F32 {
+	return &F32{PosX - Origin, vpnumber.F32Const0, Origin, vpnumber.F32Const1}
+}
+
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
 func (mat *F32) ToX32() *X32 {
 	var ret X32

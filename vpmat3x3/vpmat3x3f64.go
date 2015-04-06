@@ -61,6 +61,13 @@ func F64Rot(r float64) *F64 {
 	return &F64{math.Cos(r), math.Sin(r), vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
 }
 
+// F64RebaseOXY creates a matrix that translates from the default
+// O=(0,0), X=(1,0), Y=(0,1) basis to the given
+// basis. It assumes f(a+b) equals f(a)+f(b).
+func F64RebaseOXY(Origin, PosX, PosY *vpvec2.F64) *F64 {
+	return &F64{PosX[0] - Origin[0], PosX[1] - Origin[1], vpnumber.F64Const0, PosY[0] - Origin[0], PosY[1] - Origin[1], vpnumber.F64Const0, Origin[0], Origin[1], vpnumber.F64Const1}
+}
+
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
 func (mat *F64) ToX32() *X32 {
 	var ret X32

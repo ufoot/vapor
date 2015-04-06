@@ -52,6 +52,13 @@ func F64Scale(f float64) *F64 {
 	return &F64{f, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
 }
 
+// F64RebaseOX creates a matrix that translates from the default
+// O=(0), X=(1) basis to the given
+// basis. It assumes f(a+b) equals f(a)+f(b).
+func F64RebaseOX(Origin, PosX float64) *F64 {
+	return &F64{PosX - Origin, vpnumber.F64Const0, Origin, vpnumber.F64Const1}
+}
+
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
 func (mat *F64) ToX32() *X32 {
 	var ret X32

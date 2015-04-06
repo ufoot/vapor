@@ -52,6 +52,13 @@ func X64Scale(x vpnumber.X64) *X64 {
 	return &X64{x, vpnumber.X64Const0}
 }
 
+// X64RebaseOX creates a matrix that translates from the default
+// O=(0), X=(1) basis to the given
+// basis. It assumes f(a+b) equals f(a)+f(b).
+func X64RebaseOX(Origin, PosX vpnumber.X64) *X64 {
+	return &X64{PosX - Origin, Origin}
+}
+
 // ToX32 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *X64) ToX32() *X32 {
 	var ret X32

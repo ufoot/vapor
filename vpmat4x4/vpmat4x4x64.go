@@ -75,6 +75,13 @@ func X64RotZ(r vpnumber.X64) *X64 {
 	return &X64{vpmath.X64Cos(r), vpmath.X64Sin(r), vpnumber.X64Const0, vpnumber.X64Const0, -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
+// X64RebaseOXYZ creates a matrix that translates from the default
+// O=(0,0,0), X=(1,0,0), Y=(0,1,0), Z=(0,0,1) basis to the given
+// basis. It assumes f(a+b) equals f(a)+f(b).
+func X64RebaseOXYZ(Origin, PosX, PosY, PosZ *vpvec3.X64) *X64 {
+	return &X64{PosX[0] - Origin[0], PosX[1] - Origin[1], PosX[2] - Origin[2], vpnumber.X64Const0, PosY[0] - Origin[0], PosY[1] - Origin[1], PosY[2] - Origin[2], vpnumber.X64Const0, PosZ[0] - Origin[0], PosZ[1] - Origin[1], PosZ[2] - Origin[2], vpnumber.X64Const0, Origin[0], Origin[1], Origin[2], vpnumber.X64Const1}
+}
+
 // ToX32 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *X64) ToX32() *X32 {
 	var ret X32
