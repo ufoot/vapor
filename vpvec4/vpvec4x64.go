@@ -35,6 +35,21 @@ func X64New(x1, x2, x3, x4 vpnumber.X64) *X64 {
 	return &X64{x1, x2, x3, x4}
 }
 
+// X64AxisX returns a new vector representing the X axis.
+func X64AxisX() *X64 {
+	return &X64{vpnumber.X64Const1,vpnumber.X64Const0,vpnumber.X64Const0,vpnumber.X64Const0}
+}
+
+// X64AxisY returns a new vector representing the Y axis.
+func X64AxisY() *X64 {
+	return &X64{vpnumber.X64Const0,vpnumber.X64Const1,vpnumber.X64Const0,vpnumber.X64Const0}
+}
+
+// X64AxisZ returns a new vector representing the Z axis.
+func X64AxisZ() *X64 {
+	return &X64{vpnumber.X64Const0,vpnumber.X64Const0,vpnumber.X64Const1,vpnumber.X64Const0}
+}
+
 // X64FromVec3 creates a new vector from a smaller one,
 // by appending a value at its end.
 func X64FromVec3(vec *vpvec3.X64, x vpnumber.X64) *X64 {

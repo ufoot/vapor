@@ -35,6 +35,21 @@ func F64New(f1, f2, f3 float64) *F64 {
 	return &F64{f1, f2, f3}
 }
 
+// F64AxisX returns a new vector representing the X axis.
+func F64AxisX() *F64 {
+	return &F64{vpnumber.F64Const1,vpnumber.F64Const0,vpnumber.F64Const0}
+}
+
+// F64AxisY returns a new vector representing the Y axis.
+func F64AxisY() *F64 {
+	return &F64{vpnumber.F64Const0,vpnumber.F64Const1,vpnumber.F64Const0}
+}
+
+// F64AxisZ returns a new vector representing the Z axis.
+func F64AxisZ() *F64 {
+	return &F64{vpnumber.F64Const0,vpnumber.F64Const0,vpnumber.F64Const1}
+}
+
 // F64FromVec2 creates a new vector from a smaller one,
 // by appending a value at its end.
 func F64FromVec2(vec *vpvec2.F64, f float64) *F64 {

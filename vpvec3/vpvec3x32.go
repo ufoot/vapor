@@ -35,6 +35,21 @@ func X32New(x1, x2, x3 vpnumber.X32) *X32 {
 	return &X32{x1, x2, x3}
 }
 
+// X32AxisX returns a new vector representing the X axis.
+func X32AxisX() *X32 {
+	return &X32{vpnumber.X32Const1,vpnumber.X32Const0,vpnumber.X32Const0}
+}
+
+// X32AxisY returns a new vector representing the Y axis.
+func X32AxisY() *X32 {
+	return &X32{vpnumber.X32Const0,vpnumber.X32Const1,vpnumber.X32Const0}
+}
+
+// X32AxisZ returns a new vector representing the Z axis.
+func X32AxisZ() *X32 {
+	return &X32{vpnumber.X32Const0,vpnumber.X32Const0,vpnumber.X32Const1}
+}
+
 // X32FromVec2 creates a new vector from a smaller one,
 // by appending a value at its end.
 func X32FromVec2(vec *vpvec2.X32, x vpnumber.X32) *X32 {

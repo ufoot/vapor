@@ -34,6 +34,16 @@ func F32New(f1, f2 float32) *F32 {
 	return &F32{f1, f2}
 }
 
+// F32AxisX returns a new vector representing the X axis.
+func F32AxisX() *F32 {
+	return &F32{vpnumber.F32Const1,vpnumber.F32Const0}
+}
+
+// F32AxisY returns a new vector representing the Y axis.
+func F32AxisY() *F32 {
+	return &F32{vpnumber.F32Const0,vpnumber.F32Const1}
+}
+
 // ToI32 converts the vector to an int32 vector.
 func (vec *F32) ToI32() *I32 {
 	var ret I32
