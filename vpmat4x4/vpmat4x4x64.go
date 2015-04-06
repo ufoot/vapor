@@ -118,6 +118,42 @@ func (mat *X64) Get(col, row int) vpnumber.X64 {
 	return mat[col*Height+row]
 }
 
+// SetCol sets a column to the values contained in a vector.
+func (mat *X64) SetCol(col int, vec *vpvec4.X64) {
+	for row, val := range vec {
+		mat[col*Height+row] = val
+	}
+}
+
+// GetCol gets a column and returns it in a vector.
+func (mat *X64) GetCol(col int) *vpvec4.X64 {
+	var ret vpvec4.X64
+
+	for row := range ret {
+		ret[row] = mat[col*Height+row]
+	}
+
+	return &ret
+}
+
+// SetRow sets a row to the values contained in a vector.
+func (mat *X64) SetRow(row int, vec *vpvec4.X64) {
+	for col, val := range vec {
+		mat[col*Height+row] = val
+	}
+}
+
+// GetRow gets a row and returns it in a vector.
+func (mat *X64) GetRow(row int) *vpvec4.X64 {
+	var ret vpvec4.X64
+
+	for col := range ret {
+		ret[col] = mat[col*Height+row]
+	}
+
+	return &ret
+}
+
 // MarshalJSON implements the json.Marshaler interface.
 func (mat *X64) MarshalJSON() ([]byte, error) {
 	var tmpArray [Width][Height]int64

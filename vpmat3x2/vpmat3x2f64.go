@@ -24,6 +24,7 @@ import (
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec2"
+	"github.com/ufoot/vapor/vpvec3"
 	"math"
 )
 
@@ -100,6 +101,42 @@ func (mat *F64) Set(col, row int, val float64) {
 // Get gets the value of the matrix for a given column and row.
 func (mat *F64) Get(col, row int) float64 {
 	return mat[col*Height+row]
+}
+
+// SetCol sets a column to the values contained in a vector.
+func (mat *F64) SetCol(col int, vec *vpvec2.F64) {
+	for row, val := range vec {
+		mat[col*Height+row] = val
+	}
+}
+
+// GetCol gets a column and returns it in a vector.
+func (mat *F64) GetCol(col int) *vpvec2.F64 {
+	var ret vpvec2.F64
+
+	for row := range ret {
+		ret[row] = mat[col*Height+row]
+	}
+
+	return &ret
+}
+
+// SetRow sets a row to the values contained in a vector.
+func (mat *F64) SetRow(row int, vec *vpvec3.F64) {
+	for col, val := range vec {
+		mat[col*Height+row] = val
+	}
+}
+
+// GetRow gets a row and returns it in a vector.
+func (mat *F64) GetRow(row int) *vpvec3.F64 {
+	var ret vpvec3.F64
+
+	for col := range ret {
+		ret[col] = mat[col*Height+row]
+	}
+
+	return &ret
 }
 
 // MarshalJSON implements the json.Marshaler interface.
