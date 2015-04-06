@@ -131,7 +131,7 @@ func TestF32Math(t *testing.T) {
 
 func TestF32JSON(t *testing.T) {
 	m1 := F32New(0.1, 0.2)
-	m2 := F32New(1.0, 0.0)
+	m2 := F32AxisX()
 
 	var err error
 	var jsonBuf []byte

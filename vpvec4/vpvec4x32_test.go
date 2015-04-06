@@ -135,7 +135,7 @@ func TestX32Math(t *testing.T) {
 
 func TestX32JSON(t *testing.T) {
 	m1 := X32New(vpnumber.I32ToX32(10), vpnumber.I32ToX32(20), vpnumber.I32ToX32(30), vpnumber.I32ToX32(40))
-	m2 := X32New(vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0)
+	m2 := X32AxisX()
 
 	var err error
 	var jsonBuf []byte

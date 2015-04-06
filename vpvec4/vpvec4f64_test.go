@@ -135,7 +135,7 @@ func TestF64Math(t *testing.T) {
 
 func TestF64JSON(t *testing.T) {
 	m1 := F64New(0.1, 0.2, 0.3, 0.4)
-	m2 := F64New(1.0, 0.0, 0.0, 0.0)
+	m2 := F64AxisX()
 
 	var err error
 	var jsonBuf []byte

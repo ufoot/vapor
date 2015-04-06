@@ -141,7 +141,7 @@ func TestX64Math(t *testing.T) {
 
 func TestX64JSON(t *testing.T) {
 	m1 := X64New(vpnumber.I64ToX64(10), vpnumber.I64ToX64(20), vpnumber.I64ToX64(30))
-	m2 := X64New(vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0)
+	m2 := X64AxisX()
 
 	var err error
 	var jsonBuf []byte
