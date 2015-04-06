@@ -181,6 +181,26 @@ func (mat *F32) Sub(op *F32) *F32 {
 	return mat
 }
 
+// MulScale multiplies all values of the matrix by factor.
+// It modifies the matrix, and returns a pointer on it.
+func (mat *F32) MulScale(factor float32) *F32 {
+	for i, v := range mat {
+		mat[i] = v * factor
+	}
+
+	return mat
+}
+
+// DivScale divides all values of the matrix by factor.
+// It modifies the matrix, and returns a pointer on it.
+func (mat *F32) DivScale(factor float32) *F32 {
+	for i, v := range mat {
+		mat[i] = vpnumber.F32Div(v, factor)
+	}
+
+	return mat
+}
+
 // IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (mat *F32) IsSimilar(op *F32) bool {

@@ -307,6 +307,26 @@ func X64Sub(mata, matb *X64) *X64 {
 	return &ret
 }
 
+// X64MulScale multiplies all values of a matrix by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
+func X64MulScale(mat *X64, factor vpnumber.X64) *X64 {
+	var ret = *mat
+
+	_ = ret.MulScale(factor)
+
+	return &ret
+}
+
+// X64DivScale divides all values of a matrix by a scalar.
+// Args are left untouched, a pointer on a new object is returned.
+func X64DivScale(mat *X64, factor vpnumber.X64) *X64 {
+	var ret = *mat
+
+	_ = ret.DivScale(factor)
+
+	return &ret
+}
+
 // X64Transpose inverts rows and columns (matrix transposition).
 // Args is left untouched, a pointer on a new object is returned.
 func X64Transpose(mat *X64) *X64 {

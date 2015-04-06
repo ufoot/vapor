@@ -194,6 +194,26 @@ func (mat *X32) Sub(op *X32) *X32 {
 	return mat
 }
 
+// MulScale multiplies all values of the matrix by factor.
+// It modifies the matrix, and returns a pointer on it.
+func (mat *X32) MulScale(factor vpnumber.X32) *X32 {
+	for i, v := range mat {
+		mat[i] = vpnumber.X32Mul(v, factor)
+	}
+
+	return mat
+}
+
+// DivScale divides all values of the matrix by factor.
+// It modifies the matrix, and returns a pointer on it.
+func (mat *X32) DivScale(factor vpnumber.X32) *X32 {
+	for i, v := range mat {
+		mat[i] = vpnumber.X32Div(v, factor)
+	}
+
+	return mat
+}
+
 // IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (mat *X32) IsSimilar(op *X32) bool {
