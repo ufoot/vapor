@@ -112,6 +112,16 @@ func invertableF64() *F64 {
 	return &ret
 }
 
+func randomVecF64() *vpvec2.F64 {
+	var ret vpvec2.F64
+
+	for i := range ret {
+		ret[i] = rand.Float64()
+	}
+
+	return &ret
+}
+
 func TestF64Comp(t *testing.T) {
 	m1 := invertableF64()
 	m2 := F64Inv(m1)
@@ -164,6 +174,32 @@ func TestF64Aff(t *testing.T) {
 	v3dir = v3.ToVec2()
 	if !v2dir.IsSimilar(v3dir) {
 		t.Errorf("mat3x2 rotation MulVecDir error v2dir=%s v3dir=%s", v2dir.String(), v3dir.String())
+	}
+}
+
+func TestF64Rebase(t *testing.T) {
+	m1 := invertableF64()
+	var vo1 vpvec2.F64
+	vx1 := vpvec2.F64AxisX()
+	vy1 := vpvec2.F64AxisY()
+	vo2 := randomVecF64()
+	vx2 := m1.GetCol(0)
+	vy2 := m1.GetCol(1)
+
+	m2 := F64RebaseOXY(vo2, vx2, vy2)
+	t.Logf("transformation matrix for O=%s X=%s Y=%s is M=%s", vo2.String(), vx2.String(), vy2.String(), m2.String())
+
+	vo3 := m2.MulVecPos(&vo1)
+	if !vo3.IsSimilar(vo2) {
+		t.Errorf("vo1 -> vo2 error vo1=%s vo2=%s vo3=%s", vo1.String(), vo2.String(), vo3.String())
+	}
+	vx3 := m2.MulVecPos(vx1)
+	if !vx3.IsSimilar(vx2) {
+		t.Errorf("vx1 -> vx2 error vx1=%s vx2=%s vx3=%s", vx1.String(), vx2.String(), vx3.String())
+	}
+	vy3 := m2.MulVecPos(vy1)
+	if !vy3.IsSimilar(vy2) {
+		t.Errorf("vy1 -> vy2 error vy1=%s vy2=%s vy3=%s", vy1.String(), vy2.String(), vy3.String())
 	}
 }
 
