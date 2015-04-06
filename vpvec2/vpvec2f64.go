@@ -36,12 +36,12 @@ func F64New(f1, f2 float64) *F64 {
 
 // F64AxisX returns a new vector representing the X axis.
 func F64AxisX() *F64 {
-	return &F64{vpnumber.F64Const1,vpnumber.F64Const0}
+	return &F64{vpnumber.F64Const1, vpnumber.F64Const0}
 }
 
 // F64AxisY returns a new vector representing the Y axis.
 func F64AxisY() *F64 {
-	return &F64{vpnumber.F64Const0,vpnumber.F64Const1}
+	return &F64{vpnumber.F64Const0, vpnumber.F64Const1}
 }
 
 // ToI32 converts the vector to an int32 vector.

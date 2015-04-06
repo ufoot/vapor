@@ -36,12 +36,12 @@ func X32New(x1, x2 vpnumber.X32) *X32 {
 
 // X32AxisX returns a new vector representing the X axis.
 func X32AxisX() *X32 {
-	return &X32{vpnumber.X32Const1,vpnumber.X32Const0}
+	return &X32{vpnumber.X32Const1, vpnumber.X32Const0}
 }
 
 // X32AxisY returns a new vector representing the Y axis.
 func X32AxisY() *X32 {
-	return &X32{vpnumber.X32Const0,vpnumber.X32Const1}
+	return &X32{vpnumber.X32Const0, vpnumber.X32Const1}
 }
 
 // ToI32 converts the vector to an int32 vector.

@@ -234,32 +234,32 @@ func TestF32Aff(t *testing.T) {
 func TestF32Rebase(t *testing.T) {
 	m1 := invertableF32()
 	var vo1 vpvec3.F32
-	vx1:=vpvec3.F32AxisX()
-	vy1:=vpvec3.F32AxisY()
-	vz1:=vpvec3.F32AxisZ()	
+	vx1 := vpvec3.F32AxisX()
+	vy1 := vpvec3.F32AxisY()
+	vz1 := vpvec3.F32AxisZ()
 	vo2 := randomVecF32()
-	vx2:=m1.GetCol(0)
-	vy2:=m1.GetCol(1)
-	vz2:=m1.GetCol(2)
-	
-	m2:=F32RebaseOXYZ(vo2,vx2,vy2,vz2)
-	t.Logf("transformation matrix for O=%s X=%s Y=%s Z=%s is M=%s",vo2.String(),vx2.String(),vy2.String(),vz2.String(),m2.String())
+	vx2 := m1.GetCol(0)
+	vy2 := m1.GetCol(1)
+	vz2 := m1.GetCol(2)
 
-	vo3:=m2.MulVecPos(&vo1)
+	m2 := F32RebaseOXYZ(vo2, vx2, vy2, vz2)
+	t.Logf("transformation matrix for O=%s X=%s Y=%s Z=%s is M=%s", vo2.String(), vx2.String(), vy2.String(), vz2.String(), m2.String())
+
+	vo3 := m2.MulVecPos(&vo1)
 	if !vo3.IsSimilar(vo2) {
-		t.Errorf("vo1 -> vo2 error vo1=%s vo2=%s vo3=%s",vo1.String(),vo2.String(),vo3.String())
+		t.Errorf("vo1 -> vo2 error vo1=%s vo2=%s vo3=%s", vo1.String(), vo2.String(), vo3.String())
 	}
-	vx3:=m2.MulVecPos(vx1)
+	vx3 := m2.MulVecPos(vx1)
 	if !vx3.IsSimilar(vx2) {
-		t.Errorf("vx1 -> vx2 error vx1=%s vx2=%s vx3=%s",vx1.String(),vx2.String(),vx3.String())
+		t.Errorf("vx1 -> vx2 error vx1=%s vx2=%s vx3=%s", vx1.String(), vx2.String(), vx3.String())
 	}
-	vy3:=m2.MulVecPos(vy1)
+	vy3 := m2.MulVecPos(vy1)
 	if !vy3.IsSimilar(vy2) {
-		t.Errorf("vy1 -> vy2 error vy1=%s vy2=%s vy3=%s",vy1.String(),vy2.String(),vy3.String())
+		t.Errorf("vy1 -> vy2 error vy1=%s vy2=%s vy3=%s", vy1.String(), vy2.String(), vy3.String())
 	}
-	vz3:=m2.MulVecPos(vz1)
+	vz3 := m2.MulVecPos(vz1)
 	if !vz3.IsSimilar(vz2) {
-		t.Errorf("vz1 -> vz2 error vz1=%s vz2=%s vz3=%s",vz1.String(),vz2.String(),vz3.String())
+		t.Errorf("vz1 -> vz2 error vz1=%s vz2=%s vz3=%s", vz1.String(), vz2.String(), vz3.String())
 	}
 }
 

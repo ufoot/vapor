@@ -37,17 +37,17 @@ func F32New(f1, f2, f3 float32) *F32 {
 
 // F32AxisX returns a new vector representing the X axis.
 func F32AxisX() *F32 {
-	return &F32{vpnumber.F32Const1,vpnumber.F32Const0,vpnumber.F32Const0}
+	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0}
 }
 
 // F32AxisY returns a new vector representing the Y axis.
 func F32AxisY() *F32 {
-	return &F32{vpnumber.F32Const0,vpnumber.F32Const1,vpnumber.F32Const0}
+	return &F32{vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0}
 }
 
 // F32AxisZ returns a new vector representing the Z axis.
 func F32AxisZ() *F32 {
-	return &F32{vpnumber.F32Const0,vpnumber.F32Const0,vpnumber.F32Const1}
+	return &F32{vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
 // F32FromVec2 creates a new vector from a smaller one,
