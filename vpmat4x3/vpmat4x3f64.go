@@ -180,26 +180,6 @@ func (mat *F64) Sub(op *F64) *F64 {
 	return mat
 }
 
-// MulScale multiplies all values of the matrix by factor.
-// It modifies the matrix, and returns a pointer on it.
-func (mat *F64) MulScale(factor float64) *F64 {
-	for i, v := range mat {
-		mat[i] = v * factor
-	}
-
-	return mat
-}
-
-// DivScale divides all values of the matrix by factor.
-// It modifies the matrix, and returns a pointer on it.
-func (mat *F64) DivScale(factor float64) *F64 {
-	for i, v := range mat {
-		mat[i] = vpnumber.F64Div(v, factor)
-	}
-
-	return mat
-}
-
 // IsSimilar returns true if matrices are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (mat *F64) IsSimilar(op *F64) bool {
