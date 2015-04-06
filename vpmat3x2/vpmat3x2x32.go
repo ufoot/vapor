@@ -48,6 +48,11 @@ func X32Trans(vec *vpvec2.X32) *X32 {
 	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vec[0], vec[1]}
 }
 
+// X32Scale creates a new scale matrix.
+func X32Scale(vec *vpvec2.X32) *X32 {
+	return &X32{vec[0], vpnumber.X32Const0, vpnumber.X32Const0, vec[1], vpnumber.X32Const0, vpnumber.X32Const0}
+}
+
 // X32Rot creates a new rotation matrix.
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.

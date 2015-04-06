@@ -49,6 +49,11 @@ func X64Trans(vec *vpvec2.X64) *X64 {
 	return &X64{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vec[0], vec[1], vpnumber.X64Const1}
 }
 
+// X64Scale creates a new scale matrix.
+func X64Scale(vec *vpvec2.X64) *X64 {
+	return &X64{vec[0], vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vec[1], vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+}
+
 // X64Rot creates a new rotation matrix.
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.

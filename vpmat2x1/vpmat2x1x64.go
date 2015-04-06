@@ -47,6 +47,11 @@ func X64Trans(x vpnumber.X64) *X64 {
 	return &X64{vpnumber.X64Const1, x}
 }
 
+// X64Scale creates a new scale matrix.
+func X64Scale(x vpnumber.X64) *X64 {
+	return &X64{x, vpnumber.X64Const0}
+}
+
 // ToX32 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *X64) ToX32() *X32 {
 	var ret X32

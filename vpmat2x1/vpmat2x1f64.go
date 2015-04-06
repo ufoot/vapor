@@ -47,6 +47,11 @@ func F64Trans(f float64) *F64 {
 	return &F64{vpnumber.F64Const1, f}
 }
 
+// F64Scale creates a new scale matrix.
+func F64Scale(f float64) *F64 {
+	return &F64{f, vpnumber.F64Const0}
+}
+
 // ToX32 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *F64) ToX32() *X32 {
 	var ret X32

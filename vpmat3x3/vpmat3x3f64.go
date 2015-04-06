@@ -49,6 +49,11 @@ func F64Trans(vec *vpvec2.F64) *F64 {
 	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vec[0], vec[1], vpnumber.F64Const1}
 }
 
+// F64Scale creates a new scale matrix.
+func F64Scale(vec *vpvec2.F64) *F64 {
+	return &F64{vec[0], vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vec[1], vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
+}
+
 // F64Rot creates a new rotation matrix.
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.

@@ -49,6 +49,11 @@ func F32Trans(vec *vpvec2.F32) *F32 {
 	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vec[0], vec[1], vpnumber.F32Const1}
 }
 
+// F32Scale creates a new scale matrix.
+func F32Scale(vec *vpvec2.F32) *F32 {
+	return &F32{vec[0], vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vec[1], vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
+}
+
 // F32Rot creates a new rotation matrix.
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.

@@ -47,6 +47,11 @@ func X32Trans(x vpnumber.X32) *X32 {
 	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, x, vpnumber.X32Const1}
 }
 
+// X32Scale creates a new scale matrix.
+func X32Scale(x vpnumber.X32) *X32 {
+	return &X32{x, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
+}
+
 // ToX64 converts the matrix to a fixed point number matrix on 64 bits.
 func (mat *X32) ToX64() *X64 {
 	var ret X64
