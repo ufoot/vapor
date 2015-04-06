@@ -21,6 +21,7 @@ package vpmat3x3
 
 import (
 	"encoding/json"
+	"github.com/ufoot/vapor/vpmat2x2"
 	"github.com/ufoot/vapor/vpmath"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
@@ -66,6 +67,32 @@ func X64Rot(r vpnumber.X64) *X64 {
 // basis. It assumes f(a+b) equals f(a)+f(b).
 func X64RebaseOXY(Origin, PosX, PosY *vpvec2.X64) *X64 {
 	return &X64{PosX[0] - Origin[0], PosX[1] - Origin[1], vpnumber.X64Const0, PosY[0] - Origin[0], PosY[1] - Origin[1], vpnumber.X64Const0, Origin[0], Origin[1], vpnumber.X64Const1}
+}
+
+// X64RebaseOXYP creates a matrix that translates from the default
+// O=(0,0), X=(1,0), Y=(0,1), P=(1,1) basis to the given
+// basis. Note that there can be a projection, so  f(a+b) is not f(a)+f(b).
+func X64RebaseOXYP(Origin, PosX, PosY, PosP *vpvec2.X64) *X64 {
+	var tmpMat vpmat2x2.X64
+	projMat := X64Identity()
+
+	dX := vpvec2.X64Sub(PosX, Origin)
+	dY := vpvec2.X64Sub(PosY, Origin)
+	dP := vpvec2.X64Sub(PosP, Origin)
+	tmpMat.SetCol(0, vpvec2.X64Sub(dX, dP))
+	tmpMat.SetCol(1, vpvec2.X64Sub(dY, dP))
+	tmpMat.Inv()
+	tmpVec := vpvec2.X64Sub(dP, vpvec2.X64Add(dX, dY))
+	lastRow := tmpMat.MulVec(tmpVec)
+	colX := vpvec2.X64MulScale(dX, vpnumber.X64Const1+lastRow[0])
+	colY := vpvec2.X64MulScale(dY, vpnumber.X64Const1+lastRow[1])
+	projMat.SetCol(0, vpvec3.X64FromVec2(colX, lastRow[0]))
+	projMat.SetCol(1, vpvec3.X64FromVec2(colY, lastRow[1]))
+	transMat := X64Trans(Origin)
+
+	ret := X64MulComp(transMat, projMat)
+
+	return ret
 }
 
 // ToX32 converts the matrix to a fixed point number matrix on 64 bits.

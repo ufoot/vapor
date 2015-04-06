@@ -21,6 +21,7 @@ package vpmat3x3
 
 import (
 	"encoding/json"
+	"github.com/ufoot/vapor/vpmat2x2"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec2"
@@ -66,6 +67,32 @@ func F32Rot(r float32) *F32 {
 // basis. It assumes f(a+b) equals f(a)+f(b).
 func F32RebaseOXY(Origin, PosX, PosY *vpvec2.F32) *F32 {
 	return &F32{PosX[0] - Origin[0], PosX[1] - Origin[1], vpnumber.F32Const0, PosY[0] - Origin[0], PosY[1] - Origin[1], vpnumber.F32Const0, Origin[0], Origin[1], vpnumber.F32Const1}
+}
+
+// F32RebaseOXYP creates a matrix that translates from the default
+// O=(0,0), X=(1,0), Y=(0,1), P=(1,1) basis to the given
+// basis. Note that there can be a projection, so  f(a+b) is not f(a)+f(b).
+func F32RebaseOXYP(Origin, PosX, PosY, PosP *vpvec2.F32) *F32 {
+	var tmpMat vpmat2x2.F32
+	projMat := F32Identity()
+
+	dX := vpvec2.F32Sub(PosX, Origin)
+	dY := vpvec2.F32Sub(PosY, Origin)
+	dP := vpvec2.F32Sub(PosP, Origin)
+	tmpMat.SetCol(0, vpvec2.F32Sub(dX, dP))
+	tmpMat.SetCol(1, vpvec2.F32Sub(dY, dP))
+	tmpMat.Inv()
+	tmpVec := vpvec2.F32Sub(dP, vpvec2.F32Add(dX, dY))
+	lastRow := tmpMat.MulVec(tmpVec)
+	colX := vpvec2.F32MulScale(dX, vpnumber.F32Const1+lastRow[0])
+	colY := vpvec2.F32MulScale(dY, vpnumber.F32Const1+lastRow[1])
+	projMat.SetCol(0, vpvec3.F32FromVec2(colX, lastRow[0]))
+	projMat.SetCol(1, vpvec3.F32FromVec2(colY, lastRow[1]))
+	transMat := F32Trans(Origin)
+
+	ret := F32MulComp(transMat, projMat)
+
+	return ret
 }
 
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.

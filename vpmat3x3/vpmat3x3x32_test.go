@@ -188,13 +188,17 @@ func TestX32Aff(t *testing.T) {
 }
 
 func TestX32Rebase(t *testing.T) {
+	cx := vpnumber.F32ToX32(1.1)
+	cy := vpnumber.F32ToX32(1.2)
 	m1 := invertableX32()
 	var vo1 vpvec2.X32
 	vx1 := vpvec2.X32AxisX()
 	vy1 := vpvec2.X32AxisY()
+	vp1 := vpvec2.X32Add(vx1, vy1)
 	vo2 := randomVecX32()
-	vx2 := m1.GetCol(0).ToVec2()
-	vy2 := m1.GetCol(1).ToVec2()
+	vx2 := vpvec2.X32Add(m1.GetCol(0).ToVec2(), vo2)
+	vy2 := vpvec2.X32Add(m1.GetCol(1).ToVec2(), vo2)
+	vp2 := vpvec2.X32Add(vo2, vpvec2.X32Add(vpvec2.X32MulScale(vpvec2.X32Sub(vx2, vo2), cx), vpvec2.X32MulScale(vpvec2.X32Sub(vy2, vo2), cy)))
 
 	m2 := X32RebaseOXY(vo2, vx2, vy2)
 	t.Logf("transformation matrix for O=%s X=%s Y=%s is M=%s", vo2.String(), vx2.String(), vy2.String(), m2.String())
@@ -210,6 +214,25 @@ func TestX32Rebase(t *testing.T) {
 	vy3 := m2.MulVecPos(vy1)
 	if !vy3.IsSimilar(vy2) {
 		t.Errorf("vy1 -> vy2 error vy1=%s vy2=%s vy3=%s", vy1.String(), vy2.String(), vy3.String())
+	}
+
+	m2 = X32RebaseOXYP(vo2, vx2, vy2, vp2)
+	t.Logf("transformation matrix for O=%s X=%s Y=%s P=%s is M=%s", vo2.String(), vx2.String(), vy2.String(), vp2.String(), m2.String())
+	vo3 = m2.MulVecPos(&vo1)
+	if !vo3.IsSimilar(vo2) {
+		t.Errorf("vo1 -> vo2 error vo1=%s vo2=%s vo3=%s", vo1.String(), vo2.String(), vo3.String())
+	}
+	vx3 = m2.MulVecPos(vx1)
+	if !vx3.IsSimilar(vx2) {
+		t.Errorf("vx1 -> vx2 error vx1=%s vx2=%s vx3=%s", vx1.String(), vx2.String(), vx3.String())
+	}
+	vy3 = m2.MulVecPos(vy1)
+	if !vy3.IsSimilar(vy2) {
+		t.Errorf("vy1 -> vy2 error vy1=%s vy2=%s vy3=%s", vy1.String(), vy2.String(), vy3.String())
+	}
+	vp3 := m2.MulVecPos(vp1)
+	if !vp3.IsSimilar(vp2) {
+		t.Errorf("vp1 -> vp2 error vp1=%s vp2=%s vp3=%s", vp1.String(), vp2.String(), vp3.String())
 	}
 }
 
