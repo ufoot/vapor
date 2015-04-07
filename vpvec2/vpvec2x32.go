@@ -161,6 +161,22 @@ func (vec *X32) DivScale(factor vpnumber.X32) *X32 {
 	return vec
 }
 
+// Lerp performs a linear interpolation with another vector.
+func (vec *X32) Lerp(op *X32, beta vpnumber.X32) *X32 {
+	switch {
+	case beta <= vpnumber.X32Const0:
+		return vec
+	case beta >= vpnumber.X32Const1:
+		*vec = *op
+		return vec
+	}
+
+	vec.MulScale(vpnumber.X32Const1 - beta)
+	vec.Add(X32MulScale(op, beta))
+
+	return vec
+}
+
 // SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
@@ -255,6 +271,15 @@ func X32DivScale(vec *X32, factor vpnumber.X32) *X32 {
 	var ret = *vec
 
 	_ = ret.DivScale(factor)
+
+	return &ret
+}
+
+// X32Lerp performs a linear interpolation between 2 vectors.
+func X32Lerp(veca, vecb *X32, beta vpnumber.X32) *X32 {
+	var ret = *veca
+
+	ret.Lerp(vecb, beta)
 
 	return &ret
 }
