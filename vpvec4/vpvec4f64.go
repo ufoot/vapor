@@ -178,6 +178,22 @@ func (vec *F64) DivScale(factor float64) *F64 {
 	return vec
 }
 
+// Lerp performs a linear interpolation with another vector.
+func (vec *F64) Lerp(op *F64, beta float64) *F64 {
+	switch {
+	case beta <= vpnumber.F64Const0:
+		return vec
+	case beta >= vpnumber.F64Const1:
+		*vec = *op
+		return vec
+	}
+
+	vec.MulScale(vpnumber.F64Const1 - beta)
+	vec.Add(F64MulScale(op, beta))
+
+	return vec
+}
+
 // SqMag returns the sum of the squares of all values.
 // It is used to calculate length, it is faster than the complete
 // length calculation, as it does not perform a square root.
@@ -272,6 +288,15 @@ func F64DivScale(vec *F64, factor float64) *F64 {
 	var ret = *vec
 
 	_ = ret.DivScale(factor)
+
+	return &ret
+}
+
+// F64Lerp performs a linear interpolation between 2 vectors.
+func F64Lerp(veca, vecb *F64, beta float64) *F64 {
+	var ret = *veca
+
+	ret.Lerp(vecb, beta)
 
 	return &ret
 }
