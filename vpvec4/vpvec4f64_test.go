@@ -126,6 +126,13 @@ func TestF64Math(t *testing.T) {
 		t.Error("Normalize error", f)
 	}
 
+	f = 0.3
+	v3 = F64Lerp(v1, v2, f)
+	v4 = F64Add(F64MulScale(v1, vpnumber.F64Const1-f), F64MulScale(v2, f))
+	if !v3.IsSimilar(v4) {
+		t.Errorf("Lerp error v3=%s v4=%s", v3.String(), v4.String())
+	}
+
 	dot1 := v1.Dot(v2)
 	dot2 := f1*f5 + f2*f6 + f3*f7 + f4*f8
 	if !vpnumber.F64IsSimilar(dot1, dot2) {

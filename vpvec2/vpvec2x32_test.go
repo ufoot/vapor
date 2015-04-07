@@ -122,6 +122,13 @@ func TestX32Math(t *testing.T) {
 		t.Error("Normalize error", x)
 	}
 
+	x = vpnumber.F32ToX32(0.3)
+	v3 = X32Lerp(v1, v2, x)
+	v4 = X32Add(X32MulScale(v1, vpnumber.X32Const1-x), X32MulScale(v2, x))
+	if !v3.IsSimilar(v4) {
+		t.Errorf("Lerp error v3=%s v4=%s", v3.String(), v4.String())
+	}
+
 	dot1 := v1.Dot(v2)
 	dot2 := vpnumber.X32Mul(x1, x5) + vpnumber.X32Mul(x2, x6)
 	if !vpnumber.X32IsSimilar(dot1, dot2) {
