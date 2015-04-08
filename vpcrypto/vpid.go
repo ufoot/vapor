@@ -25,22 +25,25 @@ import (
 	"time"
 )
 
-// Checker is used to check wether a number, typically an id,
-// verifies a property or not.
-type Checker interface {
+// FilterChecker is used to filter and check wether a number,
+// typically an id, verifies a property or not.
+type FilterChecker interface {
+	// Filter processes the value and returns the
+	// filtered value.
+	Filter(*big.Int) *big.Int
 	// Check should return true if number matches property,
 	// false if not.
 	Check(*big.Int) bool
 }
 
 // GenerateID512 generates a 512 bits id, and signs it.
-// If checker is not nil, it is garanteed that the property
+// If filterChecker is not nil, it is garanteed that the property
 // is verified by the id.
 // If seconds is greater than 0, will wait for this amount of
 // time and try and find an id that has a signature with a
 // checksum containing a maximum of zeroes. This allows deep
 // per-key personnalisation.
-func GenerateID512(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error) {
+func GenerateID512(key *Key, filterChecker FilterChecker, seconds int) (*big.Int, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
@@ -49,7 +52,10 @@ func GenerateID512(key *Key, checker Checker, seconds int) (*big.Int, []byte, in
 
 	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand512(r, nil)
-		if checker == nil || checker.Check(tmpInt) {
+		if filterChecker != nil {
+			tmpInt=filterChecker.Filter(tmpInt)
+		}
+		if filterChecker == nil || filterChecker.Check(tmpInt) {
 			tmpData = IntToBuf512(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
 			if err != nil {
@@ -68,13 +74,13 @@ func GenerateID512(key *Key, checker Checker, seconds int) (*big.Int, []byte, in
 }
 
 // GenerateID256 generates a 256 bits id, and signs it.
-// If checker is not nil, it is garanteed that the property
+// If filterChecker is not nil, it is garanteed that the property
 // is verified by the id.
 // If seconds is greater than 0, will wait for this amount of
 // time and try and find an id that has a signature with a
 // checksum containing a maximum of zeroes. This allows deep
 // per-key personnalisation.
-func GenerateID256(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error) {
+func GenerateID256(key *Key, filterChecker FilterChecker, seconds int) (*big.Int, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
@@ -83,7 +89,10 @@ func GenerateID256(key *Key, checker Checker, seconds int) (*big.Int, []byte, in
 
 	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand256(r, nil)
-		if checker == nil || checker.Check(tmpInt) {
+		if filterChecker != nil {
+			tmpInt=filterChecker.Filter(tmpInt)
+		}
+		if filterChecker == nil || filterChecker.Check(tmpInt) {
 			tmpData = IntToBuf256(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
 			if err != nil {
@@ -102,13 +111,13 @@ func GenerateID256(key *Key, checker Checker, seconds int) (*big.Int, []byte, in
 }
 
 // GenerateID128 generates a 128 bits id, and signs it.
-// If checker is not nil, it is garanteed that the property
+// If filterChecker is not nil, it is garanteed that the property
 // is verified by the id.
 // If seconds is greater than 0, will wait for this amount of
 // time and try and find an id that has a signature with a
 // checksum containing a maximum of zeroes. This allows deep
 // per-key personnalisation.
-func GenerateID128(key *Key, checker Checker, seconds int) (*big.Int, []byte, int, error) {
+func GenerateID128(key *Key, filterChecker FilterChecker, seconds int) (*big.Int, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
@@ -117,7 +126,10 @@ func GenerateID128(key *Key, checker Checker, seconds int) (*big.Int, []byte, in
 
 	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand128(r, nil)
-		if checker == nil || checker.Check(tmpInt) {
+		if filterChecker != nil {
+			tmpInt=filterChecker.Filter(tmpInt)
+		}
+		if filterChecker == nil || filterChecker.Check(tmpInt) {
 			tmpData = IntToBuf128(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
 			if err != nil {
@@ -136,13 +148,13 @@ func GenerateID128(key *Key, checker Checker, seconds int) (*big.Int, []byte, in
 }
 
 // GenerateID64 generates a 64 bits id, and signs it.
-// If checker is not nil, it is garanteed that the property
+// If filterChecker is not nil, it is garanteed that the property
 // is verified by the id.
 // If seconds is greater than 0, will wait for this amount of
 // time and try and find an id that has a signature with a
 // checksum containing a maximum of zeroes. This allows deep
 // per-key personnalisation.
-func GenerateID64(key *Key, checker Checker, seconds int) (uint64, []byte, int, error) {
+func GenerateID64(key *Key, filterChecker FilterChecker, seconds int) (uint64, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt uint64
 	var tmpBig big.Int
@@ -153,7 +165,11 @@ func GenerateID64(key *Key, checker Checker, seconds int) (uint64, []byte, int, 
 	for start := time.Now().Unix(); ret == 0 || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand64(r, 0)
 		tmpBig.SetUint64(tmpInt)
-		if checker == nil || checker.Check(&tmpBig) {
+		if filterChecker != nil {
+			tmpBig=*filterChecker.Filter(&tmpBig)
+		}
+		tmpInt=tmpBig.Uint64()
+		if filterChecker == nil || filterChecker.Check(&tmpBig) {
 			tmpData = IntToBuf64(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
 			if err != nil {
@@ -172,13 +188,13 @@ func GenerateID64(key *Key, checker Checker, seconds int) (uint64, []byte, int, 
 }
 
 // GenerateID32 generates a 32 bits id, and signs it.
-// If checker is not nil, it is garanteed that the property
+// If filterChecker is not nil, it is garanteed that the property
 // is verified by the id.
 // If seconds is greater than 0, will wait for this amount of
 // time and try and find an id that has a signature with a
 // checksum containing a maximum of zeroes. This allows deep
 // per-key personnalisation.
-func GenerateID32(key *Key, checker Checker, seconds int) (uint32, []byte, int, error) {
+func GenerateID32(key *Key, filterChecker FilterChecker, seconds int) (uint32, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt uint32
 	var tmpBig big.Int
@@ -189,7 +205,11 @@ func GenerateID32(key *Key, checker Checker, seconds int) (uint32, []byte, int, 
 	for start := time.Now().Unix(); ret == 0 || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand32(r, 0)
 		tmpBig.SetUint64(uint64(tmpInt))
-		if checker == nil || checker.Check(&tmpBig) {
+		if filterChecker != nil {
+			tmpBig=*filterChecker.Filter(&tmpBig)
+		}
+		tmpInt=uint32(tmpBig.Uint64())
+		if filterChecker == nil || filterChecker.Check(&tmpBig) {
 			tmpData = IntToBuf32(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
 			if err != nil {
