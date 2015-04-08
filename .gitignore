@@ -10,5 +10,6 @@ src
 bin
 pkg
 doc
+thrift/gen-*
 *~
 *#*

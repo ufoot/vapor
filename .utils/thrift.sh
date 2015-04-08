@@ -27,15 +27,11 @@ if [ ! -d .utils ] ; then
     exit 1
 fi
 
-export GOPATH=$(pwd)
+cd thrift && \
+    thrift --gen go --gen cpp --gen html vpbusapi.thrift && \
+    cp ./gen-go/vpbusapi/*.go ../vpbusapi/ && \
+    cp ./gen-go/vpbusapi/vp_bus_api-remote/vp_bus_api-remote.go ../vpbusclient/vpbusclient.go && \
+    sed -i "s/\"vpbusapi\"/\"github.com\/ufoot\/vapor\/vpbusapi\"/" ../vpbusclient/vpbusclient.go
 
-go get golang.org/x/crypto/ripemd160
-go get golang.org/x/crypto/openpgp
-go get golang.org/x/crypto/openpgp/packet
-go get github.com/golang/lint/golint
-go get git.apache.org/thrift.git/lib/go/thrift
 
-rm -rf src/github.com/ufoot/vapor
-install -d src/github.com/ufoot/vapor
-for i in vp*; do ln -s $(pwd)/$i src/github.com/ufoot/vapor/$i ; done
 

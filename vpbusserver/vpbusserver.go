@@ -17,27 +17,34 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package main
+package vpbusserver
 
 import (
-	"github.com/ufoot/vapor/vpbusserver"
-	"github.com/ufoot/vapor/vploop"
+	"git.apache.org/thrift.git/lib/go/thrift"
+	"github.com/ufoot/vapor/vpbus"
+	"github.com/ufoot/vapor/vpbusapi"
 	"github.com/ufoot/vapor/vpsys"
 )
 
-func main() {
-	var state1 NibblesState
-	var state2 NibblesState
+func runServer(transportFactory thrift.TTransportFactory, protocolFactory thrift.TProtocolFactory, addr string) error {
+	var transport thrift.TServerTransport
 	var err error
 
-	vpsys.LogInit("vpdemo")
-	vploop.MainLoop(state1, state2)
+	transport, err = thrift.NewTServerSocket(addr)
 
-	vpsys.LogNotice("starting Thrift server")
-	err = vpbusserver.RunDefault()
 	if err != nil {
-		vpsys.LogWarning("unable to start Thrift server", err)
+		return vpsys.ErrorChain(err, "unable to create server socket")
 	}
+	vpsys.LogNoticef("%T\n", transport)
+	handler := vpbus.New()
+	processor := vpbusapi.NewVpBusApiProcessor(handler)
+	server := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
 
-	return
+	vpsys.LogNoticef("Starting Thrift server on %s\n", addr)
+	return server.Serve()
+}
+
+// RunDefault runs a server with default parameters (for testing purposes).
+func RunDefault() error {
+	return runServer(thrift.NewTTransportFactory(), thrift.NewTBinaryProtocolFactoryDefault(), "127.0.0.1:9090")
 }

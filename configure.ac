@@ -24,6 +24,7 @@ AC_CHECK_PROG(GO,go,yes,no)
 AC_CHECK_PROG(GODOC,godoc,yes,no)
 AC_CHECK_PROG(GIT,git,yes,no)
 AC_CHECK_PROG(GIT2CL,git2cl,yes,no)
+AC_CHECK_PROG(THRIFT,thrift,yes,no)
 
 if test $GO != "yes"; then
    AC_MSG_ERROR(unable to find go, please install golang http://golang.org/)

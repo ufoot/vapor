@@ -17,27 +17,6 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package main
-
-import (
-	"github.com/ufoot/vapor/vpbusserver"
-	"github.com/ufoot/vapor/vploop"
-	"github.com/ufoot/vapor/vpsys"
-)
-
-func main() {
-	var state1 NibblesState
-	var state2 NibblesState
-	var err error
-
-	vpsys.LogInit("vpdemo")
-	vploop.MainLoop(state1, state2)
-
-	vpsys.LogNotice("starting Thrift server")
-	err = vpbusserver.RunDefault()
-	if err != nil {
-		vpsys.LogWarning("unable to start Thrift server", err)
-	}
-
-	return
-}
+// Package vpbus contains the implementation of the Golang server
+// callbacks called by the C++ client GUI.
+package vpbus

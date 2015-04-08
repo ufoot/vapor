@@ -53,7 +53,7 @@ func GenerateID512(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand512(r, nil)
 		if filterChecker != nil {
-			tmpInt=filterChecker.Filter(tmpInt)
+			tmpInt = filterChecker.Filter(tmpInt)
 		}
 		if filterChecker == nil || filterChecker.Check(tmpInt) {
 			tmpData = IntToBuf512(tmpInt)
@@ -90,7 +90,7 @@ func GenerateID256(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand256(r, nil)
 		if filterChecker != nil {
-			tmpInt=filterChecker.Filter(tmpInt)
+			tmpInt = filterChecker.Filter(tmpInt)
 		}
 		if filterChecker == nil || filterChecker.Check(tmpInt) {
 			tmpData = IntToBuf256(tmpInt)
@@ -127,7 +127,7 @@ func GenerateID128(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
 		tmpInt = Rand128(r, nil)
 		if filterChecker != nil {
-			tmpInt=filterChecker.Filter(tmpInt)
+			tmpInt = filterChecker.Filter(tmpInt)
 		}
 		if filterChecker == nil || filterChecker.Check(tmpInt) {
 			tmpData = IntToBuf128(tmpInt)
@@ -166,9 +166,9 @@ func GenerateID64(key *Key, filterChecker FilterChecker, seconds int) (uint64, [
 		tmpInt = Rand64(r, 0)
 		tmpBig.SetUint64(tmpInt)
 		if filterChecker != nil {
-			tmpBig=*filterChecker.Filter(&tmpBig)
+			tmpBig = *filterChecker.Filter(&tmpBig)
 		}
-		tmpInt=tmpBig.Uint64()
+		tmpInt = tmpBig.Uint64()
 		if filterChecker == nil || filterChecker.Check(&tmpBig) {
 			tmpData = IntToBuf64(tmpInt)
 			tmpSig, err = key.Sign(tmpData)
@@ -206,9 +206,9 @@ func GenerateID32(key *Key, filterChecker FilterChecker, seconds int) (uint32, [
 		tmpInt = Rand32(r, 0)
 		tmpBig.SetUint64(uint64(tmpInt))
 		if filterChecker != nil {
-			tmpBig=*filterChecker.Filter(&tmpBig)
+			tmpBig = *filterChecker.Filter(&tmpBig)
 		}
-		tmpInt=uint32(tmpBig.Uint64())
+		tmpInt = uint32(tmpBig.Uint64())
 		if filterChecker == nil || filterChecker.Check(&tmpBig) {
 			tmpData = IntToBuf32(tmpInt)
 			tmpSig, err = key.Sign(tmpData)

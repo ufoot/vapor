@@ -17,27 +17,25 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package main
 
-import (
-	"github.com/ufoot/vapor/vpbusserver"
-	"github.com/ufoot/vapor/vploop"
-	"github.com/ufoot/vapor/vpsys"
-)
+# VpBusApi
+# Christian Mauduit (ufoot@ufoot.org)
+#
+# Thrift protocol between Golang backend server and C++ GUI client.
 
-func main() {
-	var state1 NibblesState
-	var state2 NibblesState
-	var err error
+namespace cpp vpbusapi
+namespace go vpbusapi
 
-	vpsys.LogInit("vpdemo")
-	vploop.MainLoop(state1, state2)
-
-	vpsys.LogNotice("starting Thrift server")
-	err = vpbusserver.RunDefault()
-	if err != nil {
-		vpsys.LogWarning("unable to start Thrift server", err)
-	}
-
-	return
+service VpBusApi
+{
+  void ping (),
+  i32 getVersionMajor (),
+  i32 getVersionMinor (),
+  string getVersionStamp (),
+  string getPackageTarname (),
+  string getPackageName (),
+  string getPackageEmail (),
+  string getPackageURL (),
+  i64 uptime (),
+  oneway void halt ()
 }
