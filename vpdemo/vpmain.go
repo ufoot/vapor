@@ -20,24 +20,16 @@
 package main
 
 import (
-	"github.com/ufoot/vapor/vpbusserver"
 	"github.com/ufoot/vapor/vploop"
 	"github.com/ufoot/vapor/vpsys"
 )
 
 func main() {
-	var state1 NibblesState
-	var state2 NibblesState
-	var err error
+	var state NibblesState
+	var server NibblesServer
 
 	vpsys.LogInit("vpdemo")
-	vploop.MainLoop(state1, state2)
-
-	vpsys.LogNotice("starting Thrift server")
-	err = vpbusserver.RunDefault()
-	if err != nil {
-		vpsys.LogWarning("unable to start Thrift server", err)
-	}
+	vploop.MainLoop(state, server)
 
 	return
 }

@@ -26,14 +26,14 @@ import (
 	"github.com/ufoot/vapor/vpsys"
 )
 
-func runServer(transportFactory thrift.TTransportFactory, protocolFactory thrift.TProtocolFactory, addr string) error {
+func runServer(transportFactory thrift.TTransportFactory, protocolFactory thrift.TProtocolFactory, addr string) (*thrift.TSimpleServer, error) {
 	var transport thrift.TServerTransport
 	var err error
 
 	transport, err = thrift.NewTServerSocket(addr)
 
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to create server socket")
+		return nil, vpsys.ErrorChain(err, "unable to create server socket")
 	}
 	vpsys.LogNoticef("%T\n", transport)
 	handler := vpbus.New()
@@ -41,10 +41,10 @@ func runServer(transportFactory thrift.TTransportFactory, protocolFactory thrift
 	server := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
 
 	vpsys.LogNoticef("Starting Thrift server on %s\n", addr)
-	return server.Serve()
+	return server, server.Serve()
 }
 
 // RunDefault runs a server with default parameters (for testing purposes).
-func RunDefault() error {
+func RunDefault() (*thrift.TSimpleServer, error) {
 	return runServer(thrift.NewTTransportFactory(), thrift.NewTBinaryProtocolFactoryDefault(), "127.0.0.1:9090")
 }
