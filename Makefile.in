@@ -51,10 +51,10 @@ devel: indent dep stamp vp devel-vp
 doc: indent dep stamp doc-vp
 
 clean:
-	rm -rf bin pkg doc thrift/gen-*
+	rm -rf bin/vp* pkg doc/txt doc/html thrift/gen-*
 
 distclean: clean
-	rm -rf autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src
+	rm -rf bin/* autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src
 	find . -name "*~" -exec rm -f "{}" \;
 
 get:

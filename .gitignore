@@ -7,9 +7,11 @@ Makefile
 Makefile.dep
 Makefile.help
 src
-bin
+bin/vp*
+bin/golint
 pkg
-doc
+doc/txt
+doc/html
 thrift/gen-*
 *~
 *#*

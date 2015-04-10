@@ -28,10 +28,9 @@ if [ ! -d .utils ] ; then
 fi
 
 cd thrift && \
-    thrift --gen go --gen cpp --gen html vpbusapi.thrift && \
+    thrift --gen go --gen cpp --gen html:standalone vpbusapi.thrift && \
     cp ./gen-go/vpbusapi/*.go ../vpbusapi/ && \
     cp ./gen-go/vpbusapi/vp_bus_api-remote/vp_bus_api-remote.go ../vpbusclient/vpbusclient.go && \
-    sed -i "s/\"vpbusapi\"/\"github.com\/ufoot\/vapor\/vpbusapi\"/" ../vpbusclient/vpbusclient.go
-
-
+    sed -i "s/\"vpbusapi\"/\"github.com\/ufoot\/vapor\/vpbusapi\"/" ../vpbusclient/vpbusclient.go && \
+    cp ./gen-html/vpbusapi.html ../doc/thrift-vpbusapi.html
 
