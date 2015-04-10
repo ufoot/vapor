@@ -6,6 +6,9 @@ components that are not directly linked to the
 [Liquid War](http://www.ufoot.org/liquidwar) gameplay,
 including, but not limited to, network tools, massive parallel
 computation, game loops, fixed-point math arithmetics, etc.
+Desgin might evolve but as of today, the most probable option is
+that this package would handle all game logic while a GUI
+client, typically written in C++, would connect to it.
 
 Overview
 ========
