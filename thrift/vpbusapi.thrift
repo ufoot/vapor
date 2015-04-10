@@ -26,16 +26,24 @@
 namespace cpp vpbusapi
 namespace go vpbusapi
 
+struct Version {
+  1: i32 Major, 
+  2: i32 Minor,
+  3: string Stamp,
+}
+
+struct Package {
+  1: string Tarname,
+  2: string Name,
+  3: string Email,
+  4: string URL,
+}
+
 service VpBusApi
 {
   void ping (),
-  i32 getVersionMajor (),
-  i32 getVersionMinor (),
-  string getVersionStamp (),
-  string getPackageTarname (),
-  string getPackageName (),
-  string getPackageEmail (),
-  string getPackageURL (),
+  Version getVersion (),
+  Package getPackage (),
   i64 uptime (),
   oneway void halt ()
 }

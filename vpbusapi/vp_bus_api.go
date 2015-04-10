@@ -16,13 +16,8 @@ var _ = fmt.Printf
 
 type VpBusApi interface {
 	Ping() (err error)
-	GetVersionMajor() (r int32, err error)
-	GetVersionMinor() (r int32, err error)
-	GetVersionStamp() (r string, err error)
-	GetPackageTarname() (r string, err error)
-	GetPackageName() (r string, err error)
-	GetPackageEmail() (r string, err error)
-	GetPackageURL() (r string, err error)
+	GetVersion() (r *Version, err error)
+	GetPackage() (r *Package, err error)
 	Uptime() (r int64, err error)
 	Halt() (err error)
 }
@@ -108,29 +103,29 @@ func (p *VpBusApiClient) recvPing() (err error) {
 	return
 }
 
-func (p *VpBusApiClient) GetVersionMajor() (r int32, err error) {
-	if err = p.sendGetVersionMajor(); err != nil {
+func (p *VpBusApiClient) GetVersion() (r *Version, err error) {
+	if err = p.sendGetVersion(); err != nil {
 		return
 	}
-	return p.recvGetVersionMajor()
+	return p.recvGetVersion()
 }
 
-func (p *VpBusApiClient) sendGetVersionMajor() (err error) {
+func (p *VpBusApiClient) sendGetVersion() (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	oprot.WriteMessageBegin("getVersionMajor", thrift.CALL, p.SeqId)
-	args4 := NewGetVersionMajorArgs()
+	oprot.WriteMessageBegin("getVersion", thrift.CALL, p.SeqId)
+	args4 := NewGetVersionArgs()
 	err = args4.Write(oprot)
 	oprot.WriteMessageEnd()
 	oprot.Flush()
 	return
 }
 
-func (p *VpBusApiClient) recvGetVersionMajor() (value int32, err error) {
+func (p *VpBusApiClient) recvGetVersion() (value *Version, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -157,36 +152,36 @@ func (p *VpBusApiClient) recvGetVersionMajor() (value int32, err error) {
 		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
 		return
 	}
-	result5 := NewGetVersionMajorResult()
+	result5 := NewGetVersionResult()
 	err = result5.Read(iprot)
 	iprot.ReadMessageEnd()
 	value = result5.Success
 	return
 }
 
-func (p *VpBusApiClient) GetVersionMinor() (r int32, err error) {
-	if err = p.sendGetVersionMinor(); err != nil {
+func (p *VpBusApiClient) GetPackage() (r *Package, err error) {
+	if err = p.sendGetPackage(); err != nil {
 		return
 	}
-	return p.recvGetVersionMinor()
+	return p.recvGetPackage()
 }
 
-func (p *VpBusApiClient) sendGetVersionMinor() (err error) {
+func (p *VpBusApiClient) sendGetPackage() (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	oprot.WriteMessageBegin("getVersionMinor", thrift.CALL, p.SeqId)
-	args8 := NewGetVersionMinorArgs()
+	oprot.WriteMessageBegin("getPackage", thrift.CALL, p.SeqId)
+	args8 := NewGetPackageArgs()
 	err = args8.Write(oprot)
 	oprot.WriteMessageEnd()
 	oprot.Flush()
 	return
 }
 
-func (p *VpBusApiClient) recvGetVersionMinor() (value int32, err error) {
+func (p *VpBusApiClient) recvGetPackage() (value *Package, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -213,36 +208,36 @@ func (p *VpBusApiClient) recvGetVersionMinor() (value int32, err error) {
 		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
 		return
 	}
-	result9 := NewGetVersionMinorResult()
+	result9 := NewGetPackageResult()
 	err = result9.Read(iprot)
 	iprot.ReadMessageEnd()
 	value = result9.Success
 	return
 }
 
-func (p *VpBusApiClient) GetVersionStamp() (r string, err error) {
-	if err = p.sendGetVersionStamp(); err != nil {
+func (p *VpBusApiClient) Uptime() (r int64, err error) {
+	if err = p.sendUptime(); err != nil {
 		return
 	}
-	return p.recvGetVersionStamp()
+	return p.recvUptime()
 }
 
-func (p *VpBusApiClient) sendGetVersionStamp() (err error) {
+func (p *VpBusApiClient) sendUptime() (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	oprot.WriteMessageBegin("getVersionStamp", thrift.CALL, p.SeqId)
-	args12 := NewGetVersionStampArgs()
+	oprot.WriteMessageBegin("uptime", thrift.CALL, p.SeqId)
+	args12 := NewUptimeArgs()
 	err = args12.Write(oprot)
 	oprot.WriteMessageEnd()
 	oprot.Flush()
 	return
 }
 
-func (p *VpBusApiClient) recvGetVersionStamp() (value string, err error) {
+func (p *VpBusApiClient) recvUptime() (value int64, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -269,36 +264,36 @@ func (p *VpBusApiClient) recvGetVersionStamp() (value string, err error) {
 		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
 		return
 	}
-	result13 := NewGetVersionStampResult()
+	result13 := NewUptimeResult()
 	err = result13.Read(iprot)
 	iprot.ReadMessageEnd()
 	value = result13.Success
 	return
 }
 
-func (p *VpBusApiClient) GetPackageTarname() (r string, err error) {
-	if err = p.sendGetPackageTarname(); err != nil {
+func (p *VpBusApiClient) Halt() (err error) {
+	if err = p.sendHalt(); err != nil {
 		return
 	}
-	return p.recvGetPackageTarname()
+	return
 }
 
-func (p *VpBusApiClient) sendGetPackageTarname() (err error) {
+func (p *VpBusApiClient) sendHalt() (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	oprot.WriteMessageBegin("getPackageTarname", thrift.CALL, p.SeqId)
-	args16 := NewGetPackageTarnameArgs()
+	oprot.WriteMessageBegin("halt", thrift.CALL, p.SeqId)
+	args16 := NewHaltArgs()
 	err = args16.Write(oprot)
 	oprot.WriteMessageEnd()
 	oprot.Flush()
 	return
 }
 
-func (p *VpBusApiClient) recvGetPackageTarname() (value string, err error) {
+func (p *VpBusApiClient) recvHalt() (err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -325,288 +320,8 @@ func (p *VpBusApiClient) recvGetPackageTarname() (value string, err error) {
 		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
 		return
 	}
-	result17 := NewGetPackageTarnameResult()
+	result17 := NewHaltResult()
 	err = result17.Read(iprot)
-	iprot.ReadMessageEnd()
-	value = result17.Success
-	return
-}
-
-func (p *VpBusApiClient) GetPackageName() (r string, err error) {
-	if err = p.sendGetPackageName(); err != nil {
-		return
-	}
-	return p.recvGetPackageName()
-}
-
-func (p *VpBusApiClient) sendGetPackageName() (err error) {
-	oprot := p.OutputProtocol
-	if oprot == nil {
-		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
-		p.OutputProtocol = oprot
-	}
-	p.SeqId++
-	oprot.WriteMessageBegin("getPackageName", thrift.CALL, p.SeqId)
-	args20 := NewGetPackageNameArgs()
-	err = args20.Write(oprot)
-	oprot.WriteMessageEnd()
-	oprot.Flush()
-	return
-}
-
-func (p *VpBusApiClient) recvGetPackageName() (value string, err error) {
-	iprot := p.InputProtocol
-	if iprot == nil {
-		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
-		p.InputProtocol = iprot
-	}
-	_, mTypeId, seqId, err := iprot.ReadMessageBegin()
-	if err != nil {
-		return
-	}
-	if mTypeId == thrift.EXCEPTION {
-		error22 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-		var error23 error
-		error23, err = error22.Read(iprot)
-		if err != nil {
-			return
-		}
-		if err = iprot.ReadMessageEnd(); err != nil {
-			return
-		}
-		err = error23
-		return
-	}
-	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
-		return
-	}
-	result21 := NewGetPackageNameResult()
-	err = result21.Read(iprot)
-	iprot.ReadMessageEnd()
-	value = result21.Success
-	return
-}
-
-func (p *VpBusApiClient) GetPackageEmail() (r string, err error) {
-	if err = p.sendGetPackageEmail(); err != nil {
-		return
-	}
-	return p.recvGetPackageEmail()
-}
-
-func (p *VpBusApiClient) sendGetPackageEmail() (err error) {
-	oprot := p.OutputProtocol
-	if oprot == nil {
-		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
-		p.OutputProtocol = oprot
-	}
-	p.SeqId++
-	oprot.WriteMessageBegin("getPackageEmail", thrift.CALL, p.SeqId)
-	args24 := NewGetPackageEmailArgs()
-	err = args24.Write(oprot)
-	oprot.WriteMessageEnd()
-	oprot.Flush()
-	return
-}
-
-func (p *VpBusApiClient) recvGetPackageEmail() (value string, err error) {
-	iprot := p.InputProtocol
-	if iprot == nil {
-		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
-		p.InputProtocol = iprot
-	}
-	_, mTypeId, seqId, err := iprot.ReadMessageBegin()
-	if err != nil {
-		return
-	}
-	if mTypeId == thrift.EXCEPTION {
-		error26 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-		var error27 error
-		error27, err = error26.Read(iprot)
-		if err != nil {
-			return
-		}
-		if err = iprot.ReadMessageEnd(); err != nil {
-			return
-		}
-		err = error27
-		return
-	}
-	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
-		return
-	}
-	result25 := NewGetPackageEmailResult()
-	err = result25.Read(iprot)
-	iprot.ReadMessageEnd()
-	value = result25.Success
-	return
-}
-
-func (p *VpBusApiClient) GetPackageURL() (r string, err error) {
-	if err = p.sendGetPackageURL(); err != nil {
-		return
-	}
-	return p.recvGetPackageURL()
-}
-
-func (p *VpBusApiClient) sendGetPackageURL() (err error) {
-	oprot := p.OutputProtocol
-	if oprot == nil {
-		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
-		p.OutputProtocol = oprot
-	}
-	p.SeqId++
-	oprot.WriteMessageBegin("getPackageURL", thrift.CALL, p.SeqId)
-	args28 := NewGetPackageURLArgs()
-	err = args28.Write(oprot)
-	oprot.WriteMessageEnd()
-	oprot.Flush()
-	return
-}
-
-func (p *VpBusApiClient) recvGetPackageURL() (value string, err error) {
-	iprot := p.InputProtocol
-	if iprot == nil {
-		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
-		p.InputProtocol = iprot
-	}
-	_, mTypeId, seqId, err := iprot.ReadMessageBegin()
-	if err != nil {
-		return
-	}
-	if mTypeId == thrift.EXCEPTION {
-		error30 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-		var error31 error
-		error31, err = error30.Read(iprot)
-		if err != nil {
-			return
-		}
-		if err = iprot.ReadMessageEnd(); err != nil {
-			return
-		}
-		err = error31
-		return
-	}
-	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
-		return
-	}
-	result29 := NewGetPackageURLResult()
-	err = result29.Read(iprot)
-	iprot.ReadMessageEnd()
-	value = result29.Success
-	return
-}
-
-func (p *VpBusApiClient) Uptime() (r int64, err error) {
-	if err = p.sendUptime(); err != nil {
-		return
-	}
-	return p.recvUptime()
-}
-
-func (p *VpBusApiClient) sendUptime() (err error) {
-	oprot := p.OutputProtocol
-	if oprot == nil {
-		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
-		p.OutputProtocol = oprot
-	}
-	p.SeqId++
-	oprot.WriteMessageBegin("uptime", thrift.CALL, p.SeqId)
-	args32 := NewUptimeArgs()
-	err = args32.Write(oprot)
-	oprot.WriteMessageEnd()
-	oprot.Flush()
-	return
-}
-
-func (p *VpBusApiClient) recvUptime() (value int64, err error) {
-	iprot := p.InputProtocol
-	if iprot == nil {
-		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
-		p.InputProtocol = iprot
-	}
-	_, mTypeId, seqId, err := iprot.ReadMessageBegin()
-	if err != nil {
-		return
-	}
-	if mTypeId == thrift.EXCEPTION {
-		error34 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-		var error35 error
-		error35, err = error34.Read(iprot)
-		if err != nil {
-			return
-		}
-		if err = iprot.ReadMessageEnd(); err != nil {
-			return
-		}
-		err = error35
-		return
-	}
-	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
-		return
-	}
-	result33 := NewUptimeResult()
-	err = result33.Read(iprot)
-	iprot.ReadMessageEnd()
-	value = result33.Success
-	return
-}
-
-func (p *VpBusApiClient) Halt() (err error) {
-	if err = p.sendHalt(); err != nil {
-		return
-	}
-	return
-}
-
-func (p *VpBusApiClient) sendHalt() (err error) {
-	oprot := p.OutputProtocol
-	if oprot == nil {
-		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
-		p.OutputProtocol = oprot
-	}
-	p.SeqId++
-	oprot.WriteMessageBegin("halt", thrift.CALL, p.SeqId)
-	args36 := NewHaltArgs()
-	err = args36.Write(oprot)
-	oprot.WriteMessageEnd()
-	oprot.Flush()
-	return
-}
-
-func (p *VpBusApiClient) recvHalt() (err error) {
-	iprot := p.InputProtocol
-	if iprot == nil {
-		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
-		p.InputProtocol = iprot
-	}
-	_, mTypeId, seqId, err := iprot.ReadMessageBegin()
-	if err != nil {
-		return
-	}
-	if mTypeId == thrift.EXCEPTION {
-		error38 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-		var error39 error
-		error39, err = error38.Read(iprot)
-		if err != nil {
-			return
-		}
-		if err = iprot.ReadMessageEnd(); err != nil {
-			return
-		}
-		err = error39
-		return
-	}
-	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "ping failed: out of sequence response")
-		return
-	}
-	result37 := NewHaltResult()
-	err = result37.Read(iprot)
 	iprot.ReadMessageEnd()
 	return
 }
@@ -631,18 +346,13 @@ func (p *VpBusApiProcessor) ProcessorMap() map[string]thrift.TProcessorFunction 
 
 func NewVpBusApiProcessor(handler VpBusApi) *VpBusApiProcessor {
 
-	self40 := &VpBusApiProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
-	self40.processorMap["ping"] = &vpBusApiProcessorPing{handler: handler}
-	self40.processorMap["getVersionMajor"] = &vpBusApiProcessorGetVersionMajor{handler: handler}
-	self40.processorMap["getVersionMinor"] = &vpBusApiProcessorGetVersionMinor{handler: handler}
-	self40.processorMap["getVersionStamp"] = &vpBusApiProcessorGetVersionStamp{handler: handler}
-	self40.processorMap["getPackageTarname"] = &vpBusApiProcessorGetPackageTarname{handler: handler}
-	self40.processorMap["getPackageName"] = &vpBusApiProcessorGetPackageName{handler: handler}
-	self40.processorMap["getPackageEmail"] = &vpBusApiProcessorGetPackageEmail{handler: handler}
-	self40.processorMap["getPackageURL"] = &vpBusApiProcessorGetPackageURL{handler: handler}
-	self40.processorMap["uptime"] = &vpBusApiProcessorUptime{handler: handler}
-	self40.processorMap["halt"] = &vpBusApiProcessorHalt{handler: handler}
-	return self40
+	self20 := &VpBusApiProcessor{handler: handler, processorMap: make(map[string]thrift.TProcessorFunction)}
+	self20.processorMap["ping"] = &vpBusApiProcessorPing{handler: handler}
+	self20.processorMap["getVersion"] = &vpBusApiProcessorGetVersion{handler: handler}
+	self20.processorMap["getPackage"] = &vpBusApiProcessorGetPackage{handler: handler}
+	self20.processorMap["uptime"] = &vpBusApiProcessorUptime{handler: handler}
+	self20.processorMap["halt"] = &vpBusApiProcessorHalt{handler: handler}
+	return self20
 }
 
 func (p *VpBusApiProcessor) Process(iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
@@ -655,12 +365,12 @@ func (p *VpBusApiProcessor) Process(iprot, oprot thrift.TProtocol) (success bool
 	}
 	iprot.Skip(thrift.STRUCT)
 	iprot.ReadMessageEnd()
-	x41 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function "+name)
+	x21 := thrift.NewTApplicationException(thrift.UNKNOWN_METHOD, "Unknown function "+name)
 	oprot.WriteMessageBegin(name, thrift.EXCEPTION, seqId)
-	x41.Write(oprot)
+	x21.Write(oprot)
 	oprot.WriteMessageEnd()
 	oprot.Flush()
-	return false, x41
+	return false, x21
 
 }
 
@@ -707,32 +417,32 @@ func (p *vpBusApiProcessorPing) Process(seqId int32, iprot, oprot thrift.TProtoc
 	return true, err
 }
 
-type vpBusApiProcessorGetVersionMajor struct {
+type vpBusApiProcessorGetVersion struct {
 	handler VpBusApi
 }
 
-func (p *vpBusApiProcessorGetVersionMajor) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := NewGetVersionMajorArgs()
+func (p *vpBusApiProcessorGetVersion) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := NewGetVersionArgs()
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getVersionMajor", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("getVersion", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
 		return
 	}
 	iprot.ReadMessageEnd()
-	result := NewGetVersionMajorResult()
-	if result.Success, err = p.handler.GetVersionMajor(); err != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getVersionMajor: "+err.Error())
-		oprot.WriteMessageBegin("getVersionMajor", thrift.EXCEPTION, seqId)
+	result := NewGetVersionResult()
+	if result.Success, err = p.handler.GetVersion(); err != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getVersion: "+err.Error())
+		oprot.WriteMessageBegin("getVersion", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
 		return
 	}
-	if err2 := oprot.WriteMessageBegin("getVersionMajor", thrift.REPLY, seqId); err2 != nil {
+	if err2 := oprot.WriteMessageBegin("getVersion", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 := result.Write(oprot); err == nil && err2 != nil {
@@ -750,247 +460,32 @@ func (p *vpBusApiProcessorGetVersionMajor) Process(seqId int32, iprot, oprot thr
 	return true, err
 }
 
-type vpBusApiProcessorGetVersionMinor struct {
+type vpBusApiProcessorGetPackage struct {
 	handler VpBusApi
 }
 
-func (p *vpBusApiProcessorGetVersionMinor) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := NewGetVersionMinorArgs()
+func (p *vpBusApiProcessorGetPackage) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := NewGetPackageArgs()
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getVersionMinor", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("getPackage", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
 		return
 	}
 	iprot.ReadMessageEnd()
-	result := NewGetVersionMinorResult()
-	if result.Success, err = p.handler.GetVersionMinor(); err != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getVersionMinor: "+err.Error())
-		oprot.WriteMessageBegin("getVersionMinor", thrift.EXCEPTION, seqId)
+	result := NewGetPackageResult()
+	if result.Success, err = p.handler.GetPackage(); err != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getPackage: "+err.Error())
+		oprot.WriteMessageBegin("getPackage", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
 		return
 	}
-	if err2 := oprot.WriteMessageBegin("getVersionMinor", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 := result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 := oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 := oprot.Flush(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type vpBusApiProcessorGetVersionStamp struct {
-	handler VpBusApi
-}
-
-func (p *vpBusApiProcessorGetVersionStamp) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := NewGetVersionStampArgs()
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getVersionStamp", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush()
-		return
-	}
-	iprot.ReadMessageEnd()
-	result := NewGetVersionStampResult()
-	if result.Success, err = p.handler.GetVersionStamp(); err != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getVersionStamp: "+err.Error())
-		oprot.WriteMessageBegin("getVersionStamp", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush()
-		return
-	}
-	if err2 := oprot.WriteMessageBegin("getVersionStamp", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 := result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 := oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 := oprot.Flush(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type vpBusApiProcessorGetPackageTarname struct {
-	handler VpBusApi
-}
-
-func (p *vpBusApiProcessorGetPackageTarname) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := NewGetPackageTarnameArgs()
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getPackageTarname", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush()
-		return
-	}
-	iprot.ReadMessageEnd()
-	result := NewGetPackageTarnameResult()
-	if result.Success, err = p.handler.GetPackageTarname(); err != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getPackageTarname: "+err.Error())
-		oprot.WriteMessageBegin("getPackageTarname", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush()
-		return
-	}
-	if err2 := oprot.WriteMessageBegin("getPackageTarname", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 := result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 := oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 := oprot.Flush(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type vpBusApiProcessorGetPackageName struct {
-	handler VpBusApi
-}
-
-func (p *vpBusApiProcessorGetPackageName) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := NewGetPackageNameArgs()
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getPackageName", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush()
-		return
-	}
-	iprot.ReadMessageEnd()
-	result := NewGetPackageNameResult()
-	if result.Success, err = p.handler.GetPackageName(); err != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getPackageName: "+err.Error())
-		oprot.WriteMessageBegin("getPackageName", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush()
-		return
-	}
-	if err2 := oprot.WriteMessageBegin("getPackageName", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 := result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 := oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 := oprot.Flush(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type vpBusApiProcessorGetPackageEmail struct {
-	handler VpBusApi
-}
-
-func (p *vpBusApiProcessorGetPackageEmail) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := NewGetPackageEmailArgs()
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getPackageEmail", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush()
-		return
-	}
-	iprot.ReadMessageEnd()
-	result := NewGetPackageEmailResult()
-	if result.Success, err = p.handler.GetPackageEmail(); err != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getPackageEmail: "+err.Error())
-		oprot.WriteMessageBegin("getPackageEmail", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush()
-		return
-	}
-	if err2 := oprot.WriteMessageBegin("getPackageEmail", thrift.REPLY, seqId); err2 != nil {
-		err = err2
-	}
-	if err2 := result.Write(oprot); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 := oprot.WriteMessageEnd(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err2 := oprot.Flush(); err == nil && err2 != nil {
-		err = err2
-	}
-	if err != nil {
-		return
-	}
-	return true, err
-}
-
-type vpBusApiProcessorGetPackageURL struct {
-	handler VpBusApi
-}
-
-func (p *vpBusApiProcessorGetPackageURL) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := NewGetPackageURLArgs()
-	if err = args.Read(iprot); err != nil {
-		iprot.ReadMessageEnd()
-		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("getPackageURL", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush()
-		return
-	}
-	iprot.ReadMessageEnd()
-	result := NewGetPackageURLResult()
-	if result.Success, err = p.handler.GetPackageURL(); err != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing getPackageURL: "+err.Error())
-		oprot.WriteMessageBegin("getPackageURL", thrift.EXCEPTION, seqId)
-		x.Write(oprot)
-		oprot.WriteMessageEnd()
-		oprot.Flush()
-		return
-	}
-	if err2 := oprot.WriteMessageBegin("getPackageURL", thrift.REPLY, seqId); err2 != nil {
+	if err2 := oprot.WriteMessageBegin("getPackage", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 := result.Write(oprot); err == nil && err2 != nil {
@@ -1194,14 +689,14 @@ func (p *PingResult) String() string {
 	return fmt.Sprintf("PingResult(%+v)", *p)
 }
 
-type GetVersionMajorArgs struct {
+type GetVersionArgs struct {
 }
 
-func NewGetVersionMajorArgs() *GetVersionMajorArgs {
-	return &GetVersionMajorArgs{}
+func NewGetVersionArgs() *GetVersionArgs {
+	return &GetVersionArgs{}
 }
 
-func (p *GetVersionMajorArgs) Read(iprot thrift.TProtocol) error {
+func (p *GetVersionArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return fmt.Errorf("%T read error", p)
 	}
@@ -1223,8 +718,8 @@ func (p *GetVersionMajorArgs) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *GetVersionMajorArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getVersionMajor_args"); err != nil {
+func (p *GetVersionArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getVersion_args"); err != nil {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	if err := oprot.WriteFieldStop(); err != nil {
@@ -1236,159 +731,22 @@ func (p *GetVersionMajorArgs) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *GetVersionMajorArgs) String() string {
+func (p *GetVersionArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("GetVersionMajorArgs(%+v)", *p)
+	return fmt.Sprintf("GetVersionArgs(%+v)", *p)
 }
 
-type GetVersionMajorResult struct {
-	Success int32 `thrift:"success,0"`
+type GetVersionResult struct {
+	Success *Version `thrift:"success,0"`
 }
 
-func NewGetVersionMajorResult() *GetVersionMajorResult {
-	return &GetVersionMajorResult{}
+func NewGetVersionResult() *GetVersionResult {
+	return &GetVersionResult{}
 }
 
-func (p *GetVersionMajorResult) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		switch fieldId {
-		case 0:
-			if err := p.readField0(iprot); err != nil {
-				return err
-			}
-		default:
-			if err := iprot.Skip(fieldTypeId); err != nil {
-				return err
-			}
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GetVersionMajorResult) readField0(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
-		return fmt.Errorf("error reading field 0: %s")
-	} else {
-		p.Success = v
-	}
-	return nil
-}
-
-func (p *GetVersionMajorResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getVersionMajor_result"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	switch {
-	default:
-		if err := p.writeField0(oprot); err != nil {
-			return err
-		}
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GetVersionMajorResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("success", thrift.I32, 0); err != nil {
-		return fmt.Errorf("%T write field begin error 0:success: %s", p, err)
-	}
-	if err := oprot.WriteI32(int32(p.Success)); err != nil {
-		return fmt.Errorf("%T.success (0) field write error: %s", p)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return fmt.Errorf("%T write field end error 0:success: %s", p, err)
-	}
-	return err
-}
-
-func (p *GetVersionMajorResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GetVersionMajorResult(%+v)", *p)
-}
-
-type GetVersionMinorArgs struct {
-}
-
-func NewGetVersionMinorArgs() *GetVersionMinorArgs {
-	return &GetVersionMinorArgs{}
-}
-
-func (p *GetVersionMinorArgs) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GetVersionMinorArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getVersionMinor_args"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GetVersionMinorArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GetVersionMinorArgs(%+v)", *p)
-}
-
-type GetVersionMinorResult struct {
-	Success int32 `thrift:"success,0"`
-}
-
-func NewGetVersionMinorResult() *GetVersionMinorResult {
-	return &GetVersionMinorResult{}
-}
-
-func (p *GetVersionMinorResult) Read(iprot thrift.TProtocol) error {
+func (p *GetVersionResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return fmt.Errorf("%T read error", p)
 	}
@@ -1420,17 +778,16 @@ func (p *GetVersionMinorResult) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *GetVersionMinorResult) readField0(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadI32(); err != nil {
-		return fmt.Errorf("error reading field 0: %s")
-	} else {
-		p.Success = v
+func (p *GetVersionResult) readField0(iprot thrift.TProtocol) error {
+	p.Success = NewVersion()
+	if err := p.Success.Read(iprot); err != nil {
+		return fmt.Errorf("%T error reading struct: %s", p.Success)
 	}
 	return nil
 }
 
-func (p *GetVersionMinorResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getVersionMinor_result"); err != nil {
+func (p *GetVersionResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getVersion_result"); err != nil {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	switch {
@@ -1448,34 +805,36 @@ func (p *GetVersionMinorResult) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *GetVersionMinorResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("success", thrift.I32, 0); err != nil {
-		return fmt.Errorf("%T write field begin error 0:success: %s", p, err)
-	}
-	if err := oprot.WriteI32(int32(p.Success)); err != nil {
-		return fmt.Errorf("%T.success (0) field write error: %s", p)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return fmt.Errorf("%T write field end error 0:success: %s", p, err)
+func (p *GetVersionResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.Success != nil {
+		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			return fmt.Errorf("%T write field begin error 0:success: %s", p, err)
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return fmt.Errorf("%T error writing struct: %s", p.Success)
+		}
+		if err := oprot.WriteFieldEnd(); err != nil {
+			return fmt.Errorf("%T write field end error 0:success: %s", p, err)
+		}
 	}
 	return err
 }
 
-func (p *GetVersionMinorResult) String() string {
+func (p *GetVersionResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("GetVersionMinorResult(%+v)", *p)
+	return fmt.Sprintf("GetVersionResult(%+v)", *p)
 }
 
-type GetVersionStampArgs struct {
+type GetPackageArgs struct {
 }
 
-func NewGetVersionStampArgs() *GetVersionStampArgs {
-	return &GetVersionStampArgs{}
+func NewGetPackageArgs() *GetPackageArgs {
+	return &GetPackageArgs{}
 }
 
-func (p *GetVersionStampArgs) Read(iprot thrift.TProtocol) error {
+func (p *GetPackageArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return fmt.Errorf("%T read error", p)
 	}
@@ -1497,8 +856,8 @@ func (p *GetVersionStampArgs) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *GetVersionStampArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getVersionStamp_args"); err != nil {
+func (p *GetPackageArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getPackage_args"); err != nil {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	if err := oprot.WriteFieldStop(); err != nil {
@@ -1510,22 +869,22 @@ func (p *GetVersionStampArgs) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *GetVersionStampArgs) String() string {
+func (p *GetPackageArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("GetVersionStampArgs(%+v)", *p)
+	return fmt.Sprintf("GetPackageArgs(%+v)", *p)
 }
 
-type GetVersionStampResult struct {
-	Success string `thrift:"success,0"`
+type GetPackageResult struct {
+	Success *Package `thrift:"success,0"`
 }
 
-func NewGetVersionStampResult() *GetVersionStampResult {
-	return &GetVersionStampResult{}
+func NewGetPackageResult() *GetPackageResult {
+	return &GetPackageResult{}
 }
 
-func (p *GetVersionStampResult) Read(iprot thrift.TProtocol) error {
+func (p *GetPackageResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return fmt.Errorf("%T read error", p)
 	}
@@ -1557,17 +916,16 @@ func (p *GetVersionStampResult) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *GetVersionStampResult) readField0(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return fmt.Errorf("error reading field 0: %s")
-	} else {
-		p.Success = v
+func (p *GetPackageResult) readField0(iprot thrift.TProtocol) error {
+	p.Success = NewPackage()
+	if err := p.Success.Read(iprot); err != nil {
+		return fmt.Errorf("%T error reading struct: %s", p.Success)
 	}
 	return nil
 }
 
-func (p *GetVersionStampResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getVersionStamp_result"); err != nil {
+func (p *GetPackageResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("getPackage_result"); err != nil {
 		return fmt.Errorf("%T write struct begin error: %s", p, err)
 	}
 	switch {
@@ -1585,572 +943,26 @@ func (p *GetVersionStampResult) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *GetVersionStampResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("success", thrift.STRING, 0); err != nil {
-		return fmt.Errorf("%T write field begin error 0:success: %s", p, err)
-	}
-	if err := oprot.WriteString(string(p.Success)); err != nil {
-		return fmt.Errorf("%T.success (0) field write error: %s", p)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return fmt.Errorf("%T write field end error 0:success: %s", p, err)
+func (p *GetPackageResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.Success != nil {
+		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			return fmt.Errorf("%T write field begin error 0:success: %s", p, err)
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return fmt.Errorf("%T error writing struct: %s", p.Success)
+		}
+		if err := oprot.WriteFieldEnd(); err != nil {
+			return fmt.Errorf("%T write field end error 0:success: %s", p, err)
+		}
 	}
 	return err
 }
 
-func (p *GetVersionStampResult) String() string {
+func (p *GetPackageResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("GetVersionStampResult(%+v)", *p)
-}
-
-type GetPackageTarnameArgs struct {
-}
-
-func NewGetPackageTarnameArgs() *GetPackageTarnameArgs {
-	return &GetPackageTarnameArgs{}
-}
-
-func (p *GetPackageTarnameArgs) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GetPackageTarnameArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getPackageTarname_args"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GetPackageTarnameArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GetPackageTarnameArgs(%+v)", *p)
-}
-
-type GetPackageTarnameResult struct {
-	Success string `thrift:"success,0"`
-}
-
-func NewGetPackageTarnameResult() *GetPackageTarnameResult {
-	return &GetPackageTarnameResult{}
-}
-
-func (p *GetPackageTarnameResult) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		switch fieldId {
-		case 0:
-			if err := p.readField0(iprot); err != nil {
-				return err
-			}
-		default:
-			if err := iprot.Skip(fieldTypeId); err != nil {
-				return err
-			}
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GetPackageTarnameResult) readField0(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return fmt.Errorf("error reading field 0: %s")
-	} else {
-		p.Success = v
-	}
-	return nil
-}
-
-func (p *GetPackageTarnameResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getPackageTarname_result"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	switch {
-	default:
-		if err := p.writeField0(oprot); err != nil {
-			return err
-		}
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GetPackageTarnameResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("success", thrift.STRING, 0); err != nil {
-		return fmt.Errorf("%T write field begin error 0:success: %s", p, err)
-	}
-	if err := oprot.WriteString(string(p.Success)); err != nil {
-		return fmt.Errorf("%T.success (0) field write error: %s", p)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return fmt.Errorf("%T write field end error 0:success: %s", p, err)
-	}
-	return err
-}
-
-func (p *GetPackageTarnameResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GetPackageTarnameResult(%+v)", *p)
-}
-
-type GetPackageNameArgs struct {
-}
-
-func NewGetPackageNameArgs() *GetPackageNameArgs {
-	return &GetPackageNameArgs{}
-}
-
-func (p *GetPackageNameArgs) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GetPackageNameArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getPackageName_args"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GetPackageNameArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GetPackageNameArgs(%+v)", *p)
-}
-
-type GetPackageNameResult struct {
-	Success string `thrift:"success,0"`
-}
-
-func NewGetPackageNameResult() *GetPackageNameResult {
-	return &GetPackageNameResult{}
-}
-
-func (p *GetPackageNameResult) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		switch fieldId {
-		case 0:
-			if err := p.readField0(iprot); err != nil {
-				return err
-			}
-		default:
-			if err := iprot.Skip(fieldTypeId); err != nil {
-				return err
-			}
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GetPackageNameResult) readField0(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return fmt.Errorf("error reading field 0: %s")
-	} else {
-		p.Success = v
-	}
-	return nil
-}
-
-func (p *GetPackageNameResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getPackageName_result"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	switch {
-	default:
-		if err := p.writeField0(oprot); err != nil {
-			return err
-		}
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GetPackageNameResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("success", thrift.STRING, 0); err != nil {
-		return fmt.Errorf("%T write field begin error 0:success: %s", p, err)
-	}
-	if err := oprot.WriteString(string(p.Success)); err != nil {
-		return fmt.Errorf("%T.success (0) field write error: %s", p)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return fmt.Errorf("%T write field end error 0:success: %s", p, err)
-	}
-	return err
-}
-
-func (p *GetPackageNameResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GetPackageNameResult(%+v)", *p)
-}
-
-type GetPackageEmailArgs struct {
-}
-
-func NewGetPackageEmailArgs() *GetPackageEmailArgs {
-	return &GetPackageEmailArgs{}
-}
-
-func (p *GetPackageEmailArgs) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GetPackageEmailArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getPackageEmail_args"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GetPackageEmailArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GetPackageEmailArgs(%+v)", *p)
-}
-
-type GetPackageEmailResult struct {
-	Success string `thrift:"success,0"`
-}
-
-func NewGetPackageEmailResult() *GetPackageEmailResult {
-	return &GetPackageEmailResult{}
-}
-
-func (p *GetPackageEmailResult) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		switch fieldId {
-		case 0:
-			if err := p.readField0(iprot); err != nil {
-				return err
-			}
-		default:
-			if err := iprot.Skip(fieldTypeId); err != nil {
-				return err
-			}
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GetPackageEmailResult) readField0(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return fmt.Errorf("error reading field 0: %s")
-	} else {
-		p.Success = v
-	}
-	return nil
-}
-
-func (p *GetPackageEmailResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getPackageEmail_result"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	switch {
-	default:
-		if err := p.writeField0(oprot); err != nil {
-			return err
-		}
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GetPackageEmailResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("success", thrift.STRING, 0); err != nil {
-		return fmt.Errorf("%T write field begin error 0:success: %s", p, err)
-	}
-	if err := oprot.WriteString(string(p.Success)); err != nil {
-		return fmt.Errorf("%T.success (0) field write error: %s", p)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return fmt.Errorf("%T write field end error 0:success: %s", p, err)
-	}
-	return err
-}
-
-func (p *GetPackageEmailResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GetPackageEmailResult(%+v)", *p)
-}
-
-type GetPackageURLArgs struct {
-}
-
-func NewGetPackageURLArgs() *GetPackageURLArgs {
-	return &GetPackageURLArgs{}
-}
-
-func (p *GetPackageURLArgs) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GetPackageURLArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getPackageURL_args"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GetPackageURLArgs) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GetPackageURLArgs(%+v)", *p)
-}
-
-type GetPackageURLResult struct {
-	Success string `thrift:"success,0"`
-}
-
-func NewGetPackageURLResult() *GetPackageURLResult {
-	return &GetPackageURLResult{}
-}
-
-func (p *GetPackageURLResult) Read(iprot thrift.TProtocol) error {
-	if _, err := iprot.ReadStructBegin(); err != nil {
-		return fmt.Errorf("%T read error", p)
-	}
-	for {
-		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
-		if err != nil {
-			return fmt.Errorf("%T field %d read error: %s", p, fieldId, err)
-		}
-		if fieldTypeId == thrift.STOP {
-			break
-		}
-		switch fieldId {
-		case 0:
-			if err := p.readField0(iprot); err != nil {
-				return err
-			}
-		default:
-			if err := iprot.Skip(fieldTypeId); err != nil {
-				return err
-			}
-		}
-		if err := iprot.ReadFieldEnd(); err != nil {
-			return err
-		}
-	}
-	if err := iprot.ReadStructEnd(); err != nil {
-		return fmt.Errorf("%T read struct end error: %s", p, err)
-	}
-	return nil
-}
-
-func (p *GetPackageURLResult) readField0(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadString(); err != nil {
-		return fmt.Errorf("error reading field 0: %s")
-	} else {
-		p.Success = v
-	}
-	return nil
-}
-
-func (p *GetPackageURLResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("getPackageURL_result"); err != nil {
-		return fmt.Errorf("%T write struct begin error: %s", p, err)
-	}
-	switch {
-	default:
-		if err := p.writeField0(oprot); err != nil {
-			return err
-		}
-	}
-	if err := oprot.WriteFieldStop(); err != nil {
-		return fmt.Errorf("%T write field stop error: %s", err)
-	}
-	if err := oprot.WriteStructEnd(); err != nil {
-		return fmt.Errorf("%T write struct stop error: %s", err)
-	}
-	return nil
-}
-
-func (p *GetPackageURLResult) writeField0(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("success", thrift.STRING, 0); err != nil {
-		return fmt.Errorf("%T write field begin error 0:success: %s", p, err)
-	}
-	if err := oprot.WriteString(string(p.Success)); err != nil {
-		return fmt.Errorf("%T.success (0) field write error: %s", p)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return fmt.Errorf("%T write field end error 0:success: %s", p, err)
-	}
-	return err
-}
-
-func (p *GetPackageURLResult) String() string {
-	if p == nil {
-		return "<nil>"
-	}
-	return fmt.Sprintf("GetPackageURLResult(%+v)", *p)
+	return fmt.Sprintf("GetPackageResult(%+v)", *p)
 }
 
 type UptimeArgs struct {

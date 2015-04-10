@@ -21,13 +21,8 @@ func Usage() {
 	flag.PrintDefaults()
 	fmt.Fprintln(os.Stderr, "\nFunctions:")
 	fmt.Fprintln(os.Stderr, "  void ping()")
-	fmt.Fprintln(os.Stderr, "  i32 getVersionMajor()")
-	fmt.Fprintln(os.Stderr, "  i32 getVersionMinor()")
-	fmt.Fprintln(os.Stderr, "  string getVersionStamp()")
-	fmt.Fprintln(os.Stderr, "  string getPackageTarname()")
-	fmt.Fprintln(os.Stderr, "  string getPackageName()")
-	fmt.Fprintln(os.Stderr, "  string getPackageEmail()")
-	fmt.Fprintln(os.Stderr, "  string getPackageURL()")
+	fmt.Fprintln(os.Stderr, "  Version getVersion()")
+	fmt.Fprintln(os.Stderr, "  Package getPackage()")
 	fmt.Fprintln(os.Stderr, "  i64 uptime()")
 	fmt.Fprintln(os.Stderr, "  void halt()")
 	fmt.Fprintln(os.Stderr)
@@ -132,60 +127,20 @@ func main() {
 		fmt.Print(client.Ping())
 		fmt.Print("\n")
 		break
-	case "getVersionMajor":
+	case "getVersion":
 		if flag.NArg()-1 != 0 {
-			fmt.Fprintln(os.Stderr, "GetVersionMajor requires 0 args")
+			fmt.Fprintln(os.Stderr, "GetVersion requires 0 args")
 			flag.Usage()
 		}
-		fmt.Print(client.GetVersionMajor())
+		fmt.Print(client.GetVersion())
 		fmt.Print("\n")
 		break
-	case "getVersionMinor":
+	case "getPackage":
 		if flag.NArg()-1 != 0 {
-			fmt.Fprintln(os.Stderr, "GetVersionMinor requires 0 args")
+			fmt.Fprintln(os.Stderr, "GetPackage requires 0 args")
 			flag.Usage()
 		}
-		fmt.Print(client.GetVersionMinor())
-		fmt.Print("\n")
-		break
-	case "getVersionStamp":
-		if flag.NArg()-1 != 0 {
-			fmt.Fprintln(os.Stderr, "GetVersionStamp requires 0 args")
-			flag.Usage()
-		}
-		fmt.Print(client.GetVersionStamp())
-		fmt.Print("\n")
-		break
-	case "getPackageTarname":
-		if flag.NArg()-1 != 0 {
-			fmt.Fprintln(os.Stderr, "GetPackageTarname requires 0 args")
-			flag.Usage()
-		}
-		fmt.Print(client.GetPackageTarname())
-		fmt.Print("\n")
-		break
-	case "getPackageName":
-		if flag.NArg()-1 != 0 {
-			fmt.Fprintln(os.Stderr, "GetPackageName requires 0 args")
-			flag.Usage()
-		}
-		fmt.Print(client.GetPackageName())
-		fmt.Print("\n")
-		break
-	case "getPackageEmail":
-		if flag.NArg()-1 != 0 {
-			fmt.Fprintln(os.Stderr, "GetPackageEmail requires 0 args")
-			flag.Usage()
-		}
-		fmt.Print(client.GetPackageEmail())
-		fmt.Print("\n")
-		break
-	case "getPackageURL":
-		if flag.NArg()-1 != 0 {
-			fmt.Fprintln(os.Stderr, "GetPackageURL requires 0 args")
-			flag.Usage()
-		}
-		fmt.Print(client.GetPackageURL())
+		fmt.Print(client.GetPackage())
 		fmt.Print("\n")
 		break
 	case "uptime":

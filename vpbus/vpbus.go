@@ -21,6 +21,7 @@ package vpbus
 
 import (
 	"github.com/ufoot/vapor/vpbuild"
+	"github.com/ufoot/vapor/vpbusapi"
 	"github.com/ufoot/vapor/vpsys"
 	"time"
 )
@@ -44,39 +45,27 @@ func (bus *VpBus) Ping() (err error) {
 	return nil
 }
 
-// GetVersionMajor returns the major version number.
-func (bus *VpBus) GetVersionMajor() (r int32, err error) {
-	return vpbuild.VersionMajor, nil
+// GetPackage returns the version of the program.
+func (bus *VpBus) GetPackage() (r *vpbusapi.Package, err error) {
+	var p vpbusapi.Package
+
+	p.Tarname = vpbuild.PackageTarname
+	p.Name = vpbuild.PackageName
+	p.Email = vpbuild.PackageEmail
+	p.URL = vpbuild.PackageURL
+
+	return &p, nil
 }
 
-// GetVersionMinor returns the minor version number.
-func (bus *VpBus) GetVersionMinor() (r int32, err error) {
-	return vpbuild.VersionMinor, nil
-}
+// GetVersion returns the version of the program.
+func (bus *VpBus) GetVersion() (r *vpbusapi.Version, err error) {
+	var v vpbusapi.Version
 
-// GetVersionStamp returns the version stamp.
-func (bus *VpBus) GetVersionStamp() (r string, err error) {
-	return vpbuild.VersionStamp, nil
-}
+	v.Major = vpbuild.VersionMajor
+	v.Minor = vpbuild.VersionMinor
+	v.Stamp = vpbuild.VersionStamp
 
-// GetPackageTarname returns the short package name.
-func (bus *VpBus) GetPackageTarname() (r string, err error) {
-	return vpbuild.PackageTarname, nil
-}
-
-// GetPackageName returns a human readable package name.
-func (bus *VpBus) GetPackageName() (r string, err error) {
-	return vpbuild.PackageName, nil
-}
-
-// GetPackageEmail returns the package maintainer's email.
-func (bus *VpBus) GetPackageEmail() (r string, err error) {
-	return vpbuild.PackageEmail, nil
-}
-
-// GetPackageURL returns the package home page address.
-func (bus *VpBus) GetPackageURL() (r string, err error) {
-	return vpbuild.PackageURL, nil
+	return &v, nil
 }
 
 // Uptime returns how many seconds the server has been up.
