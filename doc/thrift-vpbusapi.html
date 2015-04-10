@@ -214,22 +214,33 @@ code { line-height: 20px; }
 <tr><td>1</td><td>Major</td><td><code>i32</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>2</td><td>Minor</td><td><code>i32</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>3</td><td>Stamp</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
-</table><br/></div><div class="definition"><h3 id="Struct_Package">Struct: Package</h3>
+</table><br/>Version contains the program version, usefull
+what it is capable of.
+<br/></div><div class="definition"><h3 id="Struct_Package">Struct: Package</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>Tarname</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>2</td><td>Name</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>3</td><td>Email</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>4</td><td>URL</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
-</table><br/></div><hr/><h2 id="Services">Services</h2>
+</table><br/>Package contains informations about the program package,
+such as its name, email maintainer, homepage.
+<br/></div><hr/><h2 id="Services">Services</h2>
 <h3 id="Svc_VpBusApi">Service: VpBusApi</h3>
-<div class="definition"><h4 id="Fn_VpBusApi_ping">Function: VpBusApi.ping</h4>
+VpBusApi is used to communicate between Vapor and Fumes.
+Vapor is the Golang server and Fumes the C++ client.
+<br/><div class="definition"><h4 id="Fn_VpBusApi_ping">Function: VpBusApi.ping</h4>
 <pre><code>void</code> ping()
-</pre></div><div class="definition"><h4 id="Fn_VpBusApi_getVersion">Function: VpBusApi.getVersion</h4>
+</pre>ping is a basic ping function, just to check connection is up.
+<br/></div><div class="definition"><h4 id="Fn_VpBusApi_getVersion">Function: VpBusApi.getVersion</h4>
 <pre><code><a href="vpbusapi.html#Struct_Version">Version</a></code> getVersion()
-</pre></div><div class="definition"><h4 id="Fn_VpBusApi_getPackage">Function: VpBusApi.getPackage</h4>
+</pre>getVersion returns the program version.
+<br/></div><div class="definition"><h4 id="Fn_VpBusApi_getPackage">Function: VpBusApi.getPackage</h4>
 <pre><code><a href="vpbusapi.html#Struct_Package">Package</a></code> getPackage()
-</pre></div><div class="definition"><h4 id="Fn_VpBusApi_uptime">Function: VpBusApi.uptime</h4>
+</pre>getPackage returns the program package information.
+<br/></div><div class="definition"><h4 id="Fn_VpBusApi_uptime">Function: VpBusApi.uptime</h4>
 <pre><code>i64</code> uptime()
-</pre></div><div class="definition"><h4 id="Fn_VpBusApi_halt">Function: VpBusApi.halt</h4>
+</pre>uptime returns the uptime in seconds.
+<br/></div><div class="definition"><h4 id="Fn_VpBusApi_halt">Function: VpBusApi.halt</h4>
 <pre><code>void</code> halt()
-</pre></div></div></body></html>
+</pre>halt stops the server.
+<br/></div></div></body></html>

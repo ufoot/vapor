@@ -14,14 +14,23 @@ var _ = math.MinInt32
 var _ = thrift.ZERO
 var _ = fmt.Printf
 
-type VpBusApi interface {
+type VpBusApi interface { //VpBusApi is used to communicate between Vapor and Fumes.
+	//Vapor is the Golang server and Fumes the C++ client.
+
+	// ping is a basic ping function, just to check connection is up.
 	Ping() (err error)
+	// getVersion returns the program version.
 	GetVersion() (r *Version, err error)
+	// getPackage returns the program package information.
 	GetPackage() (r *Package, err error)
+	// uptime returns the uptime in seconds.
 	Uptime() (r int64, err error)
+	// halt stops the server.
 	Halt() (err error)
 }
 
+//VpBusApi is used to communicate between Vapor and Fumes.
+//Vapor is the Golang server and Fumes the C++ client.
 type VpBusApiClient struct {
 	Transport       thrift.TTransport
 	ProtocolFactory thrift.TProtocolFactory
@@ -48,6 +57,7 @@ func NewVpBusApiClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, opro
 	}
 }
 
+// ping is a basic ping function, just to check connection is up.
 func (p *VpBusApiClient) Ping() (err error) {
 	if err = p.sendPing(); err != nil {
 		return
@@ -103,6 +113,7 @@ func (p *VpBusApiClient) recvPing() (err error) {
 	return
 }
 
+// getVersion returns the program version.
 func (p *VpBusApiClient) GetVersion() (r *Version, err error) {
 	if err = p.sendGetVersion(); err != nil {
 		return
@@ -159,6 +170,7 @@ func (p *VpBusApiClient) recvGetVersion() (value *Version, err error) {
 	return
 }
 
+// getPackage returns the program package information.
 func (p *VpBusApiClient) GetPackage() (r *Package, err error) {
 	if err = p.sendGetPackage(); err != nil {
 		return
@@ -215,6 +227,7 @@ func (p *VpBusApiClient) recvGetPackage() (value *Package, err error) {
 	return
 }
 
+// uptime returns the uptime in seconds.
 func (p *VpBusApiClient) Uptime() (r int64, err error) {
 	if err = p.sendUptime(); err != nil {
 		return
@@ -271,6 +284,7 @@ func (p *VpBusApiClient) recvUptime() (value int64, err error) {
 	return
 }
 
+// halt stops the server.
 func (p *VpBusApiClient) Halt() (err error) {
 	if err = p.sendHalt(); err != nil {
 		return

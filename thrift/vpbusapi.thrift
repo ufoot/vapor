@@ -26,12 +26,20 @@
 namespace cpp vpbusapi
 namespace go vpbusapi
 
+/**
+ * Version contains the program version, usefull
+ * what it is capable of.
+ */
 struct Version {
   1: i32 Major, 
   2: i32 Minor,
   3: string Stamp,
 }
 
+/**
+ * Package contains informations about the program package,
+ * such as its name, email maintainer, homepage.
+ */
 struct Package {
   1: string Tarname,
   2: string Name,
@@ -39,11 +47,30 @@ struct Package {
   4: string URL,
 }
 
+/**
+ * VpBusApi is used to communicate between Vapor and Fumes.
+ * Vapor is the Golang server and Fumes the C++ client.
+ */
 service VpBusApi
 {
+  /**
+   * Ping is a basic ping function, just to check connection is up.
+   */
   void ping (),
+  /**
+   * GetVersion returns the program version.
+   */
   Version getVersion (),
+  /**
+   * GetPackage returns the program package information.
+   */
   Package getPackage (),
+  /**
+   * Uptime returns the uptime in seconds.
+   */
   i64 uptime (),
+  /**
+   * Halt stops the server.
+   */
   oneway void halt ()
 }
