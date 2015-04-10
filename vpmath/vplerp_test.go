@@ -33,7 +33,7 @@ func TestF32Lerp(t *testing.T) {
 
 	f = F32Lerp(f1, f2, beta)
 	if !vpnumber.F32IsSimilar(f, lerp) {
-		t.Errorf("bad lerp, got %f should be %f", f, beta)
+		t.Errorf("bad lerp, got %f should be %f", f, lerp)
 	}
 	f = F32Lerp(f1, f2, -vpnumber.F32Const1)
 	if f != f1 {
@@ -54,7 +54,7 @@ func TestF64Lerp(t *testing.T) {
 
 	f = F64Lerp(f1, f2, beta)
 	if !vpnumber.F64IsSimilar(f, lerp) {
-		t.Errorf("bad lerp, got %f should be %f", f, beta)
+		t.Errorf("bad lerp, got %f should be %f", f, lerp)
 	}
 	f = F64Lerp(f1, f2, -vpnumber.F64Const1)
 	if f != f1 {
@@ -75,7 +75,7 @@ func TestX32Lerp(t *testing.T) {
 
 	x = X32Lerp(x1, x2, beta)
 	if !vpnumber.X32IsSimilar(x, lerp) {
-		t.Errorf("bad lerp, got %x should be %x", x, lerp)
+		t.Errorf("bad lerp, got %s should be %s", x.String(), lerp.String())
 	}
 	x = X32Lerp(x1, x2, -vpnumber.X32Const1)
 	if x != x1 {
@@ -96,7 +96,7 @@ func TestX64Lerp(t *testing.T) {
 
 	x = X64Lerp(x1, x2, beta)
 	if !vpnumber.X64IsSimilar(x, lerp) {
-		t.Errorf("bad lerp, got %x should be %x", x, lerp)
+		t.Errorf("bad lerp, got %s should be %s", x.String(), lerp.String())
 	}
 	x = X64Lerp(x1, x2, -vpnumber.X64Const1)
 	if x != x1 {
