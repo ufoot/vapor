@@ -1,14 +1,15 @@
 Vapor is a toolkit designed to support Liquid War 7.
 
 While truely dedicated to power the multiplayer game Liquid War 7, it
-may be used to develop other games. The idea is to provide all the
-components that are not directly linked to the
-[Liquid War](http://www.ufoot.org/liquidwar) gameplay,
-including, but not limited to, network tools, massive parallel
-computation, game loops, fixed-point math arithmetics, etc.
-Desgin might evolve but as of today, the most probable option is
-that this package would handle all game logic while a GUI
-client, typically written in C++, would connect to it.
+may be used to develop other similar games. The idea is to provide all
+the components that are not directly linked to the
+[Liquid War](http://www.ufoot.org/liquidwar) gameplay, including, but not
+limited to, network tools, massive parallel computation, game loops,
+fixed-point math arithmetics, etc.  Design might evolve but as of
+today, the most probable option is that this package would handle all
+game logic while a GUI client, typically written in C++, would connect
+to it.  A candidate name for this client is
+[Fumes](https://github.com/ufoot/fumes).
 
 Overview
 ========
@@ -40,6 +41,12 @@ Project status
 --------------
 
 Experimental. Unstable. Under heavy work. Use at your own risks. Period.
+
+Why is it named Vapor?
+----------------------
+
+The main author of Liquid War struggles to find free time to hack arround,
+so most of this is [vaporware](https://en.wikipedia.org/wiki/Vaporware).
 
 News
 ====
