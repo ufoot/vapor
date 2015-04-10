@@ -283,15 +283,3 @@ func X32IsSimilar(x1 X32, x2 X32) bool {
 
 	return false
 }
-
-// X32Lerp performs a linear interpolation between a and b.
-func X32Lerp(x1 X32, x2 X32, beta X32) X32 {
-	switch {
-	case beta <= X32Const0:
-		return x1
-	case beta >= X32Const1:
-		return x2
-	}
-
-	return X32Mul(x1, (X32Const1-beta)) + X32Mul(x2, beta)
-}
