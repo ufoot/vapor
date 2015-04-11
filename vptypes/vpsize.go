@@ -20,13 +20,10 @@
 package vptypes
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/ufoot/vapor/vpsys"
-	"strings"
 )
 
-type Size int32
+type Size int
 
 const (
 	SizeSmall Size = iota
@@ -35,68 +32,38 @@ const (
 	SizeRange
 )
 
-const sizeSmallShortStr = "S"
-const sizeMediumShortStr = "M"
-const sizeLargeShortStr = "L"
-const sizeSmallLongStr = "small"
-const sizeMediumLongStr = "medium"
-const sizeLargeLongStr = "large"
+var sizeShortStr []string
+var sizeLongStr []string
+
+func init() {
+	sizeShortStr = make([]string, SizeRange)
+	sizeShortStr[SizeSmall] = "S"
+	sizeShortStr[SizeMedium] = "M"
+	sizeShortStr[SizeLarge] = "L"
+	sizeLongStr = make([]string, SizeRange)
+	sizeLongStr[SizeSmall] = "small"
+	sizeLongStr[SizeMedium] = "medium"
+	sizeLongStr[SizeLarge] = "large"
+}
 
 // MarshalJSON implements the json.Marshaler interface.
 func (s *Size) MarshalJSON() ([]byte, error) {
-	var js string
-
-	switch *s {
-	case SizeSmall:
-		js = sizeSmallShortStr
-	case SizeMedium:
-		js = sizeMediumShortStr
-	case SizeLarge:
-		js = sizeLargeLongStr
-	default:
-		return nil, fmt.Errorf("bad Size %d", s)
-	}
-	ret, err := json.Marshal(js)
-	if err != nil {
-		return nil, vpsys.ErrorChainf(err, "unable to marshal Size %s", js)
-	}
-
-	return ret, nil
+	return enumMarshalJSON(int(*s), &sizeShortStr)
 }
 
 // UnmarshalJSON implements the json.Unmarshaler interface.
 func (s *Size) UnmarshalJSON(data []byte) error {
-	var tmpStr string
-	var tmpInt int32
+	tmpInt, err := enumUnmarshalJSON(data, &sizeShortStr, &sizeLongStr)
 
-	err := json.Unmarshal(data, &tmpInt)
 	if err != nil {
-		err := json.Unmarshal(data, &tmpStr)
-		if err != nil {
-			if err != nil {
-				return vpsys.ErrorChain(err, "unable to unmarshal Size")
-			}
-		}
-		switch {
-		case strings.ToUpper(tmpStr) == sizeSmallShortStr || strings.ToLower(tmpStr) == sizeSmallLongStr:
-			*s = SizeSmall
-			return nil
-		case strings.ToUpper(tmpStr) == sizeMediumShortStr || strings.ToLower(tmpStr) == sizeMediumLongStr:
-			*s = SizeMedium
-			return nil
-		case strings.ToUpper(tmpStr) == sizeLargeShortStr || strings.ToLower(tmpStr) == sizeLargeLongStr:
-			*s = SizeLarge
-			return nil
-		default:
-			return fmt.Errorf("unable to interpret '%s' as a Size", tmpStr)
-		}
+		return vpsys.ErrorChain(err, "unable to unmarshal Size")
 	}
-
-	if tmpInt < int32(SizeSmall) || tmpInt > int32(SizeLarge) {
-		return fmt.Errorf("out of bound Size %d", tmpInt)
-	}
-
 	*s = Size(tmpInt)
 
 	return nil
+}
+
+// String returns a readable form of the Size.
+func (s *Size) String() string {
+	return enumString(int(*s), &sizeLongStr)
 }
