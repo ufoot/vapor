@@ -62,11 +62,10 @@ func enumUnmarshalJSON(data []byte, shortStr, longStr *[]string) (int, error) {
 				return i, nil
 			}
 		}
-	}
-
-	if tmpInt < 0 || tmpInt >= len(*shortStr) {
-		return -1, fmt.Errorf("out of bound enum %d, should be in range [0,%d)", tmpInt, len(*shortStr))
 	} else {
+		if tmpInt < 0 || tmpInt >= len(*shortStr) {
+			return -1, fmt.Errorf("out of bound enum %d, should be in range [0,%d)", tmpInt, len(*shortStr))
+		}
 		return tmpInt, nil
 	}
 

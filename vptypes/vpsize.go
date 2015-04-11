@@ -23,12 +23,18 @@ import (
 	"github.com/ufoot/vapor/vpsys"
 )
 
+// Size is a generic type to store small/medium/large values.
+// Typically used for game settings.
 type Size int
 
 const (
+	// SizeSmall represent an abritrary "small" value.
 	SizeSmall Size = iota
+	// SizeMedium represent an abritrary "medium" value.
 	SizeMedium
+	// SizeLarge represent an abritrary "large" value.
 	SizeLarge
+	// SizeRange is the number of available sizes.
 	SizeRange
 )
 

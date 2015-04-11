@@ -50,15 +50,13 @@ func F32Anglelerp(f1, f2, beta float32) float32 {
 	case f1 < f2:
 		if f2-f1 < math.Pi {
 			return F32Lerp(f1, f2, beta)
-		} else {
-			return F32Lerp(f1+f32Const2Pi, f2, beta)
 		}
+		return F32Lerp(f1+f32Const2Pi, f2, beta)
 	case f2 < f1:
 		if f1-f2 < math.Pi {
 			return F32Lerp(f1, f2, beta)
-		} else {
-			return F32Lerp(f1, f2+f32Const2Pi, beta)
 		}
+		return F32Lerp(f1, f2+f32Const2Pi, beta)
 	}
 
 	return f1
@@ -87,15 +85,13 @@ func F64Anglelerp(f1, f2, beta float64) float64 {
 	case f1 < f2:
 		if f2-f1 < math.Pi {
 			return F64Lerp(f1, f2, beta)
-		} else {
-			return F64Lerp(f1+f64Const2Pi, f2, beta)
 		}
+		return F64Lerp(f1+f64Const2Pi, f2, beta)
 	case f2 < f1:
 		if f1-f2 < math.Pi {
 			return F64Lerp(f1, f2, beta)
-		} else {
-			return F64Lerp(f1, f2+f64Const2Pi, beta)
 		}
+		return F64Lerp(f1, f2+f64Const2Pi, beta)
 	}
 
 	return f1
@@ -124,15 +120,13 @@ func X32Anglelerp(x1, x2, beta vpnumber.X32) vpnumber.X32 {
 	case x1 < x2:
 		if x2-x1 < X32ConstPi {
 			return X32Lerp(x1, x2, beta)
-		} else {
-			return X32Lerp(x1+X32Const2Pi, x2, beta)
 		}
+		return X32Lerp(x1+X32Const2Pi, x2, beta)
 	case x2 < x1:
 		if x1-x2 < X32ConstPi {
 			return X32Lerp(x1, x2, beta)
-		} else {
-			return X32Lerp(x1, x2+X32Const2Pi, beta)
 		}
+		return X32Lerp(x1, x2+X32Const2Pi, beta)
 	}
 
 	return x1
@@ -161,15 +155,13 @@ func X64Anglelerp(x1, x2, beta vpnumber.X64) vpnumber.X64 {
 	case x1 < x2:
 		if x2-x1 < X64ConstPi {
 			return X64Lerp(x1, x2, beta)
-		} else {
-			return X64Lerp(x1+X64Const2Pi, x2, beta)
 		}
+		return X64Lerp(x1+X64Const2Pi, x2, beta)
 	case x2 < x1:
 		if x1-x2 < X64ConstPi {
 			return X64Lerp(x1, x2, beta)
-		} else {
-			return X64Lerp(x1, x2+X64Const2Pi, beta)
 		}
+		return X64Lerp(x1, x2+X64Const2Pi, beta)
 	}
 
 	return x1
