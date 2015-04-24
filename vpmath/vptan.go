@@ -23,58 +23,14 @@ import (
 	"github.com/ufoot/vapor/vpnumber"
 )
 
-// X32Sin is a lookup table based implementation of the sinus
+// X32Tan is a lookup table based implementation of the tangent
 // function, working with fixed point numbers on 32 bits.
-func X32Sin(x vpnumber.X32) vpnumber.X32 {
-	var i int
-	var s vpnumber.X32 = 1
-
-	x = X32RadMod(x)
-
-	if x > X32ConstPi {
-		x -= X32ConstPi
-		s = -1
-	}
-	if x > X32ConstPi2 {
-		x = X32ConstPi - x
-	}
-
-	i = (int(x) * x32TableSize) / int(X32ConstPi2)
-
-	switch {
-	case i < 0:
-		i = 0
-	case i > x32TableSize:
-		i = x32TableSize
-	}
-
-	return x32SinTable[i] * s
+func X32Tan(x vpnumber.X32) vpnumber.X32 {
+	return vpnumber.X32Div(X32Sin(x), X32Cos(x))
 }
 
-// X64Sin is a lookup table based implementation of the sinus
+// X64Tan is a lookup table based implementation of the tangent
 // function, working with fixed point numbers on 64 bits.
-func X64Sin(x vpnumber.X64) vpnumber.X64 {
-	var i int
-	var s vpnumber.X64 = 1
-
-	x = X64RadMod(x)
-
-	if x > X64ConstPi {
-		x -= X64ConstPi
-		s = -1
-	}
-	if x > X64ConstPi2 {
-		x = X64ConstPi - x
-	}
-
-	i = (int(x) * x64TableSize) / int(X64ConstPi2)
-
-	switch {
-	case i < 0:
-		i = 0
-	case i > x64TableSize:
-		i = x64TableSize
-	}
-
-	return x64SinTable[i] * s
+func X64Tan(x vpnumber.X64) vpnumber.X64 {
+	return vpnumber.X64Div(X64Sin(x), X64Cos(x))
 }

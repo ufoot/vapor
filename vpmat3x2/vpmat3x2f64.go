@@ -57,7 +57,10 @@ func F64Scale(vec *vpvec2.F64) *F64 {
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.
 func F64Rot(r float64) *F64 {
-	return &F64{math.Cos(r), math.Sin(r), -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0}
+	cos := math.Cos(r)
+	sin := math.Sin(r)
+
+	return &F64{cos, sin, -sin, cos, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // F64RebaseOXY creates a matrix that translates from the default

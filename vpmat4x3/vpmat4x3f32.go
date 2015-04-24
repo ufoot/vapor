@@ -58,21 +58,30 @@ func F32Scale(vec *vpvec3.F32) *F32 {
 // The rotation is done in 3D over the x (1st) axis.
 // Angle is given in radians.
 func F32RotX(r float32) *F32 {
-	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, float32(math.Cos(float64(r))), float32(math.Sin(float64(r))), vpnumber.F32Const0, -float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0}
+	cos := float32(math.Cos(float64(r)))
+	sin := float32(math.Sin(float64(r)))
+
+	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, cos, sin, vpnumber.F32Const0, -sin, cos, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0}
 }
 
 // F32RotY creates a new rotation matrix.
 // The rotation is done in 3D over the y (2nd) axis.
 // Angle is given in radians.
 func F32RotY(r float32) *F32 {
-	return &F32{float32(math.Cos(float64(r))), vpnumber.F32Const0, -float32(math.Sin(float64(r))), vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, float32(math.Sin(float64(r))), vpnumber.F32Const0, float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0}
+	cos := float32(math.Cos(float64(r)))
+	sin := float32(math.Sin(float64(r)))
+
+	return &F32{cos, vpnumber.F32Const0, -sin, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, sin, vpnumber.F32Const0, cos, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0}
 }
 
 // F32RotZ creates a new rotation matrix.
 // The rotation is done in 3D over the z (3rd) axis.
 // Angle is given in radians.
 func F32RotZ(r float32) *F32 {
-	return &F32{float32(math.Cos(float64(r))), float32(math.Sin(float64(r))), vpnumber.F32Const0, -float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0}
+	cos := float32(math.Cos(float64(r)))
+	sin := float32(math.Sin(float64(r)))
+
+	return &F32{cos, sin, vpnumber.F32Const0, -sin, cos, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0}
 }
 
 // F32RebaseOXYZ creates a matrix that translates from the default

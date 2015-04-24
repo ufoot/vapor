@@ -50,7 +50,7 @@ func TestF64Anglelerp(t *testing.T) {
 	const f1 float64 = -2.0
 	const f2 float64 = 8.0
 	const beta float64 = 0.7
-	const lerp float64 = 2.486
+	const lerp float64 = 2.486726
 
 	f = F64Anglelerp(f1, f2, beta)
 	if !vpnumber.F64IsSimilar(f, lerp) {
@@ -71,7 +71,7 @@ func TestX32Anglelerp(t *testing.T) {
 	var x1 = vpnumber.F32ToX32(-2.0)
 	var x2 = vpnumber.F32ToX32(8.0)
 	var beta = vpnumber.F32ToX32(0.7)
-	var lerp = vpnumber.F32ToX32(2.486726)
+	var lerp = vpnumber.F32ToX32(2.486)
 
 	x = X32Anglelerp(x1, x2, beta)
 	if !vpnumber.X32IsSimilar(x, lerp) {

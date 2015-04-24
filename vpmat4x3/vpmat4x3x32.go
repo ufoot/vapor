@@ -58,21 +58,30 @@ func X32Scale(vec *vpvec3.X32) *X32 {
 // The rotation is done in 3D over the x (1st) axis.
 // Angle is given in radians.
 func X32RotX(r vpnumber.X32) *X32 {
-	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpmath.X32Cos(r), vpmath.X32Sin(r), vpnumber.X32Const0, -vpmath.X32Sin(r), vpmath.X32Cos(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0}
+	cos := vpmath.X32Cos(r)
+	sin := vpmath.X32Sin(r)
+
+	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, cos, sin, vpnumber.X32Const0, -sin, cos, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0}
 }
 
 // X32RotY creates a new rotation matrix.
 // The rotation is done in 3D over the y (2nd) axis.
 // Angle is given in radians.
 func X32RotY(r vpnumber.X32) *X32 {
-	return &X32{vpmath.X32Cos(r), vpnumber.X32Const0, -vpmath.X32Sin(r), vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpmath.X32Sin(r), vpnumber.X32Const0, vpmath.X32Cos(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0}
+	cos := vpmath.X32Cos(r)
+	sin := vpmath.X32Sin(r)
+
+	return &X32{cos, vpnumber.X32Const0, -sin, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, sin, vpnumber.X32Const0, cos, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0}
 }
 
 // X32RotZ creates a new rotation matrix.
 // The rotation is done in 3D over the z (3rd) axis.
 // Angle is given in radians.
 func X32RotZ(r vpnumber.X32) *X32 {
-	return &X32{vpmath.X32Cos(r), vpmath.X32Sin(r), vpnumber.X32Const0, -vpmath.X32Sin(r), vpmath.X32Cos(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0}
+	cos := vpmath.X32Cos(r)
+	sin := vpmath.X32Sin(r)
+
+	return &X32{cos, sin, vpnumber.X32Const0, -sin, cos, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0}
 }
 
 // X32RebaseOXYZ creates a matrix that translates from the default

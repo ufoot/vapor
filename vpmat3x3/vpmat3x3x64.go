@@ -59,7 +59,10 @@ func X64Scale(vec *vpvec2.X64) *X64 {
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.
 func X64Rot(r vpnumber.X64) *X64 {
-	return &X64{vpmath.X64Cos(r), vpmath.X64Sin(r), vpnumber.X64Const0, -vpmath.X64Sin(r), vpmath.X64Cos(r), vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
+	cos := vpmath.X64Cos(r)
+	sin := vpmath.X64Sin(r)
+
+	return &X64{cos, sin, vpnumber.X64Const0, -sin, cos, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
 // X64RebaseOXY creates a matrix that translates from the default

@@ -59,7 +59,10 @@ func X32Scale(vec *vpvec2.X32) *X32 {
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.
 func X32Rot(r vpnumber.X32) *X32 {
-	return &X32{vpmath.X32Cos(r), vpmath.X32Sin(r), vpnumber.X32Const0, -vpmath.X32Sin(r), vpmath.X32Cos(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
+	cos := vpmath.X32Cos(r)
+	sin := vpmath.X32Sin(r)
+
+	return &X32{cos, sin, vpnumber.X32Const0, -sin, cos, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
 }
 
 // X32RebaseOXY creates a matrix that translates from the default

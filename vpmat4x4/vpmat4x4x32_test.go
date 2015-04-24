@@ -301,6 +301,90 @@ func TestX32Rebase(t *testing.T) {
 	}
 }
 
+func TestX32Ortho(t *testing.T) {
+	left := vpnumber.I32ToX32(-3)
+	right := vpnumber.I32ToX32(7)
+	bottom := vpnumber.I32ToX32(-3)
+	top := vpnumber.I32ToX32(7)
+	nearVal := vpnumber.I32ToX32(-3)
+	farVal := vpnumber.I32ToX32(-10)
+	v0 := vpvec3.X32New(left, bottom, nearVal)
+	v1 := vpvec3.X32New(right, top, farVal)
+	v0OrthoCheck := vpvec3.X32New(-vpnumber.X32Const1, -vpnumber.X32Const1, -vpnumber.X32Const1)
+	v1OrthoCheck := vpvec3.X32New(vpnumber.X32Const1, vpnumber.X32Const1, vpnumber.X32Const1)
+
+	mOrtho := X32Ortho(left, right, bottom, top, -nearVal, -farVal)
+	t.Logf("mOrtho=%s", mOrtho.String())
+	v0Ortho := mOrtho.MulVecPos(v0)
+	t.Logf("%s * %s = %s", mOrtho.String(), v0.String(), v0Ortho.String())
+	if !v0Ortho.IsSimilar(v0OrthoCheck) {
+		t.Errorf("problem with ortho proj, got %s should be %s", v0Ortho.String(), v0OrthoCheck.String())
+	}
+	v1Ortho := mOrtho.MulVecPos(v1)
+	t.Logf("%s * %s = %s", mOrtho.String(), v1.String(), v1Ortho.String())
+	if !v1Ortho.IsSimilar(v1OrthoCheck) {
+		t.Errorf("problem with ortho proj, got %s should be %s", v1Ortho.String(), v1OrthoCheck.String())
+	}
+}
+
+func TestX32Perspective(t *testing.T) {
+	fovy := vpnumber.F32ToX32(45)
+	aspect := vpnumber.F32ToX32(1.5)
+	zNear := vpnumber.F32ToX32(3)
+	zFar := vpnumber.F32ToX32(10)
+	xNearCheck := vpnumber.F32ToX32(0.5364919)
+	xFarCheck := vpnumber.F32ToX32(0.16094756)
+	yNearCheck := vpnumber.F32ToX32(0.8047378)
+	yFarCheck := vpnumber.F32ToX32(0.24142134)
+
+	v000 := vpvec3.X32New(vpnumber.X32Const0, vpnumber.X32Const0, -zNear)
+	v001 := vpvec3.X32New(vpnumber.X32Const0, vpnumber.X32Const0, -zFar)
+	v100 := vpvec3.X32New(vpnumber.X32Const1, vpnumber.X32Const0, -zNear)
+	v101 := vpvec3.X32New(vpnumber.X32Const1, vpnumber.X32Const0, -zFar)
+	v010 := vpvec3.X32New(vpnumber.X32Const0, vpnumber.X32Const1, -zNear)
+	v011 := vpvec3.X32New(vpnumber.X32Const0, vpnumber.X32Const1, -zFar)
+
+	v000PerspectiveCheck := vpvec3.X32New(vpnumber.X32Const0, vpnumber.X32Const0, -vpnumber.X32Const1)
+	v001PerspectiveCheck := vpvec3.X32New(vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1)
+	v100PerspectiveCheck := vpvec3.X32New(xNearCheck, vpnumber.X32Const0, -vpnumber.X32Const1)
+	v101PerspectiveCheck := vpvec3.X32New(xFarCheck, vpnumber.X32Const0, vpnumber.X32Const1)
+	v010PerspectiveCheck := vpvec3.X32New(vpnumber.X32Const0, yNearCheck, -vpnumber.X32Const1)
+	v011PerspectiveCheck := vpvec3.X32New(vpnumber.X32Const0, yFarCheck, vpnumber.X32Const1)
+
+	mPerspective := X32Perspective(fovy, aspect, zNear, zFar)
+	t.Logf("mPerspective=%s", mPerspective.String())
+	v000Perspective := mPerspective.MulVecPos(v000)
+	t.Logf("%s * %s = %s", mPerspective.String(), v000.String(), v000Perspective.String())
+	if !v000Perspective.IsSimilar(v000PerspectiveCheck) {
+		t.Errorf("problem with perspective proj, got %s should be %s", v000Perspective.String(), v000PerspectiveCheck.String())
+	}
+	v001Perspective := mPerspective.MulVecPos(v001)
+	t.Logf("%s * %s = %s", mPerspective.String(), v001.String(), v001Perspective.String())
+	if !v001Perspective.IsSimilar(v001PerspectiveCheck) {
+		t.Errorf("problem with perspective proj, got %s should be %s", v001Perspective.String(), v001PerspectiveCheck.String())
+	}
+	v100Perspective := mPerspective.MulVecPos(v100)
+	t.Logf("%s * %s = %s", mPerspective.String(), v100.String(), v100Perspective.String())
+	if !v100Perspective.IsSimilar(v100PerspectiveCheck) {
+		t.Errorf("problem with perspective proj, got %s should be %s", v100Perspective.String(), v100PerspectiveCheck.String())
+	}
+	v101Perspective := mPerspective.MulVecPos(v101)
+	t.Logf("%s * %s = %s", mPerspective.String(), v101.String(), v101Perspective.String())
+	if !v101Perspective.IsSimilar(v101PerspectiveCheck) {
+		t.Errorf("problem with perspective proj, got %s should be %s", v101Perspective.String(), v101PerspectiveCheck.String())
+	}
+	v010Perspective := mPerspective.MulVecPos(v010)
+	t.Logf("%s * %s = %s", mPerspective.String(), v010.String(), v010Perspective.String())
+	if !v010Perspective.IsSimilar(v010PerspectiveCheck) {
+		t.Errorf("problem with perspective proj, got %s should be %s", v010Perspective.String(), v010PerspectiveCheck.String())
+	}
+	v011Perspective := mPerspective.MulVecPos(v011)
+	t.Logf("%s * %s = %s", mPerspective.String(), v011.String(), v011Perspective.String())
+	if !v011Perspective.IsSimilar(v011PerspectiveCheck) {
+		t.Errorf("problem with perspective proj, got %s should be %s", v011Perspective.String(), v011PerspectiveCheck.String())
+	}
+}
+
 func TestX32JSON(t *testing.T) {
 	m1 := invertableX32()
 	m2 := X32Identity()

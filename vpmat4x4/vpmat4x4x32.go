@@ -59,21 +59,30 @@ func X32Scale(vec *vpvec3.X32) *X32 {
 // The rotation is done in 3D over the x (1st) axis.
 // Angle is given in radians.
 func X32RotX(r vpnumber.X32) *X32 {
-	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpmath.X32Cos(r), vpmath.X32Sin(r), vpnumber.X32Const0, vpnumber.X32Const0, -vpmath.X32Sin(r), vpmath.X32Cos(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
+	cos := vpmath.X32Cos(r)
+	sin := vpmath.X32Sin(r)
+
+	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, cos, sin, vpnumber.X32Const0, vpnumber.X32Const0, -sin, cos, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
 }
 
 // X32RotY creates a new rotation matrix.
 // The rotation is done in 3D over the y (2nd) axis.
 // Angle is given in radians.
 func X32RotY(r vpnumber.X32) *X32 {
-	return &X32{vpmath.X32Cos(r), vpnumber.X32Const0, -vpmath.X32Sin(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpmath.X32Sin(r), vpnumber.X32Const0, vpmath.X32Cos(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
+	cos := vpmath.X32Cos(r)
+	sin := vpmath.X32Sin(r)
+
+	return &X32{cos, vpnumber.X32Const0, -sin, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, sin, vpnumber.X32Const0, cos, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
 }
 
 // X32RotZ creates a new rotation matrix.
 // The rotation is done in 3D over the z (3rd) axis.
 // Angle is given in radians.
 func X32RotZ(r vpnumber.X32) *X32 {
-	return &X32{vpmath.X32Cos(r), vpmath.X32Sin(r), vpnumber.X32Const0, vpnumber.X32Const0, -vpmath.X32Sin(r), vpmath.X32Cos(r), vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
+	cos := vpmath.X32Cos(r)
+	sin := vpmath.X32Sin(r)
+
+	return &X32{cos, sin, vpnumber.X32Const0, vpnumber.X32Const0, -sin, cos, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
 }
 
 // X32RebaseOXYZ creates a matrix that translates from the default
@@ -111,6 +120,42 @@ func X32RebaseOXYZP(Origin, PosX, PosY, PosZ, PosP *vpvec3.X32) *X32 {
 	ret := X32MulComp(transMat, projMat)
 
 	return ret
+}
+
+// X32Ortho creates a projection matrix the way the standard OpenGL glOrtho
+// would (see https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml).
+// Note: use -nearVal and -farVal to initialize.
+func X32Ortho(left, right, bottom, top, nearVal, farVal vpnumber.X32) *X32 {
+	var ret X32
+
+	ret[Col0Row0] = vpnumber.X32Div(vpnumber.I32ToX32(2), right-left)
+	ret[Col1Row1] = vpnumber.X32Div(vpnumber.I32ToX32(2), top-bottom)
+	ret[Col2Row2] = vpnumber.X32Div(-vpnumber.I32ToX32(2), farVal-nearVal)
+	ret[Col3Row0] = -vpnumber.X32Div(right+left, right-left)
+	ret[Col3Row1] = -vpnumber.X32Div(top+bottom, top-bottom)
+	ret[Col3Row2] = -vpnumber.X32Div(farVal+nearVal, farVal-nearVal)
+	ret[Col3Row3] = vpnumber.X32Const1
+
+	return &ret
+}
+
+// X32Perspective creates a projection matrix the way the standard GLU
+// gluPerspective function would (see
+// https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml).
+// Beware, fovy is in degrees, not radians.
+func X32Perspective(fovy, aspect, zNear, zFar vpnumber.X32) *X32 {
+	var ret X32
+
+	radFovy2 := vpmath.X32DegToRad(vpmath.X32DegMod(fovy) >> 1)
+	f := vpnumber.X32Div(vpmath.X32Cos(radFovy2), vpmath.X32Sin(radFovy2))
+
+	ret[Col0Row0] = vpnumber.X32Div(f, aspect)
+	ret[Col1Row1] = f
+	ret[Col2Row2] = vpnumber.X32Div(zFar+zNear, zNear-zFar)
+	ret[Col2Row3] = -vpnumber.X32Const1
+	ret[Col3Row2] = vpnumber.X32Div(vpnumber.X32Mul(zFar, zNear)<<1, zNear-zFar)
+
+	return &ret
 }
 
 // ToX64 converts the matrix to a fixed point number matrix on 64 bits.

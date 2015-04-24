@@ -58,21 +58,30 @@ func F64Scale(vec *vpvec3.F64) *F64 {
 // The rotation is done in 3D over the x (1st) axis.
 // Angle is given in radians.
 func F64RotX(r float64) *F64 {
-	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, math.Cos(r), math.Sin(r), vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
+	cos := math.Cos(r)
+	sin := math.Sin(r)
+
+	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, cos, sin, vpnumber.F64Const0, -sin, cos, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // F64RotY creates a new rotation matrix.
 // The rotation is done in 3D over the y (2nd) axis.
 // Angle is given in radians.
 func F64RotY(r float64) *F64 {
-	return &F64{math.Cos(r), vpnumber.F64Const0, -math.Sin(r), vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, math.Sin(r), vpnumber.F64Const0, math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
+	cos := math.Cos(r)
+	sin := math.Sin(r)
+
+	return &F64{cos, vpnumber.F64Const0, -sin, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, sin, vpnumber.F64Const0, cos, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // F64RotZ creates a new rotation matrix.
 // The rotation is done in 3D over the z (3rd) axis.
 // Angle is given in radians.
 func F64RotZ(r float64) *F64 {
-	return &F64{math.Cos(r), math.Sin(r), vpnumber.F64Const0, -math.Sin(r), math.Cos(r), vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
+	cos := math.Cos(r)
+	sin := math.Sin(r)
+
+	return &F64{cos, sin, vpnumber.F64Const0, -sin, cos, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
 // F64RebaseOXYZ creates a matrix that translates from the default

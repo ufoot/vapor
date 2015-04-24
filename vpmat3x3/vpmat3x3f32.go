@@ -59,7 +59,10 @@ func F32Scale(vec *vpvec2.F32) *F32 {
 // The rotation is done in 2D over a virtual z axis, such as z = cross(x,y).
 // Angle is given in radians.
 func F32Rot(r float32) *F32 {
-	return &F32{float32(math.Cos(float64(r))), float32(math.Sin(float64(r))), vpnumber.F32Const0, -float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
+	cos := float32(math.Cos(float64(r)))
+	sin := float32(math.Sin(float64(r)))
+
+	return &F32{cos, sin, vpnumber.F32Const0, -sin, cos, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
 // F32RebaseOXY creates a matrix that translates from the default

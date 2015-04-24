@@ -24,145 +24,118 @@ import (
 	"math"
 )
 
-const f32Const2Pi = float32(2 * math.Pi)
-const f64Const2Pi = 2 * math.Pi
-
 // F32Anglelerp performs a linear interpolation between two angles.
 // Angles need a special lerp as they wrap arround.
-func F32Anglelerp(f1, f2, beta float32) float32 {
+func F32Anglelerp(rad1, rad2, beta float32) float32 {
 	switch {
 	case beta <= vpnumber.F32Const0:
-		return f1
+		return rad1
 	case beta >= vpnumber.F32Const1:
-		return f2
+		return rad2
 	}
 
-	f1 = float32(math.Mod(float64(f1), float64(f32Const2Pi)))
-	f2 = float32(math.Mod(float64(f2), float64(f32Const2Pi)))
-	if f1 < 0 {
-		f1 += f32Const2Pi
-	}
-	if f2 < 0 {
-		f2 += f32Const2Pi
-	}
+	rad1 = F32RadMod(rad1)
+	rad2 = F32RadMod(rad2)
 
 	switch {
-	case f1 < f2:
-		if f2-f1 < math.Pi {
-			return F32Lerp(f1, f2, beta)
+	case rad1 < rad2:
+		if rad2-rad1 < math.Pi {
+			return F32Lerp(rad1, rad2, beta)
 		}
-		return F32Lerp(f1+f32Const2Pi, f2, beta)
-	case f2 < f1:
-		if f1-f2 < math.Pi {
-			return F32Lerp(f1, f2, beta)
+		return F32Lerp(rad1, rad2-f32Const2Pi, beta)
+	case rad2 < rad1:
+		if rad1-rad2 < math.Pi {
+			return F32Lerp(rad1, rad2, beta)
 		}
-		return F32Lerp(f1, f2+f32Const2Pi, beta)
+		return F32Lerp(rad1-f32Const2Pi, rad2, beta)
 	}
 
-	return f1
+	return rad1
 }
 
 // F64Anglelerp performs a linear interpolation between two angles.
 // Angles need a special lerp as they wrap arround.
-func F64Anglelerp(f1, f2, beta float64) float64 {
+func F64Anglelerp(rad1, rad2, beta float64) float64 {
 	switch {
 	case beta <= vpnumber.F64Const0:
-		return f1
+		return rad1
 	case beta >= vpnumber.F64Const1:
-		return f2
+		return rad2
 	}
 
-	f1 = math.Mod(f1, f64Const2Pi)
-	f2 = math.Mod(f2, f64Const2Pi)
-	if f1 < 0 {
-		f1 += f64Const2Pi
-	}
-	if f2 < 0 {
-		f2 += f64Const2Pi
-	}
+	rad1 = F64RadMod(rad1)
+	rad2 = F64RadMod(rad2)
 
 	switch {
-	case f1 < f2:
-		if f2-f1 < math.Pi {
-			return F64Lerp(f1, f2, beta)
+	case rad1 < rad2:
+		if rad2-rad1 < math.Pi {
+			return F64Lerp(rad1, rad2, beta)
 		}
-		return F64Lerp(f1+f64Const2Pi, f2, beta)
-	case f2 < f1:
-		if f1-f2 < math.Pi {
-			return F64Lerp(f1, f2, beta)
+		return F64Lerp(rad1, rad2-f64Const2Pi, beta)
+	case rad2 < rad1:
+		if rad1-rad2 < math.Pi {
+			return F64Lerp(rad1, rad2, beta)
 		}
-		return F64Lerp(f1, f2+f64Const2Pi, beta)
+		return F64Lerp(rad1-f64Const2Pi, rad2, beta)
 	}
 
-	return f1
+	return rad1
 }
 
 // X32Anglelerp performs a linear interpolation between two angles.
 // Angles need a special lerp as they wrap arround.
-func X32Anglelerp(x1, x2, beta vpnumber.X32) vpnumber.X32 {
+func X32Anglelerp(rad1, rad2, beta vpnumber.X32) vpnumber.X32 {
 	switch {
 	case beta <= vpnumber.X32Const0:
-		return x1
+		return rad1
 	case beta >= vpnumber.X32Const1:
-		return x2
+		return rad2
 	}
 
-	x1 = x1 % X32Const2Pi
-	x2 = x2 % X32Const2Pi
-	if x1 < 0 {
-		x1 += X32Const2Pi
-	}
-	if x2 < 0 {
-		x2 += X32Const2Pi
-	}
+	rad1 = X32RadMod(rad1)
+	rad2 = X32RadMod(rad2)
 
 	switch {
-	case x1 < x2:
-		if x2-x1 < X32ConstPi {
-			return X32Lerp(x1, x2, beta)
+	case rad1 < rad2:
+		if rad2-rad1 < X32ConstPi {
+			return X32Lerp(rad1, rad2, beta)
 		}
-		return X32Lerp(x1+X32Const2Pi, x2, beta)
-	case x2 < x1:
-		if x1-x2 < X32ConstPi {
-			return X32Lerp(x1, x2, beta)
+		return X32Lerp(rad1, rad2-X32Const2Pi, beta)
+	case rad2 < rad1:
+		if rad1-rad2 < X32ConstPi {
+			return X32Lerp(rad1, rad2, beta)
 		}
-		return X32Lerp(x1, x2+X32Const2Pi, beta)
+		return X32Lerp(rad1-X32Const2Pi, rad2, beta)
 	}
 
-	return x1
+	return rad1
 }
 
 // X64Anglelerp performs a linear interpolation between two angles.
 // Angles need a special lerp as they wrap arround.
-func X64Anglelerp(x1, x2, beta vpnumber.X64) vpnumber.X64 {
+func X64Anglelerp(rad1, rad2, beta vpnumber.X64) vpnumber.X64 {
 	switch {
 	case beta <= vpnumber.X64Const0:
-		return x1
+		return rad1
 	case beta >= vpnumber.X64Const1:
-		return x2
+		return rad2
 	}
 
-	x1 = x1 % X64Const2Pi
-	x2 = x2 % X64Const2Pi
-	if x1 < 0 {
-		x1 += X64Const2Pi
-	}
-	if x2 < 0 {
-		x2 += X64Const2Pi
-	}
+	rad1 = X64RadMod(rad1)
+	rad2 = X64RadMod(rad2)
 
 	switch {
-	case x1 < x2:
-		if x2-x1 < X64ConstPi {
-			return X64Lerp(x1, x2, beta)
+	case rad1 < rad2:
+		if rad2-rad1 < X64ConstPi {
+			return X64Lerp(rad1, rad2, beta)
 		}
-		return X64Lerp(x1+X64Const2Pi, x2, beta)
-	case x2 < x1:
-		if x1-x2 < X64ConstPi {
-			return X64Lerp(x1, x2, beta)
+		return X64Lerp(rad1, rad2-X64Const2Pi, beta)
+	case rad2 < rad1:
+		if rad1-rad2 < X64ConstPi {
+			return X64Lerp(rad1, rad2, beta)
 		}
-		return X64Lerp(x1, x2+X64Const2Pi, beta)
+		return X64Lerp(rad1-X64Const2Pi, rad2, beta)
 	}
 
-	return x1
+	return rad1
 }

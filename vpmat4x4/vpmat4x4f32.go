@@ -22,6 +22,7 @@ package vpmat4x4
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/vpmat3x3"
+	"github.com/ufoot/vapor/vpmath"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec3"
@@ -59,21 +60,30 @@ func F32Scale(vec *vpvec3.F32) *F32 {
 // The rotation is done in 3D over the x (1st) axis.
 // Angle is given in radians.
 func F32RotX(r float32) *F32 {
-	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, float32(math.Cos(float64(r))), float32(math.Sin(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, -float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
+	cos := float32(math.Cos(float64(r)))
+	sin := float32(math.Sin(float64(r)))
+
+	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, cos, sin, vpnumber.F32Const0, vpnumber.F32Const0, -sin, cos, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
 // F32RotY creates a new rotation matrix.
 // The rotation is done in 3D over the y (2nd) axis.
 // Angle is given in radians.
 func F32RotY(r float32) *F32 {
-	return &F32{float32(math.Cos(float64(r))), vpnumber.F32Const0, -float32(math.Sin(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, float32(math.Sin(float64(r))), vpnumber.F32Const0, float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
+	cos := float32(math.Cos(float64(r)))
+	sin := float32(math.Sin(float64(r)))
+
+	return &F32{cos, vpnumber.F32Const0, -sin, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, sin, vpnumber.F32Const0, cos, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
 // F32RotZ creates a new rotation matrix.
 // The rotation is done in 3D over the z (3rd) axis.
 // Angle is given in radians.
 func F32RotZ(r float32) *F32 {
-	return &F32{float32(math.Cos(float64(r))), float32(math.Sin(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, -float32(math.Sin(float64(r))), float32(math.Cos(float64(r))), vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
+	cos := float32(math.Cos(float64(r)))
+	sin := float32(math.Sin(float64(r)))
+
+	return &F32{cos, sin, vpnumber.F32Const0, vpnumber.F32Const0, -sin, cos, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
 // F32RebaseOXYZ creates a matrix that translates from the default
@@ -111,6 +121,42 @@ func F32RebaseOXYZP(Origin, PosX, PosY, PosZ, PosP *vpvec3.F32) *F32 {
 	ret := F32MulComp(transMat, projMat)
 
 	return ret
+}
+
+// F32Ortho creates a projection matrix the way the standard OpenGL glOrtho
+// would (see https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml).
+// Note: use -nearVal and -farVal to initialize.
+func F32Ortho(left, right, bottom, top, nearVal, farVal float32) *F32 {
+	var ret F32
+
+	ret[Col0Row0] = vpnumber.F32Div(2.0, right-left)
+	ret[Col1Row1] = vpnumber.F32Div(2.0, top-bottom)
+	ret[Col2Row2] = vpnumber.F32Div(-2.0, farVal-nearVal)
+	ret[Col3Row0] = -vpnumber.F32Div(right+left, right-left)
+	ret[Col3Row1] = -vpnumber.F32Div(top+bottom, top-bottom)
+	ret[Col3Row2] = -vpnumber.F32Div(farVal+nearVal, farVal-nearVal)
+	ret[Col3Row3] = vpnumber.F32Const1
+
+	return &ret
+}
+
+// F32Perspective creates a projection matrix the way the standard GLU
+// gluPerspective function would (see
+// https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml).
+// Beware, fovy is in degrees, not radians.
+func F32Perspective(fovy, aspect, zNear, zFar float32) *F32 {
+	var ret F32
+
+	radFovy2 := float64(vpmath.F32DegToRad(vpmath.F32DegMod(fovy) / 2.0))
+	f := vpnumber.F32Div(float32(math.Cos(radFovy2)), float32(math.Sin(radFovy2)))
+
+	ret[Col0Row0] = vpnumber.F32Div(f, aspect)
+	ret[Col1Row1] = f
+	ret[Col2Row2] = vpnumber.F32Div(zFar+zNear, zNear-zFar)
+	ret[Col2Row3] = -vpnumber.F32Const1
+	ret[Col3Row2] = vpnumber.F32Div(2.0*zFar*zNear, zNear-zFar)
+
+	return &ret
 }
 
 // ToX32 converts the matrix to a fixed point number matrix on 32 bits.
