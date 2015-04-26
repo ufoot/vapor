@@ -122,6 +122,12 @@ func TestF32Math(t *testing.T) {
 		t.Error("Normalize error", f)
 	}
 
+	v3 = F32Homogeneous(v1)
+	f = v3[Size-1]
+	if f != vpnumber.F32Const1 {
+		t.Error("Homogeneous error", f)
+	}
+
 	f = 0.3
 	v3 = F32Lerp(v1, v2, f)
 	v4 = F32Add(F32MulScale(v1, vpnumber.F32Const1-f), F32MulScale(v2, f))

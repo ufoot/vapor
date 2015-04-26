@@ -126,6 +126,12 @@ func TestX32Math(t *testing.T) {
 		t.Error("Normalize error", x)
 	}
 
+	v3 = X32Homogeneous(v1)
+	x = v3[Size-1]
+	if x != vpnumber.X32Const1 {
+		t.Error("Homogeneous error", x)
+	}
+
 	x = vpnumber.F32ToX32(0.3)
 	v3 = X32Lerp(v1, v2, x)
 	v4 = X32Add(X32MulScale(v1, vpnumber.X32Const1-x), X32MulScale(v2, x))

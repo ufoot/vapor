@@ -122,6 +122,12 @@ func TestX64Math(t *testing.T) {
 		t.Error("Normalize error", x)
 	}
 
+	v3 = X64Homogeneous(v1)
+	x = v3[Size-1]
+	if x != vpnumber.X64Const1 {
+		t.Error("Homogeneous error", x)
+	}
+
 	x = vpnumber.F64ToX64(0.3)
 	v3 = X64Lerp(v1, v2, x)
 	v4 = X64Add(X64MulScale(v1, vpnumber.X64Const1-x), X64MulScale(v2, x))
