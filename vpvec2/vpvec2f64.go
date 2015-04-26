@@ -203,6 +203,15 @@ func (vec *F64) Normalize() *F64 {
 	return vec
 }
 
+// Homogeneous scales the vector so that its latest member is 1.
+// This what we want to do when projecting, to have homegemous coords.
+// It modifies the vector, and returns a pointer on it.
+func (vec *F64) Homogeneous() *F64 {
+	vec.DivScale(vec[Size-1])
+
+	return vec
+}
+
 // IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (vec *F64) IsSimilar(op *F64) bool {
@@ -290,6 +299,17 @@ func F64Normalize(vec *F64) *F64 {
 	var ret = *vec
 
 	_ = ret.Normalize()
+
+	return &ret
+}
+
+// F64Homogeneous scales the vector so that its latest member is 1.
+// This what we want to do when projecting, to have homegemous coords.
+// Arg is left untouched, a pointer on a new object is returned.
+func F64Homogeneous(vec *F64) *F64 {
+	var ret = *vec
+
+	_ = ret.Homogeneous()
 
 	return &ret
 }

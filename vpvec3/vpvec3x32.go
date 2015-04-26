@@ -220,6 +220,15 @@ func (vec *X32) Normalize() *X32 {
 	return vec
 }
 
+// Homogeneous scales the vector so that its latest member is 1.
+// This what we want to do when projecting, to have homegemous coords.
+// It modifies the vector, and returns a pointer on it.
+func (vec *X32) Homogeneous() *X32 {
+	vec.DivScale(vec[Size-1])
+
+	return vec
+}
+
 // IsSimilar returns true if vectors are approximatively the same.
 // This is a workarround to ignore rounding errors.
 func (vec *X32) IsSimilar(op *X32) bool {
@@ -315,6 +324,17 @@ func X32Normalize(vec *X32) *X32 {
 	var ret = *vec
 
 	_ = ret.Normalize()
+
+	return &ret
+}
+
+// X32Homogeneous scales the vector so that its latest member is 1.
+// This what we want to do when projecting, to have homegemous coords.
+// Arg is left untouched, a pointer on a new object is returned.
+func X32Homogeneous(vec *X32) *X32 {
+	var ret = *vec
+
+	_ = ret.Homogeneous()
 
 	return &ret
 }
