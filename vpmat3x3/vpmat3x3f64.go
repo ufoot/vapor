@@ -45,8 +45,8 @@ func F64Identity() *F64 {
 	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
 }
 
-// F64Trans creates a new translation matrix.
-func F64Trans(vec *vpvec2.F64) *F64 {
+// F64Translation creates a new translation matrix.
+func F64Translation(vec *vpvec2.F64) *F64 {
 	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vec[0], vec[1], vpnumber.F64Const1}
 }
 
@@ -91,7 +91,7 @@ func F64RebaseOXYP(Origin, PosX, PosY, PosP *vpvec2.F64) *F64 {
 	colY := vpvec2.F64MulScale(dY, vpnumber.F64Const1+lastRow[1])
 	projMat.SetCol(0, vpvec3.F64FromVec2(colX, lastRow[0]))
 	projMat.SetCol(1, vpvec3.F64FromVec2(colY, lastRow[1]))
-	transMat := F64Trans(Origin)
+	transMat := F64Translation(Origin)
 
 	ret := F64MulComp(transMat, projMat)
 

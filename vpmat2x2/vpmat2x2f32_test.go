@@ -128,7 +128,7 @@ func TestF32Aff(t *testing.T) {
 	const t1 = 6.0
 
 	v1 := vpvec2.F32New(p1, vpnumber.F32Const1)
-	mt := F32Trans(t1)
+	mt := F32Translation(t1)
 	t.Logf("translation mat2 for %f is %s", p1, mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())

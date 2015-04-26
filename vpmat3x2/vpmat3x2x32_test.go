@@ -143,7 +143,7 @@ func TestX32Aff(t *testing.T) {
 
 	v1 := vpvec3.X32New(p1, p2, vpnumber.X32Const1)
 	vt := vpvec2.X32New(t1, t2)
-	mt := X32Trans(vt)
+	mt := X32Translation(vt)
 	t.Logf("translation mat3x2 for %s is %s", vt.String(), mt.String())
 	v2pos := mt.MulVecPos(v1.ToVec2())
 	v3pos := v1.ToVec2().Add(vt)

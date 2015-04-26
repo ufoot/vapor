@@ -121,7 +121,7 @@ func TestX64Aff(t *testing.T) {
 	p1 := vpnumber.F64ToX64(3.0)
 	t1 := vpnumber.F64ToX64(6.0)
 
-	mt := X64Trans(t1)
+	mt := X64Translation(t1)
 	t.Logf("translation mat2 for %f is %s", vpnumber.X64ToF64(p1), mt.String())
 	v2pos := mt.MulVecPos(p1)
 	v3pos := p1 + t1

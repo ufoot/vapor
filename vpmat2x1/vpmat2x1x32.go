@@ -42,8 +42,8 @@ func X32Identity() *X32 {
 	return &X32{vpnumber.X32Const1, vpnumber.X32Const0}
 }
 
-// X32Trans creates a new translation matrix.
-func X32Trans(x vpnumber.X32) *X32 {
+// X32Translation creates a new translation matrix.
+func X32Translation(x vpnumber.X32) *X32 {
 	return &X32{vpnumber.X32Const1, x}
 }
 

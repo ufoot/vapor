@@ -42,8 +42,8 @@ func X64Identity() *X64 {
 	return &X64{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
-// X64Trans creates a new translation matrix.
-func X64Trans(x vpnumber.X64) *X64 {
+// X64Translation creates a new translation matrix.
+func X64Translation(x vpnumber.X64) *X64 {
 	return &X64{vpnumber.X64Const1, vpnumber.X64Const0, x, vpnumber.X64Const1}
 }
 

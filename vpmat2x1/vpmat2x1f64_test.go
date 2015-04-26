@@ -122,7 +122,7 @@ func TestF64Aff(t *testing.T) {
 	const p1 = 3.0
 	const t1 = 6.0
 
-	mt := F64Trans(t1)
+	mt := F64Translation(t1)
 	t.Logf("translation mat2 for %f is %s", p1, mt.String())
 	v2pos := mt.MulVecPos(p1)
 	v3pos := float64(p1 + t1)

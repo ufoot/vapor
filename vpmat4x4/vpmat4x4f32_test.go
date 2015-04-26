@@ -164,7 +164,7 @@ func TestF32Aff(t *testing.T) {
 
 	v1 := vpvec4.F32New(p1, p2, p3, vpnumber.F32Const1)
 	vt := vpvec3.F32New(t1, t2, t3)
-	mt := F32Trans(vt)
+	mt := F32Translation(vt)
 	t.Logf("translation mat4x4 for %s is %s", vt.String(), mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat4x4 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())

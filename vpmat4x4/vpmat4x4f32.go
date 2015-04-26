@@ -46,8 +46,8 @@ func F32Identity() *F32 {
 	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
-// F32Trans creates a new translation matrix.
-func F32Trans(vec *vpvec3.F32) *F32 {
+// F32Translation creates a new translation matrix.
+func F32Translation(vec *vpvec3.F32) *F32 {
 	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vec[0], vec[1], vec[2], vpnumber.F32Const1}
 }
 
@@ -116,7 +116,7 @@ func F32RebaseOXYZP(Origin, PosX, PosY, PosZ, PosP *vpvec3.F32) *F32 {
 	projMat.SetCol(0, vpvec4.F32FromVec3(colX, lastRow[0]))
 	projMat.SetCol(1, vpvec4.F32FromVec3(colY, lastRow[1]))
 	projMat.SetCol(2, vpvec4.F32FromVec3(colZ, lastRow[2]))
-	transMat := F32Trans(Origin)
+	transMat := F32Translation(Origin)
 
 	ret := F32MulComp(transMat, projMat)
 
@@ -126,6 +126,13 @@ func F32RebaseOXYZP(Origin, PosX, PosY, PosZ, PosP *vpvec3.F32) *F32 {
 // F32Ortho creates a projection matrix the way the standard OpenGL glOrtho
 // would (see https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml).
 // Note: use -nearVal and -farVal to initialize.
+// It's a little akward, if you expect to pass vectors with positions
+// ranging from nearVal to farVal then you need to pass -nearVal and
+// -farVal to this function. This is probably due to the fact that
+// with a right-handed basis and X,Y set up "as usual", then Z is negative
+// when going farther and farther. This tweak allows farVal to yield
+// +1 and nearVal -1. We keep this function as is here, as this is the
+// way OpenGL functions seem to work.
 func F32Ortho(left, right, bottom, top, nearVal, farVal float32) *F32 {
 	var ret F32
 

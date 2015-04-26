@@ -127,7 +127,7 @@ func TestX32Aff(t *testing.T) {
 	t1 := vpnumber.F32ToX32(6.0)
 
 	v1 := vpvec2.X32New(p1, vpnumber.X32Const1)
-	mt := X32Trans(t1)
+	mt := X32Translation(t1)
 	t.Logf("translation mat2 for %f is %s", vpnumber.X32ToF32(p1), mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())

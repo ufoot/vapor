@@ -43,8 +43,8 @@ func F32Identity() *F32 {
 	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0}
 }
 
-// F32Trans creates a new translation matrix.
-func F32Trans(vec *vpvec2.F32) *F32 {
+// F32Translation creates a new translation matrix.
+func F32Translation(vec *vpvec2.F32) *F32 {
 	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vec[0], vec[1]}
 }
 

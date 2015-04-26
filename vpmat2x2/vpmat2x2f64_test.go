@@ -128,7 +128,7 @@ func TestF64Aff(t *testing.T) {
 	const t1 = 6.0
 
 	v1 := vpvec2.F64New(p1, vpnumber.F64Const1)
-	mt := F64Trans(t1)
+	mt := F64Translation(t1)
 	t.Logf("translation mat2 for %f is %s", p1, mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat2 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())

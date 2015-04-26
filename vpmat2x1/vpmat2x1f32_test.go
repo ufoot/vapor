@@ -122,7 +122,7 @@ func TestF32Aff(t *testing.T) {
 	const p1 = 3.0
 	const t1 = 6.0
 
-	mt := F32Trans(t1)
+	mt := F32Translation(t1)
 	t.Logf("translation mat2 for %f is %s", p1, mt.String())
 	v2pos := mt.MulVecPos(p1)
 	v3pos := float32(p1 + t1)

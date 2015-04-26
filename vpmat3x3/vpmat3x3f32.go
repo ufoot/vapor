@@ -45,8 +45,8 @@ func F32Identity() *F32 {
 	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1}
 }
 
-// F32Trans creates a new translation matrix.
-func F32Trans(vec *vpvec2.F32) *F32 {
+// F32Translation creates a new translation matrix.
+func F32Translation(vec *vpvec2.F32) *F32 {
 	return &F32{vpnumber.F32Const1, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const1, vpnumber.F32Const0, vec[0], vec[1], vpnumber.F32Const1}
 }
 
@@ -91,7 +91,7 @@ func F32RebaseOXYP(Origin, PosX, PosY, PosP *vpvec2.F32) *F32 {
 	colY := vpvec2.F32MulScale(dY, vpnumber.F32Const1+lastRow[1])
 	projMat.SetCol(0, vpvec3.F32FromVec2(colX, lastRow[0]))
 	projMat.SetCol(1, vpvec3.F32FromVec2(colY, lastRow[1]))
-	transMat := F32Trans(Origin)
+	transMat := F32Translation(Origin)
 
 	ret := F32MulComp(transMat, projMat)
 

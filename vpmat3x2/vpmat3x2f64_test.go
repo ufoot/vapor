@@ -143,7 +143,7 @@ func TestF64Aff(t *testing.T) {
 
 	v1 := vpvec3.F64New(p1, p2, vpnumber.F64Const1)
 	vt := vpvec2.F64New(t1, t2)
-	mt := F64Trans(vt)
+	mt := F64Translation(vt)
 	t.Logf("translation mat3x2 for %s is %s", vt.String(), mt.String())
 	v2pos := mt.MulVecPos(v1.ToVec2())
 	v3pos := v1.ToVec2().Add(vt)

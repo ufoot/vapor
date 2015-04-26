@@ -148,7 +148,7 @@ func TestX64Aff(t *testing.T) {
 
 	v1 := vpvec3.X64New(p1, p2, vpnumber.X64Const1)
 	vt := vpvec2.X64New(t1, t2)
-	mt := X64Trans(vt)
+	mt := X64Translation(vt)
 	t.Logf("translation mat3x3 for %s is %s", vt.String(), mt.String())
 	v2 := mt.MulVec(v1)
 	t.Logf("mat3x3 MulVec %s * %s = %s", mt.String(), v1.String(), v2.String())

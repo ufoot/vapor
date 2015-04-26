@@ -46,8 +46,8 @@ func F64Identity() *F64 {
 	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1}
 }
 
-// F64Trans creates a new translation matrix.
-func F64Trans(vec *vpvec3.F64) *F64 {
+// F64Translation creates a new translation matrix.
+func F64Translation(vec *vpvec3.F64) *F64 {
 	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vec[0], vec[1], vec[2], vpnumber.F64Const1}
 }
 
@@ -115,7 +115,7 @@ func F64RebaseOXYZP(Origin, PosX, PosY, PosZ, PosP *vpvec3.F64) *F64 {
 	projMat.SetCol(0, vpvec4.F64FromVec3(colX, lastRow[0]))
 	projMat.SetCol(1, vpvec4.F64FromVec3(colY, lastRow[1]))
 	projMat.SetCol(2, vpvec4.F64FromVec3(colZ, lastRow[2]))
-	transMat := F64Trans(Origin)
+	transMat := F64Translation(Origin)
 
 	ret := F64MulComp(transMat, projMat)
 
@@ -125,6 +125,13 @@ func F64RebaseOXYZP(Origin, PosX, PosY, PosZ, PosP *vpvec3.F64) *F64 {
 // F64Ortho creates a projection matrix the way the standard OpenGL glOrtho
 // would (see https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml).
 // Note: use -nearVal and -farVal to initialize.
+// It's a little akward, if you expect to pass vectors with positions
+// ranging from nearVal to farVal then you need to pass -nearVal and
+// -farVal to this function. This is probably due to the fact that
+// with a right-handed basis and X,Y set up "as usual", then Z is negative
+// when going farther and farther. This tweak allows farVal to yield
+// +1 and nearVal -1. We keep this function as is here, as this is the
+// way OpenGL functions seem to work.
 func F64Ortho(left, right, bottom, top, nearVal, farVal float64) *F64 {
 	var ret F64
 

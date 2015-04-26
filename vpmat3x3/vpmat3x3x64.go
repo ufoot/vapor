@@ -45,8 +45,8 @@ func X64Identity() *X64 {
 	return &X64{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1}
 }
 
-// X64Trans creates a new translation matrix.
-func X64Trans(vec *vpvec2.X64) *X64 {
+// X64Translation creates a new translation matrix.
+func X64Translation(vec *vpvec2.X64) *X64 {
 	return &X64{vpnumber.X64Const1, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const0, vpnumber.X64Const1, vpnumber.X64Const0, vec[0], vec[1], vpnumber.X64Const1}
 }
 
@@ -91,7 +91,7 @@ func X64RebaseOXYP(Origin, PosX, PosY, PosP *vpvec2.X64) *X64 {
 	colY := vpvec2.X64MulScale(dY, vpnumber.X64Const1+lastRow[1])
 	projMat.SetCol(0, vpvec3.X64FromVec2(colX, lastRow[0]))
 	projMat.SetCol(1, vpvec3.X64FromVec2(colY, lastRow[1]))
-	transMat := X64Trans(Origin)
+	transMat := X64Translation(Origin)
 
 	ret := X64MulComp(transMat, projMat)
 

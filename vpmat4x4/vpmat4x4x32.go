@@ -45,8 +45,8 @@ func X32Identity() *X32 {
 	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
 }
 
-// X32Trans creates a new translation matrix.
-func X32Trans(vec *vpvec3.X32) *X32 {
+// X32Translation creates a new translation matrix.
+func X32Translation(vec *vpvec3.X32) *X32 {
 	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vec[0], vec[1], vec[2], vpnumber.X32Const1}
 }
 
@@ -115,7 +115,7 @@ func X32RebaseOXYZP(Origin, PosX, PosY, PosZ, PosP *vpvec3.X32) *X32 {
 	projMat.SetCol(0, vpvec4.X32FromVec3(colX, lastRow[0]))
 	projMat.SetCol(1, vpvec4.X32FromVec3(colY, lastRow[1]))
 	projMat.SetCol(2, vpvec4.X32FromVec3(colZ, lastRow[2]))
-	transMat := X32Trans(Origin)
+	transMat := X32Translation(Origin)
 
 	ret := X32MulComp(transMat, projMat)
 
@@ -125,6 +125,13 @@ func X32RebaseOXYZP(Origin, PosX, PosY, PosZ, PosP *vpvec3.X32) *X32 {
 // X32Ortho creates a projection matrix the way the standard OpenGL glOrtho
 // would (see https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml).
 // Note: use -nearVal and -farVal to initialize.
+// It's a little akward, if you expect to pass vectors with positions
+// ranging from nearVal to farVal then you need to pass -nearVal and
+// -farVal to this function. This is probably due to the fact that
+// with a right-handed basis and X,Y set up "as usual", then Z is negative
+// when going farther and farther. This tweak allows farVal to yield
+// +1 and nearVal -1. We keep this function as is here, as this is the
+// way OpenGL functions seem to work.
 func X32Ortho(left, right, bottom, top, nearVal, farVal vpnumber.X32) *X32 {
 	var ret X32
 

@@ -143,7 +143,7 @@ func TestF32Aff(t *testing.T) {
 
 	v1 := vpvec3.F32New(p1, p2, vpnumber.F32Const1)
 	vt := vpvec2.F32New(t1, t2)
-	mt := F32Trans(vt)
+	mt := F32Translation(vt)
 	t.Logf("translation mat3x2 for %s is %s", vt.String(), mt.String())
 	v2pos := mt.MulVecPos(v1.ToVec2())
 	v3pos := v1.ToVec2().Add(vt)

@@ -43,8 +43,8 @@ func F64Identity() *F64 {
 	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0}
 }
 
-// F64Trans creates a new translation matrix.
-func F64Trans(vec *vpvec2.F64) *F64 {
+// F64Translation creates a new translation matrix.
+func F64Translation(vec *vpvec2.F64) *F64 {
 	return &F64{vpnumber.F64Const1, vpnumber.F64Const0, vpnumber.F64Const0, vpnumber.F64Const1, vec[0], vec[1]}
 }
 

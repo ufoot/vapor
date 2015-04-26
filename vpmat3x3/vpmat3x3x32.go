@@ -45,8 +45,8 @@ func X32Identity() *X32 {
 	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1}
 }
 
-// X32Trans creates a new translation matrix.
-func X32Trans(vec *vpvec2.X32) *X32 {
+// X32Translation creates a new translation matrix.
+func X32Translation(vec *vpvec2.X32) *X32 {
 	return &X32{vpnumber.X32Const1, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const0, vpnumber.X32Const1, vpnumber.X32Const0, vec[0], vec[1], vpnumber.X32Const1}
 }
 
@@ -91,7 +91,7 @@ func X32RebaseOXYP(Origin, PosX, PosY, PosP *vpvec2.X32) *X32 {
 	colY := vpvec2.X32MulScale(dY, vpnumber.X32Const1+lastRow[1])
 	projMat.SetCol(0, vpvec3.X32FromVec2(colX, lastRow[0]))
 	projMat.SetCol(1, vpvec3.X32FromVec2(colY, lastRow[1]))
-	transMat := X32Trans(Origin)
+	transMat := X32Translation(Origin)
 
 	ret := X32MulComp(transMat, projMat)
 
