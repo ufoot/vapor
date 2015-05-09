@@ -19,23 +19,15 @@
 # Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 # Contact author: ufoot@ufoot.org
 
-if [ -d ../.utils ] ; then
+if [ -d ../utils ] ; then
     cd ..
 fi
-if [ ! -d .utils ] ; then
+if [ ! -d utils ] ; then
     echo "$0 should be run in srcdir"
     exit 1
 fi
 
-export GOPATH=$(pwd)
-
-go get golang.org/x/crypto/ripemd160
-go get golang.org/x/crypto/openpgp
-go get golang.org/x/crypto/openpgp/packet
-go get github.com/golang/lint/golint
-go get git.apache.org/thrift.git/lib/go/thrift
-
-rm -rf src/github.com/ufoot/vapor
-install -d src/github.com/ufoot/vapor
-for i in vp*; do ln -s $(pwd)/$i src/github.com/ufoot/vapor/$i ; done
+for i in vp*/*.go ; do
+    go fmt "$i"
+done
 

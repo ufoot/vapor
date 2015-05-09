@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # Vapor is a toolkit designed to support Liquid War 7.
 # Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
 #
@@ -17,60 +19,5 @@
 # Vapor homepage: https://github.com/ufoot/vapor
 # Contact author: ufoot@ufoot.org
 
-srcdir = @srcdir@
-prefix = @prefix@
-
-VP_TOPBUILDDIR = @VP_TOPBUILDDIR@
-VP_TOPSRCDIR = @VP_TOPSRCDIR@
-
-.PHONY: all
-.PHONY: vp
-.PHONY: check
-.PHONY: bench
-.PHONY: lint
-.PHONY: devel
-.PHONY: doc
-.PHONY: clean
-.PHONY: distclean
-.PHONY: get
-.PHONY: dep
-.PHONY: help
-.PHONY: stamp
-.PHONY: indent
-
-all: vp
-
-check: dep stamp check-vp
-
-bench: dep stamp bench-vp
-
-lint: dep stamp lint-vp
-
-devel: indent dep stamp vp devel-vp
-
-doc: indent dep stamp doc-vp
-
-clean:
-	rm -rf bin/vp* pkg doc/txt doc/html thrift/gen-*
-
-distclean: clean
-	rm -rf bin/* autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src
-	find . -name "*~" -exec rm -f "{}" \;
-
-get:
-	./utils/get.sh
-
-dep:
-	./utils/dep.sh
-
-help:
-	cat Makefile.help
-
-stamp:
-	./utils/stamp.sh
-
-indent:
-	./utils/indent.sh
-
-include Makefile.dep
+autoreconf
 

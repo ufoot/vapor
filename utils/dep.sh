@@ -19,10 +19,10 @@
 # Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 # Contact author: ufoot@ufoot.org
 
-if [ -d ../.utils ] ; then
+if [ -d ../utils ] ; then
     cd ..
 fi
-if [ ! -d .utils ] ; then
+if [ ! -d utils ] ; then
     echo "$0 should be run in srcdir"
     exit 1
 fi
@@ -66,7 +66,7 @@ for t in "" "check-" "bench-" "lint-" "devel-" "doc-" ; do
 done
 
 echo "configure.ac: $(ls vp*/*.go | sort -u | tr "\n" " ")" >> Makefile.dep
-echo "\tcd \$(VP_TOPSRCDIR) && ./.utils/dep.sh && ./.utils/stamp.sh" >> Makefile.dep
+echo "\tcd \$(VP_TOPSRCDIR) && ./utils/dep.sh && ./utils/stamp.sh" >> Makefile.dep
 echo >> Makefile.dep
 
 for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do

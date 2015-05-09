@@ -59,5 +59,5 @@ AC_MSG_NOTICE([VP_TOPSRCDIR="${VP_TOPSRCDIR}"])
 
 install -d "${VP_TOPBUILDDIR}/doc/txt"
 install -d "${VP_TOPBUILDDIR}/doc/html"
-cd "${VP_TOPSRCDIR}" && ./.utils/get.sh && ./.utils/dep.sh && ./.utils/stamp.sh ; cd "${VP_TOPBUILDDIR}"
+cd "${VP_TOPSRCDIR}" && ./utils/get.sh && ./utils/dep.sh && ./utils/stamp.sh ; cd "${VP_TOPBUILDDIR}"
 
