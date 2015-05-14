@@ -36,6 +36,8 @@ const stdoutPriority = PriorityNotice
 const filePriority = PriorityDebug
 const syslogPriority = PriorityWarning
 const flushPriority = PriorityNotice
+// 1st parameter of the Logger.Output func
+const outputCalldepth = 4
 
 type stdoutWriter struct {
 }
@@ -105,18 +107,18 @@ func NewLog(program string) *Log {
 	return &logger
 }
 
-// Log logs a message on all relevant channels, no EOL
-// added, if you want one, do provide one.
+// Log logs a message on all relevant channels.
+// EOL is added at the end, you do not need to provide it.
 func (l *Log) Log(p Priority, v ...interface{}) {
 	if p <= l.p {
 		if p <= stdoutPriority {
-			l.stdoutLogger.Print(v...)
+			l.stdoutLogger.Output(outputCalldepth, fmt.Sprintln(v...))
 		}
 		if p <= filePriority {
-			l.fileLogger.Print(v...)
+			l.fileLogger.Output(outputCalldepth, fmt.Sprintln(v...))
 		}
 		if p <= syslogPriority {
-			l.syslogLogger.Print(v...)
+			l.syslogLogger.Output(outputCalldepth, fmt.Sprintln(v...))
 		}
 		if p <= flushPriority {
 			l.Flush()
@@ -124,19 +126,18 @@ func (l *Log) Log(p Priority, v ...interface{}) {
 	}
 }
 
-// Logf logs a message on all relevant channels, using a printf-like
-// syntax, no EOL  added, if you want one
-// do provide one.
+// Logf logs a message on all relevant channels, using a printf-like syntax.
+// EOL is added at the end, you do not need to provide it.
 func (l *Log) Logf(p Priority, format string, v ...interface{}) {
 	if p <= l.p {
 		if p <= stdoutPriority {
-			l.stdoutLogger.Printf(format, v...)
+			l.stdoutLogger.Output(outputCalldepth, fmt.Sprintf(format,v...)+"\n")
 		}
 		if p <= filePriority {
-			l.fileLogger.Printf(format, v...)
+			l.fileLogger.Output(outputCalldepth, fmt.Sprintf(format,v...)+"\n")
 		}
 		if p <= syslogPriority {
-			l.syslogLogger.Printf(format, v...)
+			l.syslogLogger.Output(outputCalldepth, fmt.Sprintf(format,v...)+"\n")
 		}
 		if p <= flushPriority {
 			l.Flush()

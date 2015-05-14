@@ -53,7 +53,7 @@ func checkContains(t *testing.T, filename string, text string) {
 }
 
 func TestLogCrit(t *testing.T) {
-	LogCrit(fmt.Sprintf("%s\n", checkCritString))
+	LogCrit(fmt.Sprintf("%s", checkCritString))
 	LogCritf("%s", checkCritStringf)
 	// no flush as Crit must be auto-flushed
 
@@ -63,7 +63,7 @@ func TestLogCrit(t *testing.T) {
 }
 
 func TestLogErr(t *testing.T) {
-	LogErr(fmt.Sprintf("%s\n", checkErrString))
+	LogErr(fmt.Sprintf("%s", checkErrString))
 	LogErrf("%s", checkErrStringf)
 	// no flush as Err must be auto-flushed
 
@@ -73,7 +73,7 @@ func TestLogErr(t *testing.T) {
 }
 
 func TestLogWarning(t *testing.T) {
-	LogWarning(fmt.Sprintf("%s\n", checkWarningString))
+	LogWarning(fmt.Sprintf("%s", checkWarningString))
 	LogWarningf("%s", checkWarningStringf)
 	// no flush as Warning must be auto-flushed
 
@@ -83,7 +83,7 @@ func TestLogWarning(t *testing.T) {
 }
 
 func TestLogNotice(t *testing.T) {
-	LogNotice(fmt.Sprintf("%s\n", checkNoticeString))
+	LogNotice(fmt.Sprintf("%s", checkNoticeString))
 	LogNoticef("%s", checkNoticeStringf)
 	// no flush as Notice must be auto-flushed
 
@@ -93,7 +93,7 @@ func TestLogNotice(t *testing.T) {
 }
 
 func TestLogInfo(t *testing.T) {
-	LogInfo(fmt.Sprintf("%s\n", checkInfoString))
+	LogInfo(fmt.Sprintf("%s", checkInfoString))
 	LogInfof("%s", checkInfoStringf)
 	LogFlush()
 
@@ -106,7 +106,7 @@ func TestLogDebug(t *testing.T) {
 	p := LogGetPriority()
 	LogSetPriority(PriorityDebug)
 
-	LogDebug(fmt.Sprintf("%s\n", checkDebugString))
+	LogDebug(fmt.Sprintf("%s", checkDebugString))
 	LogDebugf("%s", checkDebugStringf)
 	LogFlush()
 
