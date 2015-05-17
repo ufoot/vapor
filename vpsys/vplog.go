@@ -32,24 +32,27 @@ import (
 )
 
 const basename = "log.txt"
-const stdoutPriority = PriorityNotice
+const stderrPriority = PriorityNotice
+const problemPriority = PriorityWarning
 const filePriority = PriorityDebug
 const syslogPriority = PriorityWarning
 const flushPriority = PriorityNotice
+const sepHeaderContent = "-"
+
 // 1st parameter of the Logger.Output func
 const outputCalldepth = 4
 
-type stdoutWriter struct {
+type stderrWriter struct {
 }
 
-func (sw stdoutWriter) Write(p []byte) (n int, err error) {
-	fmt.Printf("%s", string(p))
+func (sw stderrWriter) Write(p []byte) (n int, err error) {
+	fmt.Fprintf(os.Stderr, "%s", string(p))
 	return len(p), nil
 }
 
 // Log is a default implementation of the Logger interface.
 // It basically logs informations in three places,
-// which are the console (stdout), a log file (typically
+// which are the console (stderr), a log file (typically
 // placed in the user's home directory) and syslog. The log file contains
 // everything while the console and syslog will only display important
 // messages. Under the hood, it uses the log.Logger object, so it's safe
@@ -68,9 +71,9 @@ type Log struct {
 	f            *os.File
 	w            io.Writer
 	fileBuffer   *bufio.Writer
-	stdoutBuffer *bufio.Writer
+	stderrBuffer *bufio.Writer
 	fileLogger   *log.Logger
-	stdoutLogger *log.Logger
+	stderrLogger *log.Logger
 	syslogLogger *log.Logger
 	flushMutex   sync.Mutex
 }
@@ -80,7 +83,7 @@ type Log struct {
 func NewLog(program string) *Log {
 	var logger Log
 	var err error
-	var s stdoutWriter
+	var s stderrWriter
 
 	prefix := fmt.Sprintf("%s: ", program)
 	logger.filename = path.Join(Home(program), basename)
@@ -92,11 +95,11 @@ func NewLog(program string) *Log {
 	}
 
 	logger.fileBuffer = bufio.NewWriter(io.Writer(logger.f))
-	logger.stdoutBuffer = bufio.NewWriter(s)
+	logger.stderrBuffer = bufio.NewWriter(s)
 
-	logger.fileLogger = log.New(logger.fileBuffer, prefix, log.LstdFlags|log.Lmicroseconds|log.Lshortfile)
-	logger.stdoutLogger = log.New(logger.stdoutBuffer, prefix, log.LstdFlags)
-	logger.syslogLogger, err = syslog.NewLogger(syslog.Priority(int(syslogPriority))|syslog.LOG_SYSLOG, log.LstdFlags|log.Lshortfile)
+	logger.fileLogger = log.New(logger.fileBuffer, prefix, log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
+	logger.stderrLogger = log.New(logger.stderrBuffer, prefix, log.Ltime)
+	logger.syslogLogger, err = syslog.NewLogger(syslog.Priority(int(syslogPriority))|syslog.LOG_SYSLOG, log.Lshortfile)
 	if err != nil {
 		panic(err)
 	}
@@ -111,14 +114,20 @@ func NewLog(program string) *Log {
 // EOL is added at the end, you do not need to provide it.
 func (l *Log) Log(p Priority, v ...interface{}) {
 	if p <= l.p {
-		if p <= stdoutPriority {
-			l.stdoutLogger.Output(outputCalldepth, fmt.Sprintln(v...))
+		ps := PriorityString(p) + " "
+		ms := sepHeaderContent + " " + fmt.Sprintln(v...)
+		if p <= stderrPriority {
+			if p <= problemPriority {
+				l.stderrLogger.Output(outputCalldepth, ps+ms)
+			} else {
+				l.stderrLogger.Output(outputCalldepth, ms)
+			}
 		}
 		if p <= filePriority {
-			l.fileLogger.Output(outputCalldepth, fmt.Sprintln(v...))
+			l.fileLogger.Output(outputCalldepth, ps+ms)
 		}
 		if p <= syslogPriority {
-			l.syslogLogger.Output(outputCalldepth, fmt.Sprintln(v...))
+			l.syslogLogger.Output(outputCalldepth, ps+ms)
 		}
 		if p <= flushPriority {
 			l.Flush()
@@ -130,14 +139,20 @@ func (l *Log) Log(p Priority, v ...interface{}) {
 // EOL is added at the end, you do not need to provide it.
 func (l *Log) Logf(p Priority, format string, v ...interface{}) {
 	if p <= l.p {
-		if p <= stdoutPriority {
-			l.stdoutLogger.Output(outputCalldepth, fmt.Sprintf(format,v...)+"\n")
+		ps := PriorityString(p) + " "
+		ms := sepHeaderContent + " " + fmt.Sprintf(format, v...) + "\n"
+		if p <= stderrPriority {
+			if p <= problemPriority {
+				l.stderrLogger.Output(outputCalldepth, ps+ms)
+			} else {
+				l.stderrLogger.Output(outputCalldepth, ms)
+			}
 		}
 		if p <= filePriority {
-			l.fileLogger.Output(outputCalldepth, fmt.Sprintf(format,v...)+"\n")
+			l.fileLogger.Output(outputCalldepth, ps+ms)
 		}
 		if p <= syslogPriority {
-			l.syslogLogger.Output(outputCalldepth, fmt.Sprintf(format,v...)+"\n")
+			l.syslogLogger.Output(outputCalldepth, ps+ms)
 		}
 		if p <= flushPriority {
 			l.Flush()
@@ -165,7 +180,7 @@ func (l *Log) GetPriority() Priority {
 func (l *Log) Flush() {
 	l.flushMutex.Lock()
 	l.fileBuffer.Flush()
-	l.stdoutBuffer.Flush()
+	l.stderrBuffer.Flush()
 	// This is why we use a Mutex and a Lock, while buffers buried
 	// under the log.Logger API might be thread-safe, the file
 	// direct access is another story.
@@ -285,7 +300,7 @@ func LogGetPriority() Priority {
 }
 
 // LogFlush flushes the global logging system, more precisely, flushes
-// stdout and the log file.
+// stderr and the log file.
 func LogFlush() {
 	getGlobalLog(vpbuild.PackageTarname).Flush()
 }

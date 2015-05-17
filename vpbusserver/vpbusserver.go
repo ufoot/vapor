@@ -35,12 +35,12 @@ func runServer(transportFactory thrift.TTransportFactory, protocolFactory thrift
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to create server socket")
 	}
-	vpsys.LogNoticef("%T\n", transport)
+	vpsys.LogNoticef("%T", transport)
 	handler := vpbus.New()
 	processor := vpbusapi.NewVpBusApiProcessor(handler)
 	server := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
 
-	vpsys.LogNoticef("Starting Thrift server on %s\n", addr)
+	vpsys.LogNoticef("Starting Thrift server on %s", addr)
 	return server, server.Serve()
 }
 
