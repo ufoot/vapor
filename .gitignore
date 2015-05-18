@@ -6,8 +6,11 @@ config.status
 Makefile
 Makefile.dep
 Makefile.help
-src
+src/git.apache.org
+src/github.com
+src/golang.org
 bin/vp*
+bin/godep
 bin/golint
 pkg
 doc/txt

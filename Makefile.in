@@ -54,7 +54,7 @@ clean:
 	rm -rf bin/vp* pkg doc/txt doc/html thrift/gen-*
 
 distclean: clean
-	rm -rf bin/* autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src
+	rm -rf bin/* autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src/git.apache.org src/github.com src/golang.org
 	find . -name "*~" -exec rm -f "{}" \;
 
 get:
