@@ -27,17 +27,17 @@ import (
 )
 
 const checkCritString = "crit1"
-const checkCritStringf = "crit2"
+const checkCritStringf = "crit2\ncrit3\n"
 const checkErrString = "err1"
-const checkErrStringf = "err2"
+const checkErrStringf = "err2\nerr3\n"
 const checkWarningString = "warning1"
-const checkWarningStringf = "warning2"
+const checkWarningStringf = "warning2\nwarning3\n"
 const checkNoticeString = "notice1"
-const checkNoticeStringf = "notice2"
+const checkNoticeStringf = "notice2\nnotice3\n"
 const checkInfoString = "info1"
-const checkInfoStringf = "info2"
+const checkInfoStringf = "info2\ninfo3\n"
 const checkDebugString = "debug1"
-const checkDebugStringf = "debug2"
+const checkDebugStringf = "debug2\ndebug3\n"
 
 func checkContains(t *testing.T, filename string, text string) {
 	content, err := ioutil.ReadFile(filename)
@@ -59,7 +59,9 @@ func TestLogCrit(t *testing.T) {
 
 	filename := LogFilename()
 	checkContains(t, filename, checkCritString)
-	checkContains(t, filename, checkCritStringf)
+	for _, line := range strings.Split(checkCritStringf, "\n") {
+		checkContains(t, filename, line)
+	}
 }
 
 func TestLogErr(t *testing.T) {
@@ -69,7 +71,9 @@ func TestLogErr(t *testing.T) {
 
 	filename := LogFilename()
 	checkContains(t, filename, checkErrString)
-	checkContains(t, filename, checkErrStringf)
+	for _, line := range strings.Split(checkErrStringf, "\n") {
+		checkContains(t, filename, line)
+	}
 }
 
 func TestLogWarning(t *testing.T) {
@@ -79,7 +83,9 @@ func TestLogWarning(t *testing.T) {
 
 	filename := LogFilename()
 	checkContains(t, filename, checkWarningString)
-	checkContains(t, filename, checkWarningStringf)
+	for _, line := range strings.Split(checkWarningStringf, "\n") {
+		checkContains(t, filename, line)
+	}
 }
 
 func TestLogNotice(t *testing.T) {
@@ -89,7 +95,9 @@ func TestLogNotice(t *testing.T) {
 
 	filename := LogFilename()
 	checkContains(t, filename, checkNoticeString)
-	checkContains(t, filename, checkNoticeStringf)
+	for _, line := range strings.Split(checkNoticeStringf, "\n") {
+		checkContains(t, filename, line)
+	}
 }
 
 func TestLogInfo(t *testing.T) {
@@ -99,7 +107,9 @@ func TestLogInfo(t *testing.T) {
 
 	filename := LogFilename()
 	checkContains(t, filename, checkInfoString)
-	checkContains(t, filename, checkInfoStringf)
+	for _, line := range strings.Split(checkInfoStringf, "\n") {
+		checkContains(t, filename, line)
+	}
 }
 
 func TestLogDebug(t *testing.T) {
@@ -114,5 +124,7 @@ func TestLogDebug(t *testing.T) {
 
 	filename := LogFilename()
 	checkContains(t, filename, checkDebugString)
-	checkContains(t, filename, checkDebugStringf)
+	for _, line := range strings.Split(checkDebugStringf, "\n") {
+		checkContains(t, filename, line)
+	}
 }

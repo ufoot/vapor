@@ -28,6 +28,7 @@ import (
 	"log/syslog"
 	"os"
 	"path"
+	"strings"
 	"sync"
 )
 
@@ -110,28 +111,39 @@ func NewLog(program string) *Log {
 	return &logger
 }
 
+func (l *Log) output(p Priority, ps, ms string) {
+	var line string
+
+	for _, line = range strings.Split(ms, "\n") {
+		if len(line) > 0 {
+			line = sepHeaderContent + " " + line
+			if p <= stderrPriority {
+				if p <= problemPriority {
+					l.stderrLogger.Output(outputCalldepth, ps+line)
+				} else {
+					l.stderrLogger.Output(outputCalldepth, line)
+				}
+			}
+			if p <= filePriority {
+				l.fileLogger.Output(outputCalldepth, ps+line)
+			}
+			if p <= syslogPriority {
+				l.syslogLogger.Output(outputCalldepth, ps+line)
+			}
+			if p <= flushPriority {
+				l.Flush()
+			}
+		}
+	}
+}
+
 // Log logs a message on all relevant channels.
 // EOL is added at the end, you do not need to provide it.
 func (l *Log) Log(p Priority, v ...interface{}) {
 	if p <= l.p {
 		ps := PriorityString(p) + " "
-		ms := sepHeaderContent + " " + fmt.Sprintln(v...)
-		if p <= stderrPriority {
-			if p <= problemPriority {
-				l.stderrLogger.Output(outputCalldepth, ps+ms)
-			} else {
-				l.stderrLogger.Output(outputCalldepth, ms)
-			}
-		}
-		if p <= filePriority {
-			l.fileLogger.Output(outputCalldepth, ps+ms)
-		}
-		if p <= syslogPriority {
-			l.syslogLogger.Output(outputCalldepth, ps+ms)
-		}
-		if p <= flushPriority {
-			l.Flush()
-		}
+		ms := fmt.Sprintln(v...)
+		l.output(p, ps, ms)
 	}
 }
 
@@ -140,23 +152,8 @@ func (l *Log) Log(p Priority, v ...interface{}) {
 func (l *Log) Logf(p Priority, format string, v ...interface{}) {
 	if p <= l.p {
 		ps := PriorityString(p) + " "
-		ms := sepHeaderContent + " " + fmt.Sprintf(format, v...) + "\n"
-		if p <= stderrPriority {
-			if p <= problemPriority {
-				l.stderrLogger.Output(outputCalldepth, ps+ms)
-			} else {
-				l.stderrLogger.Output(outputCalldepth, ms)
-			}
-		}
-		if p <= filePriority {
-			l.fileLogger.Output(outputCalldepth, ps+ms)
-		}
-		if p <= syslogPriority {
-			l.syslogLogger.Output(outputCalldepth, ps+ms)
-		}
-		if p <= flushPriority {
-			l.Flush()
-		}
+		ms := fmt.Sprintf(format, v...) + "\n"
+		l.output(p, ps, ms)
 	}
 }
 
