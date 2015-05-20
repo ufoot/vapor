@@ -31,15 +31,16 @@ import (
 // First returned value is the position, second is the derivative.
 func F32LinearCurve1d(p0, p1 float32, t float32) (float32, float32) {
 	switch {
-	case vpnumber.F32IsSimilar(p0, p1):
-		return vpmath.F32Lerp(p0, p1, t), vpnumber.F32Const0
 	case t < vpnumber.F32Const0:
 		return p0, vpnumber.F32Const0
 	case t > vpnumber.F32Const1:
 		return p1, vpnumber.F32Const0
 	}
 
-	return vpmath.F32Lerp(p0, p1, t), p1 - p0
+	retP := vpmath.F32Lerp(p0, p1, t)
+	retDt := p1 - p0
+
+	return retP, retDt
 }
 
 // F32LinearCurve2d returns the linear Bezier curve from p0 to p1,
@@ -47,15 +48,16 @@ func F32LinearCurve1d(p0, p1 float32, t float32) (float32, float32) {
 // First returned value is the position, second is the derivative.
 func F32LinearCurve2d(p0, p1 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec2.F32) {
 	switch {
-	case p0.IsSimilar(p1):
-		return vpvec2.F32Lerp(p0, p1, t), vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
 	case t < vpnumber.F32Const0:
 		return p0, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
 	case t > vpnumber.F32Const1:
 		return p1, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
 	}
 
-	return vpvec2.F32Lerp(p0, p1, t), vpvec2.F32Sub(p1, p0)
+	retP := vpvec2.F32Lerp(p0, p1, t)
+	retDt := vpvec2.F32Sub(p1, p0)
+
+	return retP, retDt
 }
 
 // F32LinearCurve3d returns the linear Bezier curve from p0 to p1,
@@ -63,13 +65,14 @@ func F32LinearCurve2d(p0, p1 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec2.F32) 
 // First returned value is the position, second is the derivative.
 func F32LinearCurve3d(p0, p1 *vpvec3.F32, t float32) (*vpvec3.F32, *vpvec3.F32) {
 	switch {
-	case p0.IsSimilar(p1):
-		return vpvec3.F32Lerp(p0, p1, t), vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
 	case t < vpnumber.F32Const0:
 		return p0, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
 	case t > vpnumber.F32Const1:
 		return p1, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
 	}
 
-	return vpvec3.F32Lerp(p0, p1, t), vpvec3.F32Sub(p1, p0)
+	retP := vpvec3.F32Lerp(p0, p1, t)
+	retDt := vpvec3.F32Sub(p1, p0)
+
+	return retP, retDt
 }

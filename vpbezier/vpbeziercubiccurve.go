@@ -32,10 +32,6 @@ import (
 // First returned value is the position, second is the derivative.
 func F32CubicCurve1d(p0, p1, p2, p3 float32, t float32) (float32, float32) {
 	switch {
-	case vpnumber.F32IsSimilar(p0, p1):
-		return F32QuadraticCurve1d(p0, p2, p3, t)
-	case vpnumber.F32IsSimilar(p2, p3):
-		return F32QuadraticCurve1d(p0, p1, p3, t)
 	case t < vpnumber.F32Const0:
 		return p0, vpnumber.F32Const0
 	case t > vpnumber.F32Const1:
@@ -44,7 +40,10 @@ func F32CubicCurve1d(p0, p1, p2, p3 float32, t float32) (float32, float32) {
 
 	oneMinusT := vpnumber.F32Const1 - t
 
-	return p0*oneMinusT*oneMinusT*oneMinusT + p1*3*oneMinusT*oneMinusT*t + p2*3*oneMinusT*t*t + p3*t*t*t, (p1-p0)*3*oneMinusT*oneMinusT + (p2-p1)*6*oneMinusT*t + (p3-p2)*3*t*t
+	retP := p0*oneMinusT*oneMinusT*oneMinusT + p1*3*oneMinusT*oneMinusT*t + p2*3*oneMinusT*t*t + p3*t*t*t
+	retDt := (p1-p0)*3*oneMinusT*oneMinusT + (p2-p1)*6*oneMinusT*t + (p3-p2)*3*t*t
+
+	return retP, retDt
 }
 
 // F32CubicCurve2d returns the cubic Bezier curve from p0 to p3,
@@ -54,10 +53,6 @@ func F32CubicCurve1d(p0, p1, p2, p3 float32, t float32) (float32, float32) {
 // First returned value is the position, second is the derivative.
 func F32CubicCurve2d(p0, p1, p2, p3 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec2.F32) {
 	switch {
-	case p0.IsSimilar(p1):
-		return F32QuadraticCurve2d(p0, p2, p3, t)
-	case p2.IsSimilar(p3):
-		return F32QuadraticCurve2d(p0, p1, p3, t)
 	case t < vpnumber.F32Const0:
 		return p0, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
 	case t > vpnumber.F32Const1:
@@ -66,7 +61,10 @@ func F32CubicCurve2d(p0, p1, p2, p3 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec
 
 	oneMinusT := vpnumber.F32Const1 - t
 
-	return vpvec2.F32Add(vpvec2.F32MulScale(p0, oneMinusT*oneMinusT*oneMinusT), vpvec2.F32MulScale(p1, 3*oneMinusT*oneMinusT*t)).Add(vpvec2.F32MulScale(p2, 3*oneMinusT*t*t)).Add(vpvec2.F32MulScale(p3, t*t*t)), vpvec2.F32Sub(p1, p0).MulScale(3 * oneMinusT * oneMinusT).Add(vpvec2.F32Sub(p2, p1).MulScale(6 * oneMinusT * t)).Add(vpvec2.F32Sub(p3, p2).MulScale(3 * t * t))
+	retP := vpvec2.F32Add(vpvec2.F32MulScale(p0, oneMinusT*oneMinusT*oneMinusT), vpvec2.F32MulScale(p1, 3*oneMinusT*oneMinusT*t)).Add(vpvec2.F32MulScale(p2, 3*oneMinusT*t*t)).Add(vpvec2.F32MulScale(p3, t*t*t))
+	retDt := vpvec2.F32Sub(p1, p0).MulScale(3 * oneMinusT * oneMinusT).Add(vpvec2.F32Sub(p2, p1).MulScale(6 * oneMinusT * t)).Add(vpvec2.F32Sub(p3, p2).MulScale(3 * t * t))
+
+	return retP, retDt
 }
 
 // F32CubicCurve3d returns the cubic Bezier curve from p0 to p3,
@@ -76,10 +74,6 @@ func F32CubicCurve2d(p0, p1, p2, p3 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec
 // First returned value is the position, second is the derivative.
 func F32CubicCurve3d(p0, p1, p2, p3 *vpvec3.F32, t float32) (*vpvec3.F32, *vpvec3.F32) {
 	switch {
-	case p0.IsSimilar(p1):
-		return F32QuadraticCurve3d(p0, p2, p3, t)
-	case p2.IsSimilar(p3):
-		return F32QuadraticCurve3d(p0, p1, p3, t)
 	case t < vpnumber.F32Const0:
 		return p0, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
 	case t > vpnumber.F32Const1:
@@ -88,5 +82,8 @@ func F32CubicCurve3d(p0, p1, p2, p3 *vpvec3.F32, t float32) (*vpvec3.F32, *vpvec
 
 	oneMinusT := vpnumber.F32Const1 - t
 
-	return vpvec3.F32Add(vpvec3.F32MulScale(p0, oneMinusT*oneMinusT*oneMinusT), vpvec3.F32MulScale(p1, 3*oneMinusT*oneMinusT*t)).Add(vpvec3.F32MulScale(p2, 3*oneMinusT*t*t)).Add(vpvec3.F32MulScale(p3, t*t*t)), vpvec3.F32Sub(p1, p0).MulScale(3 * oneMinusT * oneMinusT).Add(vpvec3.F32Sub(p2, p1).MulScale(6 * oneMinusT * t)).Add(vpvec3.F32Sub(p3, p2).MulScale(3 * t * t))
+	retP := vpvec3.F32Add(vpvec3.F32MulScale(p0, oneMinusT*oneMinusT*oneMinusT), vpvec3.F32MulScale(p1, 3*oneMinusT*oneMinusT*t)).Add(vpvec3.F32MulScale(p2, 3*oneMinusT*t*t)).Add(vpvec3.F32MulScale(p3, t*t*t))
+	retDt := vpvec3.F32Sub(p1, p0).MulScale(3 * oneMinusT * oneMinusT).Add(vpvec3.F32Sub(p2, p1).MulScale(6 * oneMinusT * t)).Add(vpvec3.F32Sub(p3, p2).MulScale(3 * t * t))
+
+	return retP, retDt
 }
