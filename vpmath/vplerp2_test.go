@@ -72,4 +72,50 @@ func TestF64Lerp2(t *testing.T) {
 	}
 }
 
-// X32 X64 tests to be written...
+func TestX32Lerp2(t *testing.T) {
+	p := [2][2]vpnumber.X32{{vpnumber.I32ToX32(-1), vpnumber.I32ToX32(1)}, {vpnumber.I32ToX32(4), vpnumber.I32ToX32(10)}}
+	u := vpnumber.F32ToX32(0.25)
+	v := vpnumber.F32ToX32(0.75)
+	lerp := vpnumber.F32ToX32(2.5)
+	var x vpnumber.X32
+	var xCheck vpnumber.X32
+
+	x = X32Lerp2(p, u, v)
+	if !vpnumber.X32IsSimilar(x, lerp) {
+		t.Errorf("bad lerp2, got %s should be %s", x.String(), lerp.String())
+	}
+	x = X32Lerp2(p, -vpnumber.X32Const1, v)
+	xCheck = X32Lerp(p[0][0], p[0][1], v)
+	if !vpnumber.X32IsSimilar(x, xCheck) {
+		t.Errorf("bad lerp2 on negative u, got %s should be %s", x.String(), xCheck.String())
+	}
+	x = X32Lerp2(p, vpnumber.X32Const1+vpnumber.X32Const1, v)
+	xCheck = X32Lerp(p[1][0], p[1][1], v)
+	if !vpnumber.X32IsSimilar(x, xCheck) {
+		t.Errorf("bad lerp2 on u>1, got %s should be %s", x.String(), xCheck.String())
+	}
+}
+
+func TestX64Lerp2(t *testing.T) {
+	p := [2][2]vpnumber.X64{{vpnumber.I64ToX64(-1), vpnumber.I64ToX64(1)}, {vpnumber.I64ToX64(4), vpnumber.I64ToX64(10)}}
+	u := vpnumber.F64ToX64(0.25)
+	v := vpnumber.F64ToX64(0.75)
+	lerp := vpnumber.F64ToX64(2.5)
+	var x vpnumber.X64
+	var xCheck vpnumber.X64
+
+	x = X64Lerp2(p, u, v)
+	if !vpnumber.X64IsSimilar(x, lerp) {
+		t.Errorf("bad lerp2, got %s should be %s", x.String(), lerp.String())
+	}
+	x = X64Lerp2(p, -vpnumber.X64Const1, v)
+	xCheck = X64Lerp(p[0][0], p[0][1], v)
+	if !vpnumber.X64IsSimilar(x, xCheck) {
+		t.Errorf("bad lerp2 on negative u, got %s should be %s", x.String(), xCheck.String())
+	}
+	x = X64Lerp2(p, vpnumber.X64Const1+vpnumber.X64Const1, v)
+	xCheck = X64Lerp(p[1][0], p[1][1], v)
+	if !vpnumber.X64IsSimilar(x, xCheck) {
+		t.Errorf("bad lerp2 on u>1, got %s should be %s", x.String(), xCheck.String())
+	}
+}
