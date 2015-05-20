@@ -24,21 +24,43 @@ import (
 	"github.com/ufoot/vapor/vpnumber"
 )
 
-// F32Bernstein returns a Berstein polynomial value.
-func F32Bernstein(n, i int, t float32) float32 {
-	b := vpmath.Binomial(n, i)
-	ret := float32(b)
+func f32TOneMinusT(a, b int, t float32) float32 {
+	ret := vpnumber.F32Const1
+	oneMinusT := vpnumber.F32Const1 - t
 	var l int
 
-	oneMinusT := vpnumber.F32Const1 - t
-
-	for l = 0; l < n; l++ {
-		if l < i {
-			ret *= t
-		} else {
-			ret *= oneMinusT
-		}
+	for l = 0; l < a; l++ {
+		ret *= t
+	}
+	for l = 0; l < b; l++ {
+		ret *= oneMinusT
 	}
 
 	return ret
+}
+
+// F32Bernstein returns a Berstein polynomial value.
+func F32Bernstein(n, i int, t float32) float32 {
+	b := vpmath.Binomial(n, i)
+
+	return float32(b) * f32TOneMinusT(i, n-i, t)
+}
+
+func f32TOneMinusTDerivative(a, b int, t float32) float32 {
+	oneMinusT := vpnumber.F32Const1 - t
+	switch {
+	case a >= 1:
+		return t*f32TOneMinusTDerivative(a-1, b, t) + f32TOneMinusT(a-1, b, t)
+	case b >= 1:
+		return oneMinusT*f32TOneMinusTDerivative(a, b-1, t) - f32TOneMinusT(a, b-1, t)
+	}
+
+	return vpnumber.F32Const0
+}
+
+// F32BernsteinDerivative returns a Berstein polynomial value.
+func F32BernsteinDerivative(n, i int, t float32) float32 {
+	b := vpmath.Binomial(n, i)
+
+	return float32(b) * f32TOneMinusTDerivative(i, n-i, t)
 }
