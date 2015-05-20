@@ -19,10 +19,86 @@
 
 package vpbezier
 
-import ()
+import (
+	"github.com/ufoot/vapor/vpmath"
+	"github.com/ufoot/vapor/vpnumber"
+	"github.com/ufoot/vapor/vpvec2"
+	"github.com/ufoot/vapor/vpvec3"
+)
+
+func scalarFromF32Vec2(p *[2][2]vpvec2.F32, i int) [2][2]float32 {
+	return [2][2]float32{{p[0][0][i], p[0][1][i]}, {p[1][0][i], p[1][1][i]}}
+}
+
+func scalarFromF32Vec3(p *[2][2]vpvec3.F32, i int) [2][2]float32 {
+	return [2][2]float32{{p[0][0][i], p[0][1][i]}, {p[1][0][i], p[1][1][i]}}
+}
 
 // F32LinearSurface1d returns the linear Bezier surface between 4 points.
 func F32LinearSurface1d(p [2][2]float32, u, v float32) (float32, float32, float32) {
-	// todo
-	return 0, 0, 0
+	switch {
+	case u < vpnumber.F32Const0:
+		return vpmath.F32Lerp(p[0][0], p[0][1], v), vpnumber.F32Const0, p[0][1] - p[0][0]
+	case u > vpnumber.F32Const1:
+		return vpmath.F32Lerp(p[1][0], p[1][1], v), vpnumber.F32Const0, p[1][1] - p[1][0]
+	case v < vpnumber.F32Const0:
+		return vpmath.F32Lerp(p[0][0], p[1][0], u), p[1][0] - p[0][0], vpnumber.F32Const0
+	case v > vpnumber.F32Const1:
+		return vpmath.F32Lerp(p[0][1], p[1][1], u), p[1][1] - p[0][1], vpnumber.F32Const0
+	}
+
+	oneMinusU := vpnumber.F32Const1 - u
+	oneMinusV := vpnumber.F32Const1 - v
+
+	retP := vpmath.F32Lerp2(p, u, v)
+	retDu := p[1][0]*oneMinusV + p[1][1]*v - p[0][0]*oneMinusV - p[0][1]*v
+	retDv := p[0][1]*oneMinusU + p[1][1]*u - p[0][0]*oneMinusU - p[1][0]*u
+
+	return retP, retDu, retDv
+}
+
+// F32LinearSurface2d returns the linear Bezier surface between 4 points.
+func F32LinearSurface2d(p *[2][2]vpvec2.F32, u, v float32) (*vpvec2.F32, *vpvec2.F32, *vpvec2.F32) {
+	switch {
+	case u < vpnumber.F32Const0:
+		return vpvec2.F32Lerp(&(p[0][0]), &(p[0][1]), v), vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0), vpvec2.F32Sub(&(p[0][1]), &(p[0][0]))
+	case u > vpnumber.F32Const1:
+		return vpvec2.F32Lerp(&(p[1][0]), &(p[1][1]), v), vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0), vpvec2.F32Sub(&(p[1][1]), &(p[1][0]))
+	case v < vpnumber.F32Const0:
+		return vpvec2.F32Lerp(&(p[0][0]), &(p[1][0]), u), vpvec2.F32Sub(&(p[1][0]), &(p[0][0])), vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+	case v > vpnumber.F32Const1:
+		return vpvec2.F32Lerp(&(p[0][1]), &(p[1][1]), u), vpvec2.F32Sub(&(p[1][1]), &(p[0][1])), vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+	}
+
+	oneMinusU := vpnumber.F32Const1 - u
+	oneMinusV := vpnumber.F32Const1 - v
+
+	retP := vpvec2.F32New(vpmath.F32Lerp2(scalarFromF32Vec2(p, 0), u, v), vpmath.F32Lerp2(scalarFromF32Vec2(p, 1), u, v))
+	retDu := vpvec2.F32MulScale(&(p[1][0]), oneMinusV).Add(vpvec2.F32MulScale(&(p[1][1]), v)).Sub(vpvec2.F32MulScale(&(p[0][0]), oneMinusV)).Sub(vpvec2.F32MulScale(&(p[0][1]), v))
+	retDv := vpvec2.F32MulScale(&(p[0][1]), oneMinusU).Add(vpvec2.F32MulScale(&(p[1][1]), u)).Sub(vpvec2.F32MulScale(&(p[0][0]), oneMinusU)).Sub(vpvec2.F32MulScale(&(p[1][0]), u))
+
+	return retP, retDu, retDv
+}
+
+// F32LinearSurface3d returns the linear Bezier surface between 4 points.
+func F32LinearSurface3d(p *[2][2]vpvec3.F32, u, v float32) (*vpvec3.F32, *vpvec3.F32, *vpvec3.F32) {
+	switch {
+	case u < vpnumber.F32Const0:
+		return vpvec3.F32Lerp(&(p[0][0]), &(p[0][1]), v), vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), vpvec3.F32Sub(&(p[0][1]), &(p[0][0]))
+	case u > vpnumber.F32Const1:
+		return vpvec3.F32Lerp(&(p[1][0]), &(p[1][1]), v), vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), vpvec3.F32Sub(&(p[1][1]), &(p[1][0]))
+	case v < vpnumber.F32Const0:
+		return vpvec3.F32Lerp(&(p[0][0]), &(p[1][0]), u), vpvec3.F32Sub(&(p[1][0]), &(p[0][0])), vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+	case v > vpnumber.F32Const1:
+		return vpvec3.F32Lerp(&(p[0][1]), &(p[1][1]), u), vpvec3.F32Sub(&(p[1][1]), &(p[0][1])), vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+	}
+
+	oneMinusU := vpnumber.F32Const1 - u
+	oneMinusV := vpnumber.F32Const1 - v
+
+	retP := vpvec3.F32New(vpmath.F32Lerp2(scalarFromF32Vec3(p, 0), u, v), vpmath.F32Lerp2(scalarFromF32Vec3(p, 1), u, v), vpmath.F32Lerp2(scalarFromF32Vec3(p, 2), u, v))
+	retDu := vpvec3.F32MulScale(&(p[1][0]), oneMinusV).Add(vpvec3.F32MulScale(&(p[1][1]), v)).Sub(vpvec3.F32MulScale(&(p[0][0]), oneMinusV)).Sub(vpvec3.F32MulScale(&(p[0][1]), v))
+	retDv := vpvec3.F32MulScale(&(p[0][1]), oneMinusU).Add(vpvec3.F32MulScale(&(p[1][1]), u)).Sub(vpvec3.F32MulScale(&(p[0][0]), oneMinusU)).Sub(vpvec3.F32MulScale(&(p[1][0]), u))
+
+	return retP, retDu, retDv
 }
