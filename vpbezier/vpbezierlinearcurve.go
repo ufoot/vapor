@@ -26,10 +26,10 @@ import (
 	"github.com/ufoot/vapor/vpvec3"
 )
 
-// F32Linear1d returns the linear Bezier curve from p0 to p1,
+// F32LinearCurve1d returns the linear Bezier curve from p0 to p1,
 // which is basically a Lerp. Works on float32 scalars.
 // First returned value is the position, second is the derivative.
-func F32Linear1d(p0, p1 float32, beta float32) (float32, float32) {
+func F32LinearCurve1d(p0, p1 float32, beta float32) (float32, float32) {
 	switch {
 	case vpnumber.F32IsSimilar(p0, p1):
 		return vpmath.F32Lerp(p0, p1, beta), vpnumber.F32Const0
@@ -42,10 +42,10 @@ func F32Linear1d(p0, p1 float32, beta float32) (float32, float32) {
 	return vpmath.F32Lerp(p0, p1, beta), (p1 - p0) / beta
 }
 
-// F32Linear2d returns the linear Bezier curve from p0 to p1,
+// F32LinearCurve2d returns the linear Bezier curve from p0 to p1,
 // which is basically a Lerp. Works on float32 2d vectors.
 // First returned value is the position, second is the derivative.
-func F32Linear2d(p0, p1 *vpvec2.F32, beta float32) (*vpvec2.F32, *vpvec2.F32) {
+func F32LinearCurve2d(p0, p1 *vpvec2.F32, beta float32) (*vpvec2.F32, *vpvec2.F32) {
 	switch {
 	case p0.IsSimilar(p1):
 		return vpvec2.F32Lerp(p0, p1, beta), vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
@@ -58,10 +58,10 @@ func F32Linear2d(p0, p1 *vpvec2.F32, beta float32) (*vpvec2.F32, *vpvec2.F32) {
 	return vpvec2.F32Lerp(p0, p1, beta), vpvec2.F32Sub(p1, p0).DivScale(beta)
 }
 
-// F32Linear3d returns the linear Bezier curve from p0 to p1,
+// F32LinearCurve3d returns the linear Bezier curve from p0 to p1,
 // which is basically a Lerp. Works on float32 3d vectors.
 // First returned value is the position, second is the derivative.
-func F32Linear3d(p0, p1 *vpvec3.F32, beta float32) (*vpvec3.F32, *vpvec3.F32) {
+func F32LinearCurve3d(p0, p1 *vpvec3.F32, beta float32) (*vpvec3.F32, *vpvec3.F32) {
 	switch {
 	case p0.IsSimilar(p1):
 		return vpvec3.F32Lerp(p0, p1, beta), vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)

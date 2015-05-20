@@ -25,15 +25,15 @@ import (
 	"github.com/ufoot/vapor/vpvec3"
 )
 
-// F32Quadratic1d returns the quadratic Bezier curve from p0 to p2,
+// F32QuadraticCurve1d returns the quadratic Bezier curve from p0 to p2,
 // going through p1. Point p1 is typically not reached, but it influences
 // the curve, as it heads to p1 from p0, and conversely from p2 to p1.
 // Works on float32 scalars.
 // First returned value is the position, second is the derivative.
-func F32Quadratic1d(p0, p1, p2 float32, beta float32) (float32, float32) {
+func F32QuadraticCurve1d(p0, p1, p2 float32, beta float32) (float32, float32) {
 	switch {
 	case vpnumber.F32IsSimilar(p0, p1) || vpnumber.F32IsSimilar(p1, p2) || vpnumber.F32IsSimilar(p2, p0):
-		return F32Linear1d(p0, p1, beta)
+		return F32LinearCurve1d(p0, p1, beta)
 	case beta < vpnumber.F32Const0:
 		return p0, vpnumber.F32Const0
 	case beta > vpnumber.F32Const1:
@@ -45,15 +45,15 @@ func F32Quadratic1d(p0, p1, p2 float32, beta float32) (float32, float32) {
 	return p0*oneMinusBeta*oneMinusBeta + p1*2*oneMinusBeta*beta + p2*beta*beta, (p1-p0)*2*oneMinusBeta + (p2-p1)*2*beta
 }
 
-// F32Quadratic2d returns the quadratic Bezier curve from p0 to p2,
+// F32QuadraticCurve2d returns the quadratic Bezier curve from p0 to p2,
 // going through p1. Point p1 is typically not reached, but it influences
 // the curve, as it heads to p1 from p0, and conversely from p2 to p1.
 // Works on float32 2d vectors.
 // First returned value is the position, second is the derivative.
-func F32Quadratic2d(p0, p1, p2 *vpvec2.F32, beta float32) (*vpvec2.F32, *vpvec2.F32) {
+func F32QuadraticCurve2d(p0, p1, p2 *vpvec2.F32, beta float32) (*vpvec2.F32, *vpvec2.F32) {
 	switch {
 	case p0.IsSimilar(p1) || p1.IsSimilar(p2) || p2.IsSimilar(p0):
-		return F32Linear2d(p0, p1, beta)
+		return F32LinearCurve2d(p0, p1, beta)
 	case beta < vpnumber.F32Const0:
 		return p0, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
 	case beta > vpnumber.F32Const1:
@@ -65,15 +65,15 @@ func F32Quadratic2d(p0, p1, p2 *vpvec2.F32, beta float32) (*vpvec2.F32, *vpvec2.
 	return vpvec2.F32Add(vpvec2.F32MulScale(p0, oneMinusBeta*oneMinusBeta), vpvec2.F32MulScale(p1, 2*oneMinusBeta*beta)).Add(vpvec2.F32MulScale(p2, beta*beta)), vpvec2.F32Sub(p1, p0).MulScale(2 * oneMinusBeta).Add(vpvec2.F32Sub(p2, p1).MulScale(2 * beta))
 }
 
-// F32Quadratic3d returns the quadratic Bezier curve from p0 to p2,
+// F32QuadraticCurve3d returns the quadratic Bezier curve from p0 to p2,
 // going through p1. Point p1 is typically not reached, but it influences
 // the curve, as it heads to p1 from p0, and conversely from p2 to p1.
 // Works on float32 3d vectors.
 // First returned value is the position, second is the derivative.
-func F32Quadratic3d(p0, p1, p2 *vpvec3.F32, beta float32) (*vpvec3.F32, *vpvec3.F32) {
+func F32QuadraticCurve3d(p0, p1, p2 *vpvec3.F32, beta float32) (*vpvec3.F32, *vpvec3.F32) {
 	switch {
 	case p0.IsSimilar(p1) || p1.IsSimilar(p2) || p2.IsSimilar(p0):
-		return F32Linear3d(p0, p1, beta)
+		return F32LinearCurve3d(p0, p1, beta)
 	case beta < vpnumber.F32Const0:
 		return p0, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
 	case beta > vpnumber.F32Const1:
