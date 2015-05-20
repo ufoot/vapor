@@ -44,6 +44,11 @@ func F32QuadraticSurface1d(p [3][3]float32, u float32, v float32) (float32, floa
 		return retP, retDu, vpnumber.F32Const0
 	}
 
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++ {
+			retP += F32Bernstein(3, i, u) * F32Bernstein(3, j, v) * p[i][j]
+		}
+	}
 	//oneMinusU := vpnumber.F32Const1 - u
 	//oneMinusV := vpnumber.F32Const1 - v
 
