@@ -21,8 +21,8 @@ package vpbezier
 
 import (
 	"github.com/ufoot/vapor/vpnumber"
-	//"github.com/ufoot/vapor/vpvec2"
-	//"github.com/ufoot/vapor/vpvec3"
+	"github.com/ufoot/vapor/vpvec2"
+	"github.com/ufoot/vapor/vpvec3"
 )
 
 // F32QuadraticSurface1d returns a quadratic Bezier surface between 9 points.
@@ -47,12 +47,76 @@ func F32QuadraticSurface1d(p [3][3]float32, u float32, v float32) (float32, floa
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
 			retP += F32Bernstein(3, i, u) * F32Bernstein(3, j, v) * p[i][j]
+			retDu += F32BernsteinDerivative(3, j, u) * F32Bernstein(3, j, v) * p[i][j]
+			retDv += F32Bernstein(3, j, u) * F32BernsteinDerivative(3, j, v) * p[i][j]
 		}
 	}
-	//oneMinusU := vpnumber.F32Const1 - u
-	//oneMinusV := vpnumber.F32Const1 - v
 
-	// todo...
+	return retP, retDu, retDv
+}
+
+// F32QuadraticSurface2d returns a quadratic Bezier surface between 9 points.
+func F32QuadraticSurface2d(p *[3][3]vpvec2.F32, u float32, v float32) (*vpvec2.F32, *vpvec2.F32, *vpvec2.F32) {
+	var retP, retDu, retDv *vpvec2.F32
+
+	switch {
+	case u < vpnumber.F32Const0:
+		retP, retDv = F32QuadraticCurve2d(&(p[0][0]), &(p[0][1]), &(p[0][2]), v)
+		return retP, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0), retDv
+	case u > vpnumber.F32Const1:
+		retP, retDv = F32QuadraticCurve2d(&(p[2][0]), &(p[2][1]), &(p[2][2]), v)
+		return retP, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0), retDv
+	case v < vpnumber.F32Const0:
+		retP, retDv = F32QuadraticCurve2d(&(p[0][0]), &(p[1][0]), &(p[2][0]), u)
+		return retP, retDu, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+	case v > vpnumber.F32Const1:
+		retP, retDv = F32QuadraticCurve2d(&(p[0][2]), &(p[1][2]), &(p[2][2]), u)
+		return retP, retDu, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+	}
+
+	retP = vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+	retDu = vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+	retDv = vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++ {
+			retP.Add(vpvec2.F32MulScale(&(p[i][j]), F32Bernstein(3, i, u)*F32Bernstein(3, j, v)))
+			retDu.Add(vpvec2.F32MulScale(&(p[i][j]), F32BernsteinDerivative(3, j, u)*F32Bernstein(3, j, v)))
+			retDv.Add(vpvec2.F32MulScale(&(p[i][j]), F32Bernstein(3, j, u)*F32BernsteinDerivative(3, j, v)))
+		}
+	}
+
+	return retP, retDu, retDv
+}
+
+// F32QuadraticSurface3d returns a quadratic Bezier surface between 9 points.
+func F32QuadraticSurface3d(p *[3][3]vpvec3.F32, u float32, v float32) (*vpvec3.F32, *vpvec3.F32, *vpvec3.F32) {
+	var retP, retDu, retDv *vpvec3.F32
+
+	switch {
+	case u < vpnumber.F32Const0:
+		retP, retDv = F32QuadraticCurve3d(&(p[0][0]), &(p[0][1]), &(p[0][2]), v)
+		return retP, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), retDv
+	case u > vpnumber.F32Const1:
+		retP, retDv = F32QuadraticCurve3d(&(p[2][0]), &(p[2][1]), &(p[2][2]), v)
+		return retP, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), retDv
+	case v < vpnumber.F32Const0:
+		retP, retDv = F32QuadraticCurve3d(&(p[0][0]), &(p[1][0]), &(p[2][0]), u)
+		return retP, retDu, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+	case v > vpnumber.F32Const1:
+		retP, retDv = F32QuadraticCurve3d(&(p[0][2]), &(p[1][2]), &(p[2][2]), u)
+		return retP, retDu, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+	}
+
+	retP = vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+	retDu = vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+	retDv = vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+	for i := 0; i < 3; i++ {
+		for j := 0; j < 3; j++ {
+			retP.Add(vpvec3.F32MulScale(&(p[i][j]), F32Bernstein(3, i, u)*F32Bernstein(3, j, v)))
+			retDu.Add(vpvec3.F32MulScale(&(p[i][j]), F32BernsteinDerivative(3, j, u)*F32Bernstein(3, j, v)))
+			retDv.Add(vpvec3.F32MulScale(&(p[i][j]), F32Bernstein(3, j, u)*F32BernsteinDerivative(3, j, v)))
+		}
+	}
 
 	return retP, retDu, retDv
 }
