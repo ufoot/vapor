@@ -58,7 +58,8 @@ func f32TOneMinusTDerivative(a, b int, t float32) float32 {
 	return vpnumber.F32Const0
 }
 
-// F32BernsteinDerivative returns a Berstein polynomial value.
+// F32BernsteinDerivative returns the derivative of the
+// the Berstein polynomial func at a given point.
 func F32BernsteinDerivative(n, i int, t float32) float32 {
 	b := vpmath.Binomial(n, i)
 

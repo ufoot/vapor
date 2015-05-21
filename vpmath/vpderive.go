@@ -23,74 +23,74 @@ import (
 	"github.com/ufoot/vapor/vpnumber"
 )
 
-// F32DeriveFunc returns a numerical derivative function.
+// F32DerivativeFunc returns a numerical derivative function.
 // The dt arg is here to give the interval on which to test.
 // Function will never fail unless the called function itself fails.
 // But... it only returns an approximation.
-func F32DeriveFunc(f func(float32) float32, dt float32) func(float32) float32 {
+func F32DerivativeFunc(f func(float32) float32, dt float32) func(float32) float32 {
 	return func(t float32) float32 {
 		return vpnumber.F32Div(f(t+dt/2.0)-f(t-dt/2.0), dt)
 	}
 }
 
-// F32Derive returns a numerical derivative value at a given point.
+// F32Derivative returns a numerical derivative value at a given point.
 // The dt arg is here to give the interval on which to test.
 // Function will never fail unless the called function itself fails.
 // But... it only returns an approximation.
-func F32Derive(f func(float32) float32, t, dt float32) float32 {
-	return F32DeriveFunc(f, dt)(t)
+func F32Derivative(f func(float32) float32, t, dt float32) float32 {
+	return F32DerivativeFunc(f, dt)(t)
 }
 
-// F64DeriveFunc returns a numerical derivative function.
+// F64DerivativeFunc returns a numerical derivative function.
 // The dt arg is here to give the interval on which to test.
 // Function will never fail unless the called function itself fails.
 // But... it only returns an approximation.
-func F64DeriveFunc(f func(float64) float64, dt float64) func(float64) float64 {
+func F64DerivativeFunc(f func(float64) float64, dt float64) func(float64) float64 {
 	return func(t float64) float64 {
 		return vpnumber.F64Div(f(t+dt/2.0)-f(t-dt/2.0), dt)
 	}
 }
 
-// F64Derive returns a numerical derivative value at a given point.
+// F64Derivative returns a numerical derivative value at a given point.
 // The dt arg is here to give the interval on which to test.
 // Function will never fail unless the called function itself fails.
 // But... it only returns an approximation.
-func F64Derive(f func(float64) float64, t, dt float64) float64 {
-	return F64DeriveFunc(f, dt)(t)
+func F64Derivative(f func(float64) float64, t, dt float64) float64 {
+	return F64DerivativeFunc(f, dt)(t)
 }
 
-// X32DeriveFunc returns a numerical derivative function.
+// X32DerivativeFunc returns a numerical derivative function.
 // The dt arg is here to give the interval on which to test.
 // Function will never fail unless the called function itself fails.
 // But... it only returns an approximation.
-func X32DeriveFunc(f func(vpnumber.X32) vpnumber.X32, dt vpnumber.X32) func(vpnumber.X32) vpnumber.X32 {
+func X32DerivativeFunc(f func(vpnumber.X32) vpnumber.X32, dt vpnumber.X32) func(vpnumber.X32) vpnumber.X32 {
 	return func(t vpnumber.X32) vpnumber.X32 {
 		return vpnumber.X32Div(f(t+(dt>>1))-f(t-(dt>>1)), dt)
 	}
 }
 
-// X32Derive returns a numerical derivative value at a given point.
+// X32Derivative returns a numerical derivative value at a given point.
 // The dt arg is here to give the interval on which to test.
 // Function will never fail unless the called function itself fails.
 // But... it only returns an approximation.
-func X32Derive(f func(vpnumber.X32) vpnumber.X32, t, dt vpnumber.X32) vpnumber.X32 {
-	return X32DeriveFunc(f, dt)(t)
+func X32Derivative(f func(vpnumber.X32) vpnumber.X32, t, dt vpnumber.X32) vpnumber.X32 {
+	return X32DerivativeFunc(f, dt)(t)
 }
 
-// X64DeriveFunc returns a numerical derivative function.
+// X64DerivativeFunc returns a numerical derivative function.
 // The dt arg is here to give the interval on which to test.
 // Function will never fail unless the called function itself fails.
 // But... it only returns an approximation.
-func X64DeriveFunc(f func(vpnumber.X64) vpnumber.X64, dt vpnumber.X64) func(vpnumber.X64) vpnumber.X64 {
+func X64DerivativeFunc(f func(vpnumber.X64) vpnumber.X64, dt vpnumber.X64) func(vpnumber.X64) vpnumber.X64 {
 	return func(t vpnumber.X64) vpnumber.X64 {
 		return vpnumber.X64Div(f(t+(dt>>1))-f(t-(dt>>1)), dt)
 	}
 }
 
-// X64Derive returns a numerical derivative value at a given point.
+// X64Derivative returns a numerical derivative value at a given point.
 // The dt arg is here to give the interval on which to test.
 // Function will never fail unless the called function itself fails.
 // But... it only returns an approximation.
-func X64Derive(f func(vpnumber.X64) vpnumber.X64, t, dt vpnumber.X64) vpnumber.X64 {
-	return X64DeriveFunc(f, dt)(t)
+func X64Derivative(f func(vpnumber.X64) vpnumber.X64, t, dt vpnumber.X64) vpnumber.X64 {
+	return X64DerivativeFunc(f, dt)(t)
 }

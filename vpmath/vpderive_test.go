@@ -24,7 +24,7 @@ import (
 	"testing"
 )
 
-func TestF32Derive(t *testing.T) {
+func TestF32Derivative(t *testing.T) {
 	const t0 = vpnumber.F32Const0
 	const t1 = vpnumber.F32Const1
 	dt := (t1 - t0) / 100
@@ -42,15 +42,15 @@ func TestF32Derive(t *testing.T) {
 		return 2.0
 	}
 
-	fp := F32DeriveFunc(f, dt)
-	fpp := F32DeriveFunc(fp, dt)
+	fp := F32DerivativeFunc(f, dt)
+	fpp := F32DerivativeFunc(fp, dt)
 
 	for tp := t0; tp <= t1; tp += step {
 		yf := f(tp)
 		t.Logf("f(%f)=%f", tp, yf)
 
 		yg := g(tp)
-		yfp := F32Derive(f, tp, dt)
+		yfp := F32Derivative(f, tp, dt)
 
 		if vpnumber.F32IsSimilar(yg, yfp) {
 			t.Logf("g(%f)=%f f'(%f)=%f", tp, yg, tp, yfp)
@@ -69,7 +69,7 @@ func TestF32Derive(t *testing.T) {
 	}
 }
 
-func TestF64Derive(t *testing.T) {
+func TestF64Derivative(t *testing.T) {
 	const t0 = vpnumber.F64Const0
 	const t1 = vpnumber.F64Const1
 	dt := (t1 - t0) / 10000
@@ -87,15 +87,15 @@ func TestF64Derive(t *testing.T) {
 		return 2.0
 	}
 
-	fp := F64DeriveFunc(f, dt)
-	fpp := F64DeriveFunc(fp, dt)
+	fp := F64DerivativeFunc(f, dt)
+	fpp := F64DerivativeFunc(fp, dt)
 
 	for tp := t0; tp <= t1; tp += step {
 		yf := f(tp)
 		t.Logf("f(%f)=%f", tp, yf)
 
 		yg := g(tp)
-		yfp := F64Derive(f, tp, dt)
+		yfp := F64Derivative(f, tp, dt)
 
 		if vpnumber.F64IsSimilar(yg, yfp) {
 			t.Logf("g(%f)=%f f'(%f)=%f", tp, yg, tp, yfp)
@@ -114,7 +114,7 @@ func TestF64Derive(t *testing.T) {
 	}
 }
 
-func TestX32Derive(t *testing.T) {
+func TestX32Derivative(t *testing.T) {
 	const t0 = vpnumber.X32Const0
 	const t1 = vpnumber.X32Const1
 	dt := (t1 - t0) / 10
@@ -132,15 +132,15 @@ func TestX32Derive(t *testing.T) {
 		return vpnumber.X32Const0
 	}
 
-	fp := X32DeriveFunc(f, dt)
-	fpp := X32DeriveFunc(fp, dt)
+	fp := X32DerivativeFunc(f, dt)
+	fpp := X32DerivativeFunc(fp, dt)
 
 	for tp := t0; tp <= t1; tp += step {
 		yf := f(tp)
 		t.Logf("f(%s)=%s", tp.String(), yf.String())
 
 		yg := g(tp)
-		yfp := X32Derive(f, tp, dt)
+		yfp := X32Derivative(f, tp, dt)
 
 		if vpnumber.X32IsSimilar(yg, yfp) {
 			t.Logf("g(%s)=%s f'(%s)=%s", tp.String(), yg.String(), tp.String(), yfp.String())
@@ -159,7 +159,7 @@ func TestX32Derive(t *testing.T) {
 	}
 }
 
-func TestX64Derive(t *testing.T) {
+func TestX64Derivative(t *testing.T) {
 	const t0 = vpnumber.X64Const0
 	const t1 = vpnumber.X64Const1
 	dt := (t1 - t0) / 100
@@ -177,15 +177,15 @@ func TestX64Derive(t *testing.T) {
 		return vpnumber.X64Const0
 	}
 
-	fp := X64DeriveFunc(f, dt)
-	fpp := X64DeriveFunc(fp, dt)
+	fp := X64DerivativeFunc(f, dt)
+	fpp := X64DerivativeFunc(fp, dt)
 
 	for tp := t0; tp <= t1; tp += step {
 		yf := f(tp)
 		t.Logf("f(%s)=%s", tp.String(), yf.String())
 
 		yg := g(tp)
-		yfp := X64Derive(f, tp, dt)
+		yfp := X64Derivative(f, tp, dt)
 
 		if vpnumber.X64IsSimilar(yg, yfp) {
 			t.Logf("g(%s)=%s f'(%s)=%s", tp.String(), yg.String(), tp.String(), yfp.String())

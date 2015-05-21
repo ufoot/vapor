@@ -39,7 +39,7 @@ const f32Const8 float32 = 8.0
 const f32Const9 float32 = 9.0
 
 const f32SimilarDiff float32 = 1.0e-3
-const f32SimilarScale float32 = 1.0e-5
+const f32SimilarScale float32 = 1.0e-4
 
 // F32ToX32 converts a float32 to a fixed point number on 32 bits.
 func F32ToX32(f float32) X32 {
