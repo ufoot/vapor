@@ -49,9 +49,9 @@ func F32LinearCurve1d(p0, p1 float32, t float32) (float32, float32) {
 func F32LinearCurve2d(p0, p1 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec2.F32) {
 	switch {
 	case t < vpnumber.F32Const0:
-		return p0, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+		return p0, new(vpvec2.F32)
 	case t > vpnumber.F32Const1:
-		return p1, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+		return p1, new(vpvec2.F32)
 	}
 
 	retP := vpvec2.F32Lerp(p0, p1, t)
@@ -66,9 +66,9 @@ func F32LinearCurve2d(p0, p1 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec2.F32) 
 func F32LinearCurve3d(p0, p1 *vpvec3.F32, t float32) (*vpvec3.F32, *vpvec3.F32) {
 	switch {
 	case t < vpnumber.F32Const0:
-		return p0, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+		return p0, new(vpvec3.F32)
 	case t > vpnumber.F32Const1:
-		return p1, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+		return p1, new(vpvec3.F32)
 	}
 
 	retP := vpvec3.F32Lerp(p0, p1, t)

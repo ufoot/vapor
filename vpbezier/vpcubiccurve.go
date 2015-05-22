@@ -54,9 +54,9 @@ func F32CubicCurve1d(p0, p1, p2, p3 float32, t float32) (float32, float32) {
 func F32CubicCurve2d(p0, p1, p2, p3 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec2.F32) {
 	switch {
 	case t < vpnumber.F32Const0:
-		return p0, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+		return p0, new(vpvec2.F32)
 	case t > vpnumber.F32Const1:
-		return p1, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+		return p1, new(vpvec2.F32)
 	}
 
 	oneMinusT := vpnumber.F32Const1 - t
@@ -75,9 +75,9 @@ func F32CubicCurve2d(p0, p1, p2, p3 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec
 func F32CubicCurve3d(p0, p1, p2, p3 *vpvec3.F32, t float32) (*vpvec3.F32, *vpvec3.F32) {
 	switch {
 	case t < vpnumber.F32Const0:
-		return p0, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+		return p0, new(vpvec3.F32)
 	case t > vpnumber.F32Const1:
-		return p1, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+		return p1, new(vpvec3.F32)
 	}
 
 	oneMinusT := vpnumber.F32Const1 - t

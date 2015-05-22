@@ -62,21 +62,21 @@ func F32QuadraticSurface2d(p *[3][3]vpvec2.F32, u float32, v float32) (*vpvec2.F
 	switch {
 	case u < vpnumber.F32Const0:
 		retP, retDv = F32QuadraticCurve2d(&(p[0][0]), &(p[0][1]), &(p[0][2]), v)
-		return retP, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0), retDv
+		return retP, new(vpvec2.F32), retDv
 	case u > vpnumber.F32Const1:
 		retP, retDv = F32QuadraticCurve2d(&(p[2][0]), &(p[2][1]), &(p[2][2]), v)
-		return retP, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0), retDv
+		return retP, new(vpvec2.F32), retDv
 	case v < vpnumber.F32Const0:
 		retP, retDv = F32QuadraticCurve2d(&(p[0][0]), &(p[1][0]), &(p[2][0]), u)
-		return retP, retDu, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+		return retP, retDu, new(vpvec2.F32)
 	case v > vpnumber.F32Const1:
 		retP, retDv = F32QuadraticCurve2d(&(p[0][2]), &(p[1][2]), &(p[2][2]), u)
-		return retP, retDu, vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+		return retP, retDu, new(vpvec2.F32)
 	}
 
-	retP = vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
-	retDu = vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
-	retDv = vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+	retP = new(vpvec2.F32)
+	retDu = new(vpvec2.F32)
+	retDv = new(vpvec2.F32)
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
 			retP.Add(vpvec2.F32MulScale(&(p[i][j]), F32Bernstein(3, i, u)*F32Bernstein(3, j, v)))
@@ -95,21 +95,21 @@ func F32QuadraticSurface3d(p *[3][3]vpvec3.F32, u float32, v float32) (*vpvec3.F
 	switch {
 	case u < vpnumber.F32Const0:
 		retP, retDv = F32QuadraticCurve3d(&(p[0][0]), &(p[0][1]), &(p[0][2]), v)
-		return retP, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), retDv
+		return retP, new(vpvec3.F32), retDv
 	case u > vpnumber.F32Const1:
 		retP, retDv = F32QuadraticCurve3d(&(p[2][0]), &(p[2][1]), &(p[2][2]), v)
-		return retP, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), retDv
+		return retP, new(vpvec3.F32), retDv
 	case v < vpnumber.F32Const0:
 		retP, retDv = F32QuadraticCurve3d(&(p[0][0]), &(p[1][0]), &(p[2][0]), u)
-		return retP, retDu, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+		return retP, retDu, new(vpvec3.F32)
 	case v > vpnumber.F32Const1:
 		retP, retDv = F32QuadraticCurve3d(&(p[0][2]), &(p[1][2]), &(p[2][2]), u)
-		return retP, retDu, vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+		return retP, retDu, new(vpvec3.F32)
 	}
 
-	retP = vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
-	retDu = vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
-	retDv = vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+	retP = new(vpvec3.F32)
+	retDu = new(vpvec3.F32)
+	retDv = new(vpvec3.F32)
 	for i := 0; i < 3; i++ {
 		for j := 0; j < 3; j++ {
 			retP.Add(vpvec3.F32MulScale(&(p[i][j]), F32Bernstein(3, i, u)*F32Bernstein(3, j, v)))

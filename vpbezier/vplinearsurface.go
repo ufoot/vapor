@@ -61,13 +61,13 @@ func F32LinearSurface1d(p [2][2]float32, u, v float32) (float32, float32, float3
 func F32LinearSurface2d(p *[2][2]vpvec2.F32, u, v float32) (*vpvec2.F32, *vpvec2.F32, *vpvec2.F32) {
 	switch {
 	case u < vpnumber.F32Const0:
-		return vpvec2.F32Lerp(&(p[0][0]), &(p[0][1]), v), vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0), vpvec2.F32Sub(&(p[0][1]), &(p[0][0]))
+		return vpvec2.F32Lerp(&(p[0][0]), &(p[0][1]), v), new(vpvec2.F32), vpvec2.F32Sub(&(p[0][1]), &(p[0][0]))
 	case u > vpnumber.F32Const1:
-		return vpvec2.F32Lerp(&(p[1][0]), &(p[1][1]), v), vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0), vpvec2.F32Sub(&(p[1][1]), &(p[1][0]))
+		return vpvec2.F32Lerp(&(p[1][0]), &(p[1][1]), v), new(vpvec2.F32), vpvec2.F32Sub(&(p[1][1]), &(p[1][0]))
 	case v < vpnumber.F32Const0:
-		return vpvec2.F32Lerp(&(p[0][0]), &(p[1][0]), u), vpvec2.F32Sub(&(p[1][0]), &(p[0][0])), vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+		return vpvec2.F32Lerp(&(p[0][0]), &(p[1][0]), u), vpvec2.F32Sub(&(p[1][0]), &(p[0][0])), new(vpvec2.F32)
 	case v > vpnumber.F32Const1:
-		return vpvec2.F32Lerp(&(p[0][1]), &(p[1][1]), u), vpvec2.F32Sub(&(p[1][1]), &(p[0][1])), vpvec2.F32New(vpnumber.F32Const0, vpnumber.F32Const0)
+		return vpvec2.F32Lerp(&(p[0][1]), &(p[1][1]), u), vpvec2.F32Sub(&(p[1][1]), &(p[0][1])), new(vpvec2.F32)
 	}
 
 	oneMinusU := vpnumber.F32Const1 - u
@@ -84,13 +84,13 @@ func F32LinearSurface2d(p *[2][2]vpvec2.F32, u, v float32) (*vpvec2.F32, *vpvec2
 func F32LinearSurface3d(p *[2][2]vpvec3.F32, u, v float32) (*vpvec3.F32, *vpvec3.F32, *vpvec3.F32) {
 	switch {
 	case u < vpnumber.F32Const0:
-		return vpvec3.F32Lerp(&(p[0][0]), &(p[0][1]), v), vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), vpvec3.F32Sub(&(p[0][1]), &(p[0][0]))
+		return vpvec3.F32Lerp(&(p[0][0]), &(p[0][1]), v), new(vpvec3.F32), vpvec3.F32Sub(&(p[0][1]), &(p[0][0]))
 	case u > vpnumber.F32Const1:
-		return vpvec3.F32Lerp(&(p[1][0]), &(p[1][1]), v), vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0), vpvec3.F32Sub(&(p[1][1]), &(p[1][0]))
+		return vpvec3.F32Lerp(&(p[1][0]), &(p[1][1]), v), new(vpvec3.F32), vpvec3.F32Sub(&(p[1][1]), &(p[1][0]))
 	case v < vpnumber.F32Const0:
-		return vpvec3.F32Lerp(&(p[0][0]), &(p[1][0]), u), vpvec3.F32Sub(&(p[1][0]), &(p[0][0])), vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+		return vpvec3.F32Lerp(&(p[0][0]), &(p[1][0]), u), vpvec3.F32Sub(&(p[1][0]), &(p[0][0])), new(vpvec3.F32)
 	case v > vpnumber.F32Const1:
-		return vpvec3.F32Lerp(&(p[0][1]), &(p[1][1]), u), vpvec3.F32Sub(&(p[1][1]), &(p[0][1])), vpvec3.F32New(vpnumber.F32Const0, vpnumber.F32Const0, vpnumber.F32Const0)
+		return vpvec3.F32Lerp(&(p[0][1]), &(p[1][1]), u), vpvec3.F32Sub(&(p[1][1]), &(p[0][1])), new(vpvec3.F32)
 	}
 
 	oneMinusU := vpnumber.F32Const1 - u
