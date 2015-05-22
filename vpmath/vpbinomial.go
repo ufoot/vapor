@@ -42,7 +42,9 @@ func calcBinomial(n, i int) int {
 	return calcFact(n) / (calcFact(i) * calcFact(n-i))
 }
 
-// Calculates the Binomial for n,i, for Bertein polynomials
+// Binomial calculates the binomial for (n,i).
+// This is typically used as a coefficient for Bertein polynomials.
+// https://en.wikipedia.org/wiki/Bernstein_polynomial
 func Binomial(n, i int) int {
 	if n < binomialCacheSize && i < binomialCacheSize {
 		return binomialCache[n][i]
