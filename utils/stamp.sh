@@ -30,7 +30,7 @@ fi
 PACKAGE_TARNAME="vapor"
 PACKAGE_NAME="Vapor Toolkit"
 PACKAGE_EMAIL="ufoot@ufoot.org"
-PACKAGE_URL="http:\\/\\/www.ufoot.org\\/liquidwar\\/v7\\/vapor"
+PACKAGE_URL="https:\\/\\/github.com\\/ufoot\\/vapor"
 VERSION_MAJOR=0
 VERSION_MINOR=1
 

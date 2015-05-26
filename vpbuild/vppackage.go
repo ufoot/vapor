@@ -26,4 +26,4 @@ const PackageName = "Vapor Toolkit" // PackageName set by stamp.sh
 // PackageEmail contains a contact email for the package.
 const PackageEmail = "ufoot@ufoot.org" // PackageEmail set by stamp.sh
 // PackageURL contains the address of the project homepage.
-const PackageURL = "http://www.ufoot.org/liquidwar/v7/vapor" // PackageURL set by stamp.sh
+const PackageURL = "https://github.com/ufoot/vapor" // PackageURL set by stamp.sh
