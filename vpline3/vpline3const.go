@@ -17,15 +17,15 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpvec3
+package vpline3
 
 const (
-	// X is the index of the x coordinate within a vector.
-	X = iota
-	// Y is the index of the y coordinate within a vector.
-	Y
-	// Z is the index of the z coordinate within a vector.
-	Z
-	// Size is the number of elements in a vector.
-	Size
+	// A is the index of the 1st point in a line.
+	A = iota
+	// B is the index of the 2nd point in a line.
+	B
+	// C is the index of the 2nd point in a line.
+	C
+	// D is the index of the 2nd point in a line.
+	D
 )

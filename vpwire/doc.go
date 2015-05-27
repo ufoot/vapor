@@ -17,15 +17,6 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpvec3
-
-const (
-	// X is the index of the x coordinate within a vector.
-	X = iota
-	// Y is the index of the y coordinate within a vector.
-	Y
-	// Z is the index of the z coordinate within a vector.
-	Z
-	// Size is the number of elements in a vector.
-	Size
-)
+// Package vpwire implements basic wireframe rendering, mostly for
+// testing purposes.
+package vpwire

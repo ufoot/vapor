@@ -17,15 +17,11 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpvec3
+package vpwire
 
-const (
-	// X is the index of the x coordinate within a vector.
-	X = iota
-	// Y is the index of the y coordinate within a vector.
-	Y
-	// Z is the index of the z coordinate within a vector.
-	Z
-	// Size is the number of elements in a vector.
-	Size
+import (
+//"image"
+//"github.com/ufoot/vapor/vpmat4x4"
+//"github.com/ufoot/vapor/vpvec3"
+//"github.com/ufoot/vapor/vpline3"
 )

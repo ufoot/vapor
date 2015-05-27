@@ -20,6 +20,10 @@
 package vpvec2
 
 const (
+	// X is the index of the x coordinate within a vector.
+	X = iota
+	// Y is the index of the y coordinate within a vector.
+	Y
 	// Size is the number of elements in a vector.
-	Size = 2
+	Size
 )

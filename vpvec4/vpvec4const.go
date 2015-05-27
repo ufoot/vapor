@@ -20,6 +20,14 @@
 package vpvec4
 
 const (
+	// X is the index of the x coordinate within a vector.
+	X = iota
+	// Y is the index of the y coordinate within a vector.
+	Y
+	// Z is the index of the z coordinate within a vector.
+	Z
+	// W is the index of the w coordinate within a vector.
+	W
 	// Size is the number of elements in a vector.
-	Size = 4
+	Size
 )
