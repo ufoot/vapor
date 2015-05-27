@@ -28,71 +28,74 @@ import (
 type X64 []vpvec3.X64
 
 // X64NewSegment creates a new segment with 2 float64 vectors.
-func X64NewSegment(a, b vpvec3.X64) *X64 {
+func X64NewSegment(a, b *vpvec3.X64) *X64 {
 	l := make([]vpvec3.X64, B+1)
-	l[A] = a
-	l[B] = b
+	l[A] = *a
+	l[B] = *b
 	ret := X64(l)
 	return &ret
 }
 
 // X64NewTriangle creates a new triangle with 3 float64 vectors.
-func X64NewTriangle(a, b, c vpvec3.X64) *X64 {
+func X64NewTriangle(a, b, c *vpvec3.X64) *X64 {
 	l := make([]vpvec3.X64, C+1)
-	l[A] = a
-	l[B] = b
-	l[C] = c
+	l[A] = *a
+	l[B] = *b
+	l[C] = *c
 	ret := X64(l)
 	return &ret
 }
 
 // X64NewQuad creates a new line with 4 float64 vectors.
-func X64NewQuad(a, b, c, d vpvec3.X64) *X64 {
+func X64NewQuad(a, b, c, d *vpvec3.X64) *X64 {
 	l := make([]vpvec3.X64, D+1)
-	l[A] = a
-	l[B] = b
-	l[C] = c
-	l[D] = d
+	l[A] = *a
+	l[B] = *b
+	l[C] = *c
+	l[D] = *d
 	ret := X64(l)
 	return &ret
 }
 
 // ToX32 converts the line to a fixed point number line on 32 bits.
 func (line *X64) ToX32() *X32 {
-	var ret X32
+	l := make([]vpvec3.X32, len(*line))
 
 	for i, v := range *line {
-		ret[i] = *v.ToX32()
+		l[i] = *v.ToX32()
 	}
 
+	ret := X32(l)
 	return &ret
 }
 
 // ToF32 converts the line to a float32 line.
 func (line *X64) ToF32() *F32 {
-	var ret F32
+	l := make([]vpvec3.F32, len(*line))
 
 	for i, v := range *line {
-		ret[i] = *v.ToF32()
+		l[i] = *v.ToF32()
 	}
 
+	ret := F32(l)
 	return &ret
 }
 
 // ToF64 converts the line to a float64 line.
 func (line *X64) ToF64() *F64 {
-	var ret F64
+	l := make([]vpvec3.F64, len(*line))
 
 	for i, v := range *line {
-		ret[i] = *v.ToF64()
+		l[i] = *v.ToF64()
 	}
 
+	ret := F64(l)
 	return &ret
 }
 
 // String returns a readable form of the line.
 func (line *X64) String() string {
-	buf, err := json.Marshal(line)
+	buf, err := json.Marshal(line.ToF64())
 
 	if err != nil {
 		// Catching & ignoring error
@@ -100,4 +103,18 @@ func (line *X64) String() string {
 	}
 
 	return string(buf)
+}
+
+// IsSimilar returns true if lines are approximatively the same.
+// This is a workarround to ignore rounding errors.
+func (line *X64) IsSimilar(op *X64) bool {
+	if len(*line) != len(*op) {
+		return false
+	}
+	ret := true
+	for i, v := range *line {
+		ret = ret && v.IsSimilar(&((*op)[i]))
+	}
+
+	return ret
 }

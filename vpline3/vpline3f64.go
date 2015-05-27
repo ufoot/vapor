@@ -28,65 +28,68 @@ import (
 type F64 []vpvec3.F64
 
 // F64NewSegment creates a new segment with 2 float64 vectors.
-func F64NewSegment(a, b vpvec3.F64) *F64 {
+func F64NewSegment(a, b *vpvec3.F64) *F64 {
 	l := make([]vpvec3.F64, B+1)
-	l[A] = a
-	l[B] = b
+	l[A] = *a
+	l[B] = *b
 	ret := F64(l)
 	return &ret
 }
 
 // F64NewTriangle creates a new triangle with 3 float64 vectors.
-func F64NewTriangle(a, b, c vpvec3.F64) *F64 {
+func F64NewTriangle(a, b, c *vpvec3.F64) *F64 {
 	l := make([]vpvec3.F64, C+1)
-	l[A] = a
-	l[B] = b
-	l[C] = c
+	l[A] = *a
+	l[B] = *b
+	l[C] = *c
 	ret := F64(l)
 	return &ret
 }
 
 // F64NewQuad creates a new line with 4 float64 vectors.
-func F64NewQuad(a, b, c, d vpvec3.F64) *F64 {
+func F64NewQuad(a, b, c, d *vpvec3.F64) *F64 {
 	l := make([]vpvec3.F64, D+1)
-	l[A] = a
-	l[B] = b
-	l[C] = c
-	l[D] = d
+	l[A] = *a
+	l[B] = *b
+	l[C] = *c
+	l[D] = *d
 	ret := F64(l)
 	return &ret
 }
 
 // ToX32 converts the line to a fixed point number line on 32 bits.
 func (line *F64) ToX32() *X32 {
-	var ret X32
+	l := make([]vpvec3.X32, len(*line))
 
 	for i, v := range *line {
-		ret[i] = *v.ToX32()
+		l[i] = *v.ToX32()
 	}
 
+	ret := X32(l)
 	return &ret
 }
 
 // ToX64 converts the line to a fixed point number line on 64 bits.
 func (line *F64) ToX64() *X64 {
-	var ret X64
+	l := make([]vpvec3.X64, len(*line))
 
 	for i, v := range *line {
-		ret[i] = *v.ToX64()
+		l[i] = *v.ToX64()
 	}
 
+	ret := X64(l)
 	return &ret
 }
 
 // ToF32 converts the line to a float32 line.
 func (line *F64) ToF32() *F32 {
-	var ret F32
+	l := make([]vpvec3.F32, len(*line))
 
 	for i, v := range *line {
-		ret[i] = *v.ToF32()
+		l[i] = *v.ToF32()
 	}
 
+	ret := F32(l)
 	return &ret
 }
 
@@ -100,4 +103,18 @@ func (line *F64) String() string {
 	}
 
 	return string(buf)
+}
+
+// IsSimilar returns true if lines are approximatively the same.
+// This is a workarround to ignore rounding errors.
+func (line *F64) IsSimilar(op *F64) bool {
+	if len(*line) != len(*op) {
+		return false
+	}
+	ret := true
+	for i, v := range *line {
+		ret = ret && v.IsSimilar(&((*op)[i]))
+	}
+
+	return ret
 }
