@@ -30,6 +30,10 @@ import (
 // Can hold the values of a point in space.
 type F64 [Size]float64
 
+// F64BinaryOperator designs funcs such as Add, Sub, Min, Max,
+// which operates on two vectors and return one.
+type F64BinaryOperator func(a, b *F64) *F64
+
 // F64New creates a new vector containing 3 float64 values.
 func F64New(f1, f2, f3 float64) *F64 {
 	return &F64{f1, f2, f3}
@@ -162,8 +166,8 @@ func (vec *F64) Neg() *F64 {
 // It modifies the vector, and returns a pointer on it.
 func (vec *F64) Min(op *F64) *F64 {
 	for i, v := range op {
-		if vec[i]>v {
-			vec[i]=v
+		if vec[i] > v {
+			vec[i] = v
 		}
 	}
 
@@ -174,8 +178,8 @@ func (vec *F64) Min(op *F64) *F64 {
 // It modifies the vector, and returns a pointer on it.
 func (vec *F64) Max(op *F64) *F64 {
 	for i, v := range op {
-		if vec[i]<v {
-			vec[i]=v
+		if vec[i] < v {
+			vec[i] = v
 		}
 	}
 
@@ -314,6 +318,7 @@ func F64Neg(vec *F64) *F64 {
 }
 
 // F64Min returns the mininum (member-wise) of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func F64Min(veca *F64, vecb *F64) *F64 {
 	var ret = *veca
 
@@ -323,6 +328,7 @@ func F64Min(veca *F64, vecb *F64) *F64 {
 }
 
 // F64Max returns the mininum (member-wise) of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func F64Max(veca *F64, vecb *F64) *F64 {
 	var ret = *veca
 

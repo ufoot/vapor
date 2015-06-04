@@ -20,11 +20,11 @@
 package vpwire
 
 import (
+	"github.com/ufoot/vapor/vpline3"
+	"github.com/ufoot/vapor/vpmat4x4"
+	"github.com/ufoot/vapor/vpvec3"
 	"image"
 	"image/color"
-"github.com/ufoot/vapor/vpmat4x4"
-"github.com/ufoot/vapor/vpvec3"
-"github.com/ufoot/vapor/vpline3"
 )
 
 // F32Proj calculates the projection for a line, so that all points in the
@@ -32,17 +32,17 @@ import (
 func F32Proj(img *image.RGBA, line *vpline3.F32, dir *vpvec3.F32) *vpmat4x4.F32 {
 	var ret vpmat4x4.F32
 
-// todo...
-	
+	// todo...
+
 	return &ret
 }
-	
-// F32Draw draws a line on a image, 
+
+// F32Draw draws a line on a image,
 // line are visible, given a direction for the center "ray".
 func F32Draw(img *image.RGBA, proj *vpmat4x4.F32, line *vpline3.F32, col color.RGBA) *image.RGBA {
 	var ret image.RGBA
 
 	// todo...
-	
+
 	return &ret
 }

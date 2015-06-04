@@ -30,6 +30,10 @@ import (
 // Can hold the values of a point in space.
 type X32 [Size]vpnumber.X32
 
+// X32BinaryOperator designs funcs such as Add, Sub, Min, Max,
+// which operates on two vectors and return one.
+type X32BinaryOperator func(a, b *X32) *X32
+
 // X32New creates a new vector containing 3 fixed point 32 bit values.
 func X32New(x1, x2, x3 vpnumber.X32) *X32 {
 	return &X32{x1, x2, x3}
@@ -162,8 +166,8 @@ func (vec *X32) Neg() *X32 {
 // It modifies the vector, and returns a pointer on it.
 func (vec *X32) Min(op *X32) *X32 {
 	for i, v := range op {
-		if vec[i]>v {
-			vec[i]=v
+		if vec[i] > v {
+			vec[i] = v
 		}
 	}
 
@@ -174,8 +178,8 @@ func (vec *X32) Min(op *X32) *X32 {
 // It modifies the vector, and returns a pointer on it.
 func (vec *X32) Max(op *X32) *X32 {
 	for i, v := range op {
-		if vec[i]<v {
-			vec[i]=v
+		if vec[i] < v {
+			vec[i] = v
 		}
 	}
 
@@ -314,6 +318,7 @@ func X32Neg(vec *X32) *X32 {
 }
 
 // X32Min returns the mininum (member-wise) of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func X32Min(veca *X32, vecb *X32) *X32 {
 	var ret = *veca
 
@@ -323,6 +328,7 @@ func X32Min(veca *X32, vecb *X32) *X32 {
 }
 
 // X32Max returns the mininum (member-wise) of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func X32Max(veca *X32, vecb *X32) *X32 {
 	var ret = *veca
 

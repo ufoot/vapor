@@ -118,3 +118,21 @@ func (line *F64) IsSimilar(op *F64) bool {
 
 	return ret
 }
+
+// Reduce applies a binary operator to all members and returns the result.
+func (line *F64) Reduce(f vpvec3.F64BinaryOperator) *vpvec3.F64 {
+	var ret vpvec3.F64
+	n := len(*line)
+
+	if n <= 0 {
+		return &ret
+	}
+
+	ret = (*line)[0]
+
+	for i := 1; i < n; i++ {
+		ret = *f(&ret, &((*line)[i]))
+	}
+
+	return &ret
+}

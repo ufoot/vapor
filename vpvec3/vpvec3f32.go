@@ -30,6 +30,10 @@ import (
 // Can hold the values of a point in space.
 type F32 [Size]float32
 
+// F32BinaryOperator designs funcs such as Add, Sub, Min, Max,
+// which operates on two vectors and return one.
+type F32BinaryOperator func(a, b *F32) *F32
+
 // F32New creates a new vector containing 3 float32 values.
 func F32New(f1, f2, f3 float32) *F32 {
 	return &F32{f1, f2, f3}
@@ -162,8 +166,8 @@ func (vec *F32) Neg() *F32 {
 // It modifies the vector, and returns a pointer on it.
 func (vec *F32) Min(op *F32) *F32 {
 	for i, v := range op {
-		if vec[i]>v {
-			vec[i]=v
+		if vec[i] > v {
+			vec[i] = v
 		}
 	}
 
@@ -174,8 +178,8 @@ func (vec *F32) Min(op *F32) *F32 {
 // It modifies the vector, and returns a pointer on it.
 func (vec *F32) Max(op *F32) *F32 {
 	for i, v := range op {
-		if vec[i]<v {
-			vec[i]=v
+		if vec[i] < v {
+			vec[i] = v
 		}
 	}
 
@@ -314,6 +318,7 @@ func F32Neg(vec *F32) *F32 {
 }
 
 // F32Min returns the mininum (member-wise) of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func F32Min(veca *F32, vecb *F32) *F32 {
 	var ret = *veca
 
@@ -323,6 +328,7 @@ func F32Min(veca *F32, vecb *F32) *F32 {
 }
 
 // F32Max returns the mininum (member-wise) of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func F32Max(veca *F32, vecb *F32) *F32 {
 	var ret = *veca
 

@@ -30,6 +30,10 @@ import (
 // Can be used in 3D matrix transformations.
 type X64 [Size]vpnumber.X64
 
+// X64BinaryOperator designs funcs such as Add, Sub, Min, Max,
+// which operates on two vectors and return one.
+type X64BinaryOperator func(a, b *X64) *X64
+
 // X64New creates a new vector containing 4 fixed point 64 bit values.
 func X64New(x1, x2, x3, x4 vpnumber.X64) *X64 {
 	return &X64{x1, x2, x3, x4}
@@ -162,8 +166,8 @@ func (vec *X64) Neg() *X64 {
 // It modifies the vector, and returns a pointer on it.
 func (vec *X64) Min(op *X64) *X64 {
 	for i, v := range op {
-		if vec[i]>v {
-			vec[i]=v
+		if vec[i] > v {
+			vec[i] = v
 		}
 	}
 
@@ -174,8 +178,8 @@ func (vec *X64) Min(op *X64) *X64 {
 // It modifies the vector, and returns a pointer on it.
 func (vec *X64) Max(op *X64) *X64 {
 	for i, v := range op {
-		if vec[i]<v {
-			vec[i]=v
+		if vec[i] < v {
+			vec[i] = v
 		}
 	}
 
@@ -306,6 +310,7 @@ func X64Neg(vec *X64) *X64 {
 }
 
 // X64Min returns the mininum (member-wise) of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func X64Min(veca *X64, vecb *X64) *X64 {
 	var ret = *veca
 
@@ -315,6 +320,7 @@ func X64Min(veca *X64, vecb *X64) *X64 {
 }
 
 // X64Max returns the mininum (member-wise) of two vectors.
+// Args are left untouched, a pointer on a new object is returned.
 func X64Max(veca *X64, vecb *X64) *X64 {
 	var ret = *veca
 

@@ -118,3 +118,21 @@ func (line *X32) IsSimilar(op *X32) bool {
 
 	return ret
 }
+
+// Reduce applies a binary operator to all members and returns the result.
+func (line *X32) Reduce(f vpvec3.X32BinaryOperator) *vpvec3.X32 {
+	var ret vpvec3.X32
+	n := len(*line)
+
+	if n <= 0 {
+		return &ret
+	}
+
+	ret = (*line)[0]
+
+	for i := 1; i < n; i++ {
+		ret = *f(&ret, &((*line)[i]))
+	}
+
+	return &ret
+}
