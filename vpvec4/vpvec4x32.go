@@ -158,6 +158,30 @@ func (vec *X32) Neg() *X32 {
 	return vec
 }
 
+// Min returns the minimum of all vector members.
+// It modifies the vector, and returns a pointer on it.
+func (vec *X32) Min(op *X32) *X32 {
+	for i, v := range op {
+		if vec[i]>v {
+			vec[i]=v
+		}
+	}
+
+	return vec
+}
+
+// Max returns the maximum of all vector members.
+// It modifies the vector, and returns a pointer on it.
+func (vec *X32) Max(op *X32) *X32 {
+	for i, v := range op {
+		if vec[i]<v {
+			vec[i]=v
+		}
+	}
+
+	return vec
+}
+
 // MulScale multiplies all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
 func (vec *X32) MulScale(factor vpnumber.X32) *X32 {
@@ -277,6 +301,24 @@ func X32Neg(vec *X32) *X32 {
 	var ret = *vec
 
 	_ = ret.Neg()
+
+	return &ret
+}
+
+// X32Min returns the mininum (member-wise) of two vectors.
+func X32Min(veca *X32, vecb *X32) *X32 {
+	var ret = *veca
+
+	_ = ret.Min(vecb)
+
+	return &ret
+}
+
+// X32Max returns the mininum (member-wise) of two vectors.
+func X32Max(veca *X32, vecb *X32) *X32 {
+	var ret = *veca
+
+	_ = ret.Max(vecb)
 
 	return &ret
 }

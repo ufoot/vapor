@@ -158,6 +158,30 @@ func (vec *X64) Neg() *X64 {
 	return vec
 }
 
+// Min returns the minimum of all vector members.
+// It modifies the vector, and returns a pointer on it.
+func (vec *X64) Min(op *X64) *X64 {
+	for i, v := range op {
+		if vec[i]>v {
+			vec[i]=v
+		}
+	}
+
+	return vec
+}
+
+// Max returns the maximum of all vector members.
+// It modifies the vector, and returns a pointer on it.
+func (vec *X64) Max(op *X64) *X64 {
+	for i, v := range op {
+		if vec[i]<v {
+			vec[i]=v
+		}
+	}
+
+	return vec
+}
+
 // MulScale multiplies all values of the vector by factor.
 // It modifies the vector, and returns a pointer on it.
 func (vec *X64) MulScale(factor vpnumber.X64) *X64 {
@@ -277,6 +301,24 @@ func X64Neg(vec *X64) *X64 {
 	var ret = *vec
 
 	_ = ret.Neg()
+
+	return &ret
+}
+
+// X64Min returns the mininum (member-wise) of two vectors.
+func X64Min(veca *X64, vecb *X64) *X64 {
+	var ret = *veca
+
+	_ = ret.Min(vecb)
+
+	return &ret
+}
+
+// X64Max returns the mininum (member-wise) of two vectors.
+func X64Max(veca *X64, vecb *X64) *X64 {
+	var ret = *veca
+
+	_ = ret.Max(vecb)
 
 	return &ret
 }
