@@ -30,6 +30,10 @@ import (
 // Can be used in 3D matrix transformations.
 type X32 [Size]vpnumber.X32
 
+// X32UnaryOperator designs funcs such as Neg,
+// which operates on one vector and returns another vector.
+type X32UnaryOperator func(a *X32) *X32
+
 // X32BinaryOperator designs funcs such as Add, Sub, Min, Max,
 // which operates on two vectors and return one.
 type X32BinaryOperator func(a, b *X32) *X32

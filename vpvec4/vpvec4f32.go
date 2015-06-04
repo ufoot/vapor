@@ -30,6 +30,10 @@ import (
 // Can be used in 3D matrix transformations.
 type F32 [Size]float32
 
+// F32UnaryOperator designs funcs such as Neg,
+// which operates on one vector and returns another vector.
+type F32UnaryOperator func(a *F32) *F32
+
 // F32BinaryOperator designs funcs such as Add, Sub, Min, Max,
 // which operates on two vectors and return one.
 type F32BinaryOperator func(a, b *F32) *F32

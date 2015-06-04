@@ -29,6 +29,10 @@ import (
 // Can hold the values of a point in a plane.
 type X64 [Size]vpnumber.X64
 
+// X64UnaryOperator designs funcs such as Neg,
+// which operates on one vector and returns another vector.
+type X64UnaryOperator func(a *X64) *X64
+
 // X64BinaryOperator designs funcs such as Add, Sub, Min, Max,
 // which operates on two vectors and return one.
 type X64BinaryOperator func(a, b *X64) *X64

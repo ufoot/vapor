@@ -30,6 +30,10 @@ import (
 // Can hold the values of a point in space.
 type F64 [Size]float64
 
+// F64UnaryOperator designs funcs such as Neg,
+// which operates on one vector and returns another vector.
+type F64UnaryOperator func(a *F64) *F64
+
 // F64BinaryOperator designs funcs such as Add, Sub, Min, Max,
 // which operates on two vectors and return one.
 type F64BinaryOperator func(a, b *F64) *F64

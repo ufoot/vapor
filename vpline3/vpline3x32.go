@@ -119,6 +119,16 @@ func (line *X32) IsSimilar(op *X32) bool {
 	return ret
 }
 
+// Map applies a unary operator to all members and returns the result.
+// Line is modified, and a pointer on it is returned.
+func (line *X32) Map(f vpvec3.X32UnaryOperator) *X32 {
+	for i, _ := range *line {
+		_ = f(&((*line)[i]))
+	}
+
+	return line
+}
+
 // Reduce applies a binary operator to all members and returns the result.
 func (line *X32) Reduce(f vpvec3.X32BinaryOperator) *vpvec3.X32 {
 	var ret vpvec3.X32
