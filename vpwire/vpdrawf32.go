@@ -22,6 +22,7 @@ package vpwire
 import (
 	"github.com/ufoot/vapor/vpline3"
 	"github.com/ufoot/vapor/vpmat4x4"
+	"github.com/ufoot/vapor/vpmath"
 	"github.com/ufoot/vapor/vpnumber"
 	"github.com/ufoot/vapor/vpvec3"
 	"image"
@@ -31,15 +32,11 @@ import (
 // F32Proj calculates the projection for a line, so that all points in the
 // line are visible, given a direction for the center "ray".
 func F32Proj(img *image.RGBA, line *vpline3.F32, dir *vpvec3.F32) *vpmat4x4.F32 {
+	ret := vpmat4x4.F32Identity()
+
 	min := line.Reduce(vpvec3.F32Min)
 	max := line.Reduce(vpvec3.F32Max)
 	avg := line.Reduce(vpvec3.F32Add).DivScale(float32(len(*line)))
-
-	cameraDirX := vpvec3.F32Normalize(dir)
-	cameraDirZ := vpvec3.F32Cross(cameraDirX, vpvec3.F32AxisY()).Normalize()
-	cameraDirY := vpvec3.F32Cross(cameraDirZ, cameraDirX).Normalize()
-	ret := vpmat4x4.F32RebaseOXYZ(new(vpvec3.F32), cameraDirX, cameraDirY, cameraDirZ)
-	ret.Inv()
 
 	var diff float32
 	for i, v := range avg {
@@ -50,10 +47,41 @@ func F32Proj(img *image.RGBA, line *vpline3.F32, dir *vpvec3.F32) *vpmat4x4.F32 
 			diff = max[i] - v
 		}
 	}
-	scale := vpnumber.F32Div(vpnumber.F32Const1, diff)
-	ret.MulComp(vpmat4x4.F32Scale(vpvec3.F32New(scale, scale, scale)))
 
-	ret.MulComp(vpmat4x4.F32Translation(vpvec3.F32Neg(avg)))
+	ret.MulComp(vpmat4x4.F32Translation(avg))
+
+	ret.MulComp(vpmat4x4.F32Scale(vpvec3.F32New(diff, diff, diff)))
+
+	cameraDirX := vpvec3.F32Normalize(dir)
+	cameraDirZ := vpvec3.F32Cross(cameraDirX, vpvec3.F32AxisY()).Normalize()
+	cameraDirY := vpvec3.F32Cross(cameraDirZ, cameraDirX).Normalize()
+	ret.MulComp(vpmat4x4.F32RebaseOXYZ(new(vpvec3.F32), cameraDirX, cameraDirY, cameraDirZ))
+	ret.Inv()
+
+	// todo : [0;1] to [-1;1] and Z-axis sig
+
+	bounds := img.Bounds()
+	var topLeftCorner image.Point
+	var bottomRightCorner image.Point
+	width := bounds.Max.X - bounds.Min.X
+	height := bounds.Max.Y - bounds.Min.Y
+
+	if width > height {
+		topLeftCorner.X = (width - height) >> 1
+		bottomRightCorner.X = topLeftCorner.X + width
+	} else {
+		topLeftCorner.Y = (height - width) >> 1
+		bottomRightCorner.Y = topLeftCorner.Y + height
+	}
+
+	perspLerp := float32(0.25)
+	proj := vpmat4x4.F32RebaseOXYZP(vpvec3.F32New(float32(topLeftCorner.X), float32(bottomRightCorner.Y), vpnumber.F32Const0),
+		vpvec3.F32New(float32(topLeftCorner.X), float32(bottomRightCorner.Y), vpnumber.F32Const0),
+		vpvec3.F32New(float32(topLeftCorner.X), vpnumber.F32Const0, vpnumber.F32Const0),
+		vpvec3.F32New(vpmath.F32Lerp(float32(topLeftCorner.X), float32(bottomRightCorner.X), perspLerp), vpmath.F32Lerp(float32(bottomRightCorner.Y), float32(topLeftCorner.Y), perspLerp), vpnumber.F32Const1),
+		vpvec3.F32New(vpmath.F32Lerp(float32(bottomRightCorner.X), float32(topLeftCorner.X), perspLerp), vpmath.F32Lerp(float32(topLeftCorner.Y), float32(bottomRightCorner.Y), perspLerp), vpnumber.F32Const1))
+
+	ret = vpmat4x4.F32MulComp(proj, ret)
 
 	return ret
 }
