@@ -29,9 +29,7 @@ import (
 	"image/color"
 )
 
-// F32Proj calculates the projection for a line, so that all points in the
-// line are visible, given a direction for the center "ray".
-func F32Proj(img *image.RGBA, line *vpline3.F32, dir *vpvec3.F32) *vpmat4x4.F32 {
+func f32ProjCenterAndScale(line *vpline3.F32) *vpmat4x4.F32 {
 	ret := vpmat4x4.F32Identity()
 
 	min := line.Reduce(vpvec3.F32Min)
@@ -52,14 +50,26 @@ func F32Proj(img *image.RGBA, line *vpline3.F32, dir *vpvec3.F32) *vpmat4x4.F32 
 
 	ret.MulComp(vpmat4x4.F32Scale(vpvec3.F32New(diff, diff, diff)))
 
+	return ret
+}
+
+func f32ProjCameraRotate(dir *vpvec3.F32) *vpmat4x4.F32 {
 	cameraDirX := vpvec3.F32Normalize(dir)
 	cameraDirZ := vpvec3.F32Cross(cameraDirX, vpvec3.F32AxisY()).Normalize()
 	cameraDirY := vpvec3.F32Cross(cameraDirZ, cameraDirX).Normalize()
-	ret.MulComp(vpmat4x4.F32RebaseOXYZ(new(vpvec3.F32), cameraDirX, cameraDirY, cameraDirZ))
-	ret.Inv()
 
-	// todo : [0;1] to [-1;1] and Z-axis sig
+	ret := vpmat4x4.F32RebaseOXYZ(new(vpvec3.F32), cameraDirX, cameraDirY, cameraDirZ)
 
+	return ret
+}
+
+func f32ProjPerspectiveToWorld() *vpmat4x4.F32 {
+	ret := vpmat4x4.F32RebaseOXYZ(vpvec3.F32New(-vpnumber.F32Const1, -vpnumber.F32Const1, vpnumber.F32Const1), vpvec3.F32New(vpnumber.F32Const1, -vpnumber.F32Const1, vpnumber.F32Const1), vpvec3.F32New(-vpnumber.F32Const1, vpnumber.F32Const1, vpnumber.F32Const1), vpvec3.F32New(-vpnumber.F32Const1, -vpnumber.F32Const1, -vpnumber.F32Const1))
+
+	return ret
+}
+
+func f32ProjPerspective(img *image.RGBA) *vpmat4x4.F32 {
 	bounds := img.Bounds()
 	var topLeftCorner image.Point
 	var bottomRightCorner image.Point
@@ -75,13 +85,27 @@ func F32Proj(img *image.RGBA, line *vpline3.F32, dir *vpvec3.F32) *vpmat4x4.F32 
 	}
 
 	perspLerp := float32(0.25)
-	proj := vpmat4x4.F32RebaseOXYZP(vpvec3.F32New(float32(topLeftCorner.X), float32(bottomRightCorner.Y), vpnumber.F32Const0),
+	ret := vpmat4x4.F32RebaseOXYZP(vpvec3.F32New(float32(topLeftCorner.X), float32(bottomRightCorner.Y), vpnumber.F32Const0),
 		vpvec3.F32New(float32(topLeftCorner.X), float32(bottomRightCorner.Y), vpnumber.F32Const0),
 		vpvec3.F32New(float32(topLeftCorner.X), vpnumber.F32Const0, vpnumber.F32Const0),
 		vpvec3.F32New(vpmath.F32Lerp(float32(topLeftCorner.X), float32(bottomRightCorner.X), perspLerp), vpmath.F32Lerp(float32(bottomRightCorner.Y), float32(topLeftCorner.Y), perspLerp), vpnumber.F32Const1),
 		vpvec3.F32New(vpmath.F32Lerp(float32(bottomRightCorner.X), float32(topLeftCorner.X), perspLerp), vpmath.F32Lerp(float32(topLeftCorner.Y), float32(bottomRightCorner.Y), perspLerp), vpnumber.F32Const1))
 
-	ret = vpmat4x4.F32MulComp(proj, ret)
+	return ret
+}
+
+// F32Proj calculates the projection for a line, so that all points in the
+// line are visible, given a direction for the center "ray".
+func F32Proj(img *image.RGBA, line *vpline3.F32, dir *vpvec3.F32) *vpmat4x4.F32 {
+	ret := vpmat4x4.F32Identity()
+
+	ret.MulComp(f32ProjCenterAndScale(line))
+	ret.MulComp(f32ProjCameraRotate(dir))
+	ret.MulComp(f32ProjPerspectiveToWorld())
+
+	ret.Inv()
+
+	ret = vpmat4x4.F32MulComp(f32ProjPerspective(img), ret)
 
 	return ret
 }
