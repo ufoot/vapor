@@ -9,6 +9,7 @@ Makefile.help
 src/git.apache.org
 src/github.com
 src/golang.org
+src/code.google.com
 bin/vp*
 bin/godep
 bin/golint

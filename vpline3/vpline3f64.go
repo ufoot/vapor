@@ -122,7 +122,7 @@ func (line *F64) IsSimilar(op *F64) bool {
 // Map applies a unary operator to all members and returns the result.
 // Line is modified, and a pointer on it is returned.
 func (line *F64) Map(f vpvec3.F64UnaryOperator) *F64 {
-	for i, _ := range *line {
+	for i := range *line {
 		_ = f(&((*line)[i]))
 	}
 

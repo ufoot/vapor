@@ -35,6 +35,7 @@ go get golang.org/x/crypto/openpgp/packet
 go get github.com/golang/lint/golint
 go get github.com/tools/godep
 go get git.apache.org/thrift.git/lib/go/thrift
+go get github.com/llgcode/draw2d
 
 rm -rf src/github.com/ufoot/vapor
 install -d src/github.com/ufoot/vapor
