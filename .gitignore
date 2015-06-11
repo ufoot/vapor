@@ -17,5 +17,6 @@ pkg
 doc/txt
 doc/html
 thrift/gen-*
+vpwire/*.png
 *~
 *#*
