@@ -21,4 +21,3 @@
 // https://en.wikipedia.org/wiki/Koorde it's used for keeping a ring
 // of p2p nodes.
 package vpkoorde
-
