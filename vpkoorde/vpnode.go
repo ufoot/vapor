@@ -23,11 +23,15 @@ import (
 	"math/big"
 )
 
-// Node contains the basics for a node, with info to connect to it.
+// Node contains the basics for a node, id and url.
 type Node struct {
 	// The node Id.
 	HashID *big.Int
 	// Url can be used and should be enough to connect to node.
 	ConnectURL string
+	// Title is a human-readable text identifying the node, need not be unique.
+	Title string
+	// Description is a human-readable description of the node.
+	Description string
 }
 
