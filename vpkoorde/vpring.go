@@ -44,13 +44,14 @@ type Ring struct {
 // node is local. If there's no element, it could not be joined. At all.
 func (*Ring) Lookup(i big.Int) ([]*Node, error) {
 	// pseudo code :
-	// procedure m.LOOKUP(k, shift, i)
+	// procedure m.LOOKUP(k, kshift, i)
 	//   if k is in (m,successor] then return (successor)
-	//   else if is in (m,successor] then return (
+	//   else if i is in (m,successor] then return (
 	//     d.lookup(k,
 	//              kshift<<1,
 	//              i o topBit(kshift)))
-	//   else return (successor.lookup(k,shift,i))
+	//   else return (successor.lookup(k,kshift,i))
+	// Note : i can be chosen so that its low bits are top bits of k
 
 	return nil,fmt.Errorf("TODO")
 }
