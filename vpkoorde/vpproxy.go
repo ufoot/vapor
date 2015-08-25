@@ -23,21 +23,18 @@ import (
 	"math/big"
 )
 
-// NodeInfo contains the basics for a node, id and url.
-type NodeInfo struct {
-	// The node Id, is technically the same as a key Id.
-	NodeID *big.Int
-	// Url can be used and should be enough to connect to node.
-	ConnectURL string
-	// Title is a human-readable text identifying the node, need not be unique.
-	Title string
-	// Description is a human-readable description of the node.
-	Description string
+// Proxy is used to communicate with another node.
+type Proxy interface {
+	// GetInfo gets the remote node informations.
+	GetInfo() *NodeInfo
+	// Lookup searchs for a key, might recursively call other
+	Lookup(i *big.Int) ([]*NodeInfo, error)	
 }
 
-// Node implements basic funcs over a node
-type Node struct {
-	// The node details.
-	Info NodeInfo
+// LocalProxy is used to communicate with a local node, this is
+// for simulation or to host several distinct virtual on a single
+// physical node.
+type LocalProxy struct {
+	localNode *Node
+	ring *Ring
 }
-

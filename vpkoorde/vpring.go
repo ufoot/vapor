@@ -29,6 +29,10 @@ type Ring struct {
 	m int
 	n int
 
+	// The application Id, identifies an application or domain.
+	AppID *big.Int
+	// The ring Id, identifies a community or bucket.
+	RingID *big.Int
 	// This node information.
 	Local *Node
 	// The successor nodes within the ring, use 1st elem for direct successor..
@@ -42,7 +46,7 @@ type Ring struct {
 // Lookup performs a lookup on a given key. Returns all the nodes which
 // must be traversed to go it. If there's only one element, it means the
 // node is local. If there's no element, it could not be joined. At all.
-func (*Ring) Lookup(i big.Int) ([]*Node, error) {
+func (*Ring) Lookup(i *big.Int) ([]*NodeInfo, error) {
 	// pseudo code :
 	// procedure m.LOOKUP(k, kshift, i)
 	//   if k is in (m,successor] then return (successor)
