@@ -57,5 +57,5 @@ func (*Ring) Lookup(i *big.Int) ([]*NodeInfo, error) {
 	//   else return (successor.lookup(k,kshift,i))
 	// Note : i can be chosen so that its low bits are top bits of k
 
-	return nil,fmt.Errorf("TODO")
+	return nil, fmt.Errorf("TODO")
 }

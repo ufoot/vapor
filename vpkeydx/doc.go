@@ -17,24 +17,6 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpkoorde
-
-import (
-	"math/big"
-)
-
-// Proxy is used to communicate with another node.
-type Proxy interface {
-	// GetInfo gets the remote node informations.
-	GetInfo() *NodeInfo
-	// Lookup searchs for a key, might recursively call other
-	Lookup(i *big.Int) ([]*NodeInfo, error)
-}
-
-// LocalProxy is used to communicate with a local node, this is
-// for simulation or to host several distinct virtual on a single
-// physical node.
-type LocalProxy struct {
-	localNode *Node
-	ring      *Ring
-}
+// Package vpkeydx contains utilities to generate and analyze keys
+// used in p2p messaging.
+package vpkeydx

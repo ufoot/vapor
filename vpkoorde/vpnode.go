@@ -40,4 +40,3 @@ type Node struct {
 	// The node details.
 	Info NodeInfo
 }
-
