@@ -23,26 +23,7 @@ import (
 	"fmt"
 	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vpsys"
-	"math/big"
 )
-
-const n31 = 31
-const n256 = 256
-const nOffset1 = n256 - n31
-const nOffset2 = n256 - 2*n31
-const nOffset3 = n256 - 3*n31
-const mask31 = 0x7fffffff
-
-func toBigInt31(i int32) (*big.Int, error) {
-	var ret big.Int
-
-	ret.SetUint64(uint64(i) & mask31)
-	if ret.Int64() != int64(i) {
-		return nil, fmt.Errorf("unable to convert %d to int31, out of range", i)
-	}
-
-	return &ret, nil
-}
 
 // Gen generates a unique ID for a key, given a seed.
 // A typical usage of seed is the vring (virtual ring) name,
@@ -154,58 +135,4 @@ func Gen3d(seed []byte, keyName string, x int32, y int32, z int32) ([]byte, erro
 		kInt = kInt.SetBit(kInt, nOffset3+3*i+2, zInt.Bit(i))
 	}
 	return vpcrypto.IntToBuf256(kInt), nil
-}
-
-// Gets the X (1st) coord value for a given key.
-// Note that it can be used for any key, even possibly those which have
-// not be generated with Gen1d.
-func GetX(keyID []byte) (int32, error) {
-	kInt, err := vpcrypto.BufToInt256(keyID)
-	if err != nil {
-		return 0, vpsys.ErrorChain(err, "unable to generate 1d keydx")
-	}
-	xInt := big.NewInt(0)
-	for i := 0; i < n31; i++ {
-		xInt = xInt.SetBit(xInt, nOffset1+i, kInt.Bit(nOffset1+i))
-	}
-
-	return int32(xInt.Int64()), nil
-}
-
-// Gets the X,Y (1st and 2nd) coord value for a given key.
-// Note that it can be used for any key, even possibly those which have
-// not be generated with Gen1d.
-func GetY(keyID []byte) (int32, int32, error) {
-	kInt, err := vpcrypto.BufToInt256(keyID)
-	if err != nil {
-		return 0, 0, vpsys.ErrorChain(err, "unable to generate 1d keydx")
-	}
-	xInt := big.NewInt(0)
-	yInt := big.NewInt(0)
-	for i := 0; i < n31; i++ {
-		xInt = xInt.SetBit(xInt, nOffset2+2*i, kInt.Bit(nOffset1+i))
-		yInt = yInt.SetBit(yInt, nOffset2+2*i+1, kInt.Bit(nOffset1+i))
-	}
-
-	return int32(xInt.Int64()), int32(yInt.Int64()), nil
-}
-
-// Gets the X,Y,Z (3rd) coord value for a given key.
-// Note that it can be used for any key, even possibly those which have
-// not be generated with Gen1d.
-func GetZ(keyID []byte) (int32, int32, int32, error) {
-	kInt, err := vpcrypto.BufToInt256(keyID)
-	if err != nil {
-		return 0, 0, 0, vpsys.ErrorChain(err, "unable to generate 1d keydx")
-	}
-	xInt := big.NewInt(0)
-	yInt := big.NewInt(0)
-	zInt := big.NewInt(0)
-	for i := 0; i < n31; i++ {
-		xInt = xInt.SetBit(xInt, nOffset3+3*i, kInt.Bit(nOffset1+i))
-		yInt = yInt.SetBit(yInt, nOffset3+3*i+1, kInt.Bit(nOffset1+i))
-		zInt = zInt.SetBit(zInt, nOffset3+3*i+2, kInt.Bit(nOffset1+i))
-	}
-
-	return int32(xInt.Int64()), int32(yInt.Int64()), int32(zInt.Int64()), nil
 }
