@@ -81,7 +81,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
         fi
     done
     echo ".PHONY: $i" >> Makefile.dep
-    echo "$i: configure.ac $k $m" >> Makefile.dep
+    echo "$i: configure.ac $k # $m" >> Makefile.dep
     echo "\texport GOPATH=\$(VP_TOPSRCDIR):\$\$GOPATH && go install $j" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: check-$i" >> Makefile.dep
