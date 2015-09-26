@@ -30,9 +30,9 @@ const nOffset1 = n256 - n31
 const nOffset2 = n256 - 2*n31
 const nOffset3 = n256 - 3*n31
 const mask31 = 0x7fffffff
-const mul31 = int64(0x100000000)
+const mul31 = int64(0x80000000)
 
-// Mod31 returns the value modulo 2<<31-1. Usefull to avoid
+// Mod31 returns the value modulo 2<<32. Usefull to avoid
 // out-of-range errors when manipulating coordinates.
 func Mod31(i int32) int32 {
 	return i & mask31
@@ -55,6 +55,16 @@ func Scale31(i int32, n int32) int32 {
 	n64 := int64(n)
 
 	return Mod31(int32((i64 * mul31) / n64))
+}
+
+// Inc31 increases the value by 1, then performs a modulo 2<<32.
+func Inc31(i int32) int32 {
+	return Mod31(i + 1)
+}
+
+// Dec31 decreases the value by 1, then performs a modulo 2<<32.
+func Dec31(i int32) int32 {
+	return Mod31(i - 1)
 }
 
 func toBigInt31(i int32) (*big.Int, error) {
