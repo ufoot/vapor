@@ -25,45 +25,45 @@ import (
 	"math/big"
 )
 
-// Gets the X (1st) coord value for a given key.
+// GetX gets the X (1st) coord value for a given key.
 // Note that it can be used for any key, even possibly those which have
 // not be generated with Gen1d.
 func GetX(keyID []byte) (int32, error) {
-	kInt, err := vpcrypto.BufToInt256(keyID)
+	keyInt, err := vpcrypto.BufToInt256(keyID)
 	if err != nil {
 		return 0, vpsys.ErrorChain(err, "unable to generate 1d keydx")
 	}
 	xInt := big.NewInt(0)
 	for i := 0; i < n31; i++ {
-		xInt = xInt.SetBit(xInt, nOffset1+i, kInt.Bit(nOffset1+i))
+		xInt = xInt.SetBit(xInt, i, keyInt.Bit(nOffset1+i))
 	}
 
 	return int32(xInt.Int64()), nil
 }
 
-// Gets the X,Y (1st and 2nd) coord value for a given key.
+// GetXY gets the X,Y (1st and 2nd) coord value for a given key.
 // Note that it can be used for any key, even possibly those which have
 // not be generated with Gen1d.
-func GetY(keyID []byte) (int32, int32, error) {
-	kInt, err := vpcrypto.BufToInt256(keyID)
+func GetXY(keyID []byte) (int32, int32, error) {
+	keyInt, err := vpcrypto.BufToInt256(keyID)
 	if err != nil {
 		return 0, 0, vpsys.ErrorChain(err, "unable to generate 1d keydx")
 	}
 	xInt := big.NewInt(0)
 	yInt := big.NewInt(0)
 	for i := 0; i < n31; i++ {
-		xInt = xInt.SetBit(xInt, nOffset2+2*i, kInt.Bit(nOffset1+i))
-		yInt = yInt.SetBit(yInt, nOffset2+2*i+1, kInt.Bit(nOffset1+i))
+		xInt = xInt.SetBit(xInt, i, keyInt.Bit(nOffset2+2*i))
+		yInt = yInt.SetBit(yInt, i, keyInt.Bit(nOffset2+2*i+1))
 	}
 
 	return int32(xInt.Int64()), int32(yInt.Int64()), nil
 }
 
-// Gets the X,Y,Z (3rd) coord value for a given key.
+// GetXYZ gets the X,Y,Z (3rd) coord value for a given key.
 // Note that it can be used for any key, even possibly those which have
 // not be generated with Gen1d.
-func GetZ(keyID []byte) (int32, int32, int32, error) {
-	kInt, err := vpcrypto.BufToInt256(keyID)
+func GetXYZ(keyID []byte) (int32, int32, int32, error) {
+	keyInt, err := vpcrypto.BufToInt256(keyID)
 	if err != nil {
 		return 0, 0, 0, vpsys.ErrorChain(err, "unable to generate 1d keydx")
 	}
@@ -71,9 +71,9 @@ func GetZ(keyID []byte) (int32, int32, int32, error) {
 	yInt := big.NewInt(0)
 	zInt := big.NewInt(0)
 	for i := 0; i < n31; i++ {
-		xInt = xInt.SetBit(xInt, nOffset3+3*i, kInt.Bit(nOffset1+i))
-		yInt = yInt.SetBit(yInt, nOffset3+3*i+1, kInt.Bit(nOffset1+i))
-		zInt = zInt.SetBit(zInt, nOffset3+3*i+2, kInt.Bit(nOffset1+i))
+		xInt = xInt.SetBit(xInt, i, keyInt.Bit(nOffset3+3*i))
+		yInt = yInt.SetBit(yInt, i, keyInt.Bit(nOffset3+3*i+1))
+		zInt = zInt.SetBit(zInt, i, keyInt.Bit(nOffset3+3*i+2))
 	}
 
 	return int32(xInt.Int64()), int32(yInt.Int64()), int32(zInt.Int64()), nil

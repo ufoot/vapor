@@ -46,26 +46,26 @@ func TestGen(t *testing.T) {
 	t.Logf("generated key %s", vpcrypto.BufToStr256(keydx))
 }
 
-func TestGen1d(t *testing.T) {
-	keydx, err := Gen1d(testSeedBuf, testKeyName, testX)
+func TestGenX(t *testing.T) {
+	keydx, err := GenX(testSeedBuf, testKeyName, testX)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to generate 1d key"))
+		t.Error(vpsys.ErrorChain(err, "unable to generate X key"))
 	}
 	t.Logf("generated key %s", vpcrypto.BufToStr256(keydx))
 }
 
-func TestGen2d(t *testing.T) {
-	keydx, err := Gen2d(testSeedBuf, testKeyName, testX, testY)
+func TestGenXY(t *testing.T) {
+	keydx, err := GenXY(testSeedBuf, testKeyName, testX, testY)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to generate 2d key"))
+		t.Error(vpsys.ErrorChain(err, "unable to generate XY key"))
 	}
 	t.Logf("generated key %s", vpcrypto.BufToStr256(keydx))
 }
 
-func TestGen3d(t *testing.T) {
-	keydx, err := Gen3d(testSeedBuf, testKeyName, testX, testY, testZ)
+func TestGenXYZ(t *testing.T) {
+	keydx, err := GenXYZ(testSeedBuf, testKeyName, testX, testY, testZ)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to generate 3d key"))
+		t.Error(vpsys.ErrorChain(err, "unable to generate XYZ key"))
 	}
 	t.Logf("generated key %s", vpcrypto.BufToStr256(keydx))
 }
@@ -81,35 +81,35 @@ func BenchmarkGen(b *testing.B) {
 	}
 }
 
-func BenchmarkGen1d(b *testing.B) {
+func BenchmarkGenX(b *testing.B) {
 	var err error
 
 	for i := 0; i < b.N; i++ {
-		_, err = Gen1d(testSeedBuf, testKeyName, testX)
+		_, err = GenX(testSeedBuf, testKeyName, testX)
 		if err != nil {
-			b.Error(vpsys.ErrorChain(err, "unable to generate 1d key"))
+			b.Error(vpsys.ErrorChain(err, "unable to generate X key"))
 		}
 	}
 }
 
-func BenchmarkGen2d(b *testing.B) {
+func BenchmarkGenXY(b *testing.B) {
 	var err error
 
 	for i := 0; i < b.N; i++ {
-		_, err = Gen2d(testSeedBuf, testKeyName, testX, testY)
+		_, err = GenXY(testSeedBuf, testKeyName, testX, testY)
 		if err != nil {
-			b.Error(vpsys.ErrorChain(err, "unable to generate 2d key"))
+			b.Error(vpsys.ErrorChain(err, "unable to generate XY key"))
 		}
 	}
 }
 
-func BenchmarkGen3d(b *testing.B) {
+func BenchmarkGenXYZ(b *testing.B) {
 	var err error
 
 	for i := 0; i < b.N; i++ {
-		_, err = Gen3d(testSeedBuf, testKeyName, testX, testY, testZ)
+		_, err = GenXYZ(testSeedBuf, testKeyName, testX, testY, testZ)
 		if err != nil {
-			b.Error(vpsys.ErrorChain(err, "unable to generate 3d key"))
+			b.Error(vpsys.ErrorChain(err, "unable to generate XYZ key"))
 		}
 	}
 }

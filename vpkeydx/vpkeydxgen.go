@@ -40,33 +40,33 @@ func Gen(seed []byte, keyName string) ([]byte, error) {
 	return vpcrypto.Checksum256(append(seed, []byte(keyName)...)), nil
 }
 
-// Gen1d generates a unique ID for a key, given a seed.
+// GenX generates a unique ID for a key, given a seed.
 // A typical usage of seed is the vring (virtual ring) name,
 // which can be used to differenciate key locations on various
 // vrings.
 // The x parameter has a special meaning, it is used on a 31-bit
 // scale (from 0 to 0x7fffffff) as a prefix for the key.
 // This is used to explicitely store some keys close to some node/host.
-func Gen1d(seed []byte, keyName string, x int32) ([]byte, error) {
-	kBuf, err := Gen(seed, keyName)
+func GenX(seed []byte, keyName string, x int32) ([]byte, error) {
+	keyBuf, err := Gen(seed, keyName)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 1d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate X keydx")
 	}
-	kInt, err := vpcrypto.BufToInt256(kBuf)
+	keyInt, err := vpcrypto.BufToInt256(keyBuf)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 1d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate X keydx")
 	}
 	xInt, err := toBigInt31(x)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 1d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate X keydx")
 	}
 	for i := 0; i < n31; i++ {
-		kInt = kInt.SetBit(kInt, nOffset1+i, xInt.Bit(i))
+		keyInt = keyInt.SetBit(keyInt, nOffset1+i, xInt.Bit(i))
 	}
-	return vpcrypto.IntToBuf256(kInt), nil
+	return vpcrypto.IntToBuf256(keyInt), nil
 }
 
-// Gen2d generates a unique ID for a key, given a seed.
+// GenXY generates a unique ID for a key, given a seed.
 // A typical usage of seed is the vring (virtual ring) name,
 // which can be used to differenciate key locations on various
 // vrings.
@@ -75,31 +75,31 @@ func Gen1d(seed []byte, keyName string, x int32) ([]byte, error) {
 // This is used to explicitely store some keys close to some node/host.
 // Technically they are interlaced so that globally, square-like shapes stick
 // together, and avoid the all row 0 first, then all row 1, etc.
-func Gen2d(seed []byte, keyName string, x int32, y int32) ([]byte, error) {
-	kBuf, err := Gen(seed, keyName)
+func GenXY(seed []byte, keyName string, x int32, y int32) ([]byte, error) {
+	keyBuf, err := Gen(seed, keyName)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 2d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate XY keydx")
 	}
-	kInt, err := vpcrypto.BufToInt256(kBuf)
+	keyInt, err := vpcrypto.BufToInt256(keyBuf)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 2d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate XY keydx")
 	}
 	xInt, err := toBigInt31(x)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 2d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate XY keydx")
 	}
 	yInt, err := toBigInt31(y)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 2d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate XY keydx")
 	}
 	for i := 0; i < n31; i++ {
-		kInt = kInt.SetBit(kInt, nOffset2+2*i, xInt.Bit(i))
-		kInt = kInt.SetBit(kInt, nOffset2+2*i+1, yInt.Bit(i))
+		keyInt = keyInt.SetBit(keyInt, nOffset2+2*i, xInt.Bit(i))
+		keyInt = keyInt.SetBit(keyInt, nOffset2+2*i+1, yInt.Bit(i))
 	}
-	return vpcrypto.IntToBuf256(kInt), nil
+	return vpcrypto.IntToBuf256(keyInt), nil
 }
 
-// Gen3d generates a unique ID for a key, given a seed.
+// GenXYZ generates a unique ID for a key, given a seed.
 // A typical usage of seed is the vring (virtual ring) name,
 // which can be used to differenciate key locations on various
 // vrings.
@@ -108,31 +108,31 @@ func Gen2d(seed []byte, keyName string, x int32, y int32) ([]byte, error) {
 // This is used to explicitely store some keys close to some node/host.
 // Technically they are interlaced so that globally, cube-like shapes stick
 // together, and avoid the all row 0 first, then all row 1, etc.
-func Gen3d(seed []byte, keyName string, x int32, y int32, z int32) ([]byte, error) {
-	kBuf, err := Gen(seed, keyName)
+func GenXYZ(seed []byte, keyName string, x int32, y int32, z int32) ([]byte, error) {
+	keyBuf, err := Gen(seed, keyName)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 3d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate XYZ keydx")
 	}
-	kInt, err := vpcrypto.BufToInt256(kBuf)
+	keyInt, err := vpcrypto.BufToInt256(keyBuf)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 3d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate XYZ keydx")
 	}
 	xInt, err := toBigInt31(x)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 2d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate XYZ keydx")
 	}
 	yInt, err := toBigInt31(y)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 3d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate XYZ keydx")
 	}
 	zInt, err := toBigInt31(z)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate 3d keydx")
+		return nil, vpsys.ErrorChain(err, "unable to generate XYZ keydx")
 	}
 	for i := 0; i < n31; i++ {
-		kInt = kInt.SetBit(kInt, nOffset3+3*i, xInt.Bit(i))
-		kInt = kInt.SetBit(kInt, nOffset3+3*i+1, yInt.Bit(i))
-		kInt = kInt.SetBit(kInt, nOffset3+3*i+2, zInt.Bit(i))
+		keyInt = keyInt.SetBit(keyInt, nOffset3+3*i, xInt.Bit(i))
+		keyInt = keyInt.SetBit(keyInt, nOffset3+3*i+1, yInt.Bit(i))
+		keyInt = keyInt.SetBit(keyInt, nOffset3+3*i+2, zInt.Bit(i))
 	}
-	return vpcrypto.IntToBuf256(kInt), nil
+	return vpcrypto.IntToBuf256(keyInt), nil
 }
