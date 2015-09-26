@@ -30,11 +30,37 @@ const nOffset1 = n256 - n31
 const nOffset2 = n256 - 2*n31
 const nOffset3 = n256 - 3*n31
 const mask31 = 0x7fffffff
+const mul31 = int64(0x100000000)
+
+// Mod31 returns the value modulo 2<<31-1. Usefull to avoid
+// out-of-range errors when manipulating coordinates.
+func Mod31(i int32) int32 {
+	return i & mask31
+}
+
+// Scale31 returns a value expressed on 31 bit, between [0,n).
+// The scale is linear, that is, if i == n / x, then returned
+// value is about 2<<31 / x.
+func Scale31(i int32, n int32) int32 {
+	if i < 0 {
+		i = 0
+	}
+	if n < 0 {
+		n = 1
+	}
+	if i >= n {
+		i = n - 1
+	}
+	i64 := int64(i)
+	n64 := int64(n)
+
+	return Mod31(int32((i64 * mul31) / n64))
+}
 
 func toBigInt31(i int32) (*big.Int, error) {
 	var ret big.Int
 
-	ret.SetUint64(uint64(i) & mask31)
+	ret.SetUint64(uint64(Mod31(i)))
 	if ret.Int64() != int64(i) {
 		return nil, fmt.Errorf("unable to convert %d to int31, out of range", i)
 	}
