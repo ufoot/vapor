@@ -17,18 +17,46 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpp2p
+package vpapp
 
 import (
-	"github.com/ufoot/vapor/vpapp"
+	"testing"
 )
 
-// AppInfo contains details about the program.
-type AppInfo struct {
-	// Unique application ID, generated from other members
-	AppID []byte
-	// Details about package
-	Package vpapp.Package
-	// Details about version
-	Version vpapp.Version
+func TestCompare(t *testing.T) {
+	v1 := NewVersion(1, 2, "toto")
+	v2 := NewVersion(2, 1, "titi")
+	v3 := NewVersion(2, 3, "tata")
+
+	t.Logf("v1=%s", v1.String())
+	t.Logf("v2=%s", v2.String())
+	t.Logf("v3=%s", v3.String())
+
+	if Compare(v1, v1) != 0 {
+		t.Error("v1==v1 does not work")
+	}
+	if Compare(v1, v2) != -1 {
+		t.Error("v1<v2 does not work")
+	}
+	if Compare(v2, v1) != 1 {
+		t.Error("v2>v1 does not work")
+	}
+	if Compare(v2, v3) != -1 {
+		t.Error("v2<v3 does not work")
+	}
+	if Compare(v3, v2) != 1 {
+		t.Error("v3>v2 does not work")
+	}
+}
+
+func TestEqual(t *testing.T) {
+	v1 := NewVersion(1, 2, "foo")
+	v2 := NewVersion(2, 1, "bar")
+
+	if !Equal(v1, v1) {
+		t.Error("v1==v1 does not work")
+	}
+	if Equal(v1, v2) {
+		t.Error("v1!=v2 does not work")
+	}
 }

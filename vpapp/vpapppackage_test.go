@@ -17,18 +17,25 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpp2p
+package vpapp
 
 import (
-	"github.com/ufoot/vapor/vpapp"
+	"testing"
 )
 
-// AppInfo contains details about the program.
-type AppInfo struct {
-	// Unique application ID, generated from other members
-	AppID []byte
-	// Details about package
-	Package vpapp.Package
-	// Details about version
-	Version vpapp.Version
+func TestCompatible(t *testing.T) {
+	p1 := NewPackage("foo", "Foo", "foo@bar.com", "http://bar.com")
+	p2 := NewPackage("foo", "Foo 2", "foo2@bar.com", "http://bar.com")
+	p3 := NewPackage("bar", "Bar", "bar@foo.com", "http://foo.com")
+
+	t.Logf("p1=%s", p1.String())
+	t.Logf("p2=%s", p2.String())
+	t.Logf("p3=%s", p3.String())
+
+	if !Compatible(p1, p2) {
+		t.Error("p1==p2 does not work")
+	}
+	if Compatible(p1, p3) {
+		t.Error("p1!=p3 does not work")
+	}
 }

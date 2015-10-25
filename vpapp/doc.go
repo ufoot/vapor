@@ -17,18 +17,6 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpp2p
-
-import (
-	"github.com/ufoot/vapor/vpapp"
-)
-
-// AppInfo contains details about the program.
-type AppInfo struct {
-	// Unique application ID, generated from other members
-	AppID []byte
-	// Details about package
-	Package vpapp.Package
-	// Details about version
-	Version vpapp.Version
-}
+// Package vpapp contains small tools to handle app package "à la" autotools
+// as well as version.
+package vpapp
