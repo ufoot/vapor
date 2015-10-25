@@ -57,8 +57,8 @@ const unknownString = "UNKNOWN"
 // could be implemented/used elsewhere. This is design for
 // quick-to-write global usage, not for universality/versatility.
 type Logger interface {
-	Log(p Priority, v ...interface{})
-	Logf(p Priority, f string, v ...interface{})
+	Logp(p Priority, v ...interface{})
+	Logpf(p Priority, f string, v ...interface{})
 	Filename() string
 	SetPriority(p Priority)
 	GetPriority() Priority
@@ -94,60 +94,60 @@ func PriorityString(p Priority) string {
 
 // LoggerCrit logs a message with critical level. No formatting.
 func LoggerCrit(l Logger, v ...interface{}) {
-	l.Log(PriorityCrit, v...)
+	l.Logp(PriorityCrit, v...)
 }
 
 // LoggerCritf logs a message with critical level. Formatting "à la" printf.
 func LoggerCritf(l Logger, f string, v ...interface{}) {
-	l.Logf(PriorityCrit, f, v...)
+	l.Logpf(PriorityCrit, f, v...)
 }
 
 // LoggerErr logs a message with error level. No formatting.
 func LoggerErr(l Logger, v ...interface{}) {
-	l.Log(PriorityErr, v...)
+	l.Logp(PriorityErr, v...)
 }
 
 // LoggerErrf logs a message with error level. Formatting "à la" printf.
 func LoggerErrf(l Logger, f string, v ...interface{}) {
-	l.Logf(PriorityErr, f, v...)
+	l.Logpf(PriorityErr, f, v...)
 }
 
 // LoggerWarning logs a message with warning level. No formatting.
 func LoggerWarning(l Logger, v ...interface{}) {
-	l.Log(PriorityWarning, v...)
+	l.Logp(PriorityWarning, v...)
 }
 
 // LoggerWarningf logs a message with warning level. Formatting "à la" printf.
 func LoggerWarningf(l Logger, f string, v ...interface{}) {
-	l.Logf(PriorityWarning, f, v...)
+	l.Logpf(PriorityWarning, f, v...)
 }
 
 // LoggerNotice logs a message with notice level. No formatting.
 func LoggerNotice(l Logger, v ...interface{}) {
-	l.Log(PriorityNotice, v...)
+	l.Logp(PriorityNotice, v...)
 }
 
 // LoggerNoticef logs a message with notice level. Formatting "à la" printf.
 func LoggerNoticef(l Logger, f string, v ...interface{}) {
-	l.Logf(PriorityNotice, f, v...)
+	l.Logpf(PriorityNotice, f, v...)
 }
 
 // LoggerInfo logs a message with info level. No formatting.
 func LoggerInfo(l Logger, v ...interface{}) {
-	l.Log(PriorityInfo, v...)
+	l.Logp(PriorityInfo, v...)
 }
 
 // LoggerInfof logs a message with info level. Formatting "à la" printf.
 func LoggerInfof(l Logger, f string, v ...interface{}) {
-	l.Logf(PriorityInfo, f, v...)
+	l.Logpf(PriorityInfo, f, v...)
 }
 
 // LoggerDebug logs a message with debug level. No formatting.
 func LoggerDebug(l Logger, v ...interface{}) {
-	l.Log(PriorityDebug, v...)
+	l.Logp(PriorityDebug, v...)
 }
 
 // LoggerDebugf logs a message with debug level. Formatting "à la" printf.
 func LoggerDebugf(l Logger, f string, v ...interface{}) {
-	l.Logf(PriorityDebug, f, v...)
+	l.Logpf(PriorityDebug, f, v...)
 }

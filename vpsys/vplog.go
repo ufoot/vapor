@@ -105,7 +105,7 @@ func NewLog(program string) *Log {
 		panic(err)
 	}
 
-	logger.Logf(PriorityNotice, "Log file: %s", logger.filename)
+	logger.Logpf(PriorityNotice, "Log file: %s", logger.filename)
 	logger.Flush()
 
 	return &logger
@@ -137,9 +137,9 @@ func (l *Log) output(p Priority, ps, ms string) {
 	}
 }
 
-// Log logs a message on all relevant channels.
+// Logp logs a message on all relevant channels.
 // EOL is added at the end, you do not need to provide it.
-func (l *Log) Log(p Priority, v ...interface{}) {
+func (l *Log) Logp(p Priority, v ...interface{}) {
 	if p <= l.p {
 		ps := PriorityString(p) + " "
 		ms := fmt.Sprintln(v...)
@@ -147,9 +147,9 @@ func (l *Log) Log(p Priority, v ...interface{}) {
 	}
 }
 
-// Logf logs a message on all relevant channels, using a printf-like syntax.
+// Logpf logs a message on all relevant channels, using a printf-like syntax.
 // EOL is added at the end, you do not need to provide it.
-func (l *Log) Logf(p Priority, format string, v ...interface{}) {
+func (l *Log) Logpf(p Priority, format string, v ...interface{}) {
 	if p <= l.p {
 		ps := PriorityString(p) + " "
 		ms := fmt.Sprintf(format, v...) + "\n"
