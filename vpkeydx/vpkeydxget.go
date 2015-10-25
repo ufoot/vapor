@@ -22,6 +22,8 @@ package vpkeydx
 import (
 	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
+	"github.com/ufoot/vapor/vpvec3"
 	"math/big"
 )
 
@@ -47,7 +49,7 @@ func GetX(keyID []byte) (int32, error) {
 func GetXY(keyID []byte) (int32, int32, error) {
 	keyInt, err := vpcrypto.BufToInt256(keyID)
 	if err != nil {
-		return 0, 0, vpsys.ErrorChain(err, "unable to generate 1d keydx")
+		return 0, 0, vpsys.ErrorChain(err, "unable to generate 2d keydx")
 	}
 	xInt := big.NewInt(0)
 	yInt := big.NewInt(0)
@@ -59,13 +61,13 @@ func GetXY(keyID []byte) (int32, int32, error) {
 	return int32(xInt.Int64()), int32(yInt.Int64()), nil
 }
 
-// GetXYZ gets the X,Y,Z (3rd) coord value for a given key.
+// GetXYZ gets the X,Y,Z (1st, 2nd and 3rd) coord value for a given key.
 // Note that it can be used for any key, even possibly those which have
 // not be generated with Gen1d.
 func GetXYZ(keyID []byte) (int32, int32, int32, error) {
 	keyInt, err := vpcrypto.BufToInt256(keyID)
 	if err != nil {
-		return 0, 0, 0, vpsys.ErrorChain(err, "unable to generate 1d keydx")
+		return 0, 0, 0, vpsys.ErrorChain(err, "unable to generate 3dd keydx")
 	}
 	xInt := big.NewInt(0)
 	yInt := big.NewInt(0)
@@ -77,4 +79,37 @@ func GetXYZ(keyID []byte) (int32, int32, int32, error) {
 	}
 
 	return int32(xInt.Int64()), int32(yInt.Int64()), int32(zInt.Int64()), nil
+}
+
+// GetVec1 gets the 1st (X) coord value for a given key.
+// Note that it can be used for any key, even possibly those which have
+// not be generated with Gen1d.
+func GetVec1(keyID []byte) (int32, error) {
+	return GetX(keyID)
+}
+
+// GetVec2 gets the 1st and 2nd (X, Y) coord value for a given key.
+// Note that it can be used for any key, even possibly those which have
+// not be generated with Gen1d.
+func GetVec2(keyID []byte) (*vpvec2.I32, error) {
+	x, y, err := GetXY(keyID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return vpvec2.I32New(x, y), nil
+}
+
+// GetVec3 gets the 1st, 2nd and 3rd (X,Y,Z) coord value for a given key.
+// Note that it can be used for any key, even possibly those which have
+// not be generated with Gen1d.
+func GetVec3(keyID []byte) (*vpvec3.I32, error) {
+	x, y, z, err := GetXYZ(keyID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return vpvec3.I32New(x, y, z), nil
 }

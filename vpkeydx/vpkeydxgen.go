@@ -23,6 +23,8 @@ import (
 	"fmt"
 	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
+	"github.com/ufoot/vapor/vpvec3"
 )
 
 // Gen generates a unique ID for a key, given a seed.
@@ -135,4 +137,21 @@ func GenXYZ(seed []byte, keyName string, x int32, y int32, z int32) ([]byte, err
 		keyInt = keyInt.SetBit(keyInt, nOffset3+3*i+2, zInt.Bit(i))
 	}
 	return vpcrypto.IntToBuf256(keyInt), nil
+}
+
+// GenVec1 is a simple alias on GenX.
+func GenVec1(seed []byte, keyName string, vec1 int32) ([]byte, error) {
+	return GenX(seed, keyName, vec1)
+}
+
+// GenVec2 is a wrapper on GenXY, which takes a vector as an argument
+// instead of individual coords.
+func GenVec2(seed []byte, keyName string, vec2 *vpvec2.I32) ([]byte, error) {
+	return GenXY(seed, keyName, vec2[vpvec2.X], vec2[vpvec2.Y])
+}
+
+// GenVec3 is a wrapper on GenXYZ, which takes a vector as an argument
+// instead of individual coords.
+func GenVec3(seed []byte, keyName string, vec3 *vpvec3.I32) ([]byte, error) {
+	return GenXYZ(seed, keyName, vec3[vpvec3.X], vec3[vpvec3.Y], vec3[vpvec3.Z])
 }

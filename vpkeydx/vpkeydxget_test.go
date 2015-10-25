@@ -23,6 +23,8 @@ import (
 	"fmt"
 	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vpvec2"
+	"github.com/ufoot/vapor/vpvec3"
 	"testing"
 )
 
@@ -81,5 +83,59 @@ func TestGetXYZ(t *testing.T) {
 	}
 	if z != testZ {
 		t.Error(fmt.Errorf("z and testZ differ %d %d", z, testZ))
+	}
+}
+
+func TestGetVec1(t *testing.T) {
+	keydx, err := GenVec1(testSeedBuf, testKeyName, testX)
+	if err != nil {
+		t.Error(vpsys.ErrorChain(err, "unable to generate Vec1 key"))
+	}
+	t.Logf("generated Vec1 key %s", vpcrypto.BufToStr256(keydx))
+	x, err := GetVec1(keydx)
+	if err != nil {
+		t.Error(vpsys.ErrorChain(err, "unable to get Vec1 coord"))
+	}
+	if x != testX {
+		t.Error(fmt.Errorf("v and testX differ %d %d", x, testX))
+	}
+}
+
+func TestGetVec2(t *testing.T) {
+	keydx, err := GenVec2(testSeedBuf, testKeyName, vpvec2.I32New(testX, testY))
+	if err != nil {
+		t.Error(vpsys.ErrorChain(err, "unable to generate Vec1 key"))
+	}
+	t.Logf("generated Vec1 key %s", vpcrypto.BufToStr256(keydx))
+	vec2, err := GetVec2(keydx)
+	if err != nil {
+		t.Error(vpsys.ErrorChain(err, "unable to get Vec1 coord"))
+	}
+	if vec2[vpvec2.X] != testX {
+		t.Error(fmt.Errorf("x and testX differ %d %d", vec2[vpvec2.X], testX))
+	}
+	if vec2[vpvec2.Y] != testY {
+		t.Error(fmt.Errorf("y and testY differ %d %d", vec2[vpvec2.Y], testY))
+	}
+}
+
+func TestGetVec3(t *testing.T) {
+	keydx, err := GenVec3(testSeedBuf, testKeyName, vpvec3.I32New(testX, testY, testZ))
+	if err != nil {
+		t.Error(vpsys.ErrorChain(err, "unable to generate Vec1 key"))
+	}
+	t.Logf("generated Vec1 key %s", vpcrypto.BufToStr256(keydx))
+	vec3, err := GetVec3(keydx)
+	if err != nil {
+		t.Error(vpsys.ErrorChain(err, "unable to get Vec1 coord"))
+	}
+	if vec3[vpvec3.X] != testX {
+		t.Error(fmt.Errorf("x and testX differ %d %d", vec3[vpvec3.X], testX))
+	}
+	if vec3[vpvec3.Y] != testY {
+		t.Error(fmt.Errorf("y and testY differ %d %d", vec3[vpvec3.Y], testY))
+	}
+	if vec3[vpvec3.Z] != testZ {
+		t.Error(fmt.Errorf("z and testZ differ %d %d", vec3[vpvec3.Z], testZ))
 	}
 }
