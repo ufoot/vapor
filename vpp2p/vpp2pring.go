@@ -38,7 +38,7 @@ type RingInfo struct {
 // together.
 type Ring struct {
 	// Info about the ring
-	Info RingInfo	
+	Info RingInfo
 
 	localNodes []Node
 }

@@ -19,22 +19,35 @@
 
 package vpp2p
 
+// AppPackage is used to identify the program package, think
+// of it as old good old autotools PACKAGE (name on steroids).
 type AppPackage struct {
+	// Tarname, for instance myapp
 	Tarname string
+	// Readable name, for instance My App
 	Name string
+	// Email of maintainer
 	Email string
+	// URL of program, to get info about it
 	URL string
 }
 
+// AppVersion is used to identify the program version.
 type AppVersion struct {
+	// Major version number
 	Major int
+	// Minor version number
 	Minor int
+	// Stamp, to differenciate between builds
 	Stamp string
 }
 
+// AppInfo contains details about the program.
 type AppInfo struct {
+	// Unique application ID, generated from other members
 	AppID []byte
+	// Details about package
 	Package AppPackage
+	// Details about version
 	Version AppVersion
 }
-

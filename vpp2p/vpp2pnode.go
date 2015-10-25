@@ -23,7 +23,7 @@ package vpp2p
 type NodeInfo struct {
 	// 256-bit id, totally random, generated when instanciating node.
 	NodeID []byte
-	// Refers to the physical host. 
+	// Refers to the physical host.
 	HostID []byte
 	// Refers to the ring on which this nodes participates.
 	RingID []byte

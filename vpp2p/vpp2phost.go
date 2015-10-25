@@ -33,7 +33,6 @@ type HostInfo struct {
 	CryptoEnable bool
 }
 
-
 // Host is a physical host, it is used to uniquely identify
 // a host, it can be used to handle several apps or rings.
 type Host struct {
