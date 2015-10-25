@@ -146,7 +146,7 @@ func TestX64Math(t *testing.T) {
 	v3 = X64Cross(v1, v2).Normalize()
 	v4 = X64Cross(v2, v3).Normalize()
 	v5 = X64Cross(v4, v2).Normalize()
-	t.Log("Cross product %s x %s = %s", v4.String(), v2.String(), v5.String())
+	t.Logf("Cross product %s x %s = %s", v4.String(), v2.String(), v5.String())
 	if !v3.IsSimilar(v5) {
 		t.Error("Cross error")
 	}
