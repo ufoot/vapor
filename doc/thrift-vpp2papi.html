@@ -189,25 +189,25 @@ table { empty-cells: show; }
 code { line-height: 20px; }
 .table-bordered th, .table-bordered td { border-bottom: 1px solid #DDDDDD; }
 --></style>
-<title>Thrift module: vpbusapi</title></head><body>
+<title>Thrift module: vpp2papi</title></head><body>
 <div class="container-fluid">
-<h1>Thrift module: vpbusapi</h1>
+<h1>Thrift module: vpp2papi</h1>
 <table class="table-bordered table-striped table-condensed"><thead><th>Module</th><th>Services</th><th>Data types</th><th>Constants</th></thead>
 <tr>
-<td>vpbusapi</td><td><a href="#Svc_VpBusApi">VpBusApi</a><br/>
+<td>vpp2papi</td><td><a href="#Svc_VpP2pApi">VpP2pApi</a><br/>
 <ul>
-<li><a href="#Fn_VpBusApi_halt">halt</a></li>
+<li><a href="#Fn_VpP2pApi_halt">halt</a></li>
 </ul>
 </td>
 <td></td>
 <td></code></td>
 </tr></table>
 <hr/><h2 id="Services">Services</h2>
-<h3 id="Svc_VpBusApi">Service: VpBusApi</h3>
+<h3 id="Svc_VpP2pApi">Service: VpP2pApi</h3>
 <div class="extends"><em>extends</em> <code><a href="vpcommonapi.html#Svc_VpCommonApi">vpcommonapi.VpCommonApi</a></code></div>
-VpBusApi is used to communicate between Vapor and Fumes.
-Vapor is the Golang server and Fumes the C++ client.
-<br/><div class="definition"><h4 id="Fn_VpBusApi_halt">Function: VpBusApi.halt</h4>
+VpP2pApi is used to communicate between 2 Vapor nodes
+in peer-to-peer mode.
+<br/><div class="definition"><h4 id="Fn_VpP2pApi_halt">Function: VpP2pApi.halt</h4>
 <pre><code>void</code> halt()
 </pre>Halt stops the server.
 <br/></div></div></body></html>

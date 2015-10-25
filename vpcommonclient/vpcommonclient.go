@@ -7,7 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
-	"github.com/ufoot/vapor/vpbusapi"
+	"github.com/ufoot/vapor/vpcommonapi"
 	"math"
 	"net"
 	"net/url"
@@ -20,7 +20,6 @@ func Usage() {
 	fmt.Fprintln(os.Stderr, "Usage of ", os.Args[0], " [-h host:port] [-u url] [-f[ramed]] function [arg1 [arg2...]]:")
 	flag.PrintDefaults()
 	fmt.Fprintln(os.Stderr, "\nFunctions:")
-	fmt.Fprintln(os.Stderr, "  void halt()")
 	fmt.Fprintln(os.Stderr, "  void ping()")
 	fmt.Fprintln(os.Stderr, "  Version getVersion()")
 	fmt.Fprintln(os.Stderr, "  Package getPackage()")
@@ -112,21 +111,13 @@ func main() {
 		Usage()
 		os.Exit(1)
 	}
-	client := vpbusapi.NewVpBusApiClientFactory(trans, protocolFactory)
+	client := vpcommonapi.NewVpCommonApiClientFactory(trans, protocolFactory)
 	if err := trans.Open(); err != nil {
 		fmt.Fprintln(os.Stderr, "Error opening socket to ", host, ":", port, " ", err)
 		os.Exit(1)
 	}
 
 	switch cmd {
-	case "halt":
-		if flag.NArg()-1 != 0 {
-			fmt.Fprintln(os.Stderr, "Halt requires 0 args")
-			flag.Usage()
-		}
-		fmt.Print(client.Halt())
-		fmt.Print("\n")
-		break
 	case "ping":
 		if flag.NArg()-1 != 0 {
 			fmt.Fprintln(os.Stderr, "Ping requires 0 args")

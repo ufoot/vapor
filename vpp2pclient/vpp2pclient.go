@@ -7,7 +7,7 @@ import (
 	"flag"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
-	"github.com/ufoot/vapor/vpbusapi"
+	"github.com/ufoot/vapor/vpp2papi"
 	"math"
 	"net"
 	"net/url"
@@ -112,7 +112,7 @@ func main() {
 		Usage()
 		os.Exit(1)
 	}
-	client := vpbusapi.NewVpBusApiClientFactory(trans, protocolFactory)
+	client := vpp2papi.NewVpP2pApiClientFactory(trans, protocolFactory)
 	if err := trans.Open(); err != nil {
 		fmt.Fprintln(os.Stderr, "Error opening socket to ", host, ":", port, " ", err)
 		os.Exit(1)

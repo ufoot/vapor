@@ -21,7 +21,7 @@ package vpbus
 
 import (
 	"github.com/ufoot/vapor/vpbuild"
-	"github.com/ufoot/vapor/vpbusapi"
+	"github.com/ufoot/vapor/vpcommonapi"
 	"github.com/ufoot/vapor/vpsys"
 	"time"
 )
@@ -46,8 +46,8 @@ func (bus *VpBus) Ping() (err error) {
 }
 
 // GetPackage returns the version of the program.
-func (bus *VpBus) GetPackage() (r *vpbusapi.Package, err error) {
-	var p vpbusapi.Package
+func (bus *VpBus) GetPackage() (r *vpcommonapi.Package, err error) {
+	var p vpcommonapi.Package
 
 	p.Tarname = vpbuild.PackageTarname
 	p.Name = vpbuild.PackageName
@@ -58,8 +58,8 @@ func (bus *VpBus) GetPackage() (r *vpbusapi.Package, err error) {
 }
 
 // GetVersion returns the version of the program.
-func (bus *VpBus) GetVersion() (r *vpbusapi.Version, err error) {
-	var v vpbusapi.Version
+func (bus *VpBus) GetVersion() (r *vpcommonapi.Version, err error) {
+	var v vpcommonapi.Version
 
 	v.Major = vpbuild.VersionMajor
 	v.Minor = vpbuild.VersionMinor

@@ -27,10 +27,12 @@ if [ ! -d utils ] ; then
     exit 1
 fi
 
-cd thrift && \
-    thrift --gen go --gen cpp --gen html:standalone vpbusapi.thrift && \
-    cp ./gen-go/vpbusapi/*.go ../vpbusapi/ && \
-    cp ./gen-go/vpbusapi/vp_bus_api-remote/vp_bus_api-remote.go ../vpbusclient/vpbusclient.go && \
-    sed -i "s/\"vpbusapi\"/\"github.com\/ufoot\/vapor\/vpbusapi\"/" ../vpbusclient/vpbusclient.go && \
-    cp ./gen-html/vpbusapi.html ../doc/thrift-vpbusapi.html
-
+for i in common bus p2p ; do
+    cd thrift && \
+	thrift --gen go:package_prefix=github.com/ufoot/vapor/ --gen cpp --gen html:standalone vp${i}api.thrift && \
+	cp ./gen-go/vp${i}api/*.go ../vp${i}api/ && \
+	cp ./gen-go/vp${i}api/vp_${i}_api-remote/vp_${i}_api-remote.go ../vp${i}client/vp${i}client.go && \
+	sed -i "s/\"vp${i}api\"/\"github.com\/ufoot\/vapor\/vp${i}api\"/" ../vp${i}client/vp${i}client.go && \
+	cp ./gen-html/vp${i}api.html ../doc/thrift-vp${i}api.html && \
+	cd ..
+done
