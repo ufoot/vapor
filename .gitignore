@@ -17,6 +17,7 @@ pkg
 doc/txt
 doc/html
 thrift/gen-*
+utils/env.sh
 vpwire/*.png
 *~
 *#*
