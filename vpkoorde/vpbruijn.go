@@ -37,7 +37,10 @@ func checkMNX(m, n int, x *big.Int) (*big.Int, *big.Int, error) {
 	bn := big.NewInt(int64(n))
 	max := big.NewInt(0)
 	max.Exp(bm, bn, nil)
-	if x.Cmp(max) >= 1 {
+	if x.Cmp(big.NewInt(0)) < 0 {
+		return nil, nil, fmt.Errorf("Invalid x=%s (current node) for Bruijn graph with m=%d n=%d, should be >=0", x.String(), m, n)
+	}
+	if x.Cmp(max) > 0 {
 		return nil, nil, fmt.Errorf("Invalid x=%s (current node) for Bruijn graph with m=%d n=%d, should be <=%s", x.String(), m, n, max.String())
 	}
 
@@ -45,9 +48,9 @@ func checkMNX(m, n int, x *big.Int) (*big.Int, *big.Int, error) {
 }
 
 func nextFirst(x, bm, max *big.Int) *big.Int {
-	p := big.NewInt(0)
-	p.Mul(x, bm)
-	return p.Mod(p, max)
+	nf := big.NewInt(0)
+	nf.Mul(x, bm)
+	return nf.Mod(nf, max)
 }
 
 // BruijnNextFirst returns the first Bruijn node pointed by this node.
@@ -99,9 +102,9 @@ func BruijnNextList(m, n int, x *big.Int) ([]*big.Int, error) {
 }
 
 func prevFirst(x, bm, max *big.Int) *big.Int {
-	p := big.NewInt(0)
+	pf := big.NewInt(0)
 	// no need to do a modulo here : it *is* smaller than m**n
-	return p.Div(x, bm)
+	return pf.Div(x, bm)
 }
 
 // BruijnPrevFirst returns the first Bruijn node pointing to this node.
@@ -156,6 +159,81 @@ func BruijnPrevList(m, n int, x *big.Int) ([]*big.Int, error) {
 			ret[i].Add(ret[i-1], step)
 			// no need to do a modulo here : it *is* smaller than m**n
 		}
+	}
+
+	return ret, nil
+}
+
+func compose(x, y, bm, max *big.Int, m, n, i int) *big.Int {
+	c := big.NewInt(0)
+
+	if i <= 0 {
+		return c.Set(x)
+	}
+	if i >= n {
+		return c.Set(y)
+	}
+
+	tX := big.NewInt(0)
+	tX.Exp(bm, big.NewInt(int64(i)), max)
+	tX.Mul(tX, x)
+
+	tY := big.NewInt(0)
+	tY.Exp(bm, big.NewInt(int64(n-i)), max)
+	tY.Div(y, tY)
+
+	c.Add(c, tX)
+	c.Add(c, tY)
+	c.Mod(c, max)
+
+	return c
+}
+
+// BruijnForwardPath returns the path between two nodes. The path
+// might be non-optimized, it always contains m+1 elements, including
+// from and to destination. This is the default forward path in which
+// node n+1 is the node after n in the bruijn sequence.
+func BruijnForwardPath(m, n int, from, to *big.Int) ([]*big.Int, error) {
+	bm, max, err := checkMNX(m, n, from)
+	if err != nil {
+		return nil, err
+	}
+	bm, max, err = checkMNX(m, n, to)
+	if err != nil {
+		return nil, err
+	}
+
+	tmpTo := big.NewInt(0)
+	tmpTo.Set(to)
+
+	ret := make([]*big.Int, n+1)
+	for i := range ret {
+		ret[i] = compose(from, to, bm, max, m, n, i)
+	}
+
+	return ret, nil
+}
+
+// BruijnBackwardPath returns the path between two nodes. The path
+// might be non-optimized, it always contains m+1 elements, including
+// from and to destination. This is the alternative backward path in which
+// node n+1 is the node before n in the bruijn sequence.
+func BruijnBackwardPath(m, n int, from, to *big.Int) ([]*big.Int, error) {
+	bm, max, err := checkMNX(m, n, from)
+	if err != nil {
+		return nil, err
+	}
+	bm, max, err = checkMNX(m, n, to)
+	if err != nil {
+		return nil, err
+	}
+
+	tmpTo := big.NewInt(0)
+	tmpTo.Set(to)
+
+	ret := make([]*big.Int, n+1)
+	for i := range ret {
+		ret[i] = compose(to, from, bm, max, m, n, n-i)
 	}
 
 	return ret, nil

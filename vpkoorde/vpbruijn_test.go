@@ -90,6 +90,72 @@ func TestBruijnPrev(t *testing.T) {
 	}
 }
 
+func TestBruijnForwardPath(t *testing.T) {
+	const m = 10
+	const n = 6
+	const from = 234567
+	const to = 987654
+
+	path, err := BruijnForwardPath(m, n, big.NewInt(from), big.NewInt(to))
+	if err != nil {
+		t.Error("unable to call BruijnForwardPath:", err)
+	}
+	for i, v := range path {
+		t.Logf("path[%d]=%d", i, v.Int64())
+		if i > 0 {
+			found := false
+			nList, err := BruijnNextList(m, n, path[i-1])
+			if err != nil {
+				t.Error("unable to call BruijnNextList:", err)
+			}
+			for j, w := range nList {
+				if v.Cmp(w) == 0 {
+					t.Logf("path[%d]: successor %d of %d found, was in position %d", i, w.Int64(), path[i-1].Int64(), j)
+					found = true
+				} else {
+					t.Logf("path[%d]: successor %d of %d in position %d, not what we search", i, w.Int64(), path[i-1].Int64(), j)
+				}
+			}
+			if !found {
+				t.Errorf("v[%d]=%d not found in successors of v[%d]", i, v.Int64(), i-1)
+			}
+		}
+	}
+}
+
+func TestBruijnBackwardPath(t *testing.T) {
+	const m = 10
+	const n = 4
+	const from = 1234
+	const to = 9876
+
+	path, err := BruijnBackwardPath(m, n, big.NewInt(from), big.NewInt(to))
+	if err != nil {
+		t.Error("unable to call BruijnBackwardPath:", err)
+	}
+	for i, v := range path {
+		t.Logf("path[%d]=%d", i, v.Int64())
+		if i > 0 {
+			found := false
+			nList, err := BruijnPrevList(m, n, path[i-1])
+			if err != nil {
+				t.Error("unable to call BruijnPrevList:", err)
+			}
+			for j, w := range nList {
+				if v.Cmp(w) == 0 {
+					t.Logf("path[%d]: predecessor %d of %d found, was in position %d", i, w.Int64(), path[i-1].Int64(), j)
+					found = true
+				} else {
+					t.Logf("path[%d]: predecessor %d of %d in position %d, not what we search", i, w.Int64(), path[i-1].Int64(), j)
+				}
+			}
+			if !found {
+				t.Errorf("v[%d]=%d not found in predecessors of v[%d]", i, v.Int64(), i-1)
+			}
+		}
+	}
+}
+
 func BenchmarkNext_2_32(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		BruijnNextList(2, 32, big.NewInt(int64(i)))
