@@ -31,12 +31,19 @@ func TestBruijnNext(t *testing.T) {
 
 	for i, v := range bruijn23 {
 		bi := big.NewInt(int64(i))
-		n0, err := BruijnNext0(m, n, bi)
+		nf, err := BruijnNextFirst(m, n, bi)
 		if err != nil {
-			t.Error("unable to call BruijnNext0:", err)
+			t.Error("unable to call BruijnNextFirst:", err)
 		}
-		if n0.Int64() != int64(v[0]) {
-			t.Errorf("bad n0 for i=%d, got %s", i, n0)
+		if nf.Int64() != int64(v[0]) {
+			t.Errorf("bad nf for i=%d, got %s", i, nf)
+		}
+		nl, err := BruijnNextLast(m, n, bi)
+		if err != nil {
+			t.Error("unable to call BruijnNextLast:", err)
+		}
+		if nl.Int64() != int64(v[1]) {
+			t.Errorf("bad nl for i=%d, got %s", i, nl)
 		}
 		nList, err := BruijnNextList(m, n, bi)
 		if err != nil {
@@ -57,18 +64,25 @@ func TestBruijnPrev(t *testing.T) {
 
 	for i, v := range bruijn23 {
 		bi := big.NewInt(int64(i))
-		n0, err := BruijnPrev0(m, n, bi)
+		pf, err := BruijnPrevFirst(m, n, bi)
 		if err != nil {
-			t.Error("unable to call BruijnPrev0:", err)
+			t.Error("unable to call BruijnPrevFirst:", err)
 		}
-		if n0.Int64() != int64(v[0]) {
-			t.Errorf("bad n0 for i=%d, got %s", i, n0)
+		if pf.Int64() != int64(v[0]) {
+			t.Errorf("bad pf for i=%d, got %s", i, pf)
 		}
-		nList, err := BruijnPrevList(m, n, bi)
+		pl, err := BruijnPrevLast(m, n, bi)
+		if err != nil {
+			t.Error("unable to call BruijnPrevLast:", err)
+		}
+		if pl.Int64() != int64(v[1]) {
+			t.Errorf("bad pl for i=%d, got %s", i, pl)
+		}
+		pList, err := BruijnPrevList(m, n, bi)
 		if err != nil {
 			t.Error("unable to call BruijnPrevList:", err)
 		}
-		for j, w := range nList {
+		for j, w := range pList {
 			if w.Int64() != int64(v[j]) {
 				t.Errorf("bad value for i,j=%d,%d got %s", i, j, w)
 			}

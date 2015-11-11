@@ -44,21 +44,35 @@ func checkMNX(m, n int, x *big.Int) (*big.Int, *big.Int, error) {
 	return bm, max, nil
 }
 
-func next0(x, bm, max *big.Int) *big.Int {
+func nextFirst(x, bm, max *big.Int) *big.Int {
 	p := big.NewInt(0)
 	p.Mul(x, bm)
 	return p.Mod(p, max)
 }
 
-// BruijnNext0 returns the first Bruijn node pointed by this node.
+// BruijnNextFirst returns the first Bruijn node pointed by this node.
 // Other nodes might be deduced by just incrementing this one.
-func BruijnNext0(m, n int, x *big.Int) (*big.Int, error) {
+func BruijnNextFirst(m, n int, x *big.Int) (*big.Int, error) {
 	bm, max, err := checkMNX(m, n, x)
 	if err != nil {
 		return nil, err
 	}
 
-	return next0(x, bm, max), nil
+	return nextFirst(x, bm, max), nil
+}
+
+// BruijnNextLast returns the last Bruijn node pointing to this node.
+// Other nodes might be deduced by just decrementing this one with
+// a value of m**(n-1).
+func BruijnNextLast(m, n int, x *big.Int) (*big.Int, error) {
+	bm, max, err := checkMNX(m, n, x)
+	if err != nil {
+		return nil, err
+	}
+	nf := nextFirst(x, bm, max)
+	bm1 := big.NewInt(int64(m - 1))
+
+	return nf.Add(nf, bm1), nil
 }
 
 // BruijnNextList returns the list of all Bruijn nodes pointed by
@@ -68,38 +82,57 @@ func BruijnNextList(m, n int, x *big.Int) ([]*big.Int, error) {
 	if err != nil {
 		return nil, err
 	}
-	next0 := next0(x, bm, max)
+	nf := nextFirst(x, bm, max)
 
 	ret := make([]*big.Int, m)
 	for i := range ret {
 		if i == 0 {
-			ret[i] = next0
+			ret[i] = nf
 		} else {
 			ret[i] = big.NewInt(0)
-			ret[i].Add(next0, big.NewInt(int64(i)))
-			ret[i].Mod(ret[i], max)
+			ret[i].Add(nf, big.NewInt(int64(i)))
+			// no need to do a modulo here : it *is* smaller than m**n
 		}
 	}
 
 	return ret, nil
 }
 
-func prev0(x, bm, max *big.Int) *big.Int {
+func prevFirst(x, bm, max *big.Int) *big.Int {
 	p := big.NewInt(0)
 	// no need to do a modulo here : it *is* smaller than m**n
 	return p.Div(x, bm)
 }
 
-// BruijnPrev0 returns the first Bruijn node pointing to this node.
+// BruijnPrevFirst returns the first Bruijn node pointing to this node.
 // Other nodes might be deduced by just incrementing this one with
 // a value of m**(n-1).
-func BruijnPrev0(m, n int, x *big.Int) (*big.Int, error) {
+func BruijnPrevFirst(m, n int, x *big.Int) (*big.Int, error) {
 	bm, max, err := checkMNX(m, n, x)
 	if err != nil {
 		return nil, err
 	}
 
-	return prev0(x, bm, max), nil
+	return prevFirst(x, bm, max), nil
+}
+
+// BruijnPrevLast returns the last Bruijn node pointing to this node.
+// Other nodes might be deduced by just decrementing this one with
+// a value of m**(n-1).
+func BruijnPrevLast(m, n int, x *big.Int) (*big.Int, error) {
+	bm, max, err := checkMNX(m, n, x)
+	if err != nil {
+		return nil, err
+	}
+	pf := prevFirst(x, bm, max)
+	bn1 := big.NewInt(int64(n - 1))
+	step := big.NewInt(0)
+	step.Exp(bm, bn1, nil)
+	bm1 := big.NewInt(0)
+	bm1.Sub(bm, big.NewInt(1))
+	step.Mul(step, bm1)
+
+	return pf.Add(pf, step), nil
 }
 
 // BruijnPrevList returns the list of all Bruijn nodes pointing to
@@ -109,7 +142,7 @@ func BruijnPrevList(m, n int, x *big.Int) ([]*big.Int, error) {
 	if err != nil {
 		return nil, err
 	}
-	prev0 := prev0(x, bm, max)
+	pf := prevFirst(x, bm, max)
 	bn1 := big.NewInt(int64(n - 1))
 	step := big.NewInt(0)
 	step.Exp(bm, bn1, nil)
@@ -117,7 +150,7 @@ func BruijnPrevList(m, n int, x *big.Int) ([]*big.Int, error) {
 	ret := make([]*big.Int, m)
 	for i := range ret {
 		if i == 0 {
-			ret[i] = prev0
+			ret[i] = pf
 		} else {
 			ret[i] = big.NewInt(0)
 			ret[i].Add(ret[i-1], step)
