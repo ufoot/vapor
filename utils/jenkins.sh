@@ -43,6 +43,7 @@ fi
 # run various typicall build commands
 
 echo "******** $0 $(date) ********"
+rm -rf src/git.apache.org src/github.com src/golang.org
 git clean -d -f -x
 rm -rf $HOME/.vapor
 

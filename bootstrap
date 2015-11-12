@@ -19,5 +19,4 @@
 # Vapor homepage: https://github.com/ufoot/vapor
 # Contact author: ufoot@ufoot.org
 
-autoreconf
-
+autoreconf && utils/get.sh
