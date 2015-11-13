@@ -29,17 +29,18 @@ fi
 
 export GOPATH=$(pwd)
 
-if [ -d /usr/share/gocode/src/golang.org/x/crypto/openpgp ] ; then
-    true # Debian package golang-go.crypto-dev installed
-else
-    go get golang.org/x/crypto/ripemd160
-    go get golang.org/x/crypto/openpgp
-    go get golang.org/x/crypto/openpgp/packet
-fi
-go get github.com/golang/lint/golint
-go get github.com/tools/godep
-go get git.apache.org/thrift.git/lib/go/thrift
-go get github.com/llgcode/draw2d
+get() {
+    echo "go get $1"
+    go get $1
+}
+
+get github.com/golang/lint/golint
+get github.com/tools/godep
+get golang.org/x/crypto/ripemd160
+get golang.org/x/crypto/openpgp
+get golang.org/x/crypto/openpgp/packet
+get git.apache.org/thrift.git/lib/go/thrift
+get github.com/llgcode/draw2d
 
 rm -rf src/github.com/ufoot/vapor
 install -d src/github.com/ufoot/vapor

@@ -27,9 +27,13 @@ if [ ! -d utils ] ; then
     exit 1
 fi
 
+THRIFT_GO_OPTIONS="package_prefix=github.com/ufoot/vapor/"
+THRIFT_CPP_OPTIONS=""
+THRIFT_HTML_OPTIONS="standalone"
+
 for i in common bus p2p ; do
     cd thrift && \
-	thrift --gen go:package_prefix=github.com/ufoot/vapor/ --gen cpp --gen html:standalone vp${i}api.thrift && \
+	thrift --gen "go:$THRIFT_GO_OPTIONS" --gen "cpp:$THIFT_CPP_OPTIONS" --gen html:$THRIFT_HTML_OPTIONS vp${i}api.thrift && \
 	cp ./gen-go/vp${i}api/*.go ../vp${i}api/ && \
 	cp ./gen-go/vp${i}api/vp_${i}_api-remote/vp_${i}_api-remote.go ../vp${i}client/vp${i}client.go && \
 	sed -i "s/\"vp${i}api\"/\"github.com\/ufoot\/vapor\/vp${i}api\"/" ../vp${i}client/vp${i}client.go && \
