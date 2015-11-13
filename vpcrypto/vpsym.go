@@ -30,6 +30,8 @@ import (
 	"time"
 )
 
+var tmp int
+
 // SymEncrypt encrypts a message using a symmetric password/key.
 func SymEncrypt(content, password []byte) ([]byte, error) {
 	var byteWriter bytes.Buffer
@@ -74,10 +76,11 @@ type proxyReader struct {
 
 func (proxy proxyReader) Read(p []byte) (int, error) {
 	vpsys.LogNoticef("Read BEGIN %d", len(p))
-	if len(p) >= 0 {
+	tmp++
+	if tmp > 10000 {
 		panic("Want stack trace")
 	}
-	n, err := proxy.Read(p)
+	n, err := proxy.reader.Read(p)
 	vpsys.LogNoticef("Read END %d,%s", n, err)
 
 	return n, err
@@ -96,14 +99,12 @@ func symDecrypt(content, password []byte) ([]byte, error) {
 	// This is not very go-ish but when passphrase is wrong,
 	// for instance, ReadMessage fails with nil pointers or
 	// other low level errors, we just trap those.
-	/*
 		err = errors.New("Unable to decrypt")
 		defer func() {
 			if rec := recover(); rec != nil {
 				vpsys.LogWarningf("symDecrypt error decrypting %d bytes",len(content))
 			}
 		}()
-	*/
 
 	vpsys.LogNotice("symDecrypt A")
 	byteReader = bytes.NewReader(content)
