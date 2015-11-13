@@ -20,7 +20,7 @@
 package vpwire
 
 import (
-	"github.com/llgcode/draw2d"
+	"github.com/llgcode/draw2d/draw2dimg"
 	"github.com/ufoot/vapor/vpline3"
 	"github.com/ufoot/vapor/vpmat4x4"
 	"github.com/ufoot/vapor/vpmath"
@@ -114,7 +114,7 @@ func F64Proj(line *vpline3.F64, img *image.RGBA, dir *vpvec3.F64) *vpmat4x4.F64 
 // F64Draw draws a line on an image, the image is modified in-place, and
 // returned modified.
 func F64Draw(img *image.RGBA, line *vpline3.F64, proj *vpmat4x4.F64, mode DrawMode, col color.Color) *image.RGBA {
-	gc := draw2d.NewGraphicContext(img)
+	gc := draw2dimg.NewGraphicContext(img)
 	gc.SetStrokeColor(col)
 
 	switch mode {
