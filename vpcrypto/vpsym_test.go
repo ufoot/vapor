@@ -21,6 +21,7 @@ package vpcrypto
 
 import (
 	"encoding/hex"
+	"fmt"
 	"github.com/ufoot/vapor/vpsys"
 	"testing"
 )
@@ -30,8 +31,9 @@ var benchSymContent []byte
 var benchSymCrypted []byte
 
 func init() {
-	benchSymPassword = []byte("abcdefghijklmnopqrstuvwxyz")
 	benchSymContent = make([]byte, 1500)
+	benchSymPassword = []byte("abcdefghijklmnopqrstuvwxyz")
+	fmt.Printf("Encrypting 0...0/%s", string(benchSymPassword))
 	benchSymCrypted, _ = SymEncrypt(benchSymContent, benchSymPassword)
 }
 
@@ -42,6 +44,7 @@ func TestSym(t *testing.T) {
 	var decrypted []byte
 	var err error
 
+	t.Logf("Encrypting %s/%s", string(content), string(password))
 	encrypted, err = SymEncrypt(content, password)
 	if err == nil {
 		t.Logf("encrypted content=\"%s\" encrypted=\"%s\"", string(content), hex.EncodeToString(encrypted))

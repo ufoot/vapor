@@ -39,6 +39,7 @@ func SymEncrypt(content, password []byte) ([]byte, error) {
 	var ret []byte
 	var hints openpgp.FileHints
 
+	vpsys.LogNotice("SymEncrypt BEGIN")
 	if len(content) <= 0 {
 		return nil, errors.New("no data")
 	}
@@ -55,55 +56,87 @@ func SymEncrypt(content, password []byte) ([]byte, error) {
 	}
 	gzipOutput = gzip.NewWriter(output)
 	gzipOutput.Write(content)
+	gzipOutput.Flush()
 	gzipOutput.Close()
 	output.Close()
+	vpsys.LogNotice("SymEncrypt END")
 
 	ret = byteWriter.Bytes()
+
+	vpsys.LogNoticef("SymEncrypt REAL END %d", len(ret))
 
 	return ret, nil
 }
 
+type proxyReader struct {
+	reader io.Reader
+}
+
+func (proxy proxyReader) Read(p []byte) (int, error) {
+	vpsys.LogNoticef("Read BEGIN %d", len(p))
+	if len(p) >= 0 {
+		panic("Want stack trace")
+	}
+	n, err := proxy.Read(p)
+	vpsys.LogNoticef("Read END %d,%s", n, err)
+
+	return n, err
+}
+
 func symDecrypt(content, password []byte) ([]byte, error) {
-	var keyRing openpgp.EntityList
 	var err error
 	var byteReader io.Reader
+	var proxy proxyReader
 	var messageDetails *openpgp.MessageDetails
 	var gzipReader *gzip.Reader
 	var ret []byte
 
+	vpsys.LogNoticef("symDecrypt BEGIN %d", len(content))
+
 	// This is not very go-ish but when passphrase is wrong,
 	// for instance, ReadMessage fails with nil pointers or
 	// other low level errors, we just trap those.
-	err = errors.New("Unable to decrypt")
-	defer func() {
-		if rec := recover(); rec != nil {
-			// todo : log ?
-		}
-	}()
+	/*
+		err = errors.New("Unable to decrypt")
+		defer func() {
+			if rec := recover(); rec != nil {
+				vpsys.LogWarningf("symDecrypt error decrypting %d bytes",len(content))
+			}
+		}()
+	*/
 
+	vpsys.LogNotice("symDecrypt A")
 	byteReader = bytes.NewReader(content)
-	messageDetails, err = openpgp.ReadMessage(byteReader, keyRing, func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
+	proxy.reader = byteReader
+	messageDetails, err = openpgp.ReadMessage(proxy, nil, func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
 		return password, nil
 	}, nil)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to read PGP content")
 	}
 
+	vpsys.LogNotice("symDecrypt B")
 	if !messageDetails.IsEncrypted {
 		return nil, errors.New("PGP content was not encrypted")
 	}
+	vpsys.LogNotice("symDecrypt C")
 	gzipReader, err = gzip.NewReader(messageDetails.UnverifiedBody)
 	defer gzipReader.Close()
+	vpsys.LogNotice("symDecrypt D")
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to open GZIP within PGP encrypted content")
 	}
+	vpsys.LogNotice("symDecrypt E")
 	ret, err = ioutil.ReadAll(gzipReader)
 	if err != nil {
 		return nil, vpsys.ErrorChain(err, "unable to read GZIP within PGP encrypted content")
 	}
+	vpsys.LogNotice("symDecrypt F")
 	if len(ret) <= 0 {
 		return nil, vpsys.ErrorChain(err, "no data in GZIP within PGP encrypted content")
 	}
+	vpsys.LogNotice("symDecrypt END")
+
 	return ret, err
 }
 
