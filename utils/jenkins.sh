@@ -72,7 +72,7 @@ else
 fi
 
 echo "******** $0 $(date) ********"
-if make ; then
+if make check ; then
     echo "make check OK"
 else
     echo "make check failed"
@@ -80,10 +80,10 @@ else
 fi
 
 echo "******** $0 $(date) ********"
-if make ; then
-    echo "make install OK"
+if make bench ; then
+    echo "make bench OK"
 else
-    echo "make install failed"
+    echo "make bench failed"
     exit 5
 fi
 
