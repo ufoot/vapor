@@ -29,9 +29,13 @@ fi
 
 export GOPATH=$(pwd)
 
-go get golang.org/x/crypto/ripemd160
-go get golang.org/x/crypto/openpgp
-go get golang.org/x/crypto/openpgp/packet
+if [ -d /usr/share/gocode/src/golang.org/x/crypto/openpgp ] ; then
+    true # Debian package golang-go.crypto-dev installed
+else
+    go get golang.org/x/crypto/ripemd160
+    go get golang.org/x/crypto/openpgp
+    go get golang.org/x/crypto/openpgp/packet
+fi
 go get github.com/golang/lint/golint
 go get github.com/tools/godep
 go get git.apache.org/thrift.git/lib/go/thrift
