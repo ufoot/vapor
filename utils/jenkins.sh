@@ -87,3 +87,11 @@ else
     exit 5
 fi
 
+echo "******** $0 $(date) ********"
+if make doc ; then
+    echo "make doc OK"
+else
+    echo "make doc failed"
+    exit 6
+fi
+
