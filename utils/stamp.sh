@@ -96,7 +96,7 @@ git_changelog () {
 }
 
 calc_branch () {
-    VERSION_BRANCH=$(git branch --color=never | grep "* " | cut -c 3- | sed "s/ //g")
+    VERSION_BRANCH=$(git branch --color=never | grep "* " | cut -c 3- | tr "()-_.,*+[]{}#!" " " | sed "s/ //g")
     if [ "x${VERSION_BRANCH}" = "x" ] ; then
         VERSION_BRANCH=unknown
     fi
