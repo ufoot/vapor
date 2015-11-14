@@ -70,6 +70,7 @@ func symDecrypt(content, password []byte) ([]byte, error) {
 	var messageDetails *openpgp.MessageDetails
 	var gzipReader *gzip.Reader
 	var ret []byte
+	var promptCalled = false
 
 	// This is not very go-ish but when passphrase is wrong,
 	// for instance, ReadMessage fails with nil pointers or
@@ -83,6 +84,10 @@ func symDecrypt(content, password []byte) ([]byte, error) {
 
 	byteReader = bytes.NewReader(content)
 	messageDetails, err = openpgp.ReadMessage(byteReader, nil, func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
+		if promptCalled {
+			return nil, errors.New("bad password")
+		}
+		promptCalled = true
 		return password, nil
 	}, nil)
 	if err != nil {
