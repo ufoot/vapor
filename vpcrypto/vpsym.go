@@ -64,23 +64,9 @@ func SymEncrypt(content, password []byte) ([]byte, error) {
 	return ret, nil
 }
 
-type proxyReader struct {
-	reader io.Reader
-}
-
-func (proxy proxyReader) Read(p []byte) (int, error) {
-	if len(p) >= 0 {
-		panic("Want stack trace")
-	}
-	n, err := proxy.Read(p)
-
-	return n, err
-}
-
 func symDecrypt(content, password []byte) ([]byte, error) {
 	var err error
 	var byteReader io.Reader
-	var proxy proxyReader
 	var messageDetails *openpgp.MessageDetails
 	var gzipReader *gzip.Reader
 	var ret []byte
@@ -96,8 +82,7 @@ func symDecrypt(content, password []byte) ([]byte, error) {
 	}()
 
 	byteReader = bytes.NewReader(content)
-	proxy.reader = byteReader
-	messageDetails, err = openpgp.ReadMessage(proxy, nil, func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
+	messageDetails, err = openpgp.ReadMessage(byteReader, nil, func(keys []openpgp.Key, symmetric bool) ([]byte, error) {
 		return password, nil
 	}, nil)
 	if err != nil {
