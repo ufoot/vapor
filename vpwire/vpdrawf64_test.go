@@ -20,7 +20,7 @@
 package vpwire
 
 import (
-	"github.com/llgcode/draw2d"
+	"github.com/llgcode/draw2d/draw2dimg"
 	"github.com/ufoot/vapor/vpline3"
 	"github.com/ufoot/vapor/vpvec3"
 	"testing"
@@ -47,7 +47,7 @@ func TestF64Square(t *testing.T) {
 	square = append(square, *vpvec3.F64New(x0, y0, z0))
 
 	img := F64Demo(&square)
-	err := draw2d.SaveToPngFile(pngName, img)
+	err := draw2dimg.SaveToPngFile(pngName, img)
 	if err == nil {
 		t.Logf("saved \"%s\", %dx%d", pngName, img.Bounds().Max.X, img.Bounds().Max.Y)
 	} else {

@@ -42,7 +42,7 @@ func NewPackage(tarname, name, email, url string) *Package {
 	return &Package{tarname, name, email, url}
 }
 
-// Same tells wether two packages refer to the same application,
+// Compatible tells wether two packages refer to the same application,
 // basically only the Tarname is checked, the rest is considered
 // informative.
 func Compatible(v1, v2 *Package) bool {

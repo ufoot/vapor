@@ -32,10 +32,10 @@ import (
 // integer calculations representing decimal numbers.
 type X32 int32
 
-// Constant containing 0 as a fixed point number on 32 bits.
+// X32Const0 contains 0 as a fixed point number on 32 bits.
 const X32Const0 X32 = 0
 
-// Constant containing 1 as a fixed point number on 32 bits.
+// X32Const1 contains 1 as a fixed point number on 32 bits.
 const X32Const1 X32 = 0x10000
 
 // X32Shift tells how many bits must be shifted to convert a
