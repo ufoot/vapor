@@ -48,9 +48,7 @@ func TestSym(t *testing.T) {
 	encrypted, err = SymEncrypt(content, password)
 	if err == nil {
 		t.Logf("encrypted content=\"%s\" encrypted=\"%s\"", string(content), hex.EncodeToString(encrypted))
-		vpsys.LogNoticef("decrypt with good password, begin")
 		decrypted, err = SymDecrypt(encrypted, password)
-		vpsys.LogNoticef("decrypt with good password, end")
 		if err == nil {
 			t.Logf("decrypted encrypted=\"%s\" decrypted=\"%s\"", hex.EncodeToString(encrypted), string(decrypted))
 			if string(content) != string(decrypted) {
@@ -59,9 +57,8 @@ func TestSym(t *testing.T) {
 		} else {
 			t.Error(err)
 		}
-		vpsys.LogNoticef("decrypt with bad password, begin")
+		t.Log("test blocks here until https://go-review.googlesource.com/#/c/16865/ is merged/fixed")
 		decrypted, err = SymDecrypt(encrypted, []byte("this is a wrong password"))
-		vpsys.LogNoticef("decrypt with bad password, end")
 		if err != nil {
 			t.Log("OK, decrypt is impossible with a bad password")
 		} else {
