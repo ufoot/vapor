@@ -82,27 +82,27 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     done
     echo ".PHONY: $i" >> Makefile.dep
     echo "$i: configure.ac $k # $m" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && go install $j" >> Makefile.dep
+    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && go install $j" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: check-$i" >> Makefile.dep
-    echo "check-$i: configure.ac $i $k" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && go test -cover $j" >> Makefile.dep
+    echo "check-$i: configure.ac $k" >> Makefile.dep
+    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +%Y%m%d-%H%M%S` && go test -o test/$i-check-\$\$DATE.bin -coverprofile=test/$i-cover-\$\$DATE.out $j | tee test/$i-check-\$\$DATE.log" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: bench-$i" >> Makefile.dep
-    echo "bench-$i: configure.ac $i $k" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && go test -bench . $j" >> Makefile.dep
+    echo "bench-$i: configure.ac $k" >> Makefile.dep
+    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +%Y%m%d-%H%M%S` && go test -o test/$i-bench-\$\$DATE.bin -cpuprofile=test/$i-cpu-\$\$DATE.out -memprofile=test/$i-mem-\$\$DATE.out $j | tee test/$i-bench-\$\$DATE.log" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: lint-$i" >> Makefile.dep
-    echo "lint-$i: configure.ac $i $k" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && go vet $j && \$(VP_TOPSRCDIR)/bin/golint $j" >> Makefile.dep
+    echo "lint-$i: configure.ac $k" >> Makefile.dep
+    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && go vet $j && \$(VP_TOPSRCDIR)/bin/golint $j" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: devel-$i" >> Makefile.dep
-    echo "devel-$i: configure.ac $i $k" >> Makefile.dep
+    echo "devel-$i: configure.ac $k" >> Makefile.dep
     echo "\texport GOPATH=\$(VP_TOPSRCDIR) && go vet $j && go test -v -cover $j" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: doc-$i" >> Makefile.dep
-    echo "doc-$i: configure.ac $i $k" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && godoc $j > doc/txt/$i.txt && godoc -html $j > doc/html/$i.html" >> Makefile.dep
+    echo "doc-$i: configure.ac $k" >> Makefile.dep
+    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && godoc $j > doc/txt/$i.txt && godoc -html $j > doc/html/$i.html" >> Makefile.dep
     echo >> Makefile.dep
 done
 
