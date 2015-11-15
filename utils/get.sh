@@ -31,7 +31,7 @@ export GOPATH=$(pwd)
 
 get() {
     echo "go get $1"
-    go get $1
+    go get -u $1
 }
 
 get github.com/golang/lint/golint
