@@ -203,9 +203,6 @@ func BruijnForwardPath(m, n int, from, to *big.Int) ([]*big.Int, error) {
 		return nil, err
 	}
 
-	tmpTo := big.NewInt(0)
-	tmpTo.Set(to)
-
 	ret := make([]*big.Int, n+1)
 	for i := range ret {
 		ret[i] = compose(from, to, bm, max, m, n, i)
@@ -228,13 +225,48 @@ func BruijnBackwardPath(m, n int, from, to *big.Int) ([]*big.Int, error) {
 		return nil, err
 	}
 
-	tmpTo := big.NewInt(0)
-	tmpTo.Set(to)
-
 	ret := make([]*big.Int, n+1)
 	for i := range ret {
 		ret[i] = compose(to, from, bm, max, m, n, n-i)
 	}
 
 	return ret, nil
+}
+
+// BruijnForwardElem returns the path element between two nodes.
+// Index 0 is the from element, and n (number of elements as in Bruijn nodes)
+// the to element. Uses the forward, default path.
+func BruijnForwardElem(m, n int, from, to *big.Int, i int) (*big.Int, error) {
+	if i < 0 || i > n {
+		return nil, fmt.Errorf("i=%d out of range n=%d", i, n)
+	}
+	bm, max, err := checkMNX(m, n, from)
+	if err != nil {
+		return nil, err
+	}
+	bm, max, err = checkMNX(m, n, to)
+	if err != nil {
+		return nil, err
+	}
+
+	return compose(from, to, bm, max, m, n, i), nil
+}
+
+// BruijnBackwardElem returns the path element between two nodes.
+// Index 0 is the from element, and n (number of elements as in Bruijn nodes)
+// the to element. Uses the backward, alternative path.
+func BruijnBackwardElem(m, n int, from, to *big.Int, i int) (*big.Int, error) {
+	if i < 0 || i > n {
+		return nil, fmt.Errorf("i=%d out of range n=%d", i, n)
+	}
+	bm, max, err := checkMNX(m, n, from)
+	if err != nil {
+		return nil, err
+	}
+	bm, max, err = checkMNX(m, n, to)
+	if err != nil {
+		return nil, err
+	}
+
+	return compose(to, from, bm, max, m, n, n-i), nil
 }

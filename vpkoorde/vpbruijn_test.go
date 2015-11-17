@@ -20,6 +20,7 @@
 package vpkoorde
 
 import (
+	"github.com/ufoot/vapor/vpsys"
 	"math/big"
 	"testing"
 )
@@ -120,6 +121,13 @@ func TestBruijnForwardPath(t *testing.T) {
 				t.Errorf("v[%d]=%d not found in successors of v[%d]", i, v.Int64(), i-1)
 			}
 		}
+		w, err := BruijnForwardElem(m, n, big.NewInt(from), big.NewInt(to), i)
+		if err != nil {
+			t.Error(vpsys.ErrorChain(err, "unable to call BruijnForwardElem"))
+		}
+		if v.Cmp(w) != 0 {
+			t.Error("values for BruijnForwardPath and BruijnForwardElem differ, i=%d", v.String(), w.String(), i)
+		}
 	}
 }
 
@@ -152,6 +160,13 @@ func TestBruijnBackwardPath(t *testing.T) {
 			if !found {
 				t.Errorf("v[%d]=%d not found in predecessors of v[%d]", i, v.Int64(), i-1)
 			}
+		}
+		w, err := BruijnBackwardElem(m, n, big.NewInt(from), big.NewInt(to), i)
+		if err != nil {
+			t.Error(vpsys.ErrorChain(err, "unable to call BruijnBackwardElem"))
+		}
+		if v.Cmp(w) != 0 {
+			t.Error("values for BruijnBackwardPath and BruijnBackwardElem differ, i=%d", v.String(), w.String(), i)
 		}
 	}
 }
