@@ -31,4 +31,3 @@ type Config struct {
 	// of steps in the worst case.
 	Steps int
 }
-

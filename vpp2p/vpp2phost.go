@@ -37,5 +37,5 @@ type Host struct {
 	Host HostInfo
 
 	localNodes []Node
-	cfg *Config
+	cfg        *Config
 }

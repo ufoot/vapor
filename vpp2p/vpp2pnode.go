@@ -45,7 +45,6 @@ type Node struct {
 	// so that it contains about O(Log(n)) before stumbling on D.
 	// The first element is actually D, the other ones go backwards on the ring.
 	D []*Node
-
 }
 
 // NodeProxy is an interface used to perform node operations.
@@ -53,7 +52,7 @@ type Node struct {
 type NodeProxy interface {
 	NodeID() []byte
 	Lookup(key []byte) ([]*NodeInfo, error)
-	Set(key,value []byte) ([]*NodeInfo, error)
+	Set(key, value []byte) ([]*NodeInfo, error)
 	Get(key []byte) ([]byte, []*NodeInfo, error)
 	Clear(key []byte) ([]*NodeInfo, error)
 	// GetRange(key1, key2 []byte) TODO !
@@ -76,21 +75,17 @@ func (LocalProxy) Lookup(key []byte) ([]*NodeInfo, error) {
 	//   else return (successor.lookup(k,kshift,i))
 	// Note : i can be chosen so that its low bits are top bits of k
 
-	return nil,nil // todo
+	return nil, nil // todo
 }
 
-func (LocalProxy) Set(key,value []byte) ([]*NodeInfo, error) {
-	return nil,nil // todo
+func (LocalProxy) Set(key, value []byte) ([]*NodeInfo, error) {
+	return nil, nil // todo
 }
-
 
 func (LocalProxy) Get(key []byte) ([]byte, []*NodeInfo, error) {
-	return nil,nil,nil // todo
+	return nil, nil, nil // todo
 }
-
 
 func (LocalProxy) Clear(key []byte) ([]*NodeInfo, error) {
-	return nil,nil // todo
+	return nil, nil // todo
 }
-
-
