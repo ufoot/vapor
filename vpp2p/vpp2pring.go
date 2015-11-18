@@ -21,14 +21,14 @@ package vpp2p
 
 // RingInfo stores the static data of a Ring.
 type RingInfo struct {
-	// 256-bit id, totally random, create a new for a new session.
+	// N-bit id, totally random, create a new for a new session.
 	RingID []byte
 	// Human readable ring (short) description
 	RingTitle string
 	// App details
 	App AppInfo
 	// Password hash
-	Password []byte
+	PasswordHash []byte
 	// Number of sub virtual rings, used for redundancy, mostly
 	NbSub int
 }

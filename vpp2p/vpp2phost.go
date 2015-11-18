@@ -21,16 +21,13 @@ package vpp2p
 
 // HostInfo stores the static data of a Host.
 type HostInfo struct {
-	// 256-bit id, depends on the pubKey
-	ID []byte
 	// Human readable hostname, not necessarily the DNS hostname.
 	HostTitle string
 	// URL used to connect to this host
 	URL string
-	// Public Key used to communicate and sign/decryp messages
+	// Public Key used to communicate and sign/decryp messages.
+	// It's also the host unique identifier (AKA ID).
 	PubKey []byte
-	// Wether to use cryptographic checks
-	CryptoEnable bool
 }
 
 // Host is a physical host, it is used to uniquely identify
@@ -40,4 +37,5 @@ type Host struct {
 	Host HostInfo
 
 	localNodes []Node
+	cfg *Config
 }

@@ -21,10 +21,11 @@ package vpp2p
 
 // NodeInfo stores the static data for a Node.
 type NodeInfo struct {
-	// 256-bit id, totally random, generated when instanciating node.
+	// 256-bit id, generated from signing HostPubKey and RingID,
+	// could be recalculated dynamically, but cached for efficiency.
 	NodeID []byte
 	// Refers to the physical host.
-	HostID []byte
+	HostPubKey []byte
 	// Refers to the ring on which this nodes participates.
 	RingID []byte
 }
@@ -37,4 +38,59 @@ type Node struct {
 
 	ringPtr *Ring
 	hostPtr *Host
+
+	// The successor nodes within the ring, use 1st elem for direct successor..
+	successor []*Node
+	// A list of nodes preceeding m*Id (the 1st Bruijn node),
+	// so that it contains about O(Log(n)) before stumbling on D.
+	// The first element is actually D, the other ones go backwards on the ring.
+	D []*Node
+
 }
+
+// NodeProxy is an interface used to perform node operations.
+// All calls return the complete call stack
+type NodeProxy interface {
+	NodeID() []byte
+	Lookup(key []byte) ([]*NodeInfo, error)
+	Set(key,value []byte) ([]*NodeInfo, error)
+	Get(key []byte) ([]byte, []*NodeInfo, error)
+	Clear(key []byte) ([]*NodeInfo, error)
+	// GetRange(key1, key2 []byte) TODO !
+}
+
+// LocalProxy is a proxy which contacts other nodes directly without
+// using any network interface whatsoever.
+type LocalProxy struct {
+	localNode Node
+}
+
+func (LocalProxy) Lookup(key []byte) ([]*NodeInfo, error) {
+	// pseudo code :
+	// procedure m.LOOKUP(k, kshift, i)
+	//   if k is in (m,successor] then return (successor)
+	//   else if i is in (m,successor] then return (
+	//     d.lookup(k,
+	//              kshift<<1,
+	//              i o topBit(kshift)))
+	//   else return (successor.lookup(k,kshift,i))
+	// Note : i can be chosen so that its low bits are top bits of k
+
+	return nil,nil // todo
+}
+
+func (LocalProxy) Set(key,value []byte) ([]*NodeInfo, error) {
+	return nil,nil // todo
+}
+
+
+func (LocalProxy) Get(key []byte) ([]byte, []*NodeInfo, error) {
+	return nil,nil,nil // todo
+}
+
+
+func (LocalProxy) Clear(key []byte) ([]*NodeInfo, error) {
+	return nil,nil // todo
+}
+
+

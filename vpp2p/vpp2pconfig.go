@@ -17,6 +17,18 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpcatalog keeps a list of available nodes, rings, required
-// for the P2P system to function.
-package vpcatalog
+package vpp2p
+
+// Config is use to keep major settings together.
+type Config struct {
+	// M is the m parameter (base) used for Koorde/Bruijn ops.
+	M int
+	// N is the n parameter (number of elements) used for Koorde/Bruijn ops.
+	N int
+	// UseSig tells wether to use cryptographic signatures/checks.
+	UseSig bool
+	// Steps optimizes Bruijn walk by considering only this number
+	// of steps in the worst case.
+	Steps int
+}
+
