@@ -17,17 +17,44 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpbus
+package vpbusserver
 
 import (
+	"git.apache.org/thrift.git/lib/go/thrift"
 	"testing"
+	"time"
 )
 
-func TestPing(t *testing.T) {
-	b := New()
+func TestServer(t *testing.T) {
+	var server *thrift.TSimpleServer
+	var err error
+	var start time.Time
 
-	err := b.Ping()
-	if err != nil {
-		t.Error("Ping is broken", err)
+	start = time.Now()
+	go func() {
+		t.Log("starting vpbusserver")
+		server, err = NewDefault()
+		if err == nil {
+			t.Log("createdThrift server")
+		} else {
+			t.Error("unable to create Thrift server", err)
+		}
+		if server.Serve() == nil {
+			t.Log("started Thrift server")
+		} else {
+			t.Error("unable to start Thrift server", err)
+		}
+	}()
+
+	for start.Unix()+10 > time.Now().Unix() && server == nil {
+		t.Log("waiting for server start")
+		time.Sleep(time.Second)
+	}
+
+	if server != nil {
+		t.Log("stopping vpbusserver")
+		server.Stop()
+	} else {
+		t.Error("server not started")
 	}
 }
