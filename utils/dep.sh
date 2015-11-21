@@ -94,7 +94,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo >> Makefile.dep
     echo ".PHONY: lint-$i" >> Makefile.dep
     echo "lint-$i: configure.ac $k" >> Makefile.dep
-    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && go vet $j && \$(VP_TOPSRCDIR)/bin/golint $j" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && go vet $j && \$(VP_TOPSRCDIR)/bin/golint $j" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: devel-$i" >> Makefile.dep
     echo "devel-$i: configure.ac $k" >> Makefile.dep

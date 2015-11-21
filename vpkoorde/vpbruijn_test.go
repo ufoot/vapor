@@ -126,7 +126,7 @@ func TestBruijnForwardPath(t *testing.T) {
 			t.Error(vpsys.ErrorChain(err, "unable to call BruijnForwardElem"))
 		}
 		if v.Cmp(w) != 0 {
-			t.Error("values for BruijnForwardPath and BruijnForwardElem differ, i=%d", v.String(), w.String(), i)
+			t.Errorf("values for BruijnForwardPath=%s and BruijnForwardElem=%s differ, i=%d", v.String(), w.String(), i)
 		}
 	}
 }
@@ -166,7 +166,7 @@ func TestBruijnBackwardPath(t *testing.T) {
 			t.Error(vpsys.ErrorChain(err, "unable to call BruijnBackwardElem"))
 		}
 		if v.Cmp(w) != 0 {
-			t.Error("values for BruijnBackwardPath and BruijnBackwardElem differ, i=%d", v.String(), w.String(), i)
+			t.Errorf("values for BruijnBackwardPath=%s and BruijnBackwardElem=%s differ, i=%d", v.String(), w.String(), i)
 		}
 	}
 }

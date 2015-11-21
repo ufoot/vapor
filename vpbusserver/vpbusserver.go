@@ -24,6 +24,7 @@ import (
 	"github.com/ufoot/vapor/vpbus"
 	"github.com/ufoot/vapor/vpbusapi"
 	"github.com/ufoot/vapor/vpsys"
+	"time"
 )
 
 func newServer(transportFactory thrift.TTransportFactory, protocolFactory thrift.TProtocolFactory, addr string) (*thrift.TSimpleServer, error) {
@@ -48,4 +49,33 @@ func newServer(transportFactory thrift.TTransportFactory, protocolFactory thrift
 // NewDefault creates a server with default parameters (for testing purposes).
 func NewDefault() (*thrift.TSimpleServer, error) {
 	return newServer(thrift.NewTTransportFactory(), thrift.NewTBinaryProtocolFactoryDefault(), "127.0.0.1:9090")
+}
+
+// AsyncServe calls Serve in a goroutine.
+func AsyncServe(server *thrift.TSimpleServer) error {
+	var err error
+
+	start := time.Now()
+	go func() {
+		vpsys.LogNoticef("Start Thrift server")
+
+		err = server.Serve()
+		if err == nil {
+			vpsys.LogNotice("Done with Thrift server")
+		} else {
+			vpsys.LogWarning("unable to start Thrift server ", err)
+		}
+	}()
+
+	for start.Unix()+2 > time.Now().Unix() && err == nil {
+		time.Sleep(time.Millisecond)
+	}
+
+	if err == nil {
+		vpsys.LogNoticef("Started Thrift server")
+	} else {
+		vpsys.LogWarning("Unable to start Thrift server", err)
+	}
+
+	return err
 }

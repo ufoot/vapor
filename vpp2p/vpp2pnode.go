@@ -64,6 +64,7 @@ type LocalProxy struct {
 	localNode Node
 }
 
+// Lookup a key and return the path of nodes to this key.
 func (LocalProxy) Lookup(key []byte) ([]*NodeInfo, error) {
 	// pseudo code :
 	// procedure m.LOOKUP(k, kshift, i)
@@ -78,14 +79,17 @@ func (LocalProxy) Lookup(key []byte) ([]*NodeInfo, error) {
 	return nil, nil // todo
 }
 
+// Set a key and return the path of nodes to this key.
 func (LocalProxy) Set(key, value []byte) ([]*NodeInfo, error) {
 	return nil, nil // todo
 }
 
+// Get a key and returns the path of nodes to this key.
 func (LocalProxy) Get(key []byte) ([]byte, []*NodeInfo, error) {
 	return nil, nil, nil // todo
 }
 
+// Clear a key and returns the path of nodes to this key.
 func (LocalProxy) Clear(key []byte) ([]*NodeInfo, error) {
 	return nil, nil // todo
 }

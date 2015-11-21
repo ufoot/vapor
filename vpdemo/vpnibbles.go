@@ -26,14 +26,9 @@ import (
 	"time"
 )
 
-var start time.Time
-
-func init() {
-	start = time.Now()
-}
-
 // NibblesState stores the game state.
 type NibblesState struct {
+	start time.Time
 	level [][]int
 }
 
@@ -43,14 +38,16 @@ func (state NibblesState) Duration() time.Duration {
 }
 
 // Init initializes the game state.
-func (state NibblesState) Init(timestamp time.Time) {
+func (state NibblesState) Init(timestamp time.Time) error {
 	vpsys.LogNoticef("game state init")
+
+	return nil
 }
 
 // Do process stuff on a game state, typically called in game loop
 // when receiving events.
 func (state NibblesState) Do(timestamp time.Time, iteration int64, quit chan<- bool) {
-	if start.Unix()+3 > time.Now().Unix() {
+	if state.start.Unix()+3 > time.Now().Unix() {
 		vpsys.LogNoticef("game state loop iteration=%d", iteration)
 	} else {
 		vpsys.LogNoticef("game state end iteration=%d 1/2", iteration)
@@ -66,6 +63,7 @@ func (state NibblesState) Quit(timestamp time.Time) {
 
 // NibblesServer stores the game server.
 type NibblesServer struct {
+	start  time.Time
 	server *thrift.TSimpleServer
 }
 
@@ -75,23 +73,27 @@ func (server NibblesServer) Duration() time.Duration {
 }
 
 // Init initializes the game server.
-func (server NibblesServer) Init(timestamp time.Time) {
+func (server NibblesServer) Init(timestamp time.Time) error {
 	vpsys.LogNoticef("game server init")
-	go func() {
-		var err error
+	var err error
 
-		server.server, err = vpbusserver.RunDefault()
-		if err != nil {
-			vpsys.LogWarning("unable to start Thrift server", err)
-			return
-		}
-	}()
+	server.server, err = vpbusserver.NewDefault()
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to create vpbusserver Thrift server")
+	}
+
+	err = vpbusserver.AsyncServe(server.server)
+	if err != nil {
+		return vpsys.ErrorChain(err, "unable to start vpbusserver Thrift server")
+	}
+
+	return nil
 }
 
 // Do process stuff on a game server, typically called in game loop
 // when receiving events.
 func (server NibblesServer) Do(timestamp time.Time, iteration int64, quit chan<- bool) {
-	if start.Unix()+3 > time.Now().Unix() {
+	if server.start.Unix()+3 > time.Now().Unix() {
 		vpsys.LogNoticef("game server loop iteration=%d", iteration)
 	} else {
 		vpsys.LogNoticef("game server end iteration=%d 1/2", iteration)

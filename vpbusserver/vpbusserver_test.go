@@ -28,27 +28,24 @@ import (
 func TestServer(t *testing.T) {
 	var server *thrift.TSimpleServer
 	var err error
-	var start time.Time
 
-	start = time.Now()
-	go func() {
-		t.Log("starting vpbusserver")
-		server, err = NewDefault()
-		if err == nil {
-			t.Log("createdThrift server")
-		} else {
-			t.Error("unable to create Thrift server", err)
-		}
-		if server.Serve() == nil {
-			t.Log("started Thrift server")
+	server, err = NewDefault()
+	if err == nil {
+		t.Log("createdThrift server")
+	} else {
+		t.Error("unable to create Thrift server", err)
+	}
+
+	if server != nil {
+		start := time.Now()
+		if AsyncServe(server) == nil {
+			for start.Unix()+3 > time.Now().Unix() {
+				t.Log("letting server run for some time")
+				time.Sleep(time.Second)
+			}
 		} else {
 			t.Error("unable to start Thrift server", err)
 		}
-	}()
-
-	for start.Unix()+10 > time.Now().Unix() && server == nil {
-		t.Log("waiting for server start")
-		time.Sleep(time.Second)
 	}
 
 	if server != nil {

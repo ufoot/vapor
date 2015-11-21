@@ -17,16 +17,16 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vploop
+package main
 
 import (
-	"time"
+	"github.com/ufoot/vapor/vploop"
+	"testing"
 )
 
-// LoopHandler is a callback called at each game loop.
-type LoopHandler interface {
-	Duration() time.Duration
-	Init(time.Time) error
-	Do(time.Time, int64, chan<- bool)
-	Quit(time.Time)
+func TestNibbles(t *testing.T) {
+	var state NibblesState
+	var server NibblesServer
+
+	vploop.MainLoop(state, server)
 }
