@@ -7,13 +7,13 @@ import (
 	"flag"
 	"fmt"
 	"git.apache.org/thrift.git/lib/go/thrift"
-	"github.com/ufoot/vapor/vpcommonapi"
 	"math"
 	"net"
 	"net/url"
 	"os"
 	"strconv"
 	"strings"
+	"github.com/ufoot/vapor/vpcommonapi"
 )
 
 func Usage() {

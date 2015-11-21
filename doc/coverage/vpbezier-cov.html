@@ -1,0 +1,783 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/ufoot/vapor/vpbezier/vpbernstein.go (88.2%)</option>
+				
+				<option value="file1">github.com/ufoot/vapor/vpbezier/vpcubiccurve.go (0.0%)</option>
+				
+				<option value="file2">github.com/ufoot/vapor/vpbezier/vpcubicsurface.go (0.0%)</option>
+				
+				<option value="file3">github.com/ufoot/vapor/vpbezier/vplinearcurve.go (100.0%)</option>
+				
+				<option value="file4">github.com/ufoot/vapor/vpbezier/vplinearsurface.go (0.0%)</option>
+				
+				<option value="file5">github.com/ufoot/vapor/vpbezier/vpquadraticcurve.go (0.0%)</option>
+				
+				<option value="file6">github.com/ufoot/vapor/vpbezier/vpquadraticsurface.go (0.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" >// Vapor is a toolkit designed to support Liquid War 7.
+// Copyright (C)  2015  Christian Mauduit &lt;ufoot@ufoot.org&gt;
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+//
+// Vapor homepage: https://github.com/ufoot/vapor
+// Contact author: ufoot@ufoot.org
+
+package vpbezier
+
+import (
+        "github.com/ufoot/vapor/vpmath"
+        "github.com/ufoot/vapor/vpnumber"
+)
+
+func f32TOneMinusT(a, b int, t float32) float32 <span class="cov8" title="1">{
+        ret := vpnumber.F32Const1
+        oneMinusT := vpnumber.F32Const1 - t
+        var l int
+
+        for l = 0; l &lt; a; l++ </span><span class="cov8" title="1">{
+                ret *= t
+        }</span>
+        <span class="cov8" title="1">for l = 0; l &lt; b; l++ </span><span class="cov8" title="1">{
+                ret *= oneMinusT
+        }</span>
+
+        <span class="cov8" title="1">return ret</span>
+}
+
+// F32Bernstein returns a Berstein polynomial value.
+func F32Bernstein(n, i int, t float32) float32 <span class="cov8" title="1">{
+        b := vpmath.Binomial(n, i)
+
+        return float32(b) * f32TOneMinusT(i, n-i, t)
+}</span>
+
+func f32TOneMinusTDerivative(a, b int, t float32) float32 <span class="cov8" title="1">{
+        oneMinusT := vpnumber.F32Const1 - t
+        switch </span>{
+        <span class="cov8" title="1">case a &gt;= 1:
+                return t*f32TOneMinusTDerivative(a-1, b, t) + f32TOneMinusT(a-1, b, t)</span>
+        <span class="cov8" title="1">case b &gt;= 1:
+                return oneMinusT*f32TOneMinusTDerivative(a, b-1, t) - f32TOneMinusT(a, b-1, t)</span>
+        }
+
+        <span class="cov8" title="1">return vpnumber.F32Const0</span>
+}
+
+// F32BernsteinDerivative returns the derivative of the
+// the Berstein polynomial func at a given point.
+func F32BernsteinDerivative(n, i int, t float32) float32 <span class="cov0" title="0">{
+        b := vpmath.Binomial(n, i)
+
+        return float32(b) * f32TOneMinusTDerivative(i, n-i, t)
+}</span>
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">// Vapor is a toolkit designed to support Liquid War 7.
+// Copyright (C)  2015  Christian Mauduit &lt;ufoot@ufoot.org&gt;
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+//
+// Vapor homepage: https://github.com/ufoot/vapor
+// Contact author: ufoot@ufoot.org
+
+package vpbezier
+
+import (
+        "github.com/ufoot/vapor/vpnumber"
+        "github.com/ufoot/vapor/vpvec2"
+        "github.com/ufoot/vapor/vpvec3"
+)
+
+// F32CubicCurve1d returns the cubic Bezier curve from p0 to p3,
+// going through p1 and p2. Points p1 and p2 are typically not reached,
+// but they influence the curve, as it heads to p1 from p0, and conversely
+// from p3 to p2. Works on float32 scalars.
+// First returned value is the position, second is the derivative.
+func F32CubicCurve1d(p0, p1, p2, p3 float32, t float32) (float32, float32) <span class="cov0" title="0">{
+        switch </span>{
+        <span class="cov0" title="0">case t &lt; vpnumber.F32Const0:
+                return p0, vpnumber.F32Const0</span>
+        <span class="cov0" title="0">case t &gt; vpnumber.F32Const1:
+                return p1, vpnumber.F32Const0</span>
+        }
+
+        <span class="cov0" title="0">oneMinusT := vpnumber.F32Const1 - t
+
+        retP := p0*oneMinusT*oneMinusT*oneMinusT + p1*3*oneMinusT*oneMinusT*t + p2*3*oneMinusT*t*t + p3*t*t*t
+        retDt := (p1-p0)*3*oneMinusT*oneMinusT + (p2-p1)*6*oneMinusT*t + (p3-p2)*3*t*t
+
+        return retP, retDt</span>
+}
+
+// F32CubicCurve2d returns the cubic Bezier curve from p0 to p3,
+// going through p1 and p2. Points p1 and p2 are typically not reached,
+// but they influence the curve, as it heads to p1 from p0, and conversely
+// from p3 to p2. Works on float32 2d vectors.
+// First returned value is the position, second is the derivative.
+func F32CubicCurve2d(p0, p1, p2, p3 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec2.F32) <span class="cov0" title="0">{
+        switch </span>{
+        <span class="cov0" title="0">case t &lt; vpnumber.F32Const0:
+                return p0, new(vpvec2.F32)</span>
+        <span class="cov0" title="0">case t &gt; vpnumber.F32Const1:
+                return p1, new(vpvec2.F32)</span>
+        }
+
+        <span class="cov0" title="0">oneMinusT := vpnumber.F32Const1 - t
+
+        retP := vpvec2.F32Add(vpvec2.F32MulScale(p0, oneMinusT*oneMinusT*oneMinusT), vpvec2.F32MulScale(p1, 3*oneMinusT*oneMinusT*t)).Add(vpvec2.F32MulScale(p2, 3*oneMinusT*t*t)).Add(vpvec2.F32MulScale(p3, t*t*t))
+        retDt := vpvec2.F32Sub(p1, p0).MulScale(3 * oneMinusT * oneMinusT).Add(vpvec2.F32Sub(p2, p1).MulScale(6 * oneMinusT * t)).Add(vpvec2.F32Sub(p3, p2).MulScale(3 * t * t))
+
+        return retP, retDt</span>
+}
+
+// F32CubicCurve3d returns the cubic Bezier curve from p0 to p3,
+// going through p1 and p2. Points p1 and p2 are typically not reached,
+// but they influence the curve, as it heads to p1 from p0, and conversely
+// from p3 to p2. Works on float32 3d vectors.
+// First returned value is the position, second is the derivative.
+func F32CubicCurve3d(p0, p1, p2, p3 *vpvec3.F32, t float32) (*vpvec3.F32, *vpvec3.F32) <span class="cov0" title="0">{
+        switch </span>{
+        <span class="cov0" title="0">case t &lt; vpnumber.F32Const0:
+                return p0, new(vpvec3.F32)</span>
+        <span class="cov0" title="0">case t &gt; vpnumber.F32Const1:
+                return p1, new(vpvec3.F32)</span>
+        }
+
+        <span class="cov0" title="0">oneMinusT := vpnumber.F32Const1 - t
+
+        retP := vpvec3.F32Add(vpvec3.F32MulScale(p0, oneMinusT*oneMinusT*oneMinusT), vpvec3.F32MulScale(p1, 3*oneMinusT*oneMinusT*t)).Add(vpvec3.F32MulScale(p2, 3*oneMinusT*t*t)).Add(vpvec3.F32MulScale(p3, t*t*t))
+        retDt := vpvec3.F32Sub(p1, p0).MulScale(3 * oneMinusT * oneMinusT).Add(vpvec3.F32Sub(p2, p1).MulScale(6 * oneMinusT * t)).Add(vpvec3.F32Sub(p3, p2).MulScale(3 * t * t))
+
+        return retP, retDt</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">// Vapor is a toolkit designed to support Liquid War 7.
+// Copyright (C)  2015  Christian Mauduit &lt;ufoot@ufoot.org&gt;
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+//
+// Vapor homepage: https://github.com/ufoot/vapor
+// Contact author: ufoot@ufoot.org
+
+package vpbezier
+
+import (
+        "github.com/ufoot/vapor/vpnumber"
+        "github.com/ufoot/vapor/vpvec2"
+        "github.com/ufoot/vapor/vpvec3"
+)
+
+// F32CubicSurface1d returns a quadratic Bezier surface between 9 points.
+func F32CubicSurface1d(p [4][4]float32, u float32, v float32) (float32, float32, float32) <span class="cov0" title="0">{
+        var retP, retDu, retDv float32
+
+        switch </span>{
+        <span class="cov0" title="0">case u &lt; vpnumber.F32Const0:
+                retP, retDv = F32CubicCurve1d(p[0][0], p[0][1], p[0][2], p[0][3], v)
+                return retP, vpnumber.F32Const0, retDv</span>
+        <span class="cov0" title="0">case u &gt; vpnumber.F32Const1:
+                retP, retDv = F32CubicCurve1d(p[3][0], p[3][1], p[3][2], p[3][3], v)
+                return retP, vpnumber.F32Const0, retDv</span>
+        <span class="cov0" title="0">case v &lt; vpnumber.F32Const0:
+                retP, retDv = F32CubicCurve1d(p[0][0], p[1][0], p[2][0], p[3][0], u)
+                return retP, retDu, vpnumber.F32Const0</span>
+        <span class="cov0" title="0">case v &gt; vpnumber.F32Const1:
+                retP, retDv = F32CubicCurve1d(p[0][3], p[1][3], p[2][3], p[3][3], u)
+                return retP, retDu, vpnumber.F32Const0</span>
+        }
+
+        <span class="cov0" title="0">for i := 0; i &lt; 4; i++ </span><span class="cov0" title="0">{
+                for j := 0; j &lt; 4; j++ </span><span class="cov0" title="0">{
+                        retP += F32Bernstein(3, i, u) * F32Bernstein(3, j, v) * p[i][j]
+                        retDu += F32BernsteinDerivative(4, j, u) * F32Bernstein(3, j, v) * p[i][j]
+                        retDv += F32Bernstein(3, j, u) * F32BernsteinDerivative(4, j, v) * p[i][j]
+                }</span>
+        }
+
+        <span class="cov0" title="0">return retP, retDu, retDv</span>
+}
+
+// F32CubicSurface2d returns a quadratic Bezier surface between 9 points.
+func F32CubicSurface2d(p *[4][4]vpvec2.F32, u float32, v float32) (*vpvec2.F32, *vpvec2.F32, *vpvec2.F32) <span class="cov0" title="0">{
+        var retP, retDu, retDv *vpvec2.F32
+
+        switch </span>{
+        <span class="cov0" title="0">case u &lt; vpnumber.F32Const0:
+                retP, retDv = F32CubicCurve2d(&amp;(p[0][0]), &amp;(p[0][1]), &amp;(p[0][2]), &amp;(p[0][3]), v)
+                return retP, new(vpvec2.F32), retDv</span>
+        <span class="cov0" title="0">case u &gt; vpnumber.F32Const1:
+                retP, retDv = F32CubicCurve2d(&amp;(p[3][0]), &amp;(p[3][1]), &amp;(p[3][2]), &amp;(p[3][3]), v)
+                return retP, new(vpvec2.F32), retDv</span>
+        <span class="cov0" title="0">case v &lt; vpnumber.F32Const0:
+                retP, retDv = F32CubicCurve2d(&amp;(p[0][0]), &amp;(p[1][0]), &amp;(p[2][0]), &amp;(p[3][0]), u)
+                return retP, retDu, new(vpvec2.F32)</span>
+        <span class="cov0" title="0">case v &gt; vpnumber.F32Const1:
+                retP, retDv = F32CubicCurve2d(&amp;(p[0][3]), &amp;(p[1][3]), &amp;(p[2][3]), &amp;(p[3][3]), u)
+                return retP, retDu, new(vpvec2.F32)</span>
+        }
+
+        <span class="cov0" title="0">retP = new(vpvec2.F32)
+        retDu = new(vpvec2.F32)
+        retDv = new(vpvec2.F32)
+        for i := 0; i &lt; 4; i++ </span><span class="cov0" title="0">{
+                for j := 0; j &lt; 4; j++ </span><span class="cov0" title="0">{
+                        retP.Add(vpvec2.F32MulScale(&amp;(p[i][j]), F32Bernstein(4, i, u)*F32Bernstein(4, j, v)))
+                        retDu.Add(vpvec2.F32MulScale(&amp;(p[i][j]), F32BernsteinDerivative(4, j, u)*F32Bernstein(4, j, v)))
+                        retDv.Add(vpvec2.F32MulScale(&amp;(p[i][j]), F32Bernstein(4, j, u)*F32BernsteinDerivative(4, j, v)))
+                }</span>
+        }
+
+        <span class="cov0" title="0">return retP, retDu, retDv</span>
+}
+
+// F32CubicSurface3d returns a quadratic Bezier surface between 9 points.
+func F32CubicSurface3d(p *[4][4]vpvec3.F32, u float32, v float32) (*vpvec3.F32, *vpvec3.F32, *vpvec3.F32) <span class="cov0" title="0">{
+        var retP, retDu, retDv *vpvec3.F32
+
+        switch </span>{
+        <span class="cov0" title="0">case u &lt; vpnumber.F32Const0:
+                retP, retDv = F32CubicCurve3d(&amp;(p[0][0]), &amp;(p[0][1]), &amp;(p[0][2]), &amp;(p[0][3]), v)
+                return retP, new(vpvec3.F32), retDv</span>
+        <span class="cov0" title="0">case u &gt; vpnumber.F32Const1:
+                retP, retDv = F32CubicCurve3d(&amp;(p[3][0]), &amp;(p[3][1]), &amp;(p[3][2]), &amp;(p[3][3]), v)
+                return retP, new(vpvec3.F32), retDv</span>
+        <span class="cov0" title="0">case v &lt; vpnumber.F32Const0:
+                retP, retDv = F32CubicCurve3d(&amp;(p[0][0]), &amp;(p[1][0]), &amp;(p[2][0]), &amp;(p[3][0]), u)
+                return retP, retDu, new(vpvec3.F32)</span>
+        <span class="cov0" title="0">case v &gt; vpnumber.F32Const1:
+                retP, retDv = F32CubicCurve3d(&amp;(p[0][3]), &amp;(p[1][3]), &amp;(p[2][3]), &amp;(p[3][3]), u)
+                return retP, retDu, new(vpvec3.F32)</span>
+        }
+
+        <span class="cov0" title="0">retP = new(vpvec3.F32)
+        retDu = new(vpvec3.F32)
+        retDv = new(vpvec3.F32)
+        for i := 0; i &lt; 4; i++ </span><span class="cov0" title="0">{
+                for j := 0; j &lt; 4; j++ </span><span class="cov0" title="0">{
+                        retP.Add(vpvec3.F32MulScale(&amp;(p[i][j]), F32Bernstein(4, i, u)*F32Bernstein(4, j, v)))
+                        retDu.Add(vpvec3.F32MulScale(&amp;(p[i][j]), F32BernsteinDerivative(4, j, u)*F32Bernstein(4, j, v)))
+                        retDv.Add(vpvec3.F32MulScale(&amp;(p[i][j]), F32Bernstein(4, j, u)*F32BernsteinDerivative(4, j, v)))
+                }</span>
+        }
+
+        <span class="cov0" title="0">return retP, retDu, retDv</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">// Vapor is a toolkit designed to support Liquid War 7.
+// Copyright (C)  2015  Christian Mauduit &lt;ufoot@ufoot.org&gt;
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+//
+// Vapor homepage: https://github.com/ufoot/vapor
+// Contact author: ufoot@ufoot.org
+
+package vpbezier
+
+import (
+        "github.com/ufoot/vapor/vpmath"
+        "github.com/ufoot/vapor/vpnumber"
+        "github.com/ufoot/vapor/vpvec2"
+        "github.com/ufoot/vapor/vpvec3"
+)
+
+// F32LinearCurve1d returns the linear Bezier curve from p0 to p1,
+// which is basically a Lerp. Works on float32 scalars.
+// First returned value is the position, second is the derivative.
+func F32LinearCurve1d(p0, p1 float32, t float32) (float32, float32) <span class="cov8" title="1">{
+        switch </span>{
+        <span class="cov8" title="1">case t &lt; vpnumber.F32Const0:
+                return p0, vpnumber.F32Const0</span>
+        <span class="cov8" title="1">case t &gt; vpnumber.F32Const1:
+                return p1, vpnumber.F32Const0</span>
+        }
+
+        <span class="cov8" title="1">retP := vpmath.F32Lerp(p0, p1, t)
+        retDt := p1 - p0
+
+        return retP, retDt</span>
+}
+
+// F32LinearCurve2d returns the linear Bezier curve from p0 to p1,
+// which is basically a Lerp. Works on float32 2d vectors.
+// First returned value is the position, second is the derivative.
+func F32LinearCurve2d(p0, p1 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec2.F32) <span class="cov8" title="1">{
+        switch </span>{
+        <span class="cov8" title="1">case t &lt; vpnumber.F32Const0:
+                return p0, new(vpvec2.F32)</span>
+        <span class="cov8" title="1">case t &gt; vpnumber.F32Const1:
+                return p1, new(vpvec2.F32)</span>
+        }
+
+        <span class="cov8" title="1">retP := vpvec2.F32Lerp(p0, p1, t)
+        retDt := vpvec2.F32Sub(p1, p0)
+
+        return retP, retDt</span>
+}
+
+// F32LinearCurve3d returns the linear Bezier curve from p0 to p1,
+// which is basically a Lerp. Works on float32 3d vectors.
+// First returned value is the position, second is the derivative.
+func F32LinearCurve3d(p0, p1 *vpvec3.F32, t float32) (*vpvec3.F32, *vpvec3.F32) <span class="cov8" title="1">{
+        switch </span>{
+        <span class="cov8" title="1">case t &lt; vpnumber.F32Const0:
+                return p0, new(vpvec3.F32)</span>
+        <span class="cov8" title="1">case t &gt; vpnumber.F32Const1:
+                return p1, new(vpvec3.F32)</span>
+        }
+
+        <span class="cov8" title="1">retP := vpvec3.F32Lerp(p0, p1, t)
+        retDt := vpvec3.F32Sub(p1, p0)
+
+        return retP, retDt</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">// Vapor is a toolkit designed to support Liquid War 7.
+// Copyright (C)  2015  Christian Mauduit &lt;ufoot@ufoot.org&gt;
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+//
+// Vapor homepage: https://github.com/ufoot/vapor
+// Contact author: ufoot@ufoot.org
+
+package vpbezier
+
+import (
+        "github.com/ufoot/vapor/vpmath"
+        "github.com/ufoot/vapor/vpnumber"
+        "github.com/ufoot/vapor/vpvec2"
+        "github.com/ufoot/vapor/vpvec3"
+)
+
+func scalarFromF32Vec2(p *[2][2]vpvec2.F32, i int) [2][2]float32 <span class="cov0" title="0">{
+        return [2][2]float32{{p[0][0][i], p[0][1][i]}, {p[1][0][i], p[1][1][i]}}
+}</span>
+
+func scalarFromF32Vec3(p *[2][2]vpvec3.F32, i int) [2][2]float32 <span class="cov0" title="0">{
+        return [2][2]float32{{p[0][0][i], p[0][1][i]}, {p[1][0][i], p[1][1][i]}}
+}</span>
+
+// F32LinearSurface1d returns the linear Bezier surface between 4 points.
+func F32LinearSurface1d(p [2][2]float32, u, v float32) (float32, float32, float32) <span class="cov0" title="0">{
+        switch </span>{
+        <span class="cov0" title="0">case u &lt; vpnumber.F32Const0:
+                return vpmath.F32Lerp(p[0][0], p[0][1], v), vpnumber.F32Const0, p[0][1] - p[0][0]</span>
+        <span class="cov0" title="0">case u &gt; vpnumber.F32Const1:
+                return vpmath.F32Lerp(p[1][0], p[1][1], v), vpnumber.F32Const0, p[1][1] - p[1][0]</span>
+        <span class="cov0" title="0">case v &lt; vpnumber.F32Const0:
+                return vpmath.F32Lerp(p[0][0], p[1][0], u), p[1][0] - p[0][0], vpnumber.F32Const0</span>
+        <span class="cov0" title="0">case v &gt; vpnumber.F32Const1:
+                return vpmath.F32Lerp(p[0][1], p[1][1], u), p[1][1] - p[0][1], vpnumber.F32Const0</span>
+        }
+
+        <span class="cov0" title="0">oneMinusU := vpnumber.F32Const1 - u
+        oneMinusV := vpnumber.F32Const1 - v
+
+        retP := vpmath.F32Lerp2(p, u, v)
+        retDu := p[1][0]*oneMinusV + p[1][1]*v - p[0][0]*oneMinusV - p[0][1]*v
+        retDv := p[0][1]*oneMinusU + p[1][1]*u - p[0][0]*oneMinusU - p[1][0]*u
+
+        return retP, retDu, retDv</span>
+}
+
+// F32LinearSurface2d returns the linear Bezier surface between 4 points.
+func F32LinearSurface2d(p *[2][2]vpvec2.F32, u, v float32) (*vpvec2.F32, *vpvec2.F32, *vpvec2.F32) <span class="cov0" title="0">{
+        switch </span>{
+        <span class="cov0" title="0">case u &lt; vpnumber.F32Const0:
+                return vpvec2.F32Lerp(&amp;(p[0][0]), &amp;(p[0][1]), v), new(vpvec2.F32), vpvec2.F32Sub(&amp;(p[0][1]), &amp;(p[0][0]))</span>
+        <span class="cov0" title="0">case u &gt; vpnumber.F32Const1:
+                return vpvec2.F32Lerp(&amp;(p[1][0]), &amp;(p[1][1]), v), new(vpvec2.F32), vpvec2.F32Sub(&amp;(p[1][1]), &amp;(p[1][0]))</span>
+        <span class="cov0" title="0">case v &lt; vpnumber.F32Const0:
+                return vpvec2.F32Lerp(&amp;(p[0][0]), &amp;(p[1][0]), u), vpvec2.F32Sub(&amp;(p[1][0]), &amp;(p[0][0])), new(vpvec2.F32)</span>
+        <span class="cov0" title="0">case v &gt; vpnumber.F32Const1:
+                return vpvec2.F32Lerp(&amp;(p[0][1]), &amp;(p[1][1]), u), vpvec2.F32Sub(&amp;(p[1][1]), &amp;(p[0][1])), new(vpvec2.F32)</span>
+        }
+
+        <span class="cov0" title="0">oneMinusU := vpnumber.F32Const1 - u
+        oneMinusV := vpnumber.F32Const1 - v
+
+        retP := vpvec2.F32New(vpmath.F32Lerp2(scalarFromF32Vec2(p, 0), u, v), vpmath.F32Lerp2(scalarFromF32Vec2(p, 1), u, v))
+        retDu := vpvec2.F32MulScale(&amp;(p[1][0]), oneMinusV).Add(vpvec2.F32MulScale(&amp;(p[1][1]), v)).Sub(vpvec2.F32MulScale(&amp;(p[0][0]), oneMinusV)).Sub(vpvec2.F32MulScale(&amp;(p[0][1]), v))
+        retDv := vpvec2.F32MulScale(&amp;(p[0][1]), oneMinusU).Add(vpvec2.F32MulScale(&amp;(p[1][1]), u)).Sub(vpvec2.F32MulScale(&amp;(p[0][0]), oneMinusU)).Sub(vpvec2.F32MulScale(&amp;(p[1][0]), u))
+
+        return retP, retDu, retDv</span>
+}
+
+// F32LinearSurface3d returns the linear Bezier surface between 4 points.
+func F32LinearSurface3d(p *[2][2]vpvec3.F32, u, v float32) (*vpvec3.F32, *vpvec3.F32, *vpvec3.F32) <span class="cov0" title="0">{
+        switch </span>{
+        <span class="cov0" title="0">case u &lt; vpnumber.F32Const0:
+                return vpvec3.F32Lerp(&amp;(p[0][0]), &amp;(p[0][1]), v), new(vpvec3.F32), vpvec3.F32Sub(&amp;(p[0][1]), &amp;(p[0][0]))</span>
+        <span class="cov0" title="0">case u &gt; vpnumber.F32Const1:
+                return vpvec3.F32Lerp(&amp;(p[1][0]), &amp;(p[1][1]), v), new(vpvec3.F32), vpvec3.F32Sub(&amp;(p[1][1]), &amp;(p[1][0]))</span>
+        <span class="cov0" title="0">case v &lt; vpnumber.F32Const0:
+                return vpvec3.F32Lerp(&amp;(p[0][0]), &amp;(p[1][0]), u), vpvec3.F32Sub(&amp;(p[1][0]), &amp;(p[0][0])), new(vpvec3.F32)</span>
+        <span class="cov0" title="0">case v &gt; vpnumber.F32Const1:
+                return vpvec3.F32Lerp(&amp;(p[0][1]), &amp;(p[1][1]), u), vpvec3.F32Sub(&amp;(p[1][1]), &amp;(p[0][1])), new(vpvec3.F32)</span>
+        }
+
+        <span class="cov0" title="0">oneMinusU := vpnumber.F32Const1 - u
+        oneMinusV := vpnumber.F32Const1 - v
+
+        retP := vpvec3.F32New(vpmath.F32Lerp2(scalarFromF32Vec3(p, 0), u, v), vpmath.F32Lerp2(scalarFromF32Vec3(p, 1), u, v), vpmath.F32Lerp2(scalarFromF32Vec3(p, 2), u, v))
+        retDu := vpvec3.F32MulScale(&amp;(p[1][0]), oneMinusV).Add(vpvec3.F32MulScale(&amp;(p[1][1]), v)).Sub(vpvec3.F32MulScale(&amp;(p[0][0]), oneMinusV)).Sub(vpvec3.F32MulScale(&amp;(p[0][1]), v))
+        retDv := vpvec3.F32MulScale(&amp;(p[0][1]), oneMinusU).Add(vpvec3.F32MulScale(&amp;(p[1][1]), u)).Sub(vpvec3.F32MulScale(&amp;(p[0][0]), oneMinusU)).Sub(vpvec3.F32MulScale(&amp;(p[1][0]), u))
+
+        return retP, retDu, retDv</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">// Vapor is a toolkit designed to support Liquid War 7.
+// Copyright (C)  2015  Christian Mauduit &lt;ufoot@ufoot.org&gt;
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+//
+// Vapor homepage: https://github.com/ufoot/vapor
+// Contact author: ufoot@ufoot.org
+
+package vpbezier
+
+import (
+        "github.com/ufoot/vapor/vpnumber"
+        "github.com/ufoot/vapor/vpvec2"
+        "github.com/ufoot/vapor/vpvec3"
+)
+
+// F32QuadraticCurve1d returns the quadratic Bezier curve from p0 to p2,
+// going through p1. Point p1 is typically not reached, but it influences
+// the curve, as it heads to p1 from p0, and conversely from p2 to p1.
+// Works on float32 scalars.
+// First returned value is the position, second is the derivative.
+func F32QuadraticCurve1d(p0, p1, p2 float32, t float32) (float32, float32) <span class="cov0" title="0">{
+        switch </span>{
+        <span class="cov0" title="0">case t &lt; vpnumber.F32Const0:
+                return p0, vpnumber.F32Const0</span>
+        <span class="cov0" title="0">case t &gt; vpnumber.F32Const1:
+                return p1, vpnumber.F32Const0</span>
+        }
+
+        <span class="cov0" title="0">oneMinusT := vpnumber.F32Const1 - t
+
+        retP := p0*oneMinusT*oneMinusT + p1*2*oneMinusT*t + p2*t*t
+        retDt := (p1-p0)*2*oneMinusT + (p2-p1)*2*t
+
+        return retP, retDt</span>
+}
+
+// F32QuadraticCurve2d returns the quadratic Bezier curve from p0 to p2,
+// going through p1. Point p1 is typically not reached, but it influences
+// the curve, as it heads to p1 from p0, and conversely from p2 to p1.
+// Works on float32 2d vectors.
+// First returned value is the position, second is the derivative.
+func F32QuadraticCurve2d(p0, p1, p2 *vpvec2.F32, t float32) (*vpvec2.F32, *vpvec2.F32) <span class="cov0" title="0">{
+        switch </span>{
+        <span class="cov0" title="0">case t &lt; vpnumber.F32Const0:
+                return p0, new(vpvec2.F32)</span>
+        <span class="cov0" title="0">case t &gt; vpnumber.F32Const1:
+                return p1, new(vpvec2.F32)</span>
+        }
+
+        <span class="cov0" title="0">oneMinusT := vpnumber.F32Const1 - t
+
+        retP := vpvec2.F32Add(vpvec2.F32MulScale(p0, oneMinusT*oneMinusT), vpvec2.F32MulScale(p1, 2*oneMinusT*t)).Add(vpvec2.F32MulScale(p2, t*t))
+        retDt := vpvec2.F32Sub(p1, p0).MulScale(2 * oneMinusT).Add(vpvec2.F32Sub(p2, p1).MulScale(2 * t))
+
+        return retP, retDt</span>
+}
+
+// F32QuadraticCurve3d returns the quadratic Bezier curve from p0 to p2,
+// going through p1. Point p1 is typically not reached, but it influences
+// the curve, as it heads to p1 from p0, and conversely from p2 to p1.
+// Works on float32 3d vectors.
+// First returned value is the position, second is the derivative.
+func F32QuadraticCurve3d(p0, p1, p2 *vpvec3.F32, t float32) (*vpvec3.F32, *vpvec3.F32) <span class="cov0" title="0">{
+        switch </span>{
+        <span class="cov0" title="0">case t &lt; vpnumber.F32Const0:
+                return p0, new(vpvec3.F32)</span>
+        <span class="cov0" title="0">case t &gt; vpnumber.F32Const1:
+                return p1, new(vpvec3.F32)</span>
+        }
+
+        <span class="cov0" title="0">oneMinusT := vpnumber.F32Const1 - t
+
+        retP := vpvec3.F32Add(vpvec3.F32MulScale(p0, oneMinusT*oneMinusT), vpvec3.F32MulScale(p1, 2*oneMinusT*t)).Add(vpvec3.F32MulScale(p2, t*t))
+        retDt := vpvec3.F32Sub(p1, p0).MulScale(2 * oneMinusT).Add(vpvec3.F32Sub(p2, p1).MulScale(2 * t))
+
+        return retP, retDt</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">// Vapor is a toolkit designed to support Liquid War 7.
+// Copyright (C)  2015  Christian Mauduit &lt;ufoot@ufoot.org&gt;
+//
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+//
+// Vapor homepage: https://github.com/ufoot/vapor
+// Contact author: ufoot@ufoot.org
+
+package vpbezier
+
+import (
+        "github.com/ufoot/vapor/vpnumber"
+        "github.com/ufoot/vapor/vpvec2"
+        "github.com/ufoot/vapor/vpvec3"
+)
+
+// F32QuadraticSurface1d returns a quadratic Bezier surface between 9 points.
+func F32QuadraticSurface1d(p [3][3]float32, u float32, v float32) (float32, float32, float32) <span class="cov0" title="0">{
+        var retP, retDu, retDv float32
+
+        switch </span>{
+        <span class="cov0" title="0">case u &lt; vpnumber.F32Const0:
+                retP, retDv = F32QuadraticCurve1d(p[0][0], p[0][1], p[0][2], v)
+                return retP, vpnumber.F32Const0, retDv</span>
+        <span class="cov0" title="0">case u &gt; vpnumber.F32Const1:
+                retP, retDv = F32QuadraticCurve1d(p[2][0], p[2][1], p[2][2], v)
+                return retP, vpnumber.F32Const0, retDv</span>
+        <span class="cov0" title="0">case v &lt; vpnumber.F32Const0:
+                retP, retDv = F32QuadraticCurve1d(p[0][0], p[1][0], p[2][0], u)
+                return retP, retDu, vpnumber.F32Const0</span>
+        <span class="cov0" title="0">case v &gt; vpnumber.F32Const1:
+                retP, retDv = F32QuadraticCurve1d(p[0][2], p[1][2], p[2][2], u)
+                return retP, retDu, vpnumber.F32Const0</span>
+        }
+
+        <span class="cov0" title="0">for i := 0; i &lt; 3; i++ </span><span class="cov0" title="0">{
+                for j := 0; j &lt; 3; j++ </span><span class="cov0" title="0">{
+                        retP += F32Bernstein(3, i, u) * F32Bernstein(3, j, v) * p[i][j]
+                        retDu += F32BernsteinDerivative(3, j, u) * F32Bernstein(3, j, v) * p[i][j]
+                        retDv += F32Bernstein(3, j, u) * F32BernsteinDerivative(3, j, v) * p[i][j]
+                }</span>
+        }
+
+        <span class="cov0" title="0">return retP, retDu, retDv</span>
+}
+
+// F32QuadraticSurface2d returns a quadratic Bezier surface between 9 points.
+func F32QuadraticSurface2d(p *[3][3]vpvec2.F32, u float32, v float32) (*vpvec2.F32, *vpvec2.F32, *vpvec2.F32) <span class="cov0" title="0">{
+        var retP, retDu, retDv *vpvec2.F32
+
+        switch </span>{
+        <span class="cov0" title="0">case u &lt; vpnumber.F32Const0:
+                retP, retDv = F32QuadraticCurve2d(&amp;(p[0][0]), &amp;(p[0][1]), &amp;(p[0][2]), v)
+                return retP, new(vpvec2.F32), retDv</span>
+        <span class="cov0" title="0">case u &gt; vpnumber.F32Const1:
+                retP, retDv = F32QuadraticCurve2d(&amp;(p[2][0]), &amp;(p[2][1]), &amp;(p[2][2]), v)
+                return retP, new(vpvec2.F32), retDv</span>
+        <span class="cov0" title="0">case v &lt; vpnumber.F32Const0:
+                retP, retDv = F32QuadraticCurve2d(&amp;(p[0][0]), &amp;(p[1][0]), &amp;(p[2][0]), u)
+                return retP, retDu, new(vpvec2.F32)</span>
+        <span class="cov0" title="0">case v &gt; vpnumber.F32Const1:
+                retP, retDv = F32QuadraticCurve2d(&amp;(p[0][2]), &amp;(p[1][2]), &amp;(p[2][2]), u)
+                return retP, retDu, new(vpvec2.F32)</span>
+        }
+
+        <span class="cov0" title="0">retP = new(vpvec2.F32)
+        retDu = new(vpvec2.F32)
+        retDv = new(vpvec2.F32)
+        for i := 0; i &lt; 3; i++ </span><span class="cov0" title="0">{
+                for j := 0; j &lt; 3; j++ </span><span class="cov0" title="0">{
+                        retP.Add(vpvec2.F32MulScale(&amp;(p[i][j]), F32Bernstein(3, i, u)*F32Bernstein(3, j, v)))
+                        retDu.Add(vpvec2.F32MulScale(&amp;(p[i][j]), F32BernsteinDerivative(3, j, u)*F32Bernstein(3, j, v)))
+                        retDv.Add(vpvec2.F32MulScale(&amp;(p[i][j]), F32Bernstein(3, j, u)*F32BernsteinDerivative(3, j, v)))
+                }</span>
+        }
+
+        <span class="cov0" title="0">return retP, retDu, retDv</span>
+}
+
+// F32QuadraticSurface3d returns a quadratic Bezier surface between 9 points.
+func F32QuadraticSurface3d(p *[3][3]vpvec3.F32, u float32, v float32) (*vpvec3.F32, *vpvec3.F32, *vpvec3.F32) <span class="cov0" title="0">{
+        var retP, retDu, retDv *vpvec3.F32
+
+        switch </span>{
+        <span class="cov0" title="0">case u &lt; vpnumber.F32Const0:
+                retP, retDv = F32QuadraticCurve3d(&amp;(p[0][0]), &amp;(p[0][1]), &amp;(p[0][2]), v)
+                return retP, new(vpvec3.F32), retDv</span>
+        <span class="cov0" title="0">case u &gt; vpnumber.F32Const1:
+                retP, retDv = F32QuadraticCurve3d(&amp;(p[2][0]), &amp;(p[2][1]), &amp;(p[2][2]), v)
+                return retP, new(vpvec3.F32), retDv</span>
+        <span class="cov0" title="0">case v &lt; vpnumber.F32Const0:
+                retP, retDv = F32QuadraticCurve3d(&amp;(p[0][0]), &amp;(p[1][0]), &amp;(p[2][0]), u)
+                return retP, retDu, new(vpvec3.F32)</span>
+        <span class="cov0" title="0">case v &gt; vpnumber.F32Const1:
+                retP, retDv = F32QuadraticCurve3d(&amp;(p[0][2]), &amp;(p[1][2]), &amp;(p[2][2]), u)
+                return retP, retDu, new(vpvec3.F32)</span>
+        }
+
+        <span class="cov0" title="0">retP = new(vpvec3.F32)
+        retDu = new(vpvec3.F32)
+        retDv = new(vpvec3.F32)
+        for i := 0; i &lt; 3; i++ </span><span class="cov0" title="0">{
+                for j := 0; j &lt; 3; j++ </span><span class="cov0" title="0">{
+                        retP.Add(vpvec3.F32MulScale(&amp;(p[i][j]), F32Bernstein(3, i, u)*F32Bernstein(3, j, v)))
+                        retDu.Add(vpvec3.F32MulScale(&amp;(p[i][j]), F32BernsteinDerivative(3, j, u)*F32Bernstein(3, j, v)))
+                        retDv.Add(vpvec3.F32MulScale(&amp;(p[i][j]), F32Bernstein(3, j, u)*F32BernsteinDerivative(3, j, v)))
+                }</span>
+        }
+
+        <span class="cov0" title="0">return retP, retDu, retDv</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible = document.getElementById('file0');
+		files.addEventListener('change', onChange, false);
+		function onChange() {
+			visible.style.display = 'none';
+			visible = document.getElementById(files.value);
+			visible.style.display = 'block';
+			window.scrollTo(0, 0);
+		}
+	})();
+	</script>
+</html>

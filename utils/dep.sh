@@ -86,7 +86,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo >> Makefile.dep
     echo ".PHONY: check-$i" >> Makefile.dep
     echo "check-$i: configure.ac $k" >> Makefile.dep
-    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +%Y%m%d-%H%M%S` && go test -o test/$i-check-\$\$DATE.bin -coverprofile=test/$i-cover-\$\$DATE.out $j | tee test/$i-check-\$\$DATE.log" >> Makefile.dep
+    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +%Y%m%d-%H%M%S` && go test -o test/$i-check-\$\$DATE.bin -coverprofile=test/$i-cover-\$\$DATE.cov $j | tee test/$i-check-\$\$DATE.log && go tool cover -html=test/$i-cover-\$\$DATE.cov -o doc/cover/$i-cover.html" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: bench-$i" >> Makefile.dep
     echo "bench-$i: configure.ac $k" >> Makefile.dep

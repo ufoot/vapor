@@ -17,6 +17,7 @@ pkg
 test
 doc/txt
 doc/html
+doc/cover
 thrift/gen-*
 utils/env.sh
 vpwire/*.png

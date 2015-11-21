@@ -51,10 +51,10 @@ devel: indent dep stamp vp devel-vp
 doc: indent dep stamp doc-vp
 
 clean:
-	rm -rf bin/vp* pkg test/* doc/txt/*.txt doc/html/*.html thrift/gen-* vpwire/*.png
+	rm -rf bin/vp* pkg test/* doc/txt/*.txt doc/html/*.html doc/cover/*.html thrift/gen-* vpwire/*.png
 
 distclean: clean
-	rm -rf bin/* test doc/txt doc/html autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src/git.apache.org src/github.com src/golang.org utils/env.sh
+	rm -rf bin/* test doc/txt doc/html doc/coverage autom4te.cache config.log config.status Makefile Makefile.dep Makefile.help src/git.apache.org src/github.com src/golang.org utils/env.sh
 	find . -name "*~" -exec rm -f "{}" \;
 
 get:
