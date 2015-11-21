@@ -82,7 +82,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     done
     echo ".PHONY: $i" >> Makefile.dep
     echo "$i: configure.ac $k # $m" >> Makefile.dep
-    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && go install $j" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && go install $j" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: check-$i" >> Makefile.dep
     echo "check-$i: configure.ac $k" >> Makefile.dep
@@ -102,7 +102,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo >> Makefile.dep
     echo ".PHONY: doc-$i" >> Makefile.dep
     echo "doc-$i: configure.ac $k" >> Makefile.dep
-    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && godoc $j > doc/txt/$i.txt && godoc -html $j > doc/html/$i.html" >> Makefile.dep
+    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && godoc $j > doc/txt/$i.txt && godoc -html $j > doc/html/$i.html" >> Makefile.dep
     echo >> Makefile.dep
 done
 
