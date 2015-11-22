@@ -21,6 +21,7 @@ package vplevel
 
 import (
 	"github.com/ufoot/vapor/vpcrypto"
+	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vptypes"
 	"math/big"
 )
@@ -109,16 +110,91 @@ type Sizes struct {
 	SystemSize vptypes.Size
 }
 
+const (
+	squareIndex int = iota
+	planetIndex
+	systemIndex
+)
+
+func setSize(id *big.Int, n int, s vptypes.Size) {
+	bsr := big.NewInt(int64(vptypes.SizeRange))
+
+	mulA := big.NewInt(0)
+	mulA.Exp(bsr, big.NewInt(int64(n)), nil)
+	mulB := big.NewInt(0)
+	mulB.Mul(bsr, mulA)
+
+	tmp := big.NewInt(0)
+	tmp.Mod(id, mulB)
+	tmp.Div(tmp, mulA)
+	tmp.Set(big.NewInt(int64(s) - tmp.Int64()))
+	tmp.Mul(tmp, mulA)
+	id.Add(id, tmp)
+}
+
+func getSize(id *big.Int, n int) vptypes.Size {
+	bsr := big.NewInt(int64(vptypes.SizeRange))
+
+	mulA := big.NewInt(0)
+	mulA.Exp(bsr, big.NewInt(int64(n)), nil)
+
+	tmp := big.NewInt(0)
+	tmp.Div(id, mulA)
+	tmp.Mod(tmp, bsr)
+
+	return vptypes.Size(tmp.Int64())
+}
+
+type levelFilterChecker struct {
+	sizes Sizes
+}
+
+func (fc levelFilterChecker) Filter(id *big.Int) *big.Int {
+	var ret big.Int
+
+	vpsys.LogDebug("filter for levelid")
+
+	ret.Set(id)
+
+	setSize(&ret, squareIndex, fc.sizes.SquareSize)
+	setSize(&ret, planetIndex, fc.sizes.PlanetSize)
+	setSize(&ret, systemIndex, fc.sizes.SystemSize)
+
+	return &ret
+}
+
+func (fc levelFilterChecker) Check(id *big.Int) bool {
+	vpsys.LogDebug("check for levelid")
+
+	if getSize(id, squareIndex) != fc.sizes.SquareSize {
+		return false
+	}
+	if getSize(id, planetIndex) != fc.sizes.PlanetSize {
+		return false
+	}
+	if getSize(id, systemIndex) != fc.sizes.SystemSize {
+		return false
+	}
+
+	return true
+}
+
 // NetworkID generates a new level id, using cryptography to garantee
 // two players will never generate the same level id.
 func NetworkID(sizes Sizes, key *vpcrypto.Key) (*big.Int, []byte, int, error) {
-	// todo : use sizes
-	return vpcrypto.GenerateID512(key, nil, NetworkIDSeconds)
+	var fc levelFilterChecker
+
+	fc.sizes = sizes
+
+	return vpcrypto.GenerateID512(key, fc, NetworkIDSeconds)
 }
 
 // LocalID generates a new level id, not suitable for inte
 // two players will never generate the same level id.
 func LocalID(sizes Sizes) *big.Int {
-	// todo : use sizes
-	return vpcrypto.Rand512(vpcrypto.NewRand(), nil)
+	var fc levelFilterChecker
+
+	fc.sizes = sizes
+
+	return vpcrypto.Rand512(vpcrypto.NewRand(), fc)
 }
