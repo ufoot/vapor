@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Vapor is a toolkit designed to support Liquid War 7.
 # Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>

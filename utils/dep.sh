@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Vapor is a toolkit designed to support Liquid War 7.
 # Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
@@ -66,7 +66,7 @@ for t in "" "check-" "bench-" "lint-" "devel-" "doc-" ; do
 done
 
 echo "configure.ac: $(ls vp*/*.go | sort -u | tr "\n" " ")" >> Makefile.dep
-echo "\tcd \$(VP_TOPSRCDIR) && ./utils/dep.sh && ./utils/stamp.sh" >> Makefile.dep
+printf "\tcd \$(VP_TOPSRCDIR) && ./utils/dep.sh && ./utils/stamp.sh\n" >> Makefile.dep
 echo >> Makefile.dep
 
 for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
@@ -82,27 +82,27 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     done
     echo ".PHONY: $i" >> Makefile.dep
     echo "$i: configure.ac $k # $m" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && go install $j" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && go install $j\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: check-$i" >> Makefile.dep
     echo "check-$i: configure.ac $k" >> Makefile.dep
-    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +%Y%m%d-%H%M%S` && go test -o test/$i-check-\$\$DATE.bin -coverprofile=test/$i-cover-\$\$DATE.cov $j | tee test/$i-check-\$\$DATE.log && go tool cover -html=test/$i-cover-\$\$DATE.cov -o doc/cover/$i-cover.html" >> Makefile.dep
+    printf "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +\%Y\%m\%d-\%H\%M\%S` && go test -o test/$i-check-\$\$DATE.bin -coverprofile=test/$i-cover-\$\$DATE.cov $j | tee test/$i-check-\$\$DATE.log && go tool cover -html=test/$i-cover-\$\$DATE.cov -o doc/cover/$i-cover.html\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: bench-$i" >> Makefile.dep
     echo "bench-$i: configure.ac $k" >> Makefile.dep
-    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +%Y%m%d-%H%M%S` && go test -bench=. -o test/$i-bench-\$\$DATE.bin -cpuprofile=test/$i-cpu-\$\$DATE.out -memprofile=test/$i-mem-\$\$DATE.out $j | tee test/$i-bench-\$\$DATE.log" >> Makefile.dep
+    printf "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +\%Y\%m\%d-\%H\%M\%S` && go test -bench=. -o test/$i-bench-\$\$DATE.bin -cpuprofile=test/$i-cpu-\$\$DATE.out -memprofile=test/$i-mem-\$\$DATE.out $j | tee test/$i-bench-\$\$DATE.log\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: lint-$i" >> Makefile.dep
     echo "lint-$i: configure.ac $k" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && go vet $j && \$(VP_TOPSRCDIR)/bin/golint $j" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && go vet $j && \$(VP_TOPSRCDIR)/bin/golint $j\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: devel-$i" >> Makefile.dep
     echo "devel-$i: configure.ac $k" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && go vet $j && go test -v -cover $j" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && go vet $j && go test -v -cover $j\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: doc-$i" >> Makefile.dep
     echo "doc-$i: configure.ac $k" >> Makefile.dep
-    echo "\texport GOPATH=\$(VP_TOPSRCDIR) && godoc $j > doc/txt/$i.txt && godoc -html $j > doc/html/$i.html" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && godoc $j > doc/txt/$i.txt && godoc -html $j > doc/html/$i.html\n" >> Makefile.dep
     echo >> Makefile.dep
 done
 

@@ -43,7 +43,7 @@ if test $GIT2CL != "yes"; then
 fi;
 
 VP_TOPBUILDDIR=$(pwd)
-VP_TOPSRCDIR=$(readlink -f $(dirname $0) || readlink $(dirname $0))
+VP_TOPSRCDIR=$(readlink -f $(dirname $0) 2> /dev/null || readlink $(dirname $0) 2> /dev/null || pwd)
 
 AC_SUBST(VP_TOPBUILDDIR)
 AC_SUBST(VP_TOPSRCDIR)
