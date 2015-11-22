@@ -40,6 +40,7 @@ func (state NibblesState) Duration() time.Duration {
 // Init initializes the game state.
 func (state NibblesState) Init(timestamp time.Time) error {
 	vpsys.LogNoticef("game state init")
+	state.start = time.Now()
 
 	return nil
 }

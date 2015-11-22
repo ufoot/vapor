@@ -110,6 +110,8 @@ type Sizes struct {
 	SystemSize vptypes.Size
 }
 
+const expBaseN = 10
+
 const (
 	squareIndex int = iota
 	planetIndex
@@ -120,7 +122,7 @@ func setSize(id *big.Int, n int, s vptypes.Size) {
 	bsr := big.NewInt(int64(vptypes.SizeRange))
 
 	mulA := big.NewInt(0)
-	mulA.Exp(bsr, big.NewInt(int64(n)), nil)
+	mulA.Exp(bsr, big.NewInt(int64(n+expBaseN)), nil)
 	mulB := big.NewInt(0)
 	mulB.Mul(bsr, mulA)
 
@@ -136,7 +138,7 @@ func getSize(id *big.Int, n int) vptypes.Size {
 	bsr := big.NewInt(int64(vptypes.SizeRange))
 
 	mulA := big.NewInt(0)
-	mulA.Exp(bsr, big.NewInt(int64(n)), nil)
+	mulA.Exp(bsr, big.NewInt(int64(n+expBaseN)), nil)
 
 	tmp := big.NewInt(0)
 	tmp.Div(id, mulA)
@@ -181,20 +183,24 @@ func (fc levelFilterChecker) Check(id *big.Int) bool {
 
 // NetworkID generates a new level id, using cryptography to garantee
 // two players will never generate the same level id.
-func NetworkID(sizes Sizes, key *vpcrypto.Key) (*big.Int, []byte, int, error) {
+func NetworkID(sizes Sizes, key *vpcrypto.Key) (*big.Int, []byte, error) {
 	var fc levelFilterChecker
 
 	fc.sizes = sizes
 
-	return vpcrypto.GenerateID512(key, fc, NetworkIDSeconds)
+	ret, sig, _, err := vpcrypto.GenerateID512(key, fc, NetworkIDSeconds)
+
+	return ret, sig, err
 }
 
 // LocalID generates a new level id, not suitable for inte
 // two players will never generate the same level id.
-func LocalID(sizes Sizes) *big.Int {
+func LocalID(sizes Sizes) (*big.Int, error) {
 	var fc levelFilterChecker
 
 	fc.sizes = sizes
 
-	return vpcrypto.Rand512(vpcrypto.NewRand(), fc)
+	ret, _, _, err := vpcrypto.GenerateID512(nil, fc, NetworkIDSeconds)
+
+	return ret, err
 }

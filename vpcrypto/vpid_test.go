@@ -107,6 +107,12 @@ func TestGenerateID512(t *testing.T) {
 	} else {
 		t.Errorf("unable to gererate filtered  ID512 id=%s", id.String())
 	}
+	id, sig, z, err = GenerateID512(nil, co, 1)
+	if err == nil && co.Check(id) {
+		t.Logf("GenerateID512 (checked) OK id=%s sig=nil z=%d", IntToStr512(id), z)
+	} else {
+		t.Errorf("unable to gererate checked  ID512 id=%s", id.String())
+	}
 }
 
 func TestGenerateID256(t *testing.T) {
@@ -138,6 +144,12 @@ func TestGenerateID256(t *testing.T) {
 	} else {
 		t.Errorf("unable to gererate filtered ID256 id=%s", id.String())
 	}
+	id, sig, z, err = GenerateID256(nil, co, 1)
+	if err == nil && co.Check(id) {
+		t.Logf("GenerateID256 (checked) OK id=%s sig=nil z=%d", IntToStr256(id), z)
+	} else {
+		t.Errorf("unable to gererate checked  ID256 id=%s", id.String())
+	}
 }
 
 func TestGenerateID128(t *testing.T) {
@@ -168,6 +180,12 @@ func TestGenerateID128(t *testing.T) {
 		t.Logf("GenerateID128 (filtered) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to gererate filtered ID128 id=%s", id.String())
+	}
+	id, sig, z, err = GenerateID128(nil, co, 1)
+	if err == nil && co.Check(id) {
+		t.Logf("GenerateID128 (checked) OK id=%s sig=nil z=%d", IntToStr128(id), z)
+	} else {
+		t.Errorf("unable to gererate checked  ID128 id=%s", id.String())
 	}
 }
 
@@ -203,6 +221,13 @@ func TestGenerateID64(t *testing.T) {
 	} else {
 		t.Errorf("unable to gererate filtered ID64 id=%d", id)
 	}
+	id, sig, z, err = GenerateID64(nil, co, 1)
+	bigInt.SetUint64(uint64(id))
+	if err == nil && co.Check(&bigInt) {
+		t.Logf("GenerateID64 (checked) OK id=%s sig=nil z=%d", IntToStr64(id), z)
+	} else {
+		t.Errorf("unable to gererate checked  ID64 id=%d", id)
+	}
 }
 
 func TestGenerateID32(t *testing.T) {
@@ -236,5 +261,12 @@ func TestGenerateID32(t *testing.T) {
 		t.Logf("GenerateID32 (filtered) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to gererate filtered ID32 id=%d", id)
+	}
+	id, sig, z, err = GenerateID32(nil, co, 1)
+	bigInt.SetUint64(uint64(id))
+	if err == nil && co.Check(&bigInt) {
+		t.Logf("GenerateID32 (checked) OK id=%s sig=nil z=%d", IntToStr32(id), z)
+	} else {
+		t.Errorf("unable to gererate checked  ID32 id=%d", id)
 	}
 }

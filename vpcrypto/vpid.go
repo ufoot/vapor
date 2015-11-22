@@ -37,6 +37,7 @@ type FilterChecker interface {
 }
 
 // GenerateID512 generates a 512 bits id, and signs it.
+// If key is nil, no signature is generated.
 // If filterChecker is not nil, it is garanteed that the property
 // is verified by the id.
 // If seconds is greater than 0, will wait for this amount of
@@ -56,10 +57,12 @@ func GenerateID512(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 			tmpInt = filterChecker.Filter(tmpInt)
 		}
 		if filterChecker == nil || filterChecker.Check(tmpInt) {
-			tmpData = IntToBuf512(tmpInt)
-			tmpSig, err = key.Sign(tmpData)
-			if err != nil {
-				return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+			if key != nil {
+				tmpData = IntToBuf512(tmpInt)
+				tmpSig, err = key.Sign(tmpData)
+				if err != nil {
+					return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+				}
 			}
 			tmpZ = ZeroesInBuf(Checksum512(tmpSig))
 			if tmpZ >= z {
@@ -74,6 +77,7 @@ func GenerateID512(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 }
 
 // GenerateID256 generates a 256 bits id, and signs it.
+// If key is nil, no signature is generated.
 // If filterChecker is not nil, it is garanteed that the property
 // is verified by the id.
 // If seconds is greater than 0, will wait for this amount of
@@ -93,10 +97,12 @@ func GenerateID256(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 			tmpInt = filterChecker.Filter(tmpInt)
 		}
 		if filterChecker == nil || filterChecker.Check(tmpInt) {
-			tmpData = IntToBuf256(tmpInt)
-			tmpSig, err = key.Sign(tmpData)
-			if err != nil {
-				return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+			if key != nil {
+				tmpData = IntToBuf256(tmpInt)
+				tmpSig, err = key.Sign(tmpData)
+				if err != nil {
+					return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+				}
 			}
 			tmpZ = ZeroesInBuf(Checksum256(tmpSig))
 			if tmpZ >= z {
@@ -111,6 +117,7 @@ func GenerateID256(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 }
 
 // GenerateID128 generates a 128 bits id, and signs it.
+// If key is nil, no signature is generated.
 // If filterChecker is not nil, it is garanteed that the property
 // is verified by the id.
 // If seconds is greater than 0, will wait for this amount of
@@ -130,10 +137,12 @@ func GenerateID128(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 			tmpInt = filterChecker.Filter(tmpInt)
 		}
 		if filterChecker == nil || filterChecker.Check(tmpInt) {
-			tmpData = IntToBuf128(tmpInt)
-			tmpSig, err = key.Sign(tmpData)
-			if err != nil {
-				return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+			if key != nil {
+				tmpData = IntToBuf128(tmpInt)
+				tmpSig, err = key.Sign(tmpData)
+				if err != nil {
+					return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+				}
 			}
 			tmpZ = ZeroesInBuf(Checksum128(tmpSig))
 			if tmpZ >= z {
@@ -148,6 +157,7 @@ func GenerateID128(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 }
 
 // GenerateID64 generates a 64 bits id, and signs it.
+// If key is nil, no signature is generated.
 // If filterChecker is not nil, it is garanteed that the property
 // is verified by the id.
 // If seconds is greater than 0, will wait for this amount of
@@ -170,10 +180,12 @@ func GenerateID64(key *Key, filterChecker FilterChecker, seconds int) (uint64, [
 		}
 		tmpInt = tmpBig.Uint64()
 		if filterChecker == nil || filterChecker.Check(&tmpBig) {
-			tmpData = IntToBuf64(tmpInt)
-			tmpSig, err = key.Sign(tmpData)
-			if err != nil {
-				return 0, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+			if key != nil {
+				tmpData = IntToBuf64(tmpInt)
+				tmpSig, err = key.Sign(tmpData)
+				if err != nil {
+					return 0, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+				}
 			}
 			tmpZ = ZeroesInBuf(Checksum64(tmpSig))
 			if tmpZ >= z {
@@ -188,6 +200,7 @@ func GenerateID64(key *Key, filterChecker FilterChecker, seconds int) (uint64, [
 }
 
 // GenerateID32 generates a 32 bits id, and signs it.
+// If key is nil, no signature is generated.
 // If filterChecker is not nil, it is garanteed that the property
 // is verified by the id.
 // If seconds is greater than 0, will wait for this amount of
@@ -210,10 +223,12 @@ func GenerateID32(key *Key, filterChecker FilterChecker, seconds int) (uint32, [
 		}
 		tmpInt = uint32(tmpBig.Uint64())
 		if filterChecker == nil || filterChecker.Check(&tmpBig) {
-			tmpData = IntToBuf32(tmpInt)
-			tmpSig, err = key.Sign(tmpData)
-			if err != nil {
-				return 0, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+			if key != nil {
+				tmpData = IntToBuf32(tmpInt)
+				tmpSig, err = key.Sign(tmpData)
+				if err != nil {
+					return 0, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+				}
 			}
 			tmpZ = ZeroesInBuf(Checksum32(tmpSig))
 			if tmpZ >= z {

@@ -61,7 +61,7 @@ func TestNetworkID(t *testing.T) {
 
 	key, err := vpcrypto.NewKey()
 	if err == nil {
-		ni, sig, _, err := NetworkID(sizes, key)
+		ni, sig, err := NetworkID(sizes, key)
 		if err == nil {
 			t.Logf("Network ID generated n=%d sig=%s", ni.Int64(), string(sig))
 			if getSize(ni, squareIndex) != sizes.SquareSize {
@@ -88,16 +88,20 @@ func TestLocalID(t *testing.T) {
 	sizes.PlanetSize = vptypes.SizeSmall
 	sizes.SystemSize = vptypes.SizeLarge
 
-	li := LocalID(sizes)
+	li, err := LocalID(sizes)
 
-	t.Logf("Local ID generated n=%d", li.Int64())
-	if getSize(li, squareIndex) != sizes.SquareSize {
-		t.Error("square size problem")
-	}
-	if getSize(li, planetIndex) != sizes.PlanetSize {
-		t.Error("planet size problem")
-	}
-	if getSize(li, systemIndex) != sizes.SystemSize {
-		t.Error("system size problem")
+	if err == nil {
+		t.Logf("Local ID generated n=%d", li.Int64())
+		if getSize(li, squareIndex) != sizes.SquareSize {
+			t.Error("square size problem")
+		}
+		if getSize(li, planetIndex) != sizes.PlanetSize {
+			t.Error("planet size problem")
+		}
+		if getSize(li, systemIndex) != sizes.SystemSize {
+			t.Error("system size problem")
+		}
+	} else {
+		t.Error("unable to generate Local ID", err)
 	}
 }
