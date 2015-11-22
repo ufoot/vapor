@@ -17,7 +17,7 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpbusserver
+package vpbussrv
 
 import (
 	"git.apache.org/thrift.git/lib/go/thrift"

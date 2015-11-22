@@ -17,6 +17,6 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpbusserver contains the glue between the implementation of
+// Package vpbussrv contains the glue between the implementation of
 // the backend Golang server and the Thrift protocol.
-package vpbusserver
+package vpbussrv

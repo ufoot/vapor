@@ -21,7 +21,7 @@ package main
 
 import (
 	"git.apache.org/thrift.git/lib/go/thrift"
-	"github.com/ufoot/vapor/vpbusserver"
+	"github.com/ufoot/vapor/vpbussrv"
 	"github.com/ufoot/vapor/vpsys"
 	"time"
 )
@@ -78,14 +78,14 @@ func (server NibblesServer) Init(timestamp time.Time) error {
 	vpsys.LogNoticef("game server init")
 	var err error
 
-	server.server, err = vpbusserver.NewDefault()
+	server.server, err = vpbussrv.NewDefault()
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to create vpbusserver Thrift server")
+		return vpsys.ErrorChain(err, "unable to create vpbussrv Thrift server")
 	}
 
-	err = vpbusserver.AsyncServe(server.server)
+	err = vpbussrv.AsyncServe(server.server)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to start vpbusserver Thrift server")
+		return vpsys.ErrorChain(err, "unable to start vpbussrv Thrift server")
 	}
 
 	return nil
