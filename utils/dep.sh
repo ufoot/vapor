@@ -90,7 +90,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo >> Makefile.dep
     echo ".PHONY: bench-$i" >> Makefile.dep
     echo "bench-$i: configure.ac $k" >> Makefile.dep
-    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +%Y%m%d-%H%M%S` && go test -o test/$i-bench-\$\$DATE.bin -cpuprofile=test/$i-cpu-\$\$DATE.out -memprofile=test/$i-mem-\$\$DATE.out $j | tee test/$i-bench-\$\$DATE.log" >> Makefile.dep
+    echo "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +%Y%m%d-%H%M%S` && go test -bench=. -o test/$i-bench-\$\$DATE.bin -cpuprofile=test/$i-cpu-\$\$DATE.out -memprofile=test/$i-mem-\$\$DATE.out $j | tee test/$i-bench-\$\$DATE.log" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: lint-$i" >> Makefile.dep
     echo "lint-$i: configure.ac $k" >> Makefile.dep
