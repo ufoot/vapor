@@ -62,5 +62,5 @@ install -d "${VP_TOPBUILDDIR}/doc/txt"
 install -d "${VP_TOPBUILDDIR}/doc/html"
 install -d "${VP_TOPBUILDDIR}/doc/cover"
 install -d "${VP_TOPBUILDDIR}/test"
-cd "${VP_TOPSRCDIR}" && ./utils/get.sh && ./utils/dep.sh && ./utils/stamp.sh ; cd "${VP_TOPBUILDDIR}"
+cd "${VP_TOPSRCDIR}" && ./utils/dep.sh && ./utils/stamp.sh ; cd "${VP_TOPBUILDDIR}"
 

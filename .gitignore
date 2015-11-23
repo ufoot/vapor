@@ -11,8 +11,7 @@ src/github.com
 src/golang.org
 src/code.google.com
 bin/vp*
-bin/godep
-bin/golint
+bin/go*
 pkg
 test
 doc/txt

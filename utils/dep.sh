@@ -86,11 +86,11 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo >> Makefile.dep
     echo ".PHONY: check-$i" >> Makefile.dep
     echo "check-$i: configure.ac $k" >> Makefile.dep
-    printf "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +\%Y\%m\%d-\%H\%M\%S` && go test -o test/$i-check-\$\$DATE.bin -coverprofile=test/$i-cover-\$\$DATE.cov $j | tee test/$i-check-\$\$DATE.log && go tool cover -html=test/$i-cover-\$\$DATE.cov -o doc/cover/$i-cover.html\n" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && go test $j\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: bench-$i" >> Makefile.dep
     echo "bench-$i: configure.ac $k" >> Makefile.dep
-    printf "\t@export GOPATH=\$(VP_TOPSRCDIR) && export DATE=`date +\%Y\%m\%d-\%H\%M\%S` && go test -bench=. -o test/$i-bench-\$\$DATE.bin -cpuprofile=test/$i-cpu-\$\$DATE.out -memprofile=test/$i-mem-\$\$DATE.out $j | tee test/$i-bench-\$\$DATE.log\n" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && go test -bench=. $j\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: lint-$i" >> Makefile.dep
     echo "lint-$i: configure.ac $k" >> Makefile.dep
@@ -98,7 +98,12 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo >> Makefile.dep
     echo ".PHONY: devel-$i" >> Makefile.dep
     echo "devel-$i: configure.ac $k" >> Makefile.dep
-    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && go vet $j && go test -v -cover $j\n" >> Makefile.dep
+    printf "\techo check $i\n" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((go test -o test/$i-check.bin -coverprofile=test/$i-cover.cov $j | tee test/$i-check.log) || true)\n" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((go test -v $j | \$(VP_TOPSRCDIR)/bin/go-junit-report > test/$i-junit.xml) || true)\n" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((go tool cover -html=test/$i-cover.cov -o doc/cover/$i-cover.html) || true)\n" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((\$(VP_TOPSRCDIR)/bin/gocov convert test/$i-cover.cov | \$(VP_TOPSRCDIR)/bin/gocov-xml > test/$i-cobertura.xml) || true)\n" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((go test -bench=. $j | tee test/$i-bench.log) || true)\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: doc-$i" >> Makefile.dep
     echo "doc-$i: configure.ac $k" >> Makefile.dep

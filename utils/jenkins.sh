@@ -44,7 +44,7 @@ fi
 
 echo "******** $0 $(date) ********"
 #rm -rf src/git.apache.org src/github.com src/golang.org
-rm -rf test doc/txt doc/html
+rm -rf test doc/txt doc/html doc/cover
 git clean -d -f -x
 rm -rf $HOME/.vapor
 
@@ -73,11 +73,19 @@ else
 fi
 
 echo "******** $0 $(date) ********"
+if make devel ; then
+    echo "make devel OK"
+else
+    echo "make devel failed"
+    exit 4
+fi
+
+echo "******** $0 $(date) ********"
 if make check ; then
     echo "make check OK"
 else
     echo "make check failed"
-    exit 4
+    exit 5
 fi
 
 echo "******** $0 $(date) ********"
@@ -85,7 +93,7 @@ if make bench ; then
     echo "make bench OK"
 else
     echo "make bench failed"
-    exit 5
+    exit 6
 fi
 
 echo "******** $0 $(date) ********"
@@ -93,6 +101,6 @@ if make doc ; then
     echo "make doc OK"
 else
     echo "make doc failed"
-    exit 6
+    exit 7
 fi
 
