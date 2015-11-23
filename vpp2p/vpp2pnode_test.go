@@ -20,12 +20,17 @@
 package vpp2p
 
 import (
+	"github.com/ufoot/vapor/vpcrypto"
 	"testing"
 )
 
 func TestLookup(t *testing.T) {
 	var lp LocalProxy
 
-	path, err := lp.Lookup([]byte("toto"))
+	key := vpcrypto.Checksum256([]byte("toto"))
+	keyShift := vpcrypto.Checksum256([]byte("toto"))
+	imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
+
+	path, err := lp.Lookup(key, keyShift, imaginaryNode)
 	t.Log("todo...", path, err)
 }

@@ -21,8 +21,8 @@ package vpp2p
 
 // NodeInfo stores the static data for a Node.
 type NodeInfo struct {
-	// 256-bit id, generated from signing HostPubKey and RingID,
-	// could be recalculated dynamically, but cached for efficiency.
+	// 256-bit id, generated randomly, this is what allows us to
+	// have several nodes per host/ring.
 	NodeID []byte
 	// Refers to the physical host.
 	HostPubKey []byte
@@ -40,7 +40,7 @@ type Node struct {
 	hostPtr *Host
 
 	// The successor nodes within the ring, use 1st elem for direct successor..
-	successor []*Node
+	Successor []*Node
 	// A list of nodes preceeding m*Id (the 1st Bruijn node),
 	// so that it contains about O(Log(n)) before stumbling on D.
 	// The first element is actually D, the other ones go backwards on the ring.
@@ -51,10 +51,10 @@ type Node struct {
 // All calls return the complete call stack
 type NodeProxy interface {
 	NodeID() []byte
-	Lookup(key []byte) ([]*NodeInfo, error)
-	Set(key, value []byte) ([]*NodeInfo, error)
-	Get(key []byte) ([]byte, []*NodeInfo, error)
-	Clear(key []byte) ([]*NodeInfo, error)
+	Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error)
+	Set(key, keyShift, imaginaryNode, value []byte) ([]*NodeInfo, error)
+	Get(key, keyShift, imaginaryNode []byte) ([]byte, []*NodeInfo, error)
+	Clear(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error)
 	// GetRange(key1, key2 []byte) TODO !
 }
 
@@ -64,8 +64,13 @@ type LocalProxy struct {
 	localNode Node
 }
 
+// NodeID returns this node's ID.
+func (LocalProxy) NodeID() []byte {
+	return nil // todo
+}
+
 // Lookup a key and return the path of nodes to this key.
-func (LocalProxy) Lookup(key []byte) ([]*NodeInfo, error) {
+func (LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
 	// pseudo code :
 	// procedure m.LOOKUP(k, kshift, i)
 	//   if k is in (m,successor] then return (successor)
@@ -80,16 +85,16 @@ func (LocalProxy) Lookup(key []byte) ([]*NodeInfo, error) {
 }
 
 // Set a key and return the path of nodes to this key.
-func (LocalProxy) Set(key, value []byte) ([]*NodeInfo, error) {
+func (LocalProxy) Set(key, keyShift, imaginaryNode, value []byte) ([]*NodeInfo, error) {
 	return nil, nil // todo
 }
 
 // Get a key and returns the path of nodes to this key.
-func (LocalProxy) Get(key []byte) ([]byte, []*NodeInfo, error) {
+func (LocalProxy) Get(key, keyShift, imaginaryNode []byte) ([]byte, []*NodeInfo, error) {
 	return nil, nil, nil // todo
 }
 
 // Clear a key and returns the path of nodes to this key.
-func (LocalProxy) Clear(key []byte) ([]*NodeInfo, error) {
+func (LocalProxy) Clear(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
 	return nil, nil // todo
 }
