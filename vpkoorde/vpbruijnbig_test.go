@@ -25,30 +25,30 @@ import (
 	"testing"
 )
 
-func TestBruijnNext(t *testing.T) {
+func TestBruijnBigNext(t *testing.T) {
 	const m = 2
 	const n = 3
 	bruijn23 := [m * m * m][n]int{{0, 1}, {2, 3}, {4, 5}, {6, 7}, {0, 1}, {2, 3}, {4, 5}, {6, 7}}
 
 	for i, v := range bruijn23 {
 		bi := big.NewInt(int64(i))
-		nf, err := BruijnNextFirst(m, n, bi)
+		nf, err := BruijnBigNextFirst(m, n, bi)
 		if err != nil {
-			t.Error("unable to call BruijnNextFirst:", err)
+			t.Error("unable to call BruijnBigNextFirst:", err)
 		}
 		if nf.Int64() != int64(v[0]) {
 			t.Errorf("bad nf for i=%d, got %s", i, nf)
 		}
-		nl, err := BruijnNextLast(m, n, bi)
+		nl, err := BruijnBigNextLast(m, n, bi)
 		if err != nil {
-			t.Error("unable to call BruijnNextLast:", err)
+			t.Error("unable to call BruijnBigNextLast:", err)
 		}
 		if nl.Int64() != int64(v[1]) {
 			t.Errorf("bad nl for i=%d, got %s", i, nl)
 		}
-		nList, err := BruijnNextList(m, n, bi)
+		nList, err := BruijnBigNextList(m, n, bi)
 		if err != nil {
-			t.Error("unable to call BruijnNextList:", err)
+			t.Error("unable to call BruijnBigNextList:", err)
 		}
 		for j, w := range nList {
 			if w.Int64() != int64(v[j]) {
@@ -58,30 +58,30 @@ func TestBruijnNext(t *testing.T) {
 	}
 }
 
-func TestBruijnPrev(t *testing.T) {
+func TestBruijnBigPrev(t *testing.T) {
 	const m = 2
 	const n = 3
 	bruijn23 := [m * m * m][n]int{{0, 4}, {0, 4}, {1, 5}, {1, 5}, {2, 6}, {2, 6}, {3, 7}, {3, 7}}
 
 	for i, v := range bruijn23 {
 		bi := big.NewInt(int64(i))
-		pf, err := BruijnPrevFirst(m, n, bi)
+		pf, err := BruijnBigPrevFirst(m, n, bi)
 		if err != nil {
-			t.Error("unable to call BruijnPrevFirst:", err)
+			t.Error("unable to call BruijnBigPrevFirst:", err)
 		}
 		if pf.Int64() != int64(v[0]) {
 			t.Errorf("bad pf for i=%d, got %s", i, pf)
 		}
-		pl, err := BruijnPrevLast(m, n, bi)
+		pl, err := BruijnBigPrevLast(m, n, bi)
 		if err != nil {
-			t.Error("unable to call BruijnPrevLast:", err)
+			t.Error("unable to call BruijnBigPrevLast:", err)
 		}
 		if pl.Int64() != int64(v[1]) {
 			t.Errorf("bad pl for i=%d, got %s", i, pl)
 		}
-		pList, err := BruijnPrevList(m, n, bi)
+		pList, err := BruijnBigPrevList(m, n, bi)
 		if err != nil {
-			t.Error("unable to call BruijnPrevList:", err)
+			t.Error("unable to call BruijnBigPrevList:", err)
 		}
 		for j, w := range pList {
 			if w.Int64() != int64(v[j]) {
@@ -91,23 +91,23 @@ func TestBruijnPrev(t *testing.T) {
 	}
 }
 
-func TestBruijnForwardPath(t *testing.T) {
+func TestBruijnBigForwardPath(t *testing.T) {
 	const m = 10
 	const n = 6
 	const from = 234567
 	const to = 987654
 
-	path, err := BruijnForwardPath(m, n, big.NewInt(from), big.NewInt(to))
+	path, err := BruijnBigForwardPath(m, n, big.NewInt(from), big.NewInt(to))
 	if err != nil {
-		t.Error("unable to call BruijnForwardPath:", err)
+		t.Error("unable to call BruijnBigForwardPath:", err)
 	}
 	for i, v := range path {
 		t.Logf("path[%d]=%d", i, v.Int64())
 		if i > 0 {
 			found := false
-			nList, err := BruijnNextList(m, n, path[i-1])
+			nList, err := BruijnBigNextList(m, n, path[i-1])
 			if err != nil {
-				t.Error("unable to call BruijnNextList:", err)
+				t.Error("unable to call BruijnBigNextList:", err)
 			}
 			for j, w := range nList {
 				if v.Cmp(w) == 0 {
@@ -121,33 +121,33 @@ func TestBruijnForwardPath(t *testing.T) {
 				t.Errorf("v[%d]=%d not found in successors of v[%d]", i, v.Int64(), i-1)
 			}
 		}
-		w, err := BruijnForwardElem(m, n, big.NewInt(from), big.NewInt(to), i)
+		w, err := BruijnBigForwardElem(m, n, big.NewInt(from), big.NewInt(to), i)
 		if err != nil {
-			t.Error(vpsys.ErrorChain(err, "unable to call BruijnForwardElem"))
+			t.Error(vpsys.ErrorChain(err, "unable to call BruijnBigForwardElem"))
 		}
 		if v.Cmp(w) != 0 {
-			t.Errorf("values for BruijnForwardPath=%s and BruijnForwardElem=%s differ, i=%d", v.String(), w.String(), i)
+			t.Errorf("values for BruijnBigForwardPath=%s and BruijnBigForwardElem=%s differ, i=%d", v.String(), w.String(), i)
 		}
 	}
 }
 
-func TestBruijnBackwardPath(t *testing.T) {
+func TestBruijnBigBackwardPath(t *testing.T) {
 	const m = 10
 	const n = 4
 	const from = 1234
 	const to = 9876
 
-	path, err := BruijnBackwardPath(m, n, big.NewInt(from), big.NewInt(to))
+	path, err := BruijnBigBackwardPath(m, n, big.NewInt(from), big.NewInt(to))
 	if err != nil {
-		t.Error("unable to call BruijnBackwardPath:", err)
+		t.Error("unable to call BruijnBigBackwardPath:", err)
 	}
 	for i, v := range path {
 		t.Logf("path[%d]=%d", i, v.Int64())
 		if i > 0 {
 			found := false
-			nList, err := BruijnPrevList(m, n, path[i-1])
+			nList, err := BruijnBigPrevList(m, n, path[i-1])
 			if err != nil {
-				t.Error("unable to call BruijnPrevList:", err)
+				t.Error("unable to call BruijnBigPrevList:", err)
 			}
 			for j, w := range nList {
 				if v.Cmp(w) == 0 {
@@ -161,50 +161,50 @@ func TestBruijnBackwardPath(t *testing.T) {
 				t.Errorf("v[%d]=%d not found in predecessors of v[%d]", i, v.Int64(), i-1)
 			}
 		}
-		w, err := BruijnBackwardElem(m, n, big.NewInt(from), big.NewInt(to), i)
+		w, err := BruijnBigBackwardElem(m, n, big.NewInt(from), big.NewInt(to), i)
 		if err != nil {
-			t.Error(vpsys.ErrorChain(err, "unable to call BruijnBackwardElem"))
+			t.Error(vpsys.ErrorChain(err, "unable to call BruijnBigBackwardElem"))
 		}
 		if v.Cmp(w) != 0 {
-			t.Errorf("values for BruijnBackwardPath=%s and BruijnBackwardElem=%s differ, i=%d", v.String(), w.String(), i)
+			t.Errorf("values for BruijnBigBackwardPath=%s and BruijnBigBackwardElem=%s differ, i=%d", v.String(), w.String(), i)
 		}
 	}
 }
 
-func BenchmarkNext_2_32(b *testing.B) {
+func BenchmarkBruijnBigNext_2_32(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		BruijnNextList(2, 32, big.NewInt(int64(i)))
+		BruijnBigNextList(2, 32, big.NewInt(int64(i)))
 	}
 }
 
-func BenchmarkPrev_2_32(b *testing.B) {
+func BenchmarkBruijnBigPrev_2_32(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		BruijnPrevList(2, 32, big.NewInt(int64(i)))
+		BruijnBigPrevList(2, 32, big.NewInt(int64(i)))
 	}
 }
 
-func BenchmarkNext_4_512(b *testing.B) {
+func BenchmarkBruijnBigNext_4_512(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		BruijnNextList(4, 512, big.NewInt(int64(i)))
+		BruijnBigNextList(4, 512, big.NewInt(int64(i)))
 	}
 }
 
-func BenchmarkPrev_4_512(b *testing.B) {
+func BenchmarkBruijnBigPrev_4_512(b *testing.B) {
 	for i := 0; i < b.N; i++ {
-		BruijnPrevList(4, 512, big.NewInt(int64(i)))
+		BruijnBigPrevList(4, 512, big.NewInt(int64(i)))
 	}
 }
 
-func BenchmarkNext_7_100(b *testing.B) {
+func BenchmarkBruijnBigNext_7_100(b *testing.B) {
 	// 7**100 -> approx 280 bits
 	for i := 0; i < b.N; i++ {
-		BruijnNextList(7, 100, big.NewInt(int64(i)))
+		BruijnBigNextList(7, 100, big.NewInt(int64(i)))
 	}
 }
 
-func BenchmarkPrev_7_100(b *testing.B) {
+func BenchmarkBruijnBigPrev_7_100(b *testing.B) {
 	// 7**100 -> approx 280 bits
 	for i := 0; i < b.N; i++ {
-		BruijnPrevList(7, 100, big.NewInt(int64(i)))
+		BruijnBigPrevList(7, 100, big.NewInt(int64(i)))
 	}
 }

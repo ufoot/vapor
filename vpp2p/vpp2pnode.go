@@ -65,12 +65,12 @@ type LocalProxy struct {
 }
 
 // NodeID returns this node's ID.
-func (LocalProxy) NodeID() []byte {
-	return nil // todo
+func (lp LocalProxy) NodeID() []byte {
+	return lp.localNode.Info.NodeID
 }
 
 // Lookup a key and return the path of nodes to this key.
-func (LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
+func (lp LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
 	// pseudo code :
 	// procedure m.LOOKUP(k, kshift, i)
 	//   if k is in (m,successor] then return (successor)
@@ -81,20 +81,22 @@ func (LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, erro
 	//   else return (successor.lookup(k,kshift,i))
 	// Note : i can be chosen so that its low bits are top bits of k
 
+	//   if k is in (m,successor] then return (successor)
+
 	return nil, nil // todo
 }
 
 // Set a key and return the path of nodes to this key.
-func (LocalProxy) Set(key, keyShift, imaginaryNode, value []byte) ([]*NodeInfo, error) {
+func (lp LocalProxy) Set(key, keyShift, imaginaryNode, value []byte) ([]*NodeInfo, error) {
 	return nil, nil // todo
 }
 
 // Get a key and returns the path of nodes to this key.
-func (LocalProxy) Get(key, keyShift, imaginaryNode []byte) ([]byte, []*NodeInfo, error) {
+func (lp LocalProxy) Get(key, keyShift, imaginaryNode []byte) ([]byte, []*NodeInfo, error) {
 	return nil, nil, nil // todo
 }
 
 // Clear a key and returns the path of nodes to this key.
-func (LocalProxy) Clear(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
+func (lp LocalProxy) Clear(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
 	return nil, nil // todo
 }

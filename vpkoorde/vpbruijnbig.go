@@ -21,6 +21,10 @@ package vpkoorde
 
 // Read https://en.wikipedia.org/wiki/De_Bruijn_graph for theory
 
+// This is a generalist (slow) Bruijn graph implementation.
+// It can be used for any m,n combination, making it a good reference
+// to check other optimized / limited implementations.
+
 import (
 	"fmt"
 	"math/big"
@@ -47,45 +51,45 @@ func checkMNX(m, n int, x *big.Int) (*big.Int, *big.Int, error) {
 	return bm, max, nil
 }
 
-func nextFirst(x, bm, max *big.Int) *big.Int {
+func nextBigFirst(x, bm, max *big.Int) *big.Int {
 	nf := big.NewInt(0)
 	nf.Mul(x, bm)
 	return nf.Mod(nf, max)
 }
 
-// BruijnNextFirst returns the first Bruijn node pointed by this node.
+// BruijnBigNextFirst returns the first Bruijn node pointed by this node.
 // Other nodes might be deduced by just incrementing this one.
-func BruijnNextFirst(m, n int, x *big.Int) (*big.Int, error) {
+func BruijnBigNextFirst(m, n int, x *big.Int) (*big.Int, error) {
 	bm, max, err := checkMNX(m, n, x)
 	if err != nil {
 		return nil, err
 	}
 
-	return nextFirst(x, bm, max), nil
+	return nextBigFirst(x, bm, max), nil
 }
 
-// BruijnNextLast returns the last Bruijn node pointing to this node.
+// BruijnBigNextLast returns the last Bruijn node pointing to this node.
 // Other nodes might be deduced by just decrementing this one with
 // a value of m**(n-1).
-func BruijnNextLast(m, n int, x *big.Int) (*big.Int, error) {
+func BruijnBigNextLast(m, n int, x *big.Int) (*big.Int, error) {
 	bm, max, err := checkMNX(m, n, x)
 	if err != nil {
 		return nil, err
 	}
-	nf := nextFirst(x, bm, max)
+	nf := nextBigFirst(x, bm, max)
 	bm1 := big.NewInt(int64(m - 1))
 
 	return nf.Add(nf, bm1), nil
 }
 
-// BruijnNextList returns the list of all Bruijn nodes pointed by
+// BruijnBigNextList returns the list of all Bruijn nodes pointed by
 // this node, the nodes following this one (we walk down the graph).
-func BruijnNextList(m, n int, x *big.Int) ([]*big.Int, error) {
+func BruijnBigNextList(m, n int, x *big.Int) ([]*big.Int, error) {
 	bm, max, err := checkMNX(m, n, x)
 	if err != nil {
 		return nil, err
 	}
-	nf := nextFirst(x, bm, max)
+	nf := nextBigFirst(x, bm, max)
 
 	ret := make([]*big.Int, m)
 	for i := range ret {
@@ -101,33 +105,33 @@ func BruijnNextList(m, n int, x *big.Int) ([]*big.Int, error) {
 	return ret, nil
 }
 
-func prevFirst(x, bm, max *big.Int) *big.Int {
+func prevBigFirst(x, bm, max *big.Int) *big.Int {
 	pf := big.NewInt(0)
 	// no need to do a modulo here : it *is* smaller than m**n
 	return pf.Div(x, bm)
 }
 
-// BruijnPrevFirst returns the first Bruijn node pointing to this node.
+// BruijnBigPrevFirst returns the first Bruijn node pointing to this node.
 // Other nodes might be deduced by just incrementing this one with
 // a value of m**(n-1).
-func BruijnPrevFirst(m, n int, x *big.Int) (*big.Int, error) {
+func BruijnBigPrevFirst(m, n int, x *big.Int) (*big.Int, error) {
 	bm, max, err := checkMNX(m, n, x)
 	if err != nil {
 		return nil, err
 	}
 
-	return prevFirst(x, bm, max), nil
+	return prevBigFirst(x, bm, max), nil
 }
 
-// BruijnPrevLast returns the last Bruijn node pointing to this node.
+// BruijnBigPrevLast returns the last Bruijn node pointing to this node.
 // Other nodes might be deduced by just decrementing this one with
 // a value of m**(n-1).
-func BruijnPrevLast(m, n int, x *big.Int) (*big.Int, error) {
+func BruijnBigPrevLast(m, n int, x *big.Int) (*big.Int, error) {
 	bm, max, err := checkMNX(m, n, x)
 	if err != nil {
 		return nil, err
 	}
-	pf := prevFirst(x, bm, max)
+	pf := prevBigFirst(x, bm, max)
 	bn1 := big.NewInt(int64(n - 1))
 	step := big.NewInt(0)
 	step.Exp(bm, bn1, nil)
@@ -138,14 +142,14 @@ func BruijnPrevLast(m, n int, x *big.Int) (*big.Int, error) {
 	return pf.Add(pf, step), nil
 }
 
-// BruijnPrevList returns the list of all Bruijn nodes pointing to
+// BruijnBigPrevList returns the list of all Bruijn nodes pointing to
 // this node, the nodes preceding this one (we walk up the graph).
-func BruijnPrevList(m, n int, x *big.Int) ([]*big.Int, error) {
+func BruijnBigPrevList(m, n int, x *big.Int) ([]*big.Int, error) {
 	bm, max, err := checkMNX(m, n, x)
 	if err != nil {
 		return nil, err
 	}
-	pf := prevFirst(x, bm, max)
+	pf := prevBigFirst(x, bm, max)
 	bn1 := big.NewInt(int64(n - 1))
 	step := big.NewInt(0)
 	step.Exp(bm, bn1, nil)
@@ -164,7 +168,7 @@ func BruijnPrevList(m, n int, x *big.Int) ([]*big.Int, error) {
 	return ret, nil
 }
 
-func compose(x, y, bm, max *big.Int, m, n, i int) *big.Int {
+func composeBig(x, y, bm, max *big.Int, m, n, i int) *big.Int {
 	c := big.NewInt(0)
 
 	if i <= 0 {
@@ -189,11 +193,11 @@ func compose(x, y, bm, max *big.Int, m, n, i int) *big.Int {
 	return c
 }
 
-// BruijnForwardPath returns the path between two nodes. The path
+// BruijnBigForwardPath returns the path between two nodes. The path
 // might be non-optimized, it always contains m+1 elements, including
 // from and to destination. This is the default forward path in which
 // node n+1 is the node after n in the bruijn sequence.
-func BruijnForwardPath(m, n int, from, to *big.Int) ([]*big.Int, error) {
+func BruijnBigForwardPath(m, n int, from, to *big.Int) ([]*big.Int, error) {
 	bm, max, err := checkMNX(m, n, from)
 	if err != nil {
 		return nil, err
@@ -205,17 +209,17 @@ func BruijnForwardPath(m, n int, from, to *big.Int) ([]*big.Int, error) {
 
 	ret := make([]*big.Int, n+1)
 	for i := range ret {
-		ret[i] = compose(from, to, bm, max, m, n, i)
+		ret[i] = composeBig(from, to, bm, max, m, n, i)
 	}
 
 	return ret, nil
 }
 
-// BruijnBackwardPath returns the path between two nodes. The path
+// BruijnBigBackwardPath returns the path between two nodes. The path
 // might be non-optimized, it always contains m+1 elements, including
 // from and to destination. This is the alternative backward path in which
 // node n+1 is the node before n in the bruijn sequence.
-func BruijnBackwardPath(m, n int, from, to *big.Int) ([]*big.Int, error) {
+func BruijnBigBackwardPath(m, n int, from, to *big.Int) ([]*big.Int, error) {
 	bm, max, err := checkMNX(m, n, from)
 	if err != nil {
 		return nil, err
@@ -227,16 +231,16 @@ func BruijnBackwardPath(m, n int, from, to *big.Int) ([]*big.Int, error) {
 
 	ret := make([]*big.Int, n+1)
 	for i := range ret {
-		ret[i] = compose(to, from, bm, max, m, n, n-i)
+		ret[i] = composeBig(to, from, bm, max, m, n, n-i)
 	}
 
 	return ret, nil
 }
 
-// BruijnForwardElem returns the path element between two nodes.
+// BruijnBigForwardElem returns the path element between two nodes.
 // Index 0 is the from element, and n (number of elements as in Bruijn nodes)
 // the to element. Uses the forward, default path.
-func BruijnForwardElem(m, n int, from, to *big.Int, i int) (*big.Int, error) {
+func BruijnBigForwardElem(m, n int, from, to *big.Int, i int) (*big.Int, error) {
 	if i < 0 || i > n {
 		return nil, fmt.Errorf("i=%d out of range n=%d", i, n)
 	}
@@ -249,13 +253,13 @@ func BruijnForwardElem(m, n int, from, to *big.Int, i int) (*big.Int, error) {
 		return nil, err
 	}
 
-	return compose(from, to, bm, max, m, n, i), nil
+	return composeBig(from, to, bm, max, m, n, i), nil
 }
 
-// BruijnBackwardElem returns the path element between two nodes.
+// BruijnBigBackwardElem returns the path element between two nodes.
 // Index 0 is the from element, and n (number of elements as in Bruijn nodes)
 // the to element. Uses the backward, alternative path.
-func BruijnBackwardElem(m, n int, from, to *big.Int, i int) (*big.Int, error) {
+func BruijnBigBackwardElem(m, n int, from, to *big.Int, i int) (*big.Int, error) {
 	if i < 0 || i > n {
 		return nil, fmt.Errorf("i=%d out of range n=%d", i, n)
 	}
@@ -268,5 +272,5 @@ func BruijnBackwardElem(m, n int, from, to *big.Int, i int) (*big.Int, error) {
 		return nil, err
 	}
 
-	return compose(to, from, bm, max, m, n, n-i), nil
+	return composeBig(to, from, bm, max, m, n, n-i), nil
 }
