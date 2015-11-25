@@ -46,7 +46,7 @@ bench: dep stamp bench-vp
 
 lint: dep stamp lint-vp
 
-devel: indent dep stamp vp devel-vp
+devel: indent dep stamp devel-vp
 
 doc: indent dep stamp doc-vp
 

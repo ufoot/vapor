@@ -89,18 +89,10 @@ else
 fi
 
 echo "******** $0 $(date) ********"
-if make bench ; then
-    echo "make bench OK"
-else
-    echo "make bench failed"
-    exit 6
-fi
-
-echo "******** $0 $(date) ********"
 if make doc ; then
     echo "make doc OK"
 else
     echo "make doc failed"
-    exit 7
+    exit 6
 fi
 
