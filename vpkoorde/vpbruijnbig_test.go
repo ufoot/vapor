@@ -172,39 +172,43 @@ func TestBruijnBigBackwardPath(t *testing.T) {
 }
 
 func BenchmarkBruijnBigNext_2_32(b *testing.B) {
+	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigNextList(2, 32, big.NewInt(int64(i)))
+		BruijnBigNextList(2, 32, v)
 	}
 }
 
 func BenchmarkBruijnBigPrev_2_32(b *testing.B) {
+	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigPrevList(2, 32, big.NewInt(int64(i)))
+		BruijnBigPrevList(2, 32, v)
 	}
 }
 
-func BenchmarkBruijnBigNext_4_512(b *testing.B) {
+func BenchmarkBruijnBigNext_16_64(b *testing.B) {
+	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigNextList(4, 512, big.NewInt(int64(i)))
+		BruijnBigNextList(16, 64, v)
 	}
 }
 
-func BenchmarkBruijnBigPrev_4_512(b *testing.B) {
+func BenchmarkBruijnBigPrev_16_64(b *testing.B) {
+	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigPrevList(4, 512, big.NewInt(int64(i)))
+		BruijnBigPrevList(16, 64, v)
 	}
 }
 
 func BenchmarkBruijnBigNext_7_100(b *testing.B) {
-	// 7**100 -> approx 280 bits
+	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigNextList(7, 100, big.NewInt(int64(i)))
+		BruijnBigNextList(7, 100, v)
 	}
 }
 
 func BenchmarkBruijnBigPrev_7_100(b *testing.B) {
-	// 7**100 -> approx 280 bits
+	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigPrevList(7, 100, big.NewInt(int64(i)))
+		BruijnBigPrevList(7, 100, v)
 	}
 }
