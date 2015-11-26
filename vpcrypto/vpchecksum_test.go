@@ -372,7 +372,7 @@ func BenchmarkChecksum512(b *testing.B) {
 	}
 }
 
-func BenchmarkChecksum256(b *testing.B) {
+func BenchmarkChecksum256Plot(b *testing.B) {
 	data := make([]byte, 2048)
 
 	for i := 0; i < b.N; i++ {

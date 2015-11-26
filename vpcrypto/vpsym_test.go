@@ -70,7 +70,7 @@ func TestSym(t *testing.T) {
 
 }
 
-func BenchmarkSymEncrypt(b *testing.B) {
+func BenchmarkSymEncryptPlot(b *testing.B) {
 	var err error
 
 	for i := 0; i < b.N; i++ {
@@ -81,7 +81,7 @@ func BenchmarkSymEncrypt(b *testing.B) {
 	}
 }
 
-func BenchmarkSymDecrypt(b *testing.B) {
+func BenchmarkSymDecryptPlot(b *testing.B) {
 	var err error
 
 	for i := 0; i < b.N; i++ {
