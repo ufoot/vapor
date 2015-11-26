@@ -419,7 +419,7 @@ func BenchmarkX64Add(b *testing.B) {
 	}
 }
 
-func BenchmarkX64Inv(b *testing.B) {
+func BenchmarkX64InvPlot(b *testing.B) {
 	mat := invertableX64()
 
 	for i := 0; i < b.N; i++ {

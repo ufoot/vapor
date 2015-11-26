@@ -57,7 +57,7 @@ func TestX64Cos(t *testing.T) {
 	}
 }
 
-func BenchmarkX32Cos(b *testing.B) {
+func BenchmarkX32CosPlot(b *testing.B) {
 	var x = vpnumber.I32ToX32(100)
 
 	for i := 0; i < b.N; i++ {
@@ -65,7 +65,7 @@ func BenchmarkX32Cos(b *testing.B) {
 	}
 }
 
-func BenchmarkX64Cos(b *testing.B) {
+func BenchmarkX64CosPlot(b *testing.B) {
 	var x = vpnumber.I64ToX64(10000)
 
 	for i := 0; i < b.N; i++ {
@@ -73,7 +73,7 @@ func BenchmarkX64Cos(b *testing.B) {
 	}
 }
 
-func BenchmarkFCos(b *testing.B) {
+func BenchmarkFCosPlot(b *testing.B) {
 	var f = 1000000.0
 
 	for i := 0; i < b.N; i++ {

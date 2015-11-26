@@ -419,7 +419,7 @@ func BenchmarkF32Add(b *testing.B) {
 	}
 }
 
-func BenchmarkF32Inv(b *testing.B) {
+func BenchmarkF32InvPlot(b *testing.B) {
 	mat := invertableF32()
 
 	for i := 0; i < b.N; i++ {

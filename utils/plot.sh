@@ -27,13 +27,9 @@ if [ ! -d utils ] ; then
     exit 1
 fi
 
-export PLOT_XML="test/plot.xml"
+export PLOT_XML="test/jenkins-plot.xml"
 
 rm -f $PLOT_XML
 echo "<Benchmarks>" >> $PLOT_XML
-for i in NsPerOp AllocsBytesPerOp AllocsPerOp mbPerSec ; do
-    echo " <$i>" >> $PLOT_XML
-    cat $(ls test/*-plot.xml | sort) | grep -v "Benchmarks>" | grep "Benchmark" | sort >> $PLOT_XML
-    echo " </$i>" >> $PLOT_XML
-done
+cat $(ls test/*-plot.xml | sort) | grep "Benchmark" | grep "Plot" | sort >> $PLOT_XML
 echo "</Benchmarks>" >> $PLOT_XML

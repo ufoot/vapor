@@ -103,7 +103,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((\$(VP_TOPSRCDIR)/bin/go-junit-report < test/$i-check.log > test/$i-junit.xml) || true)\n" >> Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((go tool cover -html=test/$i-cover.cov -o doc/cover/$i-cover.html) || true)\n" >> Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((\$(VP_TOPSRCDIR)/bin/gocov convert test/$i-cover.cov | \$(VP_TOPSRCDIR)/bin/gocov-xml > test/$i-cobertura.xml) || true)\n" >> Makefile.dep
-    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((go test -v -benchmem -bench=. $j | tee test/$i-bench.log) || true)\n" >> Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((go test -v -bench=. $j | tee test/$i-bench.log) || true)\n" >> Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((\$(VP_TOPSRCDIR)/bin/gobench2plot < test/$i-bench.log > test/$i-plot.xml) || true)\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: doc-$i" >> Makefile.dep
