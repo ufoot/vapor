@@ -31,5 +31,5 @@ export PLOT_XML="test/jenkins-plot.xml"
 
 rm -f $PLOT_XML
 echo "<Benchmarks>" >> $PLOT_XML
-cat $(ls test/*-plot.xml | sort) | grep "Benchmark" | grep "Plot" | sort >> $PLOT_XML
+cat $(ls test/*-plot.xml | sort) | grep "Benchmark" | grep "Plot" | sort | sed "s/\..*<\//<\//g" | sed "s/>0/>1/g" >> $PLOT_XML
 echo "</Benchmarks>" >> $PLOT_XML
