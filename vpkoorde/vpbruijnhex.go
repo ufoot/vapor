@@ -45,9 +45,8 @@ func checkX(x []byte) error {
 	return nil
 }
 
-func nextHexC(x []byte, c byte) ([]byte, error) {
+func nextHexC(x, enc []byte, c byte) ([]byte, error) {
 	ret := make([]byte, nbBytes)
-	enc := make([]byte, bruijnN+1)
 
 	hex.Encode(enc[0:bruijnN], x)
 	enc[bruijnN] = c
@@ -61,11 +60,15 @@ func nextHexC(x []byte, c byte) ([]byte, error) {
 }
 
 func nextHexFirst(x []byte) ([]byte, error) {
-	return nextHexC(x, byte('0'))
+	enc := make([]byte, bruijnN+1)
+
+	return nextHexC(x, enc, byte('0'))
 }
 
 func nextHexLast(x []byte) ([]byte, error) {
-	return nextHexC(x, byte('f'))
+	enc := make([]byte, bruijnN+1)
+
+	return nextHexC(x, enc, byte('f'))
 }
 
 // BruijnHexNextFirst returns the first Bruijn node pointed by this node.
@@ -100,8 +103,9 @@ func BruijnHexNextList(x []byte) ([][]byte, error) {
 	}
 
 	ret := make([][]byte, bruijnM)
+	enc := make([]byte, bruijnN+1)
 	for i, v := range []byte(hexdigits) {
-		ret[i], err = nextHexC(x, v)
+		ret[i], err = nextHexC(x, enc, v)
 		if err != nil {
 			return nil, err
 		}
@@ -110,9 +114,8 @@ func BruijnHexNextList(x []byte) ([][]byte, error) {
 	return ret, nil
 }
 
-func prevHexC(x []byte, c byte) ([]byte, error) {
+func prevHexC(x, enc []byte, c byte) ([]byte, error) {
 	ret := make([]byte, nbBytes)
-	enc := make([]byte, bruijnN+1)
 
 	hex.Encode(enc[1:bruijnN+1], x)
 	enc[0] = c
@@ -126,11 +129,15 @@ func prevHexC(x []byte, c byte) ([]byte, error) {
 }
 
 func prevHexFirst(x []byte) ([]byte, error) {
-	return prevHexC(x, byte('0'))
+	enc := make([]byte, bruijnN+1)
+
+	return prevHexC(x, enc, byte('0'))
 }
 
 func prevHexLast(x []byte) ([]byte, error) {
-	return prevHexC(x, byte('f'))
+	enc := make([]byte, bruijnN+1)
+
+	return prevHexC(x, enc, byte('f'))
 }
 
 // BruijnHexPrevFirst returns the first Bruijn node pointing to this node.
@@ -166,8 +173,9 @@ func BruijnHexPrevList(x []byte) ([][]byte, error) {
 	}
 
 	ret := make([][]byte, bruijnM)
+	enc := make([]byte, bruijnN+1)
 	for i, v := range []byte(hexdigits) {
-		ret[i], err = prevHexC(x, v)
+		ret[i], err = prevHexC(x, enc, v)
 		if err != nil {
 			return nil, err
 		}
@@ -176,9 +184,8 @@ func BruijnHexPrevList(x []byte) ([][]byte, error) {
 	return ret, nil
 }
 
-func composeHex(x, y []byte, i int) ([]byte, error) {
+func composeHex(x, y, enc []byte, i int) ([]byte, error) {
 	ret := make([]byte, nbBytes)
-	enc := make([]byte, bruijnN*2)
 
 	hex.Encode(enc[0:bruijnN], x)
 	hex.Encode(enc[bruijnN:bruijnN*2], y)
@@ -206,8 +213,9 @@ func BruijnHexForwardPath(from, to []byte) ([][]byte, error) {
 	}
 
 	ret := make([][]byte, bruijnN)
+	enc := make([]byte, bruijnN*2)
 	for i := range ret {
-		ret[i], err = composeHex(from, to, i)
+		ret[i], err = composeHex(from, to, enc, i)
 		if err != nil {
 			return nil, err
 		}
@@ -231,8 +239,9 @@ func BruijnHexBackwardPath(from, to []byte) ([][]byte, error) {
 	}
 
 	ret := make([][]byte, bruijnN)
+	enc := make([]byte, bruijnN*2)
 	for i := range ret {
-		ret[i], err = composeHex(to, from, bruijnN-i)
+		ret[i], err = composeHex(to, from, enc, bruijnN-i)
 		if err != nil {
 			return nil, err
 		}
@@ -254,7 +263,9 @@ func BruijnHexForwardElem(from, to []byte, i int) ([]byte, error) {
 		return nil, err
 	}
 
-	return composeHex(from, to, i)
+	enc := make([]byte, bruijnN*2)
+
+	return composeHex(from, to, enc, i)
 }
 
 // BruijnHexBackwardElem returns the path element between two nodes.
@@ -270,5 +281,7 @@ func BruijnHexBackwardElem(from, to []byte, i int) ([]byte, error) {
 		return nil, err
 	}
 
-	return composeHex(to, from, bruijnN-i)
+	enc := make([]byte, bruijnN*2)
+
+	return composeHex(to, from, enc, bruijnN-i)
 }
