@@ -60,18 +60,85 @@ func TestBruijnHexNext(t *testing.T) {
 	if bnl.Cmp(&bCheck) != 0 {
 		t.Errorf("bad nl big=%s hex=%s", vpcrypto.IntToStr256(bnl), vpcrypto.IntToStr256(&bCheck))
 	}
+
+	bnList, err := BruijnBigNextList(bruijnM, bruijnN, &bi)
+	if err != nil {
+		t.Error("unable to call BruijnBigNextLast:", err)
+	}
+	nList, err := BruijnHexNextList(i)
+	if err != nil {
+		t.Error("unable to call BruijnHexNextLast:", err)
+	}
+	for j, w := range bnList {
+		bCheck.SetBytes(nList[j])
+		if w.Cmp(&bCheck) != 0 {
+			t.Errorf("j=%d bad nl big=%s hex=%s", j, vpcrypto.IntToStr256(w), vpcrypto.IntToStr256(&bCheck))
+		}
+	}
+}
+
+func TestBruijnHexPrev(t *testing.T) {
+	const m = 2
+	const n = 3
+	var bi big.Int
+	var bCheck big.Int
+
+	i := vpcrypto.Checksum256([]byte("toto"))
+	bi.SetBytes(i)
+	t.Logf("i=%s", vpcrypto.IntToStr256(&bi))
+
+	bnf, err := BruijnBigPrevFirst(bruijnM, bruijnN, &bi)
+	if err != nil {
+		t.Error("unable to call BruijnBigPrevFirst:", err)
+	}
+	nf, err := BruijnHexPrevFirst(i)
+	if err != nil {
+		t.Error("unable to call BruijnHexPrevFirst:", err)
+	}
+	bCheck.SetBytes(nf)
+	if bnf.Cmp(&bCheck) != 0 {
+		t.Errorf("bad nf big=%s hex=%s", vpcrypto.IntToStr256(bnf), vpcrypto.IntToStr256(&bCheck))
+	}
+
+	bnl, err := BruijnBigPrevLast(bruijnM, bruijnN, &bi)
+	if err != nil {
+		t.Error("unable to call BruijnBigPrevLast:", err)
+	}
+	nl, err := BruijnHexPrevLast(i)
+	if err != nil {
+		t.Error("unable to call BruijnHexPrevLast:", err)
+	}
+	bCheck.SetBytes(nl)
+	if bnl.Cmp(&bCheck) != 0 {
+		t.Errorf("bad nl big=%s hex=%s", vpcrypto.IntToStr256(bnl), vpcrypto.IntToStr256(&bCheck))
+	}
+
+	bnList, err := BruijnBigPrevList(bruijnM, bruijnN, &bi)
+	if err != nil {
+		t.Error("unable to call BruijnBigPrevLast:", err)
+	}
+	nList, err := BruijnHexPrevList(i)
+	if err != nil {
+		t.Error("unable to call BruijnHexPrevLast:", err)
+	}
+	for j, w := range bnList {
+		bCheck.SetBytes(nList[j])
+		if w.Cmp(&bCheck) != 0 {
+			t.Errorf("j=%d bad nl big=%s hex=%s", j, vpcrypto.IntToStr256(w), vpcrypto.IntToStr256(&bCheck))
+		}
+	}
 }
 
 func BenchmarkBruijnHexNext(b *testing.B) {
 	v := vpcrypto.Checksum256([]byte("toto"))
 	for i := 0; i < b.N; i++ {
-		BruijnHexNextList(v)
+		BruijnHexNextFirst(v)
 	}
 }
 
 func BenchmarkBruijnHexPrev(b *testing.B) {
 	v := vpcrypto.Checksum256([]byte("toto"))
 	for i := 0; i < b.N; i++ {
-		BruijnHexPrevList(v)
+		BruijnHexPrevFirst(v)
 	}
 }

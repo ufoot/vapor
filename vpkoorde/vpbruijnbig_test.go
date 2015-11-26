@@ -174,41 +174,41 @@ func TestBruijnBigBackwardPath(t *testing.T) {
 func BenchmarkBruijnBigNext_2_32(b *testing.B) {
 	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigNextList(2, 32, v)
+		BruijnBigNextFirst(2, 32, v)
 	}
 }
 
 func BenchmarkBruijnBigPrev_2_32(b *testing.B) {
 	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigPrevList(2, 32, v)
+		BruijnBigPrevFirst(2, 32, v)
 	}
 }
 
 func BenchmarkBruijnBigNext_16_64(b *testing.B) {
 	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigNextList(16, 64, v)
+		BruijnBigNextFirst(16, 64, v)
 	}
 }
 
 func BenchmarkBruijnBigPrev_16_64(b *testing.B) {
 	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigPrevList(16, 64, v)
+		BruijnBigPrevFirst(16, 64, v)
 	}
 }
 
 func BenchmarkBruijnBigNext_7_100(b *testing.B) {
 	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigNextList(7, 100, v)
+		BruijnBigNextFirst(7, 100, v)
 	}
 }
 
 func BenchmarkBruijnBigPrev_7_100(b *testing.B) {
 	v := big.NewInt(1000)
 	for i := 0; i < b.N; i++ {
-		BruijnBigPrevList(7, 100, v)
+		BruijnBigPrevFirst(7, 100, v)
 	}
 }
