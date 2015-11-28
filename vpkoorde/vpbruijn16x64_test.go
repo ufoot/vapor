@@ -21,117 +21,58 @@ package vpkoorde
 
 import (
 	"github.com/ufoot/vapor/vpcrypto"
-	"math/big"
 	"testing"
 )
 
 func TestBruijn16x64Next(t *testing.T) {
 	const m = 16
 	const n = 64
-	var bi big.Int
-	var bCheck big.Int
 
 	implGeneric := BruijnGenericNew(m, n)
 	impl16x64 := Bruijn16x64New()
 
 	i := vpcrypto.Checksum256([]byte("toto"))
-	bi.SetBytes(i)
-	t.Logf("i=%s", vpcrypto.IntToStr256(&bi))
 
-	bnf, err := implGeneric.NextFirst(&bi)
-	if err != nil {
-		t.Error("unable to call BruijnBigNextFirst:", err)
-	}
-	nf, err := impl16x64.NextFirst(i)
-	if err != nil {
-		t.Error("unable to call BruijnHexNextFirst:", err)
-	}
-	bCheck.SetBytes(nf)
-	if bnf.Cmp(&bCheck) != 0 {
-		t.Errorf("bad nf big=%s hex=%s", vpcrypto.IntToStr256(bnf), vpcrypto.IntToStr256(&bCheck))
+	nfGeneric := implGeneric.NextFirst(i)
+	nf16x64 := impl16x64.NextFirst(i)
+	if implGeneric.Cmp(nfGeneric, nf16x64) == 0 {
+		t.Logf("i=%s nf=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(nf16x64))
+	} else {
+		t.Errorf("bad nf i=%s big=%s hex=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(nfGeneric), vpcrypto.BufToStr256(nf16x64))
 	}
 
-	bnl, err := implGeneric.NextLast(&bi)
-	if err != nil {
-		t.Error("unable to call BruijnBigNextLast:", err)
-	}
-	nl, err := impl16x64.NextLast(i)
-	if err != nil {
-		t.Error("unable to call BruijnHexNextLast:", err)
-	}
-	bCheck.SetBytes(nl)
-	if bnl.Cmp(&bCheck) != 0 {
-		t.Errorf("bad nl big=%s hex=%s", vpcrypto.IntToStr256(bnl), vpcrypto.IntToStr256(&bCheck))
-	}
-
-	bnList, err := implGeneric.NextList(&bi)
-	if err != nil {
-		t.Error("unable to call BruijnBigNextLast:", err)
-	}
-	nList, err := impl16x64.NextList(i)
-	if err != nil {
-		t.Error("unable to call BruijnHexNextLast:", err)
-	}
-	for j, w := range bnList {
-		bCheck.SetBytes(nList[j])
-		if w.Cmp(&bCheck) != 0 {
-			t.Errorf("j=%d bad nl big=%s hex=%s", j, vpcrypto.IntToStr256(w), vpcrypto.IntToStr256(&bCheck))
-		}
+	nlGeneric := implGeneric.NextFirst(i)
+	nl16x64 := impl16x64.NextFirst(i)
+	if implGeneric.Cmp(nlGeneric, nl16x64) == 0 {
+		t.Logf("i=%s nl=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(nl16x64))
+	} else {
+		t.Errorf("bad nl i=%s big=%s hex=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(nlGeneric), vpcrypto.BufToStr256(nl16x64))
 	}
 }
 
 func TestBruijn16x64Prev(t *testing.T) {
 	const m = 16
 	const n = 64
-	var bi big.Int
-	var bCheck big.Int
 
 	implGeneric := BruijnGenericNew(m, n)
 	impl16x64 := Bruijn16x64New()
 
 	i := vpcrypto.Checksum256([]byte("toto"))
-	bi.SetBytes(i)
-	t.Logf("i=%s", vpcrypto.IntToStr256(&bi))
 
-	bnf, err := implGeneric.PrevFirst(&bi)
-	if err != nil {
-		t.Error("unable to call BruijnBigPrevFirst:", err)
-	}
-	nf, err := impl16x64.PrevFirst(i)
-	if err != nil {
-		t.Error("unable to call BruijnHexPrevFirst:", err)
-	}
-	bCheck.SetBytes(nf)
-	if bnf.Cmp(&bCheck) != 0 {
-		t.Errorf("bad nf big=%s hex=%s", vpcrypto.IntToStr256(bnf), vpcrypto.IntToStr256(&bCheck))
+	pfGeneric := implGeneric.PrevFirst(i)
+	pf16x64 := impl16x64.PrevFirst(i)
+	if implGeneric.Cmp(pfGeneric, pf16x64) == 0 {
+		t.Logf("i=%s pf=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(pf16x64))
+	} else {
+		t.Errorf("bad pf i=%s big=%s hex=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(pfGeneric), vpcrypto.BufToStr256(pf16x64))
 	}
 
-	bnl, err := implGeneric.PrevLast(&bi)
-	if err != nil {
-		t.Error("unable to call BruijnBigPrevLast:", err)
-	}
-	nl, err := impl16x64.PrevLast(i)
-	if err != nil {
-		t.Error("unable to call BruijnHexPrevLast:", err)
-	}
-	bCheck.SetBytes(nl)
-	if bnl.Cmp(&bCheck) != 0 {
-		t.Errorf("bad nl big=%s hex=%s", vpcrypto.IntToStr256(bnl), vpcrypto.IntToStr256(&bCheck))
-	}
-
-	bnList, err := implGeneric.PrevList(&bi)
-	if err != nil {
-		t.Error("unable to call BruijnBigPrevLast:", err)
-	}
-	nList, err := impl16x64.PrevList(i)
-	if err != nil {
-		t.Error("unable to call BruijnHexPrevLast:", err)
-	}
-	for j, w := range bnList {
-		bCheck.SetBytes(nList[j])
-		if w.Cmp(&bCheck) != 0 {
-			t.Errorf("j=%d bad nl big=%s hex=%s", j, vpcrypto.IntToStr256(w), vpcrypto.IntToStr256(&bCheck))
-		}
+	plGeneric := implGeneric.PrevFirst(i)
+	pl16x64 := impl16x64.PrevFirst(i)
+	if implGeneric.Cmp(plGeneric, pl16x64) == 0 {
+		t.Logf("i=%s pl=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(pl16x64))
+	} else {
+		t.Errorf("bad pl i=%s big=%s hex=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(plGeneric), vpcrypto.BufToStr256(pl16x64))
 	}
 }
 

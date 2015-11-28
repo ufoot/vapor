@@ -27,7 +27,6 @@ package vpkoorde
 
 import (
 	"encoding/hex"
-	"fmt"
 )
 
 const (
@@ -39,13 +38,14 @@ const (
 )
 
 type bruijn16x64 struct {
+	implGeneric bruijnGeneric
 }
 
 // Bruijn16x64New creates a new Bruijn object capable of walking
 // Bruijn graphcs wih m (AKA base) =16 and n (number of elems) =64.
 // This is a specific, hopefully optimized for this case, implementation.
 func Bruijn16x64New() bruijn16x64 {
-	return bruijn16x64{}
+	return bruijn16x64{BruijnGenericNew(16, 64)}
 }
 
 func (b bruijn16x64) M() int {
@@ -64,11 +64,14 @@ func (b bruijn16x64) NbBytes() int {
 	return nbBytes
 }
 
-func (b bruijn16x64) checkX(x []byte) error {
-	if len(x) != nbBytes {
-		return fmt.Errorf("bad key len=%d, should be %d", len(x), nbBytes)
+func (b bruijn16x64) filterX(x []byte) []byte {
+	l := len(x)
+	if l >= nbBytes {
+		return x[0:nbBytes]
 	}
-	return nil
+
+	return append(make([]byte, nbBytes-l), x...)
+
 }
 
 func (b bruijn16x64) prepareNext16x64C(x []byte) []byte {
@@ -79,134 +82,106 @@ func (b bruijn16x64) prepareNext16x64C(x []byte) []byte {
 	return enc
 }
 
-func (b bruijn16x64) next16x64C(enc []byte, c byte) ([]byte, error) {
+func (b bruijn16x64) next16x64C(enc []byte, c byte) []byte {
 	ret := make([]byte, nbBytes)
 
 	enc[bruijnN] = c
 
 	_, err := hex.Decode(ret, enc[1:bruijnN+1])
 	if err != nil {
-		return nil, err
+		// return 0, this really should not happen as next16x64 is
+		// called internally only, and all keys are checked above,
+		// here we reset stuff to 0 to make sure no random data
+		// is passed upstream
+		ret = make([]byte, nbBytes)
 	}
 
-	return ret, nil
+	return ret
 }
 
-func (b bruijn16x64) next16x64First(x []byte) ([]byte, error) {
+func (b bruijn16x64) next16x64First(x []byte) []byte {
 	enc := b.prepareNext16x64C(x)
 
 	return b.next16x64C(enc, byte('0'))
 }
 
-func (b bruijn16x64) next16x64Last(x []byte) ([]byte, error) {
+func (b bruijn16x64) next16x64Last(x []byte) []byte {
 	enc := b.prepareNext16x64C(x)
 
 	return b.next16x64C(enc, byte('f'))
 }
 
-func (b bruijn16x64) NextFirst(x []byte) ([]byte, error) {
-	err := b.checkX(x)
-	if err != nil {
-		return nil, err
-	}
-
-	return b.next16x64First(x)
+func (b bruijn16x64) NextFirst(x []byte) []byte {
+	return b.next16x64First(b.filterX(x))
 }
 
-func (b bruijn16x64) NextLast(x []byte) ([]byte, error) {
-	err := b.checkX(x)
-	if err != nil {
-		return nil, err
-	}
-
-	return b.next16x64Last(x)
+func (b bruijn16x64) NextLast(x []byte) []byte {
+	return b.next16x64Last(b.filterX(x))
 }
 
-func (b bruijn16x64) NextList(x []byte) ([][]byte, error) {
-	err := b.checkX(x)
-	if err != nil {
-		return nil, err
-	}
-
+func (b bruijn16x64) NextList(x []byte) [][]byte {
 	ret := make([][]byte, bruijnM)
-	enc := b.prepareNext16x64C(x)
+	enc := b.prepareNext16x64C(b.filterX(x))
 	for i, v := range []byte(hexdigits) {
-		ret[i], err = b.next16x64C(enc, v)
-		if err != nil {
-			return nil, err
-		}
+		ret[i] = b.next16x64C(enc, v)
 	}
 
-	return ret, nil
+	return ret
 }
 
 func (b bruijn16x64) preparePrev16x64C(x []byte) []byte {
 	enc := make([]byte, bruijnN+1)
 
-	hex.Encode(enc[1:bruijnN+1], x)
+	hex.Encode(enc[1:bruijnN+1], b.filterX(x))
 
 	return enc
 }
 
-func (b bruijn16x64) prev16x64C(enc []byte, c byte) ([]byte, error) {
+func (b bruijn16x64) prev16x64C(enc []byte, c byte) []byte {
 	ret := make([]byte, nbBytes)
 
 	enc[0] = c
 
 	_, err := hex.Decode(ret, enc[0:bruijnN])
 	if err != nil {
-		return nil, err
+		// return 0, this really should not happen as next16x64 is
+		// called internally only, and all keys are checked above,
+		// here we reset stuff to 0 to make sure no random data
+		// is passed upstream
+		ret = make([]byte, nbBytes)
 	}
 
-	return ret, nil
+	return ret
 }
 
-func (b bruijn16x64) prev16x64First(x []byte) ([]byte, error) {
+func (b bruijn16x64) prev16x64First(x []byte) []byte {
 	enc := b.preparePrev16x64C(x)
 
 	return b.prev16x64C(enc, byte('0'))
 }
 
-func (b bruijn16x64) prev16x64Last(x []byte) ([]byte, error) {
+func (b bruijn16x64) prev16x64Last(x []byte) []byte {
 	enc := b.preparePrev16x64C(x)
 
 	return b.prev16x64C(enc, byte('f'))
 }
 
-func (b bruijn16x64) PrevFirst(x []byte) ([]byte, error) {
-	err := b.checkX(x)
-	if err != nil {
-		return nil, err
-	}
-
-	return b.prev16x64First(x)
+func (b bruijn16x64) PrevFirst(x []byte) []byte {
+	return b.prev16x64First(b.filterX(x))
 }
 
-func (b bruijn16x64) PrevLast(x []byte) ([]byte, error) {
-	err := b.checkX(x)
-	if err != nil {
-		return nil, err
-	}
-
-	return b.prev16x64Last(x)
+func (b bruijn16x64) PrevLast(x []byte) []byte {
+	return b.prev16x64Last(b.filterX(x))
 }
 
-func (b bruijn16x64) PrevList(x []byte) ([][]byte, error) {
-	err := b.checkX(x)
-	if err != nil {
-		return nil, err
-	}
-
+func (b bruijn16x64) PrevList(x []byte) [][]byte {
 	ret := make([][]byte, bruijnM)
-	enc := b.preparePrev16x64C(x)
+	enc := b.preparePrev16x64C(b.filterX(x))
 	for i, v := range []byte(hexdigits) {
-		ret[i], err = b.prev16x64C(enc, v)
-		if err != nil {
-			return nil, err
-		}
+		ret[i] = b.prev16x64C(enc, v)
 	}
 
-	return ret, nil
+	return ret
 }
 
 func (b bruijn16x64) prepareCompose16x64(x, y []byte) []byte {
@@ -218,87 +193,69 @@ func (b bruijn16x64) prepareCompose16x64(x, y []byte) []byte {
 	return enc
 }
 
-func (b bruijn16x64) compose16x64(enc []byte, i int) ([]byte, error) {
+func (b bruijn16x64) compose16x64(enc []byte, i int) []byte {
 	ret := make([]byte, nbBytes)
 
 	_, err := hex.Decode(ret, enc[i:bruijnN+i])
 	if err != nil {
-		return nil, err
+		// return 0, this really should not happen as next16x64 is
+		// called internally only, and all keys are checked above,
+		// here we reset stuff to 0 to make sure no random data
+		// is passed upstream
+		ret = make([]byte, nbBytes)
 	}
 
-	return ret, nil
+	return ret
 }
 
-func (b bruijn16x64) ForwardPath(from, to []byte) ([][]byte, error) {
-	err := b.checkX(from)
-	if err != nil {
-		return nil, err
-	}
-	err = b.checkX(to)
-	if err != nil {
-		return nil, err
-	}
-
+func (b bruijn16x64) ForwardPath(from, to []byte) [][]byte {
 	ret := make([][]byte, bruijnN)
-	enc := b.prepareCompose16x64(from, to)
+	enc := b.prepareCompose16x64(b.filterX(from), b.filterX(to))
 	for i := range ret {
-		ret[i], err = b.compose16x64(enc, i)
-		if err != nil {
-			return nil, err
-		}
+		ret[i] = b.compose16x64(enc, i)
 	}
 
-	return ret, nil
+	return ret
 }
 
-func (b bruijn16x64) BackwardPath(from, to []byte) ([][]byte, error) {
-	err := b.checkX(from)
-	if err != nil {
-		return nil, err
-	}
-	err = b.checkX(to)
-	if err != nil {
-		return nil, err
-	}
-
+func (b bruijn16x64) BackwardPath(from, to []byte) [][]byte {
 	ret := make([][]byte, bruijnN)
-	enc := b.prepareCompose16x64(from, to)
+	enc := b.prepareCompose16x64(b.filterX(to), b.filterX(from))
 	for i := range ret {
-		ret[i], err = b.compose16x64(enc, bruijnN-i)
-		if err != nil {
-			return nil, err
-		}
+		ret[i] = b.compose16x64(enc, bruijnN-i)
 	}
 
-	return ret, nil
+	return ret
 }
 
-func (b bruijn16x64) ForwardElem(from, to []byte, i int) ([]byte, error) {
-	err := b.checkX(from)
-	if err != nil {
-		return nil, err
-	}
-	err = b.checkX(to)
-	if err != nil {
-		return nil, err
-	}
-
-	enc := b.prepareCompose16x64(from, to)
+func (b bruijn16x64) ForwardElem(from, to []byte, i int) []byte {
+	enc := b.prepareCompose16x64(b.filterX(from), b.filterX(to))
 
 	return b.compose16x64(enc, i)
 }
 
-func (b bruijn16x64) BackwardElem(from, to []byte, i int) ([]byte, error) {
-	err := b.checkX(from)
-	if err != nil {
-		return nil, err
-	}
-	err = b.checkX(to)
-	if err != nil {
-		return nil, err
-	}
-
-	enc := b.prepareCompose16x64(to, from)
+func (b bruijn16x64) BackwardElem(from, to []byte, i int) []byte {
+	enc := b.prepareCompose16x64(b.filterX(to), b.filterX(from))
 
 	return b.compose16x64(enc, bruijnN-i)
+}
+
+func (b bruijn16x64) Add(x, y []byte) []byte {
+	return b.implGeneric.Add(x, y)
+}
+
+func (b bruijn16x64) Sub(x, y []byte) []byte {
+	return b.implGeneric.Sub(x, y)
+}
+
+func (b bruijn16x64) Cmp(x, y []byte) int {
+	return b.implGeneric.Cmp(x, y)
+}
+
+func (b bruijn16x64) GeLt(x, begin, end []byte) bool {
+	return b.implGeneric.GeLt(x, begin, end)
+}
+
+func (b bruijn16x64) GtLe(x, begin, end []byte) bool {
+	return b.implGeneric.GtLe(x, begin, end)
 }

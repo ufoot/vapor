@@ -35,10 +35,10 @@ func bigToBytes(i *big.Int, nbBytes int) []byte {
 	return append(make([]byte, nbBytes-l), raw...)
 }
 
-func bytesToBig(b []byte) *big.Int {
+func bytesToBig(b []byte, bigMax *big.Int) *big.Int {
 	i := big.NewInt(0)
 	i.SetBytes(b)
-	return i
+	return i.Mod(i, bigMax)
 }
 
 func nextBigFirst(x, bm, max *big.Int) *big.Int {

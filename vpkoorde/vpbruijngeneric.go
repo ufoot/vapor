@@ -20,7 +20,6 @@
 package vpkoorde
 
 import (
-	"fmt"
 	"math/big"
 )
 
@@ -53,6 +52,7 @@ type bruijnGeneric struct {
 	bigZero       *big.Int
 	bigOne        *big.Int
 	bigMax        *big.Int
+	bigMax2       *big.Int
 	bigPrevStep   *big.Int
 	bigPrevToLast *big.Int
 }
@@ -94,6 +94,8 @@ func BruijnGenericNew(m, n int) bruijnGeneric {
 	ret.bigOne = big.NewInt(1)
 	ret.bigMax = big.NewInt(0)
 	ret.bigMax.Exp(ret.bigM, ret.bigN, nil)
+	ret.bigMax2 = big.NewInt(0)
+	ret.bigMax2.Div(ret.bigMax, big.NewInt(2))
 	ret.bigPrevStep = big.NewInt(0)
 	ret.bigPrevStep.Exp(ret.bigM, ret.bigN1, ret.bigMax)
 	ret.bigPrevToLast = big.NewInt(0)
@@ -102,14 +104,9 @@ func BruijnGenericNew(m, n int) bruijnGeneric {
 	return ret
 }
 
-func (b bruijnGeneric) checkX(x *big.Int) error {
-	if x.Cmp(b.bigZero) < 0 {
-		return fmt.Errorf("Invalid x=%s (current node) for Bruijn graph with m=%d n=%d, should be >=0", x.String(), b.m, b.n)
-	}
-	if x.Cmp(b.bigMax) >= 0 {
-		return fmt.Errorf("Invalid x=%s (current node) for Bruijn graph with m=%d n=%d, should be <=%s", x.String(), b.m, b.n, b.bigMax.String())
-	}
-	return nil
+func (b bruijnGeneric) filterX(x *big.Int) *big.Int {
+	ret := big.NewInt(0)
+	return ret.Mod(x, b.bigMax)
 }
 
 func (b bruijnGeneric) M() int {
@@ -128,101 +125,59 @@ func (b bruijnGeneric) NbBytes() int {
 	return b.nbBytes
 }
 
-func (b bruijnGeneric) NextFirst(x []byte) ([]byte, error) {
-	bigX := bytesToBig(x)
-	err := b.checkX(bigX)
-	if err != nil {
-		return nil, err
-	}
+func (b bruijnGeneric) NextFirst(x []byte) []byte {
+	bigRet := nextBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM, b.bigMax)
 
-	bigRet := nextBigFirst(bigX, b.bigM, b.bigMax)
-
-	return bigToBytes(bigRet, b.nbBytes), nil
+	return bigToBytes(bigRet, b.nbBytes)
 }
 
-func (b bruijnGeneric) NextLast(x []byte) ([]byte, error) {
-	bigX := bytesToBig(x)
-	err := b.checkX(bigX)
-	if err != nil {
-		return nil, err
-	}
-
-	bigRet := nextBigFirst(bigX, b.bigM, b.bigMax)
+func (b bruijnGeneric) NextLast(x []byte) []byte {
+	bigRet := nextBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM, b.bigMax)
 	bigRet.Add(bigRet, b.bigM1)
 
-	return bigToBytes(bigRet, b.nbBytes), nil
+	return bigToBytes(bigRet, b.nbBytes)
 }
 
-func (b bruijnGeneric) NextList(x []byte) ([][]byte, error) {
-	bigX := bytesToBig(x)
-	err := b.checkX(bigX)
-	if err != nil {
-		return nil, err
-	}
+func (b bruijnGeneric) NextList(x []byte) [][]byte {
+	cur := nextBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM, b.bigMax)
 
-	cur := nextBigFirst(bigX, b.bigM, b.bigMax)
 	ret := make([][]byte, b.m)
 	for i := range ret {
 		ret[i] = bigToBytes(cur, b.nbBytes)
 		cur.Add(cur, b.bigOne)
 	}
 
-	return ret, nil
+	return ret
 }
 
-func (b bruijnGeneric) PrevFirst(x []byte) ([]byte, error) {
-	bigX := bytesToBig(x)
-	err := b.checkX(bigX)
-	if err != nil {
-		return nil, err
-	}
+func (b bruijnGeneric) PrevFirst(x []byte) []byte {
+	bigRet := prevBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM)
 
-	bigRet := prevBigFirst(bigX, b.bigM)
-
-	return bigToBytes(bigRet, b.nbBytes), nil
+	return bigToBytes(bigRet, b.nbBytes)
 }
 
-func (b bruijnGeneric) PrevLast(x []byte) ([]byte, error) {
-	bigX := bytesToBig(x)
-	err := b.checkX(bigX)
-	if err != nil {
-		return nil, err
-	}
-
-	bigRet := prevBigFirst(bigX, b.bigM)
+func (b bruijnGeneric) PrevLast(x []byte) []byte {
+	bigRet := prevBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM)
 	bigRet.Add(bigRet, b.bigPrevToLast)
 
-	return bigToBytes(bigRet, b.nbBytes), nil
+	return bigToBytes(bigRet, b.nbBytes)
 }
 
-func (b bruijnGeneric) PrevList(x []byte) ([][]byte, error) {
-	bigX := bytesToBig(x)
-	err := b.checkX(bigX)
-	if err != nil {
-		return nil, err
-	}
+func (b bruijnGeneric) PrevList(x []byte) [][]byte {
+	cur := prevBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM)
 
-	cur := prevBigFirst(bigX, b.bigM)
 	ret := make([][]byte, b.m)
 	for i := range ret {
 		ret[i] = bigToBytes(cur, b.nbBytes)
 		cur.Add(cur, b.bigPrevStep)
 	}
 
-	return ret, nil
+	return ret
 }
 
-func (b bruijnGeneric) ForwardPath(from, to []byte) ([][]byte, error) {
-	bigFrom := bytesToBig(from)
-	err := b.checkX(bigFrom)
-	if err != nil {
-		return nil, err
-	}
-	bigTo := bytesToBig(to)
-	err = b.checkX(bigTo)
-	if err != nil {
-		return nil, err
-	}
+func (b bruijnGeneric) ForwardPath(from, to []byte) [][]byte {
+	bigFrom := bytesToBig(from, b.bigMax)
+	bigTo := bytesToBig(to, b.bigMax)
 
 	ret := make([][]byte, b.n+1)
 
@@ -230,20 +185,12 @@ func (b bruijnGeneric) ForwardPath(from, to []byte) ([][]byte, error) {
 		ret[i] = bigToBytes(composeBig(bigFrom, bigTo, b.bigM, b.bigMax, b.m, b.n, i), b.nbBytes)
 	}
 
-	return ret, nil
+	return ret
 }
 
-func (b bruijnGeneric) BackwardPath(from, to []byte) ([][]byte, error) {
-	bigFrom := bytesToBig(from)
-	err := b.checkX(bigFrom)
-	if err != nil {
-		return nil, err
-	}
-	bigTo := bytesToBig(to)
-	err = b.checkX(bigTo)
-	if err != nil {
-		return nil, err
-	}
+func (b bruijnGeneric) BackwardPath(from, to []byte) [][]byte {
+	bigFrom := bytesToBig(from, b.bigMax)
+	bigTo := bytesToBig(to, b.bigMax)
 
 	ret := make([][]byte, b.n+1)
 
@@ -251,35 +198,73 @@ func (b bruijnGeneric) BackwardPath(from, to []byte) ([][]byte, error) {
 		ret[i] = bigToBytes(composeBig(bigTo, bigFrom, b.bigM, b.bigMax, b.m, b.n, b.n-i), b.nbBytes)
 	}
 
-	return ret, nil
+	return ret
 }
 
-func (b bruijnGeneric) ForwardElem(from, to []byte, i int) ([]byte, error) {
-	bigFrom := bytesToBig(from)
-	err := b.checkX(bigFrom)
-	if err != nil {
-		return nil, err
-	}
-	bigTo := bytesToBig(to)
-	err = b.checkX(bigTo)
-	if err != nil {
-		return nil, err
-	}
+func (b bruijnGeneric) ForwardElem(from, to []byte, i int) []byte {
+	bigFrom := bytesToBig(from, b.bigMax)
+	bigTo := bytesToBig(to, b.bigMax)
 
-	return bigToBytes(composeBig(bigFrom, bigTo, b.bigM, b.bigMax, b.m, b.n, i), b.nbBytes), nil
+	return bigToBytes(composeBig(bigFrom, bigTo, b.bigM, b.bigMax, b.m, b.n, i), b.nbBytes)
 }
 
-func (b bruijnGeneric) BackwardElem(from, to []byte, i int) ([]byte, error) {
-	bigFrom := bytesToBig(from)
-	err := b.checkX(bigFrom)
-	if err != nil {
-		return nil, err
-	}
-	bigTo := bytesToBig(to)
-	err = b.checkX(bigTo)
-	if err != nil {
-		return nil, err
+func (b bruijnGeneric) BackwardElem(from, to []byte, i int) []byte {
+	bigFrom := bytesToBig(from, b.bigMax)
+	bigTo := bytesToBig(to, b.bigMax)
+
+	return bigToBytes(composeBig(bigTo, bigFrom, b.bigM, b.bigMax, b.m, b.n, b.n-i), b.nbBytes)
+}
+
+func (b bruijnGeneric) Add(x, y []byte) []byte {
+	bigX := bytesToBig(x, b.bigMax)
+	bigY := bytesToBig(y, b.bigMax)
+
+	bigX.Add(bigX, bigY)
+	bigX.Mod(bigX, b.bigMax)
+
+	return bigToBytes(bigX, b.nbBytes)
+}
+
+func (b bruijnGeneric) Sub(x, y []byte) []byte {
+	bigX := bytesToBig(x, b.bigMax)
+	bigY := bytesToBig(y, b.bigMax)
+
+	bigX.Sub(bigX, bigY)
+	bigX.Mod(bigX, b.bigMax)
+
+	return bigToBytes(bigX, b.nbBytes)
+}
+
+func (b bruijnGeneric) Cmp(x, y []byte) int {
+	bigX := bytesToBig(x, b.bigMax)
+	bigY := bytesToBig(y, b.bigMax)
+
+	bigX.Sub(bigX, bigY)
+	bigX.Mod(bigX, b.bigMax)
+
+	return b.bigMax2.Cmp(bigX)
+}
+
+func (b bruijnGeneric) GeLt(x, begin, end []byte) bool {
+	bigX := bytesToBig(x, b.bigMax)
+	bigBegin := bytesToBig(begin, b.bigMax)
+	bigEnd := bytesToBig(end, b.bigMax)
+
+	if bigBegin.Cmp(bigEnd) > 0 {
+		return (bigBegin.Cmp(bigX) <= 0) || (bigX.Cmp(bigEnd) < 0)
 	}
 
-	return bigToBytes(composeBig(bigTo, bigFrom, b.bigM, b.bigMax, b.m, b.n, b.n-i), b.nbBytes), nil
+	return (bigBegin.Cmp(bigX) <= 0) && (bigX.Cmp(bigEnd) < 0)
+}
+
+func (b bruijnGeneric) GtLe(x, begin, end []byte) bool {
+	bigX := bytesToBig(x, b.bigMax)
+	bigBegin := bytesToBig(begin, b.bigMax)
+	bigEnd := bytesToBig(end, b.bigMax)
+
+	if bigBegin.Cmp(bigEnd) > 0 {
+		return (bigBegin.Cmp(bigX) < 0) || (bigX.Cmp(bigEnd) <= 0)
+	}
+
+	return (bigBegin.Cmp(bigX) < 0) && (bigX.Cmp(bigEnd) <= 0)
 }

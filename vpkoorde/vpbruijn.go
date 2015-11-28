@@ -47,7 +47,7 @@ type BruijnWalker interface {
 	NextLast(key []byte) []byte
 	// NextList returns the list of all Bruijn nodes pointed by
 	// this node, the nodes following this one (we walk down the graph).
-	NextList(key []byte) ([][]byte, error)
+	NextList(key []byte) [][]byte
 	// PrevFirst returns the first Bruijn node pointing to this node.
 	// Other nodes might be deduced by just incrementing this one with
 	// a value of m**(n-1).
