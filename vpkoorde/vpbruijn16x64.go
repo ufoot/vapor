@@ -41,6 +41,13 @@ const (
 type bruijn16x64 struct {
 }
 
+// Bruijn16x64New creates a new Bruijn object capable of walking
+// Bruijn graphcs wih m (AKA base) =16 and n (number of elems) =64.
+// This is a specific, hopefully optimized for this case, implementation.
+func Bruijn16x64New() bruijn16x64 {
+	return bruijn16x64{}
+}
+
 func (b bruijn16x64) M() int {
 	return bruijnM
 }

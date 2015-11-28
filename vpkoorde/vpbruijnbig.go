@@ -23,6 +23,24 @@ import (
 	"math/big"
 )
 
+func bigToBytes(i *big.Int, nbBytes int) []byte {
+	raw := i.Bytes()
+	l := len(raw)
+	if l == nbBytes {
+		return raw
+	}
+	if l > nbBytes {
+		return raw[l-nbBytes : l]
+	}
+	return append(make([]byte, nbBytes-l), raw...)
+}
+
+func bytesToBig(b []byte) *big.Int {
+	i := big.NewInt(0)
+	i.SetBytes(b)
+	return i
+}
+
 func nextBigFirst(x, bm, max *big.Int) *big.Int {
 	nf := big.NewInt(0)
 	nf.Mul(x, bm)

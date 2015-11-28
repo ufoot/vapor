@@ -57,7 +57,14 @@ type bruijnGeneric struct {
 	bigPrevToLast *big.Int
 }
 
-func bruijnGenericNew(m, n int) bruijnGeneric {
+// BruijnGenericNew creates a new Bruijn object capable of walking
+// Bruijn graphcs with arbitrary m an n numbers. If m and n are outside
+// allowed values, they will be increased/decreased to that they fit.
+// This is a generic implementation, can be used for real usage or as a
+// reference for optimized version. It can theorically be slower than optimized
+// 2^n as it relies on a general purpose big integer machinery, in practice
+// it shows decent results.
+func BruijnGenericNew(m, n int) bruijnGeneric {
 	var ret bruijnGeneric
 
 	if m < GenericMinM {
@@ -93,24 +100,6 @@ func bruijnGenericNew(m, n int) bruijnGeneric {
 	ret.bigPrevToLast.Mul(ret.bigPrevStep, ret.bigM1)
 
 	return ret
-}
-
-func bigToBytes(i *big.Int, nbBytes int) []byte {
-	raw := i.Bytes()
-	l := len(raw)
-	if l == nbBytes {
-		return raw
-	}
-	if l > nbBytes {
-		return raw[l-nbBytes : l]
-	}
-	return append(make([]byte, nbBytes-l), raw...)
-}
-
-func bytesToBig(b []byte) *big.Int {
-	i := big.NewInt(0)
-	i.SetBytes(b)
-	return i
 }
 
 func (b bruijnGeneric) checkX(x *big.Int) error {

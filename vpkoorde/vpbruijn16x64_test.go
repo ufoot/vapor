@@ -25,21 +25,24 @@ import (
 	"testing"
 )
 
-func TestBruijnHexNext(t *testing.T) {
-	const m = 2
-	const n = 3
+func TestBruijn16x64Next(t *testing.T) {
+	const m = 16
+	const n = 64
 	var bi big.Int
 	var bCheck big.Int
+
+	implGeneric := BruijnGenericNew(m, n)
+	impl16x64 := Bruijn16x64New()
 
 	i := vpcrypto.Checksum256([]byte("toto"))
 	bi.SetBytes(i)
 	t.Logf("i=%s", vpcrypto.IntToStr256(&bi))
 
-	bnf, err := BruijnBigNextFirst(bruijnM, bruijnN, &bi)
+	bnf, err := implGeneric.NextFirst(&bi)
 	if err != nil {
 		t.Error("unable to call BruijnBigNextFirst:", err)
 	}
-	nf, err := BruijnHexNextFirst(i)
+	nf, err := impl16x64.NextFirst(i)
 	if err != nil {
 		t.Error("unable to call BruijnHexNextFirst:", err)
 	}
@@ -48,11 +51,11 @@ func TestBruijnHexNext(t *testing.T) {
 		t.Errorf("bad nf big=%s hex=%s", vpcrypto.IntToStr256(bnf), vpcrypto.IntToStr256(&bCheck))
 	}
 
-	bnl, err := BruijnBigNextLast(bruijnM, bruijnN, &bi)
+	bnl, err := implGeneric.NextLast(&bi)
 	if err != nil {
 		t.Error("unable to call BruijnBigNextLast:", err)
 	}
-	nl, err := BruijnHexNextLast(i)
+	nl, err := impl16x64.NextLast(i)
 	if err != nil {
 		t.Error("unable to call BruijnHexNextLast:", err)
 	}
@@ -61,11 +64,11 @@ func TestBruijnHexNext(t *testing.T) {
 		t.Errorf("bad nl big=%s hex=%s", vpcrypto.IntToStr256(bnl), vpcrypto.IntToStr256(&bCheck))
 	}
 
-	bnList, err := BruijnBigNextList(bruijnM, bruijnN, &bi)
+	bnList, err := implGeneric.NextList(&bi)
 	if err != nil {
 		t.Error("unable to call BruijnBigNextLast:", err)
 	}
-	nList, err := BruijnHexNextList(i)
+	nList, err := impl16x64.NextList(i)
 	if err != nil {
 		t.Error("unable to call BruijnHexNextLast:", err)
 	}
@@ -77,21 +80,24 @@ func TestBruijnHexNext(t *testing.T) {
 	}
 }
 
-func TestBruijnHexPrev(t *testing.T) {
-	const m = 2
-	const n = 3
+func TestBruijn16x64Prev(t *testing.T) {
+	const m = 16
+	const n = 64
 	var bi big.Int
 	var bCheck big.Int
+
+	implGeneric := BruijnGenericNew(m, n)
+	impl16x64 := Bruijn16x64New()
 
 	i := vpcrypto.Checksum256([]byte("toto"))
 	bi.SetBytes(i)
 	t.Logf("i=%s", vpcrypto.IntToStr256(&bi))
 
-	bnf, err := BruijnBigPrevFirst(bruijnM, bruijnN, &bi)
+	bnf, err := implGeneric.PrevFirst(&bi)
 	if err != nil {
 		t.Error("unable to call BruijnBigPrevFirst:", err)
 	}
-	nf, err := BruijnHexPrevFirst(i)
+	nf, err := impl16x64.PrevFirst(i)
 	if err != nil {
 		t.Error("unable to call BruijnHexPrevFirst:", err)
 	}
@@ -100,11 +106,11 @@ func TestBruijnHexPrev(t *testing.T) {
 		t.Errorf("bad nf big=%s hex=%s", vpcrypto.IntToStr256(bnf), vpcrypto.IntToStr256(&bCheck))
 	}
 
-	bnl, err := BruijnBigPrevLast(bruijnM, bruijnN, &bi)
+	bnl, err := implGeneric.PrevLast(&bi)
 	if err != nil {
 		t.Error("unable to call BruijnBigPrevLast:", err)
 	}
-	nl, err := BruijnHexPrevLast(i)
+	nl, err := impl16x64.PrevLast(i)
 	if err != nil {
 		t.Error("unable to call BruijnHexPrevLast:", err)
 	}
@@ -113,11 +119,11 @@ func TestBruijnHexPrev(t *testing.T) {
 		t.Errorf("bad nl big=%s hex=%s", vpcrypto.IntToStr256(bnl), vpcrypto.IntToStr256(&bCheck))
 	}
 
-	bnList, err := BruijnBigPrevList(bruijnM, bruijnN, &bi)
+	bnList, err := implGeneric.PrevList(&bi)
 	if err != nil {
 		t.Error("unable to call BruijnBigPrevLast:", err)
 	}
-	nList, err := BruijnHexPrevList(i)
+	nList, err := impl16x64.PrevList(i)
 	if err != nil {
 		t.Error("unable to call BruijnHexPrevLast:", err)
 	}
@@ -129,16 +135,18 @@ func TestBruijnHexPrev(t *testing.T) {
 	}
 }
 
-func BenchmarkBruijnHexNext(b *testing.B) {
+func BenchmarkBruijn16x64Next(b *testing.B) {
+	impl16x64 := Bruijn16x64New()
 	v := vpcrypto.Checksum256([]byte("toto"))
 	for i := 0; i < b.N; i++ {
-		BruijnHexNextFirst(v)
+		impl16x64.NextFirst(v)
 	}
 }
 
-func BenchmarkBruijnHexPrev(b *testing.B) {
+func BenchmarkBruijn16x64Prev(b *testing.B) {
+	impl16x64 := Bruijn16x64New()
 	v := vpcrypto.Checksum256([]byte("toto"))
 	for i := 0; i < b.N; i++ {
-		BruijnHexPrevFirst(v)
+		impl16x64.PrevFirst(v)
 	}
 }
