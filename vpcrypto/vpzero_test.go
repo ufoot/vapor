@@ -24,7 +24,7 @@ import (
 	"testing"
 )
 
-const initI = 24
+const initI = 120
 const expectedZ = 3
 
 func TestZeroesInBigInt(t *testing.T) {

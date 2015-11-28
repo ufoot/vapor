@@ -38,14 +38,33 @@ const (
 	hexdigits = "0123456789abcdef"
 )
 
-func checkX(x []byte) error {
+type bruijn16x64 struct {
+}
+
+func (b bruijn16x64) M() int {
+	return bruijnM
+}
+
+func (b bruijn16x64) N() int {
+	return bruijnN
+}
+
+func (b bruijn16x64) NbBits() int {
+	return nbBits
+}
+
+func (b bruijn16x64) NbBytes() int {
+	return nbBytes
+}
+
+func (b bruijn16x64) checkX(x []byte) error {
 	if len(x) != nbBytes {
 		return fmt.Errorf("bad key len=%d, should be %d", len(x), nbBytes)
 	}
 	return nil
 }
 
-func prepareNextHexC(x []byte) []byte {
+func (b bruijn16x64) prepareNext16x64C(x []byte) []byte {
 	enc := make([]byte, bruijnN+1)
 
 	hex.Encode(enc[0:bruijnN], x)
@@ -53,7 +72,7 @@ func prepareNextHexC(x []byte) []byte {
 	return enc
 }
 
-func nextHexC(enc []byte, c byte) ([]byte, error) {
+func (b bruijn16x64) next16x64C(enc []byte, c byte) ([]byte, error) {
 	ret := make([]byte, nbBytes)
 
 	enc[bruijnN] = c
@@ -66,53 +85,46 @@ func nextHexC(enc []byte, c byte) ([]byte, error) {
 	return ret, nil
 }
 
-func nextHexFirst(x []byte) ([]byte, error) {
-	enc := prepareNextHexC(x)
+func (b bruijn16x64) next16x64First(x []byte) ([]byte, error) {
+	enc := b.prepareNext16x64C(x)
 
-	return nextHexC(enc, byte('0'))
+	return b.next16x64C(enc, byte('0'))
 }
 
-func nextHexLast(x []byte) ([]byte, error) {
-	enc := prepareNextHexC(x)
+func (b bruijn16x64) next16x64Last(x []byte) ([]byte, error) {
+	enc := b.prepareNext16x64C(x)
 
-	return nextHexC(enc, byte('f'))
+	return b.next16x64C(enc, byte('f'))
 }
 
-// BruijnHexNextFirst returns the first Bruijn node pointed by this node.
-// Other nodes might be deduced by just incrementing this one.
-func BruijnHexNextFirst(x []byte) ([]byte, error) {
-	err := checkX(x)
+func (b bruijn16x64) NextFirst(x []byte) ([]byte, error) {
+	err := b.checkX(x)
 	if err != nil {
 		return nil, err
 	}
 
-	return nextHexFirst(x)
+	return b.next16x64First(x)
 }
 
-// BruijnHexNextLast returns the last Bruijn node pointing to this node.
-// Other nodes might be deduced by just decrementing this one with
-// a value of m**(n-1).
-func BruijnHexNextLast(x []byte) ([]byte, error) {
-	err := checkX(x)
+func (b bruijn16x64) NextLast(x []byte) ([]byte, error) {
+	err := b.checkX(x)
 	if err != nil {
 		return nil, err
 	}
 
-	return nextHexLast(x)
+	return b.next16x64Last(x)
 }
 
-// BruijnHexNextList returns the list of all Bruijn nodes pointed by
-// this node, the nodes following this one (we walk down the graph).
-func BruijnHexNextList(x []byte) ([][]byte, error) {
-	err := checkX(x)
+func (b bruijn16x64) NextList(x []byte) ([][]byte, error) {
+	err := b.checkX(x)
 	if err != nil {
 		return nil, err
 	}
 
 	ret := make([][]byte, bruijnM)
-	enc := prepareNextHexC(x)
+	enc := b.prepareNext16x64C(x)
 	for i, v := range []byte(hexdigits) {
-		ret[i], err = nextHexC(enc, v)
+		ret[i], err = b.next16x64C(enc, v)
 		if err != nil {
 			return nil, err
 		}
@@ -121,7 +133,7 @@ func BruijnHexNextList(x []byte) ([][]byte, error) {
 	return ret, nil
 }
 
-func preparePrevHexC(x []byte) []byte {
+func (b bruijn16x64) preparePrev16x64C(x []byte) []byte {
 	enc := make([]byte, bruijnN+1)
 
 	hex.Encode(enc[1:bruijnN+1], x)
@@ -129,7 +141,7 @@ func preparePrevHexC(x []byte) []byte {
 	return enc
 }
 
-func prevHexC(enc []byte, c byte) ([]byte, error) {
+func (b bruijn16x64) prev16x64C(enc []byte, c byte) ([]byte, error) {
 	ret := make([]byte, nbBytes)
 
 	enc[0] = c
@@ -142,54 +154,46 @@ func prevHexC(enc []byte, c byte) ([]byte, error) {
 	return ret, nil
 }
 
-func prevHexFirst(x []byte) ([]byte, error) {
-	enc := preparePrevHexC(x)
+func (b bruijn16x64) prev16x64First(x []byte) ([]byte, error) {
+	enc := b.preparePrev16x64C(x)
 
-	return prevHexC(enc, byte('0'))
+	return b.prev16x64C(enc, byte('0'))
 }
 
-func prevHexLast(x []byte) ([]byte, error) {
-	enc := preparePrevHexC(x)
+func (b bruijn16x64) prev16x64Last(x []byte) ([]byte, error) {
+	enc := b.preparePrev16x64C(x)
 
-	return prevHexC(enc, byte('f'))
+	return b.prev16x64C(enc, byte('f'))
 }
 
-// BruijnHexPrevFirst returns the first Bruijn node pointing to this node.
-// Other nodes might be deduced by just incrementing this one with
-// a value of m**(n-1).
-func BruijnHexPrevFirst(x []byte) ([]byte, error) {
-	err := checkX(x)
+func (b bruijn16x64) PrevFirst(x []byte) ([]byte, error) {
+	err := b.checkX(x)
 	if err != nil {
 		return nil, err
 	}
 
-	return prevHexFirst(x)
+	return b.prev16x64First(x)
 }
 
-// BruijnHexPrevLast returns the last Bruijn node pointing to this node.
-// Other nodes might be deduced by just decrementing this one with
-// a value of m**(n-1).
-func BruijnHexPrevLast(x []byte) ([]byte, error) {
-	err := checkX(x)
+func (b bruijn16x64) PrevLast(x []byte) ([]byte, error) {
+	err := b.checkX(x)
 	if err != nil {
 		return nil, err
 	}
 
-	return prevHexLast(x)
+	return b.prev16x64Last(x)
 }
 
-// BruijnHexPrevList returns the list of all Bruijn nodes pointing to
-// this node, the nodes preceding this one (we walk up the graph).
-func BruijnHexPrevList(x []byte) ([][]byte, error) {
-	err := checkX(x)
+func (b bruijn16x64) PrevList(x []byte) ([][]byte, error) {
+	err := b.checkX(x)
 	if err != nil {
 		return nil, err
 	}
 
 	ret := make([][]byte, bruijnM)
-	enc := preparePrevHexC(x)
+	enc := b.preparePrev16x64C(x)
 	for i, v := range []byte(hexdigits) {
-		ret[i], err = prevHexC(enc, v)
+		ret[i], err = b.prev16x64C(enc, v)
 		if err != nil {
 			return nil, err
 		}
@@ -198,7 +202,7 @@ func BruijnHexPrevList(x []byte) ([][]byte, error) {
 	return ret, nil
 }
 
-func prepareComposeHex(x, y []byte) []byte {
+func (b bruijn16x64) prepareCompose16x64(x, y []byte) []byte {
 	enc := make([]byte, bruijnN*2)
 
 	hex.Encode(enc[0:bruijnN], x)
@@ -207,7 +211,7 @@ func prepareComposeHex(x, y []byte) []byte {
 	return enc
 }
 
-func composeHex(enc []byte, i int) ([]byte, error) {
+func (b bruijn16x64) compose16x64(enc []byte, i int) ([]byte, error) {
 	ret := make([]byte, nbBytes)
 
 	_, err := hex.Decode(ret, enc[i:bruijnN+i])
@@ -218,24 +222,20 @@ func composeHex(enc []byte, i int) ([]byte, error) {
 	return ret, nil
 }
 
-// BruijnHexForwardPath returns the path between two nodes. The path
-// might be non-optimized, it always contains m+1 elements, including
-// from and to destination. This is the default forward path in which
-// node n+1 is the node after n in the bruijn sequence.
-func BruijnHexForwardPath(from, to []byte) ([][]byte, error) {
-	err := checkX(from)
+func (b bruijn16x64) ForwardPath(from, to []byte) ([][]byte, error) {
+	err := b.checkX(from)
 	if err != nil {
 		return nil, err
 	}
-	err = checkX(to)
+	err = b.checkX(to)
 	if err != nil {
 		return nil, err
 	}
 
 	ret := make([][]byte, bruijnN)
-	enc := prepareComposeHex(from, to)
+	enc := b.prepareCompose16x64(from, to)
 	for i := range ret {
-		ret[i], err = composeHex(enc, i)
+		ret[i], err = b.compose16x64(enc, i)
 		if err != nil {
 			return nil, err
 		}
@@ -244,24 +244,20 @@ func BruijnHexForwardPath(from, to []byte) ([][]byte, error) {
 	return ret, nil
 }
 
-// BruijnHexBackwardPath returns the path between two nodes. The path
-// might be non-optimized, it always contains m+1 elements, including
-// from and to destination. This is the alternative backward path in which
-// node n+1 is the node before n in the bruijn sequence.
-func BruijnHexBackwardPath(from, to []byte) ([][]byte, error) {
-	err := checkX(from)
+func (b bruijn16x64) BackwardPath(from, to []byte) ([][]byte, error) {
+	err := b.checkX(from)
 	if err != nil {
 		return nil, err
 	}
-	err = checkX(to)
+	err = b.checkX(to)
 	if err != nil {
 		return nil, err
 	}
 
 	ret := make([][]byte, bruijnN)
-	enc := prepareComposeHex(from, to)
+	enc := b.prepareCompose16x64(from, to)
 	for i := range ret {
-		ret[i], err = composeHex(enc, bruijnN-i)
+		ret[i], err = b.compose16x64(enc, bruijnN-i)
 		if err != nil {
 			return nil, err
 		}
@@ -270,38 +266,32 @@ func BruijnHexBackwardPath(from, to []byte) ([][]byte, error) {
 	return ret, nil
 }
 
-// BruijnHexForwardElem returns the path element between two nodes.
-// Index 0 is the from element, and n (number of elements as in Bruijn nodes)
-// the to element. Uses the forward, default path.
-func BruijnHexForwardElem(from, to []byte, i int) ([]byte, error) {
-	err := checkX(from)
+func (b bruijn16x64) ForwardElem(from, to []byte, i int) ([]byte, error) {
+	err := b.checkX(from)
 	if err != nil {
 		return nil, err
 	}
-	err = checkX(to)
+	err = b.checkX(to)
 	if err != nil {
 		return nil, err
 	}
 
-	enc := prepareComposeHex(from, to)
+	enc := b.prepareCompose16x64(from, to)
 
-	return composeHex(enc, i)
+	return b.compose16x64(enc, i)
 }
 
-// BruijnHexBackwardElem returns the path element between two nodes.
-// Index 0 is the from element, and n (number of elements as in Bruijn nodes)
-// the to element. Uses the backward, alternative path.
-func BruijnHexBackwardElem(from, to []byte, i int) ([]byte, error) {
-	err := checkX(from)
+func (b bruijn16x64) BackwardElem(from, to []byte, i int) ([]byte, error) {
+	err := b.checkX(from)
 	if err != nil {
 		return nil, err
 	}
-	err = checkX(to)
+	err = b.checkX(to)
 	if err != nil {
 		return nil, err
 	}
 
-	enc := prepareComposeHex(to, from)
+	enc := b.prepareCompose16x64(to, from)
 
-	return composeHex(enc, bruijnN-i)
+	return b.compose16x64(enc, bruijnN-i)
 }
