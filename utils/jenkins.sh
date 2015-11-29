@@ -27,7 +27,6 @@ if [ ! -d utils ] ; then
     exit 1
 fi
 
-# setting up Jenkins env if needed, should be set by caller
 if test x$WORKSPACE = x ; then
     if test x$TMP = x ; then
 	if test x$TMPDIR = x ; then
@@ -40,51 +39,59 @@ if test x$WORKSPACE = x ; then
     fi
 fi
 
-# run various typicall build commands
-
-echo "******** $0 $(date) ********"
-#rm -rf src/git.apache.org src/github.com src/golang.org
+echo "******** setup ******* $0 $(date) ********"
 rm -rf test doc/txt doc/html doc/cover
 git clean -d -f -x
 rm -rf $HOME/.vapor
 
-echo "******** $0 $(date) ********"
+echo "******** bootstrap *** $0 $(date) ********"
 if ./bootstrap ; then
     echo "./bootstrap OK"
 else
     echo "./bootstrap failed"
-    exit 1
+    exit 2
 fi
 
-echo "******** $0 $(date) ********"
+echo "******** configure *** $0 $(date) ********"
 if ./configure --prefix=$WORKSPACE/local ; then
     echo "./configure OK"
 else
     echo "./configure failed"
-    exit 2
+    exit 3
 fi
 
-echo "******** $0 $(date) ********"
+echo "******** make ******** $0 $(date) ********"
 if make ; then
     echo "make OK"
 else
     echo "make failed"
-    exit 3
+    exit 4
 fi
 
-echo "******** $0 $(date) ********"
+echo "******** make devel ** $0 $(date) ********"
 if make devel ; then
     echo "make devel OK"
 else
     echo "make devel failed"
-    exit 4
+    exit 5
 fi
 
-echo "******** $0 $(date) ********"
+echo "******** make lint *** $0 $(date) ********"
+if make lint ; then
+    echo "make lint OK"
+else
+    echo "make lint failed"
+    exit 6
+fi
+
+echo "******** make doc **** $0 $(date) ********"
 if make doc ; then
     echo "make doc OK"
 else
     echo "make doc failed"
-    exit 5
+    exit 7
 fi
+
+echo "******** exit ******** $0 $(date) ********"
+exit 0
 
