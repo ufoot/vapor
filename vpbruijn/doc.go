@@ -17,7 +17,9 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpkoorde implements koorde algorithm as defined in
-// https://en.wikipedia.org/wiki/Koorde it's used for keeping a ring
-// of p2p nodes.
-package vpkoorde
+// Package vpbruijn implements De Bruijn graphs. See
+// https://en.wikipedia.org/wiki/De_Bruijn_graph for theory about
+// these graphs, this package has been initially written with the purpose
+// of implementing the Koorde https://en.wikipedia.org/wiki/Koorde
+// peer to peer network algorithm.
+package vpbruijn

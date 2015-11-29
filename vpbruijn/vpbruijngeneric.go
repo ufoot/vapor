@@ -17,7 +17,7 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpkoorde
+package vpbruijn
 
 import (
 	"math/big"
@@ -52,6 +52,7 @@ type bruijnGeneric struct {
 	bigZero       *big.Int
 	bigOne        *big.Int
 	bigMax        *big.Int
+	bigMax1       *big.Int
 	bigMax2       *big.Int
 	bigPrevStep   *big.Int
 	bigPrevToLast *big.Int
@@ -82,8 +83,6 @@ func BruijnGenericNew(m, n int) bruijnGeneric {
 
 	ret.m = m
 	ret.n = n
-	ret.nbBits = ret.n * ret.m
-	ret.nbBytes = (ret.nbBits + 7) >> 3
 
 	ret.bigM = big.NewInt(int64(m))
 	ret.bigN = big.NewInt(int64(n))
@@ -94,12 +93,17 @@ func BruijnGenericNew(m, n int) bruijnGeneric {
 	ret.bigOne = big.NewInt(1)
 	ret.bigMax = big.NewInt(0)
 	ret.bigMax.Exp(ret.bigM, ret.bigN, nil)
+	ret.bigMax1 = big.NewInt(0)
+	ret.bigMax1.Sub(ret.bigMax, ret.bigOne)
 	ret.bigMax2 = big.NewInt(0)
 	ret.bigMax2.Div(ret.bigMax, big.NewInt(2))
 	ret.bigPrevStep = big.NewInt(0)
 	ret.bigPrevStep.Exp(ret.bigM, ret.bigN1, ret.bigMax)
 	ret.bigPrevToLast = big.NewInt(0)
 	ret.bigPrevToLast.Mul(ret.bigPrevStep, ret.bigM1)
+
+	ret.nbBits = ret.bigMax1.BitLen()
+	ret.nbBytes = len(ret.bigMax1.Bytes())
 
 	return ret
 }
@@ -238,6 +242,10 @@ func (b bruijnGeneric) Sub(x, y []byte) []byte {
 func (b bruijnGeneric) Cmp(x, y []byte) int {
 	bigX := bytesToBig(x, b.bigMax)
 	bigY := bytesToBig(y, b.bigMax)
+
+	if bigX.Cmp(bigY) == 0 {
+		return 0
+	}
 
 	bigX.Sub(bigX, bigY)
 	bigX.Mod(bigX, b.bigMax)

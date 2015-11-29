@@ -17,7 +17,7 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpkoorde
+package vpbruijn
 
 // Read https://en.wikipedia.org/wiki/De_Bruijn_graph for theory
 
