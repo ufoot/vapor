@@ -69,7 +69,7 @@ func BruijnGenericNew(m, n int) BruijnWalker {
 	return bruijnGenericNew(m, n)
 }
 
-func bruijnGenericNew(m, n int) bruijnGeneric {
+func bruijnGenericNew(m, n int) *bruijnGeneric {
 	var ret bruijnGeneric
 
 	if m < GenericMinM {
@@ -109,44 +109,44 @@ func bruijnGenericNew(m, n int) bruijnGeneric {
 	ret.nbBits = ret.bigMax1.BitLen()
 	ret.nbBytes = len(ret.bigMax1.Bytes())
 
-	return ret
+	return &ret
 }
 
-func (b bruijnGeneric) filterX(x *big.Int) *big.Int {
+func (b *bruijnGeneric) filterX(x *big.Int) *big.Int {
 	ret := big.NewInt(0)
 	return ret.Mod(x, b.bigMax)
 }
 
-func (b bruijnGeneric) M() int {
+func (b *bruijnGeneric) M() int {
 	return b.m
 }
 
-func (b bruijnGeneric) N() int {
+func (b *bruijnGeneric) N() int {
 	return b.n
 }
 
-func (b bruijnGeneric) NbBits() int {
+func (b *bruijnGeneric) NbBits() int {
 	return b.nbBits
 }
 
-func (b bruijnGeneric) NbBytes() int {
+func (b *bruijnGeneric) NbBytes() int {
 	return b.nbBytes
 }
 
-func (b bruijnGeneric) NextFirst(x []byte) []byte {
+func (b *bruijnGeneric) NextFirst(x []byte) []byte {
 	bigRet := nextBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM, b.bigMax)
 
 	return bigToBytes(bigRet, b.nbBytes)
 }
 
-func (b bruijnGeneric) NextLast(x []byte) []byte {
+func (b *bruijnGeneric) NextLast(x []byte) []byte {
 	bigRet := nextBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM, b.bigMax)
 	bigRet.Add(bigRet, b.bigM1)
 
 	return bigToBytes(bigRet, b.nbBytes)
 }
 
-func (b bruijnGeneric) NextList(x []byte) [][]byte {
+func (b *bruijnGeneric) NextList(x []byte) [][]byte {
 	cur := nextBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM, b.bigMax)
 
 	ret := make([][]byte, b.m)
@@ -158,20 +158,20 @@ func (b bruijnGeneric) NextList(x []byte) [][]byte {
 	return ret
 }
 
-func (b bruijnGeneric) PrevFirst(x []byte) []byte {
+func (b *bruijnGeneric) PrevFirst(x []byte) []byte {
 	bigRet := prevBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM)
 
 	return bigToBytes(bigRet, b.nbBytes)
 }
 
-func (b bruijnGeneric) PrevLast(x []byte) []byte {
+func (b *bruijnGeneric) PrevLast(x []byte) []byte {
 	bigRet := prevBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM)
 	bigRet.Add(bigRet, b.bigPrevToLast)
 
 	return bigToBytes(bigRet, b.nbBytes)
 }
 
-func (b bruijnGeneric) PrevList(x []byte) [][]byte {
+func (b *bruijnGeneric) PrevList(x []byte) [][]byte {
 	cur := prevBigFirst(b.filterX(bytesToBig(x, b.bigMax)), b.bigM)
 
 	ret := make([][]byte, b.m)
@@ -183,7 +183,7 @@ func (b bruijnGeneric) PrevList(x []byte) [][]byte {
 	return ret
 }
 
-func (b bruijnGeneric) ForwardPath(from, to []byte) [][]byte {
+func (b *bruijnGeneric) ForwardPath(from, to []byte) [][]byte {
 	bigFrom := bytesToBig(from, b.bigMax)
 	bigTo := bytesToBig(to, b.bigMax)
 
@@ -196,7 +196,7 @@ func (b bruijnGeneric) ForwardPath(from, to []byte) [][]byte {
 	return ret
 }
 
-func (b bruijnGeneric) BackwardPath(from, to []byte) [][]byte {
+func (b *bruijnGeneric) BackwardPath(from, to []byte) [][]byte {
 	bigFrom := bytesToBig(from, b.bigMax)
 	bigTo := bytesToBig(to, b.bigMax)
 
@@ -209,21 +209,21 @@ func (b bruijnGeneric) BackwardPath(from, to []byte) [][]byte {
 	return ret
 }
 
-func (b bruijnGeneric) ForwardElem(from, to []byte, i int) []byte {
+func (b *bruijnGeneric) ForwardElem(from, to []byte, i int) []byte {
 	bigFrom := bytesToBig(from, b.bigMax)
 	bigTo := bytesToBig(to, b.bigMax)
 
 	return bigToBytes(composeBig(bigFrom, bigTo, b.bigM, b.bigMax, b.m, b.n, i), b.nbBytes)
 }
 
-func (b bruijnGeneric) BackwardElem(from, to []byte, i int) []byte {
+func (b *bruijnGeneric) BackwardElem(from, to []byte, i int) []byte {
 	bigFrom := bytesToBig(from, b.bigMax)
 	bigTo := bytesToBig(to, b.bigMax)
 
 	return bigToBytes(composeBig(bigTo, bigFrom, b.bigM, b.bigMax, b.m, b.n, b.n-i), b.nbBytes)
 }
 
-func (b bruijnGeneric) Add(x, y []byte) []byte {
+func (b *bruijnGeneric) Add(x, y []byte) []byte {
 	bigX := bytesToBig(x, b.bigMax)
 	bigY := bytesToBig(y, b.bigMax)
 
@@ -233,7 +233,7 @@ func (b bruijnGeneric) Add(x, y []byte) []byte {
 	return bigToBytes(bigX, b.nbBytes)
 }
 
-func (b bruijnGeneric) Sub(x, y []byte) []byte {
+func (b *bruijnGeneric) Sub(x, y []byte) []byte {
 	bigX := bytesToBig(x, b.bigMax)
 	bigY := bytesToBig(y, b.bigMax)
 
@@ -243,7 +243,7 @@ func (b bruijnGeneric) Sub(x, y []byte) []byte {
 	return bigToBytes(bigX, b.nbBytes)
 }
 
-func (b bruijnGeneric) Cmp(x, y []byte) int {
+func (b *bruijnGeneric) Cmp(x, y []byte) int {
 	bigX := bytesToBig(x, b.bigMax)
 	bigY := bytesToBig(y, b.bigMax)
 
@@ -257,7 +257,7 @@ func (b bruijnGeneric) Cmp(x, y []byte) int {
 	return b.bigMax2.Cmp(bigX)
 }
 
-func (b bruijnGeneric) GeLt(x, begin, end []byte) bool {
+func (b *bruijnGeneric) GeLt(x, begin, end []byte) bool {
 	bigX := bytesToBig(x, b.bigMax)
 	bigBegin := bytesToBig(begin, b.bigMax)
 	bigEnd := bytesToBig(end, b.bigMax)
@@ -269,7 +269,7 @@ func (b bruijnGeneric) GeLt(x, begin, end []byte) bool {
 	return (bigBegin.Cmp(bigX) <= 0) && (bigX.Cmp(bigEnd) < 0)
 }
 
-func (b bruijnGeneric) GtLe(x, begin, end []byte) bool {
+func (b *bruijnGeneric) GtLe(x, begin, end []byte) bool {
 	bigX := bytesToBig(x, b.bigMax)
 	bigBegin := bytesToBig(begin, b.bigMax)
 	bigEnd := bytesToBig(end, b.bigMax)
@@ -281,7 +281,7 @@ func (b bruijnGeneric) GtLe(x, begin, end []byte) bool {
 	return (bigBegin.Cmp(bigX) < 0) && (bigX.Cmp(bigEnd) <= 0)
 }
 
-func (b bruijnGeneric) Incr(x []byte) []byte {
+func (b *bruijnGeneric) Incr(x []byte) []byte {
 	bigX := bytesToBig(x, b.bigMax)
 
 	bigX.Add(bigX, b.bigOne)
@@ -290,7 +290,7 @@ func (b bruijnGeneric) Incr(x []byte) []byte {
 	return bigToBytes(bigX, b.nbBytes)
 }
 
-func (b bruijnGeneric) Decr(x []byte) []byte {
+func (b *bruijnGeneric) Decr(x []byte) []byte {
 	bigX := bytesToBig(x, b.bigMax)
 
 	bigX.Sub(bigX, b.bigOne)
@@ -299,7 +299,7 @@ func (b bruijnGeneric) Decr(x []byte) []byte {
 	return bigToBytes(bigX, b.nbBytes)
 }
 
-func (b bruijnGeneric) RingPos(x []byte) float64 {
+func (b *bruijnGeneric) RingPos(x []byte) float64 {
 	var frac big.Rat
 
 	bigX := bytesToBig(x, b.bigMax)

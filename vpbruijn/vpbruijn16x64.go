@@ -38,7 +38,7 @@ const (
 )
 
 type bruijn16x64 struct {
-	implGeneric bruijnGeneric
+	implGeneric *bruijnGeneric
 }
 
 // Bruijn16x64New creates a new Bruijn object capable of walking
@@ -48,27 +48,27 @@ func Bruijn16x64New() BruijnWalker {
 	return bruijn16x64New()
 }
 
-func bruijn16x64New() bruijn16x64 {
-	return bruijn16x64{bruijnGenericNew(16, 64)}
+func bruijn16x64New() *bruijn16x64 {
+	return &bruijn16x64{bruijnGenericNew(16, 64)}
 }
 
-func (b bruijn16x64) M() int {
+func (b *bruijn16x64) M() int {
 	return bruijnM
 }
 
-func (b bruijn16x64) N() int {
+func (b *bruijn16x64) N() int {
 	return bruijnN
 }
 
-func (b bruijn16x64) NbBits() int {
+func (b *bruijn16x64) NbBits() int {
 	return nbBits
 }
 
-func (b bruijn16x64) NbBytes() int {
+func (b *bruijn16x64) NbBytes() int {
 	return nbBytes
 }
 
-func (b bruijn16x64) filterX(x []byte) []byte {
+func (b *bruijn16x64) filterX(x []byte) []byte {
 	l := len(x)
 	if l >= nbBytes {
 		return x[0:nbBytes]
@@ -78,7 +78,7 @@ func (b bruijn16x64) filterX(x []byte) []byte {
 
 }
 
-func (b bruijn16x64) prepareNext16x64C(x []byte) []byte {
+func (b *bruijn16x64) prepareNext16x64C(x []byte) []byte {
 	enc := make([]byte, bruijnN+1)
 
 	hex.Encode(enc[0:bruijnN], x)
@@ -86,7 +86,7 @@ func (b bruijn16x64) prepareNext16x64C(x []byte) []byte {
 	return enc
 }
 
-func (b bruijn16x64) next16x64C(enc []byte, c byte) []byte {
+func (b *bruijn16x64) next16x64C(enc []byte, c byte) []byte {
 	ret := make([]byte, nbBytes)
 
 	enc[bruijnN] = c
@@ -103,27 +103,27 @@ func (b bruijn16x64) next16x64C(enc []byte, c byte) []byte {
 	return ret
 }
 
-func (b bruijn16x64) next16x64First(x []byte) []byte {
+func (b *bruijn16x64) next16x64First(x []byte) []byte {
 	enc := b.prepareNext16x64C(x)
 
 	return b.next16x64C(enc, byte('0'))
 }
 
-func (b bruijn16x64) next16x64Last(x []byte) []byte {
+func (b *bruijn16x64) next16x64Last(x []byte) []byte {
 	enc := b.prepareNext16x64C(x)
 
 	return b.next16x64C(enc, byte('f'))
 }
 
-func (b bruijn16x64) NextFirst(x []byte) []byte {
+func (b *bruijn16x64) NextFirst(x []byte) []byte {
 	return b.next16x64First(b.filterX(x))
 }
 
-func (b bruijn16x64) NextLast(x []byte) []byte {
+func (b *bruijn16x64) NextLast(x []byte) []byte {
 	return b.next16x64Last(b.filterX(x))
 }
 
-func (b bruijn16x64) NextList(x []byte) [][]byte {
+func (b *bruijn16x64) NextList(x []byte) [][]byte {
 	ret := make([][]byte, bruijnM)
 	enc := b.prepareNext16x64C(b.filterX(x))
 	for i, v := range []byte(hexdigits) {
@@ -133,7 +133,7 @@ func (b bruijn16x64) NextList(x []byte) [][]byte {
 	return ret
 }
 
-func (b bruijn16x64) preparePrev16x64C(x []byte) []byte {
+func (b *bruijn16x64) preparePrev16x64C(x []byte) []byte {
 	enc := make([]byte, bruijnN+1)
 
 	hex.Encode(enc[1:bruijnN+1], b.filterX(x))
@@ -141,7 +141,7 @@ func (b bruijn16x64) preparePrev16x64C(x []byte) []byte {
 	return enc
 }
 
-func (b bruijn16x64) prev16x64C(enc []byte, c byte) []byte {
+func (b *bruijn16x64) prev16x64C(enc []byte, c byte) []byte {
 	ret := make([]byte, nbBytes)
 
 	enc[0] = c
@@ -158,27 +158,27 @@ func (b bruijn16x64) prev16x64C(enc []byte, c byte) []byte {
 	return ret
 }
 
-func (b bruijn16x64) prev16x64First(x []byte) []byte {
+func (b *bruijn16x64) prev16x64First(x []byte) []byte {
 	enc := b.preparePrev16x64C(x)
 
 	return b.prev16x64C(enc, byte('0'))
 }
 
-func (b bruijn16x64) prev16x64Last(x []byte) []byte {
+func (b *bruijn16x64) prev16x64Last(x []byte) []byte {
 	enc := b.preparePrev16x64C(x)
 
 	return b.prev16x64C(enc, byte('f'))
 }
 
-func (b bruijn16x64) PrevFirst(x []byte) []byte {
+func (b *bruijn16x64) PrevFirst(x []byte) []byte {
 	return b.prev16x64First(b.filterX(x))
 }
 
-func (b bruijn16x64) PrevLast(x []byte) []byte {
+func (b *bruijn16x64) PrevLast(x []byte) []byte {
 	return b.prev16x64Last(b.filterX(x))
 }
 
-func (b bruijn16x64) PrevList(x []byte) [][]byte {
+func (b *bruijn16x64) PrevList(x []byte) [][]byte {
 	ret := make([][]byte, bruijnM)
 	enc := b.preparePrev16x64C(b.filterX(x))
 	for i, v := range []byte(hexdigits) {
@@ -188,7 +188,7 @@ func (b bruijn16x64) PrevList(x []byte) [][]byte {
 	return ret
 }
 
-func (b bruijn16x64) prepareCompose16x64(x, y []byte) []byte {
+func (b *bruijn16x64) prepareCompose16x64(x, y []byte) []byte {
 	enc := make([]byte, bruijnN*2)
 
 	hex.Encode(enc[0:bruijnN], x)
@@ -197,7 +197,7 @@ func (b bruijn16x64) prepareCompose16x64(x, y []byte) []byte {
 	return enc
 }
 
-func (b bruijn16x64) compose16x64(enc []byte, i int) []byte {
+func (b *bruijn16x64) compose16x64(enc []byte, i int) []byte {
 	ret := make([]byte, nbBytes)
 
 	_, err := hex.Decode(ret, enc[i:bruijnN+i])
@@ -212,7 +212,7 @@ func (b bruijn16x64) compose16x64(enc []byte, i int) []byte {
 	return ret
 }
 
-func (b bruijn16x64) ForwardPath(from, to []byte) [][]byte {
+func (b *bruijn16x64) ForwardPath(from, to []byte) [][]byte {
 	ret := make([][]byte, bruijnN)
 	enc := b.prepareCompose16x64(b.filterX(from), b.filterX(to))
 	for i := range ret {
@@ -222,7 +222,7 @@ func (b bruijn16x64) ForwardPath(from, to []byte) [][]byte {
 	return ret
 }
 
-func (b bruijn16x64) BackwardPath(from, to []byte) [][]byte {
+func (b *bruijn16x64) BackwardPath(from, to []byte) [][]byte {
 	ret := make([][]byte, bruijnN)
 	enc := b.prepareCompose16x64(b.filterX(to), b.filterX(from))
 	for i := range ret {
@@ -232,39 +232,39 @@ func (b bruijn16x64) BackwardPath(from, to []byte) [][]byte {
 	return ret
 }
 
-func (b bruijn16x64) ForwardElem(from, to []byte, i int) []byte {
+func (b *bruijn16x64) ForwardElem(from, to []byte, i int) []byte {
 	enc := b.prepareCompose16x64(b.filterX(from), b.filterX(to))
 
 	return b.compose16x64(enc, i)
 }
 
-func (b bruijn16x64) BackwardElem(from, to []byte, i int) []byte {
+func (b *bruijn16x64) BackwardElem(from, to []byte, i int) []byte {
 	enc := b.prepareCompose16x64(b.filterX(to), b.filterX(from))
 
 	return b.compose16x64(enc, bruijnN-i)
 }
 
-func (b bruijn16x64) Add(x, y []byte) []byte {
+func (b *bruijn16x64) Add(x, y []byte) []byte {
 	return b.implGeneric.Add(x, y)
 }
 
-func (b bruijn16x64) Sub(x, y []byte) []byte {
+func (b *bruijn16x64) Sub(x, y []byte) []byte {
 	return b.implGeneric.Sub(x, y)
 }
 
-func (b bruijn16x64) Cmp(x, y []byte) int {
+func (b *bruijn16x64) Cmp(x, y []byte) int {
 	return b.implGeneric.Cmp(x, y)
 }
 
-func (b bruijn16x64) GeLt(x, begin, end []byte) bool {
+func (b *bruijn16x64) GeLt(x, begin, end []byte) bool {
 	return b.implGeneric.GeLt(x, begin, end)
 }
 
-func (b bruijn16x64) GtLe(x, begin, end []byte) bool {
+func (b *bruijn16x64) GtLe(x, begin, end []byte) bool {
 	return b.implGeneric.GtLe(x, begin, end)
 }
 
-func (b bruijn16x64) Incr(x []byte) []byte {
+func (b *bruijn16x64) Incr(x []byte) []byte {
 	if len(x) == nbBytes && x[nbBytes-1] < 255 {
 		ret := make([]byte, nbBytes)
 		copy(ret, x)
@@ -275,7 +275,7 @@ func (b bruijn16x64) Incr(x []byte) []byte {
 	return b.implGeneric.Incr(x)
 }
 
-func (b bruijn16x64) Decr(x []byte) []byte {
+func (b *bruijn16x64) Decr(x []byte) []byte {
 	if len(x) == nbBytes && x[nbBytes-1] > 0 {
 		ret := make([]byte, nbBytes)
 		copy(ret, x)
@@ -286,6 +286,6 @@ func (b bruijn16x64) Decr(x []byte) []byte {
 	return b.implGeneric.Decr(x)
 }
 
-func (b bruijn16x64) RingPos(x []byte) float64 {
+func (b *bruijn16x64) RingPos(x []byte) float64 {
 	return b.implGeneric.RingPos(x)
 }
