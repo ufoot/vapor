@@ -28,7 +28,7 @@ func TestBruijnGenericNext(t *testing.T) {
 	const m = 2
 	const n = 3
 	bruijn23 := [m * m * m][n]int{{0, 1}, {2, 3}, {4, 5}, {6, 7}, {0, 1}, {2, 3}, {4, 5}, {6, 7}}
-	implGeneric := BruijnGenericNew(m, n)
+	implGeneric := bruijnGenericNew(m, n)
 
 	for i, v := range bruijn23 {
 		bi := big.NewInt(int64(i))
@@ -53,7 +53,7 @@ func TestBruijnGenericPrev(t *testing.T) {
 	const m = 2
 	const n = 3
 	bruijn23 := [m * m * m][n]int{{0, 4}, {0, 4}, {1, 5}, {1, 5}, {2, 6}, {2, 6}, {3, 7}, {3, 7}}
-	implGeneric := BruijnGenericNew(m, n)
+	implGeneric := bruijnGenericNew(m, n)
 
 	for i, v := range bruijn23 {
 		bi := big.NewInt(int64(i))
@@ -79,7 +79,7 @@ func TestBruijnGenericForwardPath(t *testing.T) {
 	const n = 6
 	const from = 234567
 	const to = 987654
-	implGeneric := BruijnGenericNew(m, n)
+	implGeneric := bruijnGenericNew(m, n)
 
 	path := implGeneric.ForwardPath(bigToBytes(big.NewInt(from), implGeneric.NbBytes()), bigToBytes(big.NewInt(to), implGeneric.NbBytes()))
 	for i, v := range path {
@@ -111,7 +111,7 @@ func TestBruijnGenericBackwardPath(t *testing.T) {
 	const n = 4
 	const from = 1234
 	const to = 9876
-	implGeneric := BruijnGenericNew(m, n)
+	implGeneric := bruijnGenericNew(m, n)
 
 	path := implGeneric.BackwardPath(bigToBytes(big.NewInt(from), implGeneric.NbBytes()), bigToBytes(big.NewInt(to), implGeneric.NbBytes()))
 	for i, v := range path {
@@ -138,48 +138,48 @@ func TestBruijnGenericBackwardPath(t *testing.T) {
 	}
 }
 
-func BrenchmarkBruijnGenericNext_2_32(b *testing.B) {
-	implGeneric := BruijnGenericNew(2, 32)
+func BrenchmarkBruijnGenericNext2_32(b *testing.B) {
+	implGeneric := bruijnGenericNew(2, 32)
 	v := bigToBytes(big.NewInt(1000), implGeneric.NbBytes())
 	for i := 0; i < b.N; i++ {
 		implGeneric.NextFirst(v)
 	}
 }
 
-func BrenchmarkBruijnGenericPrev_2_32(b *testing.B) {
-	implGeneric := BruijnGenericNew(2, 32)
+func BrenchmarkBruijnGenericPrev2_32(b *testing.B) {
+	implGeneric := bruijnGenericNew(2, 32)
 	v := bigToBytes(big.NewInt(1000), implGeneric.NbBytes())
 	for i := 0; i < b.N; i++ {
 		implGeneric.PrevFirst(v)
 	}
 }
 
-func BrenchmarkBruijnGenericNext_16_64(b *testing.B) {
-	implGeneric := BruijnGenericNew(16, 64)
+func BrenchmarkBruijnGenericNext16_64(b *testing.B) {
+	implGeneric := bruijnGenericNew(16, 64)
 	v := bigToBytes(big.NewInt(1000), implGeneric.NbBytes())
 	for i := 0; i < b.N; i++ {
 		implGeneric.NextFirst(v)
 	}
 }
 
-func BrenchmarkBruijnGenericPrev_16_64(b *testing.B) {
-	implGeneric := BruijnGenericNew(16, 64)
+func BrenchmarkBruijnGenericPrev16_64(b *testing.B) {
+	implGeneric := bruijnGenericNew(16, 64)
 	v := bigToBytes(big.NewInt(1000), implGeneric.NbBytes())
 	for i := 0; i < b.N; i++ {
 		implGeneric.PrevFirst(v)
 	}
 }
 
-func BrenchmarkBruijnGenericNext_7_100(b *testing.B) {
-	implGeneric := BruijnGenericNew(7, 100)
+func BrenchmarkBruijnGenericNext7_100(b *testing.B) {
+	implGeneric := bruijnGenericNew(7, 100)
 	v := bigToBytes(big.NewInt(1000), implGeneric.NbBytes())
 	for i := 0; i < b.N; i++ {
 		implGeneric.NextFirst(v)
 	}
 }
 
-func BrenchmarkBruijnGenericPrev_7_100(b *testing.B) {
-	implGeneric := BruijnGenericNew(7, 100)
+func BrenchmarkBruijnGenericPrev7_100(b *testing.B) {
+	implGeneric := bruijnGenericNew(7, 100)
 	v := bigToBytes(big.NewInt(1000), implGeneric.NbBytes())
 	for i := 0; i < b.N; i++ {
 		implGeneric.PrevFirst(v)

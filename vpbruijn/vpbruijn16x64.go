@@ -44,8 +44,12 @@ type bruijn16x64 struct {
 // Bruijn16x64New creates a new Bruijn object capable of walking
 // Bruijn graphcs wih m (AKA base) =16 and n (number of elems) =64.
 // This is a specific, hopefully optimized for this case, implementation.
-func Bruijn16x64New() bruijn16x64 {
-	return bruijn16x64{BruijnGenericNew(16, 64)}
+func Bruijn16x64New() BruijnWalker {
+	return bruijn16x64New()
+}
+
+func bruijn16x64New() bruijn16x64 {
+	return bruijn16x64{bruijnGenericNew(16, 64)}
 }
 
 func (b bruijn16x64) M() int {
@@ -258,4 +262,30 @@ func (b bruijn16x64) GeLt(x, begin, end []byte) bool {
 
 func (b bruijn16x64) GtLe(x, begin, end []byte) bool {
 	return b.implGeneric.GtLe(x, begin, end)
+}
+
+func (b bruijn16x64) Incr(x []byte) []byte {
+	if len(x) == nbBytes && x[nbBytes-1] < 255 {
+		ret := make([]byte, nbBytes)
+		copy(ret, x)
+		ret[nbBytes-1] = x[nbBytes-1] + 1
+		return ret
+	}
+
+	return b.implGeneric.Incr(x)
+}
+
+func (b bruijn16x64) Decr(x []byte) []byte {
+	if len(x) == nbBytes && x[nbBytes-1] > 0 {
+		ret := make([]byte, nbBytes)
+		copy(ret, x)
+		ret[nbBytes-1] = x[nbBytes-1] - 1
+		return ret
+	}
+
+	return b.implGeneric.Decr(x)
+}
+
+func (b bruijn16x64) RingPos(x []byte) float64 {
+	return b.implGeneric.RingPos(x)
 }

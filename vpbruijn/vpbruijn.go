@@ -96,16 +96,25 @@ type BruijnWalker interface {
 	// on a ring so if begin is before end, tests x>begin and x<=end, and if
 	// end is before begin, tests x<=end or x>begin.
 	GtLe(x, begin, end []byte) bool
+	// Incr increments the key by 1. If it's too great to fit within key space,
+	// then returns 0.
+	Incr(x []byte) []byte
+	// Decr decreases the key by 1. If it's below 0, then set it to the greatest
+	// possible key value.
+	Decr(x []byte) []byte
+	// RingPos returns the position on the ring between 0 and 1, this is typically
+	// interesting in a Koorde context, mostly for debugging/reporting purposes.
+	RingPos(x []byte) float64
 }
 
 // BruijnNew creates a new BruijnWalker compatible object,
 // which can be use to walk along De Bruijn networks.
 func BruijnNew(m, n int) (BruijnWalker, error) {
 	if m == 16 && n == 64 {
-		return Bruijn16x64New(), nil
+		return bruijn16x64New(), nil
 	}
 	if m >= GenericMinM && m <= GenericMaxM && n >= GenericMinN && n <= GenericMaxN {
-		return BruijnGenericNew(m, n), nil
+		return bruijnGenericNew(m, n), nil
 	}
 	return nil, fmt.Errorf("no implementation for De Bruijn networks with values m=%d n=%d", m, n)
 }

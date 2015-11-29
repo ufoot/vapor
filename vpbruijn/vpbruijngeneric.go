@@ -65,7 +65,11 @@ type bruijnGeneric struct {
 // reference for optimized version. It can theorically be slower than optimized
 // 2^n as it relies on a general purpose big integer machinery, in practice
 // it shows decent results.
-func BruijnGenericNew(m, n int) bruijnGeneric {
+func BruijnGenericNew(m, n int) BruijnWalker {
+	return bruijnGenericNew(m, n)
+}
+
+func bruijnGenericNew(m, n int) bruijnGeneric {
 	var ret bruijnGeneric
 
 	if m < GenericMinM {
@@ -275,4 +279,33 @@ func (b bruijnGeneric) GtLe(x, begin, end []byte) bool {
 	}
 
 	return (bigBegin.Cmp(bigX) < 0) && (bigX.Cmp(bigEnd) <= 0)
+}
+
+func (b bruijnGeneric) Incr(x []byte) []byte {
+	bigX := bytesToBig(x, b.bigMax)
+
+	bigX.Add(bigX, b.bigOne)
+	bigX.Mod(bigX, b.bigMax)
+
+	return bigToBytes(bigX, b.nbBytes)
+}
+
+func (b bruijnGeneric) Decr(x []byte) []byte {
+	bigX := bytesToBig(x, b.bigMax)
+
+	bigX.Sub(bigX, b.bigOne)
+	bigX.Mod(bigX, b.bigMax)
+
+	return bigToBytes(bigX, b.nbBytes)
+}
+
+func (b bruijnGeneric) RingPos(x []byte) float64 {
+	var frac big.Rat
+
+	bigX := bytesToBig(x, b.bigMax)
+	frac.SetFrac(bigX, b.bigMax)
+
+	ret, _ := frac.Float64()
+
+	return ret
 }

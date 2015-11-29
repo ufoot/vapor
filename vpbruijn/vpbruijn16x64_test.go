@@ -28,8 +28,8 @@ func TestBruijn16x64Next(t *testing.T) {
 	const m = 16
 	const n = 64
 
-	implGeneric := BruijnGenericNew(m, n)
-	impl16x64 := Bruijn16x64New()
+	implGeneric := bruijnGenericNew(m, n)
+	impl16x64 := bruijn16x64New()
 
 	i := vpcrypto.Checksum256([]byte("toto"))
 
@@ -54,8 +54,8 @@ func TestBruijn16x64Prev(t *testing.T) {
 	const m = 16
 	const n = 64
 
-	implGeneric := BruijnGenericNew(m, n)
-	impl16x64 := Bruijn16x64New()
+	implGeneric := bruijnGenericNew(m, n)
+	impl16x64 := bruijn16x64New()
 
 	i := vpcrypto.Checksum256([]byte("toto"))
 
@@ -77,7 +77,7 @@ func TestBruijn16x64Prev(t *testing.T) {
 }
 
 func BenchmarkBruijn16x64Next(b *testing.B) {
-	impl16x64 := Bruijn16x64New()
+	impl16x64 := bruijn16x64New()
 	v := vpcrypto.Checksum256([]byte("toto"))
 	for i := 0; i < b.N; i++ {
 		impl16x64.NextFirst(v)
@@ -85,7 +85,7 @@ func BenchmarkBruijn16x64Next(b *testing.B) {
 }
 
 func BenchmarkBruijn16x64Prev(b *testing.B) {
-	impl16x64 := Bruijn16x64New()
+	impl16x64 := bruijn16x64New()
 	v := vpcrypto.Checksum256([]byte("toto"))
 	for i := 0; i < b.N; i++ {
 		impl16x64.PrevFirst(v)
