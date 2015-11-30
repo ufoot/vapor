@@ -85,18 +85,21 @@ func TestBruijnGenericForwardPath(t *testing.T) {
 	for i, v := range path {
 		t.Logf("path[%d]=%d", i, bytesToBig(v, implGeneric.bigMax).Int64())
 		if i > 0 {
-			found := false
+			found := 0
 			nList := implGeneric.NextList(path[i-1])
 			for j, w := range nList {
 				if bytesToBig(v, implGeneric.bigMax).Cmp(bytesToBig(w, implGeneric.bigMax)) == 0 {
 					t.Logf("path[%d]: successor %d of %d found, was in position %d", i, bytesToBig(w, implGeneric.bigMax).Int64(), bytesToBig(path[i-1], implGeneric.bigMax).Int64(), j)
-					found = true
+					found++
 				} else {
 					t.Logf("path[%d]: successor %d of %d in position %d, not what we search", i, bytesToBig(w, implGeneric.bigMax).Int64(), bytesToBig(path[i-1], implGeneric.bigMax).Int64(), j)
 				}
 			}
-			if !found {
+			if found <= 0 {
 				t.Errorf("v[%d]=%d not found in successors of v[%d]", i, bytesToBig(v, implGeneric.bigMax).Int64(), i-1)
+			}
+			if found > 1 {
+				t.Errorf("v[%d]=%d found too many times (%d) in successors of v[%d]", i, bytesToBig(v, implGeneric.bigMax).Int64(), found, i-1)
 			}
 		}
 		w := implGeneric.ForwardElem(bigToBytes(big.NewInt(from), implGeneric.NbBytes()), bigToBytes(big.NewInt(to), implGeneric.NbBytes()), i)
@@ -117,18 +120,21 @@ func TestBruijnGenericBackwardPath(t *testing.T) {
 	for i, v := range path {
 		t.Logf("path[%d]=%d", i, bytesToBig(v, implGeneric.bigMax).Int64())
 		if i > 0 {
-			found := false
+			found := 0
 			nList := implGeneric.PrevList(path[i-1])
 			for j, w := range nList {
 				if bytesToBig(v, implGeneric.bigMax).Cmp(bytesToBig(w, implGeneric.bigMax)) == 0 {
 					t.Logf("path[%d]: predecessor %d of %d found, was in position %d", i, bytesToBig(w, implGeneric.bigMax).Int64(), bytesToBig(path[i-1], implGeneric.bigMax).Int64(), j)
-					found = true
+					found++
 				} else {
 					t.Logf("path[%d]: predecessor %d of %d in position %d, not what we search", i, bytesToBig(w, implGeneric.bigMax).Int64(), bytesToBig(path[i-1], implGeneric.bigMax).Int64(), j)
 				}
 			}
-			if !found {
+			if found <= 0 {
 				t.Errorf("v[%d]=%d not found in predecessors of v[%d]", i, bytesToBig(v, implGeneric.bigMax).Int64(), i-1)
+			}
+			if found > 1 {
+				t.Errorf("v[%d]=%d found too many times (%d) in predecessors of v[%d]", i, bytesToBig(v, implGeneric.bigMax).Int64(), found, i-1)
 			}
 		}
 		w := implGeneric.BackwardElem(bigToBytes(big.NewInt(from), implGeneric.NbBytes()), bigToBytes(big.NewInt(to), implGeneric.NbBytes()), i)

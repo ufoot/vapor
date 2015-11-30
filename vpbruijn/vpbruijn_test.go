@@ -58,7 +58,7 @@ func TestBruijnForward(t *testing.T) {
 			zero := make([]byte, walker.NbBytes())
 			max := walker.Decr(zero)
 			forwardPath := walker.ForwardPath(zero, max)
-			var lastV []byte
+			lastV := make([]byte, walker.NbBytes())
 			for i, v := range forwardPath {
 				if i > 0 {
 					possibleV := walker.NextList(lastV)
@@ -76,45 +76,43 @@ func TestBruijnForward(t *testing.T) {
 						t.Errorf("too many (%d) matches for v=%s", found, hex.EncodeToString(v))
 					}
 				}
-				lastV = v
+				copy(lastV, v)
 			}
 		}
 	}
 }
 
-/*
 func TestBruijnBackward(t *testing.T) {
-	for _,m:=range mList {
-		for _,n:=range nList {
-			t.Logf("testing Bruijn graph walker for m=%d n=%d",m,n)
-			walker,err:=BruijnNew(m,n)
-			if err!=nil {
+	for _, m := range mList {
+		for _, n := range nList {
+			t.Logf("testing Bruijn graph walker for m=%d n=%d", m, n)
+			walker, err := BruijnNew(m, n)
+			if err != nil {
 				t.Error("unable to create walker", err)
 			}
-			zero:=make([]byte,walker.NbBytes())
-			max:=walker.Decr(zero)
-			backwardPath:=walker.BackwardPath(zero,max)
-			var lastV []byte
-			for i,v:=range backwardPath {
-				if i>0 {
-					possibleV:=walker.PrevList(lastV)
-					found:=0
-					for _,w:=range(possibleV) {
-						if walker.Cmp(v,w)==0 {
-							t.Logf("found key %s as being prev to %s",hex.EncodeToString(w),hex.EncodeToString(lastV))
+			zero := make([]byte, walker.NbBytes())
+			max := walker.Decr(zero)
+			backwardPath := walker.BackwardPath(zero, max)
+			lastV := make([]byte, walker.NbBytes())
+			for i, v := range backwardPath {
+				if i > 0 {
+					possibleV := walker.PrevList(lastV)
+					found := 0
+					for _, w := range possibleV {
+						if walker.Cmp(v, w) == 0 {
+							t.Logf("found key %s as being prev to %s", hex.EncodeToString(w), hex.EncodeToString(lastV))
 							found++
 						}
 					}
-					if found==0 {
-						t.Errorf("no matches for v=%s",hex.EncodeToString(v))
+					if found == 0 {
+						t.Errorf("no matches for v=%s", hex.EncodeToString(v))
 					}
-					if found>1 {
-						t.Errorf("too many (%d) matches for v=%s",found,hex.EncodeToString(v))
+					if found > 1 {
+						t.Errorf("too many (%d) matches for v=%s", found, hex.EncodeToString(v))
 					}
 				}
-				lastV=v
+				copy(lastV, v)
 			}
 		}
 	}
 }
-*/

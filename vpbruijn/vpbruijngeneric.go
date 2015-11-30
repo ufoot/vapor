@@ -254,7 +254,16 @@ func (b *bruijnGeneric) Cmp(x, y []byte) int {
 	bigX.Sub(bigX, bigY)
 	bigX.Mod(bigX, b.bigMax)
 
-	return b.bigMax2.Cmp(bigX)
+	ret := b.bigMax2.Cmp(bigX)
+	if ret == 0 {
+		// in case ret is 0, it means y is halfway to x,
+		// in that case we just return 1 and not 0 to
+		// avoid calling code to believe a point on 0.1
+		// on the ring is the same as a point on 0.6 (0.1+0.5).
+		return 1
+	}
+
+	return ret
 }
 
 func (b *bruijnGeneric) GeLt(x, begin, end []byte) bool {
