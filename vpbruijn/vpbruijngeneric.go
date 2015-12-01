@@ -318,3 +318,17 @@ func (b *bruijnGeneric) RingPos(x []byte) float64 {
 
 	return ret
 }
+
+func (b *bruijnGeneric) RingRange(x, y []byte) float64 {
+	var frac big.Rat
+	var diff big.Int
+
+	bigX := bytesToBig(x, b.bigMax)
+	bigY := bytesToBig(y, b.bigMax)
+	diff.Sub(bigY, bigX)
+	frac.SetFrac(&diff, b.bigMax)
+
+	ret, _ := frac.Float64()
+
+	return ret
+}

@@ -289,3 +289,7 @@ func (b *bruijn16x64) Decr(x []byte) []byte {
 func (b *bruijn16x64) RingPos(x []byte) float64 {
 	return b.implGeneric.RingPos(x)
 }
+
+func (b *bruijn16x64) RingRange(x, y []byte) float64 {
+	return b.implGeneric.RingRange(x, y)
+}

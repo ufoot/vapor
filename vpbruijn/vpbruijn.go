@@ -105,6 +105,9 @@ type BruijnWalker interface {
 	// RingPos returns the position on the ring between 0 and 1, this is typically
 	// interesting in a Koorde context, mostly for debugging/reporting purposes.
 	RingPos(x []byte) float64
+	// RingRange returns the range which x to y represents on the ring. The result
+	// is between 0 and 1.
+	RingRange(x, y []byte) float64
 }
 
 // BruijnNew creates a new BruijnWalker compatible object,
