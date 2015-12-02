@@ -19,6 +19,24 @@
 
 package vpp2p
 
+import (
+	"github.com/ufoot/vapor/vpbruijn"
+)
+
+// RingConfig stores various ring technical parameters. Normally these
+// do not change anything concerning the functionnal behavior of the
+// program, it's just about performance, redundancy, stability.
+type RingConfig struct {
+	// BruijnM is the De Bruijn M (AKA base) used for De Bruijn networks.
+	BruijnM int
+	// BruijnN is the De Bruijn N (number of elems) used for De Bruijn networks.
+	BruijnN int
+	// NbBackup is the number of copies of a key we store within the network.
+	NbCopy int
+	// Number of sub virtual rings, used for redundancy, mostly
+	NbSub int
+}
+
 // RingInfo stores the static data of a Ring.
 type RingInfo struct {
 	// N-bit id, totally random, create a new for a new session.
@@ -29,8 +47,8 @@ type RingInfo struct {
 	App AppInfo
 	// Password hash
 	PasswordHash []byte
-	// Number of sub virtual rings, used for redundancy, mostly
-	NbSub int
+	// RingConfig contains technical parameters.
+	Config RingConfig
 }
 
 // Ring is a community, a network of related nodes, which communicate
@@ -40,5 +58,32 @@ type Ring struct {
 	// Info about the ring
 	Info RingInfo
 
+	walker     vpbruijn.BruijnWalker
 	localNodes []Node
+}
+
+// RingNew creates a new ring from static data.
+func RingNew(ringID []byte, ringTitle string, app AppInfo, passwordHash []byte, config RingConfig) (*Ring, error) {
+	var ret Ring
+	var ok bool
+	var err error
+
+	ok, err = CheckID(ringID)
+	if err != nil || !ok {
+		return nil, err
+	}
+	ok, err = CheckTitle(ringTitle)
+	if err != nil || !ok {
+		return nil, err
+	}
+
+	ret.localNodes = make([]Node, 0)
+
+	ret.Info.RingID = ringID
+	ret.Info.RingTitle = ringTitle
+	ret.Info.App = app
+	ret.Info.PasswordHash = passwordHash
+	ret.Info.Config = config
+
+	return &ret, nil
 }

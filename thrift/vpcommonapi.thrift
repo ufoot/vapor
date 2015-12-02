@@ -49,14 +49,6 @@ struct Package {
 }
 
 /**
- * AppError contains detailed error information.
- */
-struct AppError {
-  1: i32 errCode,
-  2: string errMsg,
-}
- 
-/**
  * VpCommonApi is the basic stuff any program should implement.
  */
 service VpCommonApi
