@@ -39,4 +39,5 @@ for i in common bus p2p ; do
 	sed -i "s/\"vp${i}api\"/\"github.com\/ufoot\/vapor\/vp${i}api\"/" ../vp${i}client/vp${i}client.go && \
 	cp ./gen-html/vp${i}api.html ../doc/thrift/vp${i}api-thrift.html && \
 	cd ..
+    rm -f vp*/vp_*.go
 done

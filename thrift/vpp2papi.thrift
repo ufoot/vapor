@@ -23,6 +23,8 @@
 #
 # Thrift protocol between Golang backend server and C++ GUI client.
 
+# http://diwakergupta.github.io/thrift-missing-guide/
+
 namespace cpp vpp2papi
 namespace go vpp2papi
 namespace php vpp2papi
@@ -30,13 +32,40 @@ namespace php vpp2papi
 include "vpcommonapi.thrift"
 
 /**
+ * NodeInfo contains static informations about a node.
+ */
+struct NodeInfo {
+  1: binary NodeID,
+  2: binary HostPubKey,
+  3: binary RingID,
+}
+
+/**
+ * Used to store results when doing Lookup-like requests.
+ */
+struct LookupData {
+  1: list<NodeInfo> path,
+  2: i32 errcode,
+}
+
+/**
+ * Used to store results when doing Get-like requests.
+ */
+struct GetData {
+  1: binary value,
+  2: list<NodeInfo> path,
+  3: i32 errcode,
+}
+
+/**
  * VpP2pApi is used to communicate between 2 Vapor nodes
  * in peer-to-peer mode.
  */
 service VpP2pApi extends vpcommonapi.VpCommonApi
 {
-  /**
-   * Halt stops the server.
-   */
-  oneway void halt ()
+  LookupData Lookup(
+    1:binary key,
+    2:binary keyShift,
+    3:binary imaginaryNode
+  ),
 }
