@@ -75,7 +75,6 @@ func (b *bruijn16x64) filterX(x []byte) []byte {
 	}
 
 	return append(make([]byte, nbBytes-l), x...)
-
 }
 
 func (b *bruijn16x64) prepareNext16x64C(x []byte) []byte {
@@ -242,6 +241,17 @@ func (b *bruijn16x64) BackwardElem(from, to []byte, i int) []byte {
 	enc := b.prepareCompose16x64(b.filterX(to), b.filterX(from))
 
 	return b.compose16x64(enc, bruijnN-i)
+}
+
+func (b *bruijn16x64) Filter(x []byte) []byte {
+	l := len(x)
+	if l >= nbBytes {
+		ret := make([]byte, nbBytes)
+		copy(ret, x[l-nbBytes:l])
+		return ret
+	}
+
+	return append(make([]byte, nbBytes-l), x...)
 }
 
 func (b *bruijn16x64) Add(x, y []byte) []byte {

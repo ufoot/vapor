@@ -25,12 +25,15 @@ import (
 )
 
 func TestLookup(t *testing.T) {
-	var lp LocalProxy
+	/*
+		key := vpcrypto.Checksum256([]byte("toto"))
+		keyShift := vpcrypto.Checksum256([]byte("toto"))
+		imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
+		ai:=vpapp.
+		r,err:=RingNew([]byte("tutu"),"foo bar",ai,[]byte("abcd"),cfg)
+		lp:=LocalNodeNew(Checksum256([]byte("tata")),h,r)
 
-	key := vpcrypto.Checksum256([]byte("toto"))
-	keyShift := vpcrypto.Checksum256([]byte("toto"))
-	imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
-
-	path, err := lp.Lookup(key, keyShift, imaginaryNode)
-	t.Log("todo...", path, err)
+		path, err := lp.Lookup(key, keyShift, imaginaryNode)
+		t.Log("todo...", path, err)
+	*/
 }

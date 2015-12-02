@@ -77,6 +77,9 @@ type BruijnWalker interface {
 	// Index 0 is the from element, and n (number of elements as in Bruijn nodes)
 	// the to element. Uses the backward, alternative path.
 	BackwardElem(from, to []byte, i int) []byte
+	// Filter a key, typically doing a modulo on it, making sure the result
+	// is within the allowed key range. This is not a hash.
+	Filter(x []byte) []byte
 	// Add 2 keys, if result is too big, will loop with Mod() and keep it
 	// within the allowed key range.
 	Add(x, y []byte) []byte

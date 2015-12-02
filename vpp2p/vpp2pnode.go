@@ -19,6 +19,10 @@
 
 package vpp2p
 
+import (
+	"fmt"
+)
+
 // NodeInfo stores the static data for a Node.
 type NodeInfo struct {
 	// 256-bit id, generated randomly, this is what allows us to
@@ -36,21 +40,21 @@ type Node struct {
 	// Info about the node
 	Info NodeInfo
 
-	ringPtr *Ring
 	hostPtr *Host
+	ringPtr *Ring
 
 	// The successor nodes within the ring, use 1st elem for direct successor..
-	Successor []*Node
+	Successor []NodeProxy
 	// A list of nodes preceeding m*Id (the 1st Bruijn node),
 	// so that it contains about O(Log(n)) before stumbling on D.
 	// The first element is actually D, the other ones go backwards on the ring.
-	D []*Node
+	D []NodeProxy
 }
 
 // NodeProxy is an interface used to perform node operations.
 // All calls return the complete call stack
 type NodeProxy interface {
-	NodeID() []byte
+	Info() *NodeInfo
 	Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error)
 	Set(key, keyShift, imaginaryNode, value []byte) ([]*NodeInfo, error)
 	Get(key, keyShift, imaginaryNode []byte) ([]byte, []*NodeInfo, error)
@@ -64,13 +68,33 @@ type LocalProxy struct {
 	localNode Node
 }
 
-// NodeID returns this node's ID.
-func (lp LocalProxy) NodeID() []byte {
-	return lp.localNode.Info.NodeID
+// LocalProxyNew creates a new local proxy.
+func LocalProxyNew(nodeID []byte, hostPtr *Host, ringPtr *Ring) (*LocalProxy, error) {
+	var ret LocalProxy
+
+	ok, err := CheckID(nodeID)
+	if err != nil || !ok {
+		return nil, err
+	}
+
+	ret.localNode.Info.NodeID = ringPtr.walker.Filter(nodeID)
+	ret.localNode.Info.HostPubKey = make([]byte, len(hostPtr.Info.PubKey))
+	copy(ret.localNode.Info.HostPubKey, hostPtr.Info.PubKey)
+	ret.localNode.Info.RingID = make([]byte, len(ringPtr.Info.RingID))
+	copy(ret.localNode.Info.RingID, ringPtr.Info.RingID)
+	ret.localNode.hostPtr = hostPtr
+	ret.localNode.ringPtr = ringPtr
+
+	return &ret, nil
+}
+
+// Info returns this node's info.
+func (lp *LocalProxy) Info() *NodeInfo {
+	return &(lp.localNode.Info)
 }
 
 // Lookup a key and return the path of nodes to this key.
-func (lp LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
+func (lp *LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
 	// pseudo code :
 	// procedure m.LOOKUP(k, kshift, i)
 	//   if k is in (m,successor] then return (successor)
@@ -81,22 +105,54 @@ func (lp LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, e
 	//   else return (successor.lookup(k,kshift,i))
 	// Note : i can be chosen so that its low bits are top bits of k
 
-	//   if k is in (m,successor] then return (successor)
+	node := lp.localNode
+	walker := lp.localNode.ringPtr.walker
 
-	return nil, nil // todo
+	ret := make([]*NodeInfo, 1)
+	ret[0] = &(node.Info)
+
+	if node.Successor == nil || len(node.Successor) == 0 || node.D == nil || len(node.D) == 0 {
+		// no successor -> we're alone !
+		return ret, nil
+	}
+	successorInfo := node.Successor[0].Info()
+
+	if walker.GtLe(key, node.Info.NodeID, successorInfo.NodeID) {
+		return append(ret, successorInfo), nil
+	}
+
+	if walker.GtLe(imaginaryNode, node.Info.NodeID, successorInfo.NodeID) {
+		upstreamPath, err := node.D[0].Lookup(key, walker.NextFirst(keyShift), walker.ForwardElem(keyShift, imaginaryNode, 1))
+		if err != nil {
+			return nil, err
+		}
+		if upstreamPath != nil {
+			return append(ret, upstreamPath...), nil
+		}
+	}
+
+	upstreamPath, err := node.Successor[0].Lookup(key, keyShift, imaginaryNode)
+	if err != nil {
+		return nil, err
+	}
+	if upstreamPath != nil {
+		return append(ret, upstreamPath...), nil
+	}
+
+	return nil, fmt.Errorf("unable to Lookup remotes")
 }
 
 // Set a key and return the path of nodes to this key.
-func (lp LocalProxy) Set(key, keyShift, imaginaryNode, value []byte) ([]*NodeInfo, error) {
+func (lp *LocalProxy) Set(key, keyShift, imaginaryNode, value []byte) ([]*NodeInfo, error) {
 	return nil, nil // todo
 }
 
 // Get a key and returns the path of nodes to this key.
-func (lp LocalProxy) Get(key, keyShift, imaginaryNode []byte) ([]byte, []*NodeInfo, error) {
+func (lp *LocalProxy) Get(key, keyShift, imaginaryNode []byte) ([]byte, []*NodeInfo, error) {
 	return nil, nil, nil // todo
 }
 
 // Clear a key and returns the path of nodes to this key.
-func (lp LocalProxy) Clear(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
+func (lp *LocalProxy) Clear(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
 	return nil, nil // todo
 }

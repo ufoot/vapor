@@ -34,7 +34,7 @@ type HostInfo struct {
 // a host, it can be used to handle several apps or rings.
 type Host struct {
 	// Info about the host
-	Host HostInfo
+	Info HostInfo
 
 	localNodes []Node
 	cfg        *Config

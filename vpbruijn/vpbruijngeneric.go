@@ -223,6 +223,12 @@ func (b *bruijnGeneric) BackwardElem(from, to []byte, i int) []byte {
 	return bigToBytes(composeBig(bigTo, bigFrom, b.bigM, b.bigMax, b.m, b.n, b.n-i), b.nbBytes)
 }
 
+func (b *bruijnGeneric) Filter(x []byte) []byte {
+	bigRet := b.filterX(bytesToBig(x, b.bigMax))
+
+	return bigToBytes(bigRet, b.nbBytes)
+}
+
 func (b *bruijnGeneric) Add(x, y []byte) []byte {
 	bigX := bytesToBig(x, b.bigMax)
 	bigY := bytesToBig(y, b.bigMax)

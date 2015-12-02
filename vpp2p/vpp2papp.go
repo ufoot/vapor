@@ -21,6 +21,7 @@ package vpp2p
 
 import (
 	"github.com/ufoot/vapor/vpapp"
+	"github.com/ufoot/vapor/vpcrypto"
 )
 
 // AppInfo contains details about the program.
@@ -31,4 +32,29 @@ type AppInfo struct {
 	Package vpapp.Package
 	// Details about version
 	Version vpapp.Version
+}
+
+// AppInfoNew creates a new AppInfo object from package and version
+func AppInfoNew(p *vpapp.Package, v *vpapp.Version) *AppInfo {
+	var ret AppInfo
+
+	ret.AppID = CalcAppID(p, v)
+	ret.Package = *p
+	ret.Version = *v
+
+	return &ret
+}
+
+// CalcAppID generates an Application ID from Package and Version
+func CalcAppID(p *vpapp.Package, v *vpapp.Version) []byte {
+	buf := make([]byte, 0)
+	buf = append(buf, p.Tarname...)
+	buf = append(buf, p.Name...)
+	buf = append(buf, p.Email...)
+	buf = append(buf, p.URL...)
+	buf = append(buf, byte(v.Major))
+	buf = append(buf, byte(v.Minor))
+	buf = append(buf, v.Stamp...)
+
+	return vpcrypto.Checksum128(buf)
 }

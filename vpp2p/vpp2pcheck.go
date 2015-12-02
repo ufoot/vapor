@@ -20,8 +20,8 @@
 package vpp2p
 
 import (
+	"fmt"
 	"unicode/utf8"
-	"fmt"	
 )
 
 const (
