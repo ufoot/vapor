@@ -20,20 +20,29 @@
 package vpp2p
 
 import (
+	"github.com/ufoot/vapor/vpapp"
 	"github.com/ufoot/vapor/vpcrypto"
 	"testing"
 )
 
 func TestLookup(t *testing.T) {
-	/*
-		key := vpcrypto.Checksum256([]byte("toto"))
-		keyShift := vpcrypto.Checksum256([]byte("toto"))
-		imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
-		ai:=vpapp.
-		r,err:=RingNew([]byte("tutu"),"foo bar",ai,[]byte("abcd"),cfg)
-		lp:=LocalNodeNew(Checksum256([]byte("tata")),h,r)
+	key := vpcrypto.Checksum256([]byte("toto"))
+	keyShift := vpcrypto.Checksum256([]byte("toto"))
+	imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
+	ai := NewAppInfo(vpapp.BuildPackage(), vpapp.BuildVersion())
+	h, err := NewHost("foo bar", "http://foo.com", []byte("sadhjkagfnjka"))
+	if err != nil {
+		t.Error("error creating host", err)
+	}
+	r, err := NewRing([]byte("tutu"), "foo bar", ai, []byte("abcd"), DefaultRingConfig())
+	if err != nil {
+		t.Error("error creating ring", err)
+	}
+	lp, err := NewLocalProxy(vpcrypto.Checksum256([]byte("tata")), h, r)
+	if err != nil {
+		t.Error("error creating local proxy", err)
+	}
 
-		path, err := lp.Lookup(key, keyShift, imaginaryNode)
-		t.Log("todo...", path, err)
-	*/
+	path, err := lp.Lookup(key, keyShift, imaginaryNode)
+	t.Log("todo...", path, err)
 }

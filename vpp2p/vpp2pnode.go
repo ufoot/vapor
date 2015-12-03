@@ -68,8 +68,8 @@ type LocalProxy struct {
 	localNode Node
 }
 
-// LocalProxyNew creates a new local proxy.
-func LocalProxyNew(nodeID []byte, hostPtr *Host, ringPtr *Ring) (*LocalProxy, error) {
+// NewLocalProxy creates a new local proxy.
+func NewLocalProxy(nodeID []byte, hostPtr *Host, ringPtr *Ring) (*LocalProxy, error) {
 	var ret LocalProxy
 
 	ok, err := CheckID(nodeID)

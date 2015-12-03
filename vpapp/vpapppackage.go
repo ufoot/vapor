@@ -21,6 +21,7 @@ package vpapp
 
 import (
 	"fmt"
+	"github.com/ufoot/vapor/vpbuild"
 	"strings"
 )
 
@@ -40,6 +41,11 @@ type Package struct {
 // NewPackage creates a new package object.
 func NewPackage(tarname, name, email, url string) *Package {
 	return &Package{tarname, name, email, url}
+}
+
+// BuildPackage creates a new default object.
+func BuildPackage() *Package {
+	return NewPackage(vpbuild.PackageTarname, vpbuild.PackageName, vpbuild.PackageEmail, vpbuild.PackageURL)
 }
 
 // Compatible tells wether two packages refer to the same application,

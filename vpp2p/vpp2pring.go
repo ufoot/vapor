@@ -23,6 +23,22 @@ import (
 	"github.com/ufoot/vapor/vpbruijn"
 )
 
+const (
+	// DefaultBruijnM default for the m parameter (base) used for Koorde/Bruijn ops.
+	DefaultBruijnM = 16
+	// DefaultBruijnN default for the n parameter (number of elements) used for Koorde/Bruijn ops.
+	DefaultBruijnN = 64
+	// DefaultNbCopy default for the number of copies of a key we store within the network.
+	DefaultNbCopy = 3
+	// DefaultNbSub default for the number sub virtual rings, used for redundancy, mostly.
+	DefaultNbSub = 3
+	// DefaultUseSig default for wether to use cryptographic signatures/checks.
+	DefaultUseSig = false
+	// DefaultSteps default to optimizes Bruijn walk by considering only this number
+	// of steps in the worst case.
+	DefaultSteps = 8
+)
+
 // RingConfig stores various ring technical parameters. Normally these
 // do not change anything concerning the functionnal behavior of the
 // program, it's just about performance, redundancy, stability.
@@ -35,6 +51,16 @@ type RingConfig struct {
 	NbCopy int
 	// Number of sub virtual rings, used for redundancy, mostly
 	NbSub int
+	// UseSig tells wether to use cryptographic signatures/checks.
+	UseSig bool
+	// Steps optimizes Bruijn walk by considering only this number
+	// of steps in the worst case.
+	Steps int
+}
+
+// DefaultRingConfig returns a default ring configuration, with 256-bit keys
+func DefaultRingConfig() *RingConfig {
+	return &RingConfig{DefaultBruijnM, DefaultBruijnN, DefaultNbCopy, DefaultNbSub, DefaultUseSig, DefaultSteps}
 }
 
 // RingInfo stores the static data of a Ring.
@@ -62,8 +88,8 @@ type Ring struct {
 	localNodes []Node
 }
 
-// RingNew creates a new ring from static data.
-func RingNew(ringID []byte, ringTitle string, app AppInfo, passwordHash []byte, config RingConfig) (*Ring, error) {
+// NewRing creates a new ring from static data.
+func NewRing(ringID []byte, ringTitle string, app *AppInfo, passwordHash []byte, config *RingConfig) (*Ring, error) {
 	var ret Ring
 	var ok bool
 	var err error
@@ -81,9 +107,9 @@ func RingNew(ringID []byte, ringTitle string, app AppInfo, passwordHash []byte, 
 
 	ret.Info.RingID = ringID
 	ret.Info.RingTitle = ringTitle
-	ret.Info.App = app
+	ret.Info.App = *app
 	ret.Info.PasswordHash = passwordHash
-	ret.Info.Config = config
+	ret.Info.Config = *config
 
 	return &ret, nil
 }

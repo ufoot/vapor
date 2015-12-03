@@ -24,8 +24,8 @@ import (
 )
 
 func TestCompare(t *testing.T) {
-	v1 := NewVersion(1, 2, "toto")
-	v2 := NewVersion(2, 1, "titi")
+	v1 := BuildVersion()
+	v2 := NewVersion(2, 1, "toto")
 	v3 := NewVersion(2, 3, "tata")
 
 	t.Logf("v1=%s", v1.String())
@@ -50,8 +50,8 @@ func TestCompare(t *testing.T) {
 }
 
 func TestEqual(t *testing.T) {
-	v1 := NewVersion(1, 2, "foo")
-	v2 := NewVersion(2, 1, "bar")
+	v1 := BuildVersion()
+	v2 := NewVersion(2, 1, "foobar")
 
 	if !Equal(v1, v1) {
 		t.Error("v1==v1 does not work")

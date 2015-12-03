@@ -37,5 +37,19 @@ type Host struct {
 	Info HostInfo
 
 	localNodes []Node
-	cfg        *Config
+}
+
+// NewHost returns a new host object
+func NewHost(title, url string, pubKey []byte) (*Host, error) {
+	var ret Host
+
+	ok, err := CheckTitle(title)
+	if err != nil || !ok {
+		return nil, err
+	}
+
+	ret.Info = HostInfo{title, url, pubKey}
+	ret.localNodes = make([]Node, 0)
+
+	return &ret, nil
 }

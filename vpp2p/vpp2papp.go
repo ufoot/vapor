@@ -34,8 +34,8 @@ type AppInfo struct {
 	Version vpapp.Version
 }
 
-// AppInfoNew creates a new AppInfo object from package and version
-func AppInfoNew(p *vpapp.Package, v *vpapp.Version) *AppInfo {
+// NewAppInfo creates a new AppInfo object from package and version
+func NewAppInfo(p *vpapp.Package, v *vpapp.Version) *AppInfo {
 	var ret AppInfo
 
 	ret.AppID = CalcAppID(p, v)
@@ -47,7 +47,8 @@ func AppInfoNew(p *vpapp.Package, v *vpapp.Version) *AppInfo {
 
 // CalcAppID generates an Application ID from Package and Version
 func CalcAppID(p *vpapp.Package, v *vpapp.Version) []byte {
-	buf := make([]byte, 0)
+	var buf []byte
+
 	buf = append(buf, p.Tarname...)
 	buf = append(buf, p.Name...)
 	buf = append(buf, p.Email...)

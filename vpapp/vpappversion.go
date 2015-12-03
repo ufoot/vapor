@@ -21,6 +21,7 @@ package vpapp
 
 import (
 	"fmt"
+	"github.com/ufoot/vapor/vpbuild"
 )
 
 // Version is used to identify the program version.
@@ -36,6 +37,11 @@ type Version struct {
 // NewVersion creates a new version object.
 func NewVersion(major, minor int, stamp string) *Version {
 	return &Version{major, minor, stamp}
+}
+
+// BuildVersion creates a new default object.
+func BuildVersion() *Version {
+	return NewVersion(vpbuild.VersionMajor, vpbuild.VersionMinor, vpbuild.VersionStamp)
 }
 
 // Compare compares two versions, returns -1 if v1<v2,
