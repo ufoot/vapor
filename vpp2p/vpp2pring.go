@@ -69,8 +69,8 @@ type RingInfo struct {
 	RingID []byte
 	// Human readable ring (short) description
 	RingTitle string
-	// App details
-	App AppInfo
+	// App ID
+	AppID []byte
 	// Password hash
 	PasswordHash []byte
 	// RingConfig contains technical parameters.
@@ -89,7 +89,7 @@ type Ring struct {
 }
 
 // NewRing creates a new ring from static data.
-func NewRing(ringID []byte, ringTitle string, app *AppInfo, passwordHash []byte, config *RingConfig) (*Ring, error) {
+func NewRing(ringID []byte, ringTitle string, appID []byte, passwordHash []byte, config *RingConfig) (*Ring, error) {
 	var ret Ring
 	var ok bool
 	var err error
@@ -102,6 +102,10 @@ func NewRing(ringID []byte, ringTitle string, app *AppInfo, passwordHash []byte,
 	if err != nil || !ok {
 		return nil, err
 	}
+	ok, err = CheckID(appID)
+	if err != nil || !ok {
+		return nil, err
+	}
 
 	ret.localNodes = make([]Node, 0)
 	ret.walker, err = vpbruijn.BruijnNew(config.BruijnM, config.BruijnN)
@@ -111,7 +115,7 @@ func NewRing(ringID []byte, ringTitle string, app *AppInfo, passwordHash []byte,
 
 	ret.Info.RingID = ringID
 	ret.Info.RingTitle = ringTitle
-	ret.Info.App = *app
+	ret.Info.AppID = appID
 	ret.Info.PasswordHash = passwordHash
 	ret.Info.Config = *config
 

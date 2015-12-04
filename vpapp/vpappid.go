@@ -17,45 +17,23 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpp2p
+package vpapp
 
 import (
-	"github.com/ufoot/vapor/vpapp"
 	"github.com/ufoot/vapor/vpcrypto"
 )
 
-// AppInfo contains details about the program.
-type AppInfo struct {
-	// Unique application ID, generated from other members
-	AppID []byte
-	// Details about package
-	Package vpapp.Package
-	// Details about version
-	Version vpapp.Version
-}
-
-// NewAppInfo creates a new AppInfo object from package and version
-func NewAppInfo(p *vpapp.Package, v *vpapp.Version) *AppInfo {
-	var ret AppInfo
-
-	ret.AppID = CalcAppID(p, v)
-	ret.Package = *p
-	ret.Version = *v
-
-	return &ret
-}
-
-// CalcAppID generates an Application ID from Package and Version
-func CalcAppID(p *vpapp.Package, v *vpapp.Version) []byte {
+// CalcID generates an Application ID from Package and Version
+func CalcID(p *Package, v *Version) []byte {
 	var buf []byte
 
 	buf = append(buf, p.Tarname...)
-	buf = append(buf, p.Name...)
-	buf = append(buf, p.Email...)
-	buf = append(buf, p.URL...)
+	//buf = append(buf, p.Name...)
+	//buf = append(buf, p.Email...)
+	//buf = append(buf, p.URL...)
 	buf = append(buf, byte(v.Major))
 	buf = append(buf, byte(v.Minor))
-	buf = append(buf, v.Stamp...)
+	//buf = append(buf, v.Stamp...)
 
 	return vpcrypto.Checksum128(buf)
 }

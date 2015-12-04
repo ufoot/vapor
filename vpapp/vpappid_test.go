@@ -17,32 +17,20 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpp2p
+package vpapp
 
 import (
-	"github.com/ufoot/vapor/vpapp"
-	"github.com/ufoot/vapor/vpcrypto"
+	"encoding/hex"
 	"testing"
 )
 
-func TestLookup(t *testing.T) {
-	key := vpcrypto.Checksum256([]byte("toto"))
-	keyShift := vpcrypto.Checksum256([]byte("toto"))
-	imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
-	ai := vpapp.CalcID(vpapp.BuildPackage(), vpapp.BuildVersion())
-	h, err := NewHost("foo bar", "http://foo.com", []byte("sadhjkagfnjka"))
-	if err != nil {
-		t.Error("error creating host", err)
-	}
-	r, err := NewRing([]byte("tutu"), "foo bar", ai, []byte("abcd"), DefaultRingConfig())
-	if err != nil {
-		t.Error("error creating ring", err)
-	}
-	lp, err := NewLocalProxy(vpcrypto.Checksum256([]byte("tata")), h, r)
-	if err != nil {
-		t.Error("error creating local proxy", err)
-	}
+func TestCalcID(t *testing.T) {
+	p := BuildPackage()
+	v := BuildVersion()
 
-	path, err := lp.Lookup(key, keyShift, imaginaryNode)
-	t.Log("todo...", path, err)
+	i := CalcID(p, v)
+	if len(i) != 16 {
+		t.Errorf("bad ID length %d", len(i))
+	}
+	t.Logf("ID=%s", hex.EncodeToString(i))
 }
