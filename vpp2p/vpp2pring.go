@@ -104,6 +104,10 @@ func NewRing(ringID []byte, ringTitle string, app *AppInfo, passwordHash []byte,
 	}
 
 	ret.localNodes = make([]Node, 0)
+	ret.walker, err = vpbruijn.BruijnNew(config.BruijnM, config.BruijnN)
+	if err != nil {
+		return nil, err
+	}
 
 	ret.Info.RingID = ringID
 	ret.Info.RingTitle = ringTitle
