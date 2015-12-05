@@ -21,6 +21,7 @@ package vpp2p
 
 import (
 	"fmt"
+	"github.com/ufoot/vapor/vpsys"
 )
 
 // NodeInfo stores the static data for a Node.
@@ -43,9 +44,14 @@ type Node struct {
 	hostPtr *Host
 	ringPtr *Ring
 
-	// The successor nodes within the ring, use 1st elem for direct successor..
+	// Successors is list of successing nodes within the ring,
+	// use 1st elem for direct successor.
 	Successor []NodeProxy
-	// A list of nodes preceeding m*Id (the 1st Bruijn node),
+	// PredecessorInfo describes the previous node within the ring. This is not used
+	// to walk along the ring but just to know what is the range of keys
+	// this node is responsible for.
+	PredecessorInfo *NodeInfo
+	// D is a  list of nodes preceeding m*Id (the 1st Bruijn node),
 	// so that it contains about O(Log(n)) before stumbling on D.
 	// The first element is actually D, the other ones go backwards on the ring.
 	D []NodeProxy
@@ -54,12 +60,19 @@ type Node struct {
 // NodeProxy is an interface used to perform node operations.
 // All calls return the complete call stack
 type NodeProxy interface {
+	// Info returns information about the Node, this should be a
+	// very fast function, with data kept locally, and should not
+	// require any network calls.
 	Info() *NodeInfo
+	// Lookup searches for the host responsible for a given key
+	// and returns the path found to it.
 	Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error)
+	// Set sets a key to a value, returns the path to the node.
 	Set(key, keyShift, imaginaryNode, value []byte) ([]*NodeInfo, error)
+	// Get returns the value of a key, and returns the path to the node.
 	Get(key, keyShift, imaginaryNode []byte) ([]byte, []*NodeInfo, error)
+	// Get clears a key, and returns the path to the node.
 	Clear(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error)
-	// GetRange(key1, key2 []byte) TODO !
 }
 
 // LocalProxy is a proxy which contacts other nodes directly without
@@ -111,26 +124,45 @@ func (lp *LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, 
 	ret := make([]*NodeInfo, 1)
 	ret[0] = &(node.Info)
 
-	if node.Successor == nil || len(node.Successor) == 0 || node.D == nil || len(node.D) == 0 {
+	if node.Successor == nil || len(node.Successor) == 0 || node.D == nil || len(node.D) == 0 || node.PredecessorInfo == nil {
 		// no successor -> we're alone !
 		return ret, nil
 	}
-	successorInfo := node.Successor[0].Info()
 
-	if walker.GtLe(key, node.Info.NodeID, successorInfo.NodeID) {
-		return append(ret, successorInfo), nil
+	if walker.GtLe(key, node.PredecessorInfo.NodeID, node.Info.NodeID) {
+		// key is local
+		return ret, nil
 	}
 
-	if walker.GtLe(imaginaryNode, node.Info.NodeID, successorInfo.NodeID) {
-		upstreamPath, err := node.D[0].Lookup(key, walker.NextFirst(keyShift), walker.ForwardElem(keyShift, imaginaryNode, 1))
-		if err != nil {
-			return nil, err
+	for i, successor := range node.Successor {
+		var curInfo *NodeInfo
+		if i == 0 {
+			curInfo = &(node.Info)
+		} else {
+			curInfo = node.Successor[i-1].Info()
 		}
-		if upstreamPath != nil {
-			return append(ret, upstreamPath...), nil
+
+		successorInfo := successor.Info()
+		if walker.GtLe(key, curInfo.NodeID, successorInfo.NodeID) {
+			// key is handled by successor
+			return append(ret, successorInfo), nil
+		}
+
+		if walker.GtLe(imaginaryNode, curInfo.NodeID, successorInfo.NodeID) {
+			for _, d := range node.D {
+				upstreamPath, err := d.Lookup(key, walker.NextFirst(keyShift), walker.ForwardElem(keyShift, imaginaryNode, 1))
+				if err == nil {
+					return append(ret, upstreamPath...), nil
+				} else {
+					vpsys.LogDebug("error contacting remote host", err)
+				}
+			}
 		}
 	}
 
+	// at this stage, key is not local, not handled by any direct host
+	// we know and De Bruijn walking did not return anything interesting.
+	// So we fall back on the default : ask next node...
 	upstreamPath, err := node.Successor[0].Lookup(key, keyShift, imaginaryNode)
 	if err != nil {
 		return nil, err
