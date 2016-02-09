@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import (
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"github.com/ufoot/vapor/vpbus"
 	"github.com/ufoot/vapor/vpbusapi"
+	"github.com/ufoot/vapor/vperror"
 	"github.com/ufoot/vapor/vpsys"
 	"time"
 )
@@ -34,7 +35,7 @@ func newServer(transportFactory thrift.TTransportFactory, protocolFactory thrift
 	transport, err = thrift.NewTServerSocket(addr)
 
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to create server socket")
+		return nil, vperror.Chain(err, "unable to create server socket")
 	}
 	vpsys.LogNoticef("%T", transport)
 	handler := vpbus.New()

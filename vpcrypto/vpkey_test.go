@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 package vpcrypto
 
 import (
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 	"testing"
 )
 
@@ -177,7 +177,7 @@ func BenchmarkSign(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_, err = benchKey.Sign(benchContent)
 		if err != nil {
-			b.Error(vpsys.ErrorChain(err, "unable to sign"))
+			b.Error(vperror.Chain(err, "unable to sign"))
 		}
 	}
 }
@@ -188,7 +188,7 @@ func BenchmarkCheckSig(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_, err = benchKey.CheckSig(benchContent, benchSig)
 		if err != nil {
-			b.Error(vpsys.ErrorChain(err, "unable to check sig"))
+			b.Error(vperror.Chain(err, "unable to check sig"))
 		}
 	}
 }
@@ -199,7 +199,7 @@ func BenchmarkEncrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_, err = benchKey.Encrypt(benchContent)
 		if err != nil {
-			b.Error(vpsys.ErrorChain(err, "unable to encrypt"))
+			b.Error(vperror.Chain(err, "unable to encrypt"))
 		}
 	}
 }
@@ -210,7 +210,7 @@ func BenchmarkDecrypt(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		_, err = benchKey.Decrypt(benchCrypted)
 		if err != nil {
-			b.Error(vpsys.ErrorChain(err, "unable to decrypt"))
+			b.Error(vperror.Chain(err, "unable to decrypt"))
 		}
 	}
 }

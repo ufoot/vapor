@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ package vpkeydx
 import (
 	"fmt"
 	"github.com/ufoot/vapor/vpcrypto"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpvec3"
 )
@@ -52,15 +52,15 @@ func Gen(seed []byte, keyName string) ([]byte, error) {
 func GenX(seed []byte, keyName string, x int32) ([]byte, error) {
 	keyBuf, err := Gen(seed, keyName)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate X keydx")
+		return nil, vperror.Chain(err, "unable to generate X keydx")
 	}
 	keyInt, err := vpcrypto.BufToInt256(keyBuf)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate X keydx")
+		return nil, vperror.Chain(err, "unable to generate X keydx")
 	}
 	xInt, err := toBigInt31(x)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate X keydx")
+		return nil, vperror.Chain(err, "unable to generate X keydx")
 	}
 	for i := 0; i < n31; i++ {
 		keyInt = keyInt.SetBit(keyInt, nOffset1+i, xInt.Bit(i))
@@ -80,19 +80,19 @@ func GenX(seed []byte, keyName string, x int32) ([]byte, error) {
 func GenXY(seed []byte, keyName string, x int32, y int32) ([]byte, error) {
 	keyBuf, err := Gen(seed, keyName)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate XY keydx")
+		return nil, vperror.Chain(err, "unable to generate XY keydx")
 	}
 	keyInt, err := vpcrypto.BufToInt256(keyBuf)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate XY keydx")
+		return nil, vperror.Chain(err, "unable to generate XY keydx")
 	}
 	xInt, err := toBigInt31(x)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate XY keydx")
+		return nil, vperror.Chain(err, "unable to generate XY keydx")
 	}
 	yInt, err := toBigInt31(y)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate XY keydx")
+		return nil, vperror.Chain(err, "unable to generate XY keydx")
 	}
 	for i := 0; i < n31; i++ {
 		keyInt = keyInt.SetBit(keyInt, nOffset2+2*i, xInt.Bit(i))
@@ -113,23 +113,23 @@ func GenXY(seed []byte, keyName string, x int32, y int32) ([]byte, error) {
 func GenXYZ(seed []byte, keyName string, x int32, y int32, z int32) ([]byte, error) {
 	keyBuf, err := Gen(seed, keyName)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate XYZ keydx")
+		return nil, vperror.Chain(err, "unable to generate XYZ keydx")
 	}
 	keyInt, err := vpcrypto.BufToInt256(keyBuf)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate XYZ keydx")
+		return nil, vperror.Chain(err, "unable to generate XYZ keydx")
 	}
 	xInt, err := toBigInt31(x)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate XYZ keydx")
+		return nil, vperror.Chain(err, "unable to generate XYZ keydx")
 	}
 	yInt, err := toBigInt31(y)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate XYZ keydx")
+		return nil, vperror.Chain(err, "unable to generate XYZ keydx")
 	}
 	zInt, err := toBigInt31(z)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to generate XYZ keydx")
+		return nil, vperror.Chain(err, "unable to generate XYZ keydx")
 	}
 	for i := 0; i < n31; i++ {
 		keyInt = keyInt.SetBit(keyInt, nOffset3+3*i, xInt.Bit(i))

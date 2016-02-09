@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,6 +22,7 @@ package main
 import (
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"github.com/ufoot/vapor/vpbussrv"
+	"github.com/ufoot/vapor/vperror"
 	"github.com/ufoot/vapor/vpsys"
 	"time"
 )
@@ -80,12 +81,12 @@ func (server NibblesServer) Init(timestamp time.Time) error {
 
 	server.server, err = vpbussrv.NewDefault()
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to create vpbussrv Thrift server")
+		return vperror.Chain(err, "unable to create vpbussrv Thrift server")
 	}
 
 	err = vpbussrv.AsyncServe(server.server)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to start vpbussrv Thrift server")
+		return vperror.Chain(err, "unable to start vpbussrv Thrift server")
 	}
 
 	return nil

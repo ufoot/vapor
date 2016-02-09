@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 	"strings"
 )
 
@@ -31,7 +31,7 @@ func enumMarshalJSON(val int, shortStr *[]string) ([]byte, error) {
 	if val >= 0 && val < len(*shortStr) {
 		ret, err := json.Marshal((*shortStr)[val])
 		if err != nil {
-			return nil, vpsys.ErrorChainf(err, "unable to marshal %s", (*shortStr)[val])
+			return nil, vperror.Chainf(err, "unable to marshal %s", (*shortStr)[val])
 		}
 		return ret, nil
 	}
@@ -48,7 +48,7 @@ func enumUnmarshalJSON(data []byte, shortStr, longStr *[]string) (int, error) {
 		err := json.Unmarshal(data, &tmpStr)
 		if err != nil {
 			if err != nil {
-				return -1, vpsys.ErrorChain(err, "unable to unmarshal enum")
+				return -1, vperror.Chain(err, "unable to unmarshal enum")
 			}
 		}
 

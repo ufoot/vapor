@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -17,34 +17,34 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpsys
+package vperror
 
 import (
 	"errors"
 	"testing"
 )
 
-func TestErrorChain(t *testing.T) {
+func TestChain(t *testing.T) {
 	err1 := errors.New("foo")
-	err2 := ErrorChain(err1, "bar")
+	err2 := Chain(err1, "bar")
 	if err2.Error() == "bar (\"foo\")" {
 		t.Logf("OK, err1=%s err2=%s", err1.Error(), err2.Error())
 	} else {
 		t.Errorf("Inconsistent errors, err1=%s err2=%s", err1.Error(), err2.Error())
 	}
-	err3 := ErrorChain(err1, "")
+	err3 := Chain(err1, "")
 	if err3.Error() == "foo" {
 		t.Logf("OK, err1=%s err3=%s", err1.Error(), err3.Error())
 	} else {
 		t.Errorf("Inconsistent errors, err1=%s err3=%s", err1.Error(), err3.Error())
 	}
-	err4 := ErrorChain(nil, "")
+	err4 := Chain(nil, "")
 	if err4 == nil {
 		t.Logf("OK, err4 is nil")
 	} else {
 		t.Errorf("Inconsistent errors, err4=%s", err4.Error())
 	}
-	err5 := ErrorChainf(err1, "bar %d", 1)
+	err5 := Chainf(err1, "bar %d", 1)
 	if err5.Error() == "bar 1 (\"foo\")" {
 		t.Logf("OK, err1=%s err5=%s", err1.Error(), err5.Error())
 	} else {

@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 package vptypes
 
 import (
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 )
 
 // Size is a generic type to store small/medium/large values.
@@ -62,7 +62,7 @@ func (s *Size) UnmarshalJSON(data []byte) error {
 	tmpInt, err := enumUnmarshalJSON(data, &sizeShortStr, &sizeLongStr)
 
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal Size")
+		return vperror.Chain(err, "unable to unmarshal Size")
 	}
 	*s = Size(tmpInt)
 

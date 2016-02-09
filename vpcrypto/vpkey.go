@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"errors"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 	"golang.org/x/crypto/openpgp"
 	"golang.org/x/crypto/openpgp/packet"
 	"golang.org/x/crypto/ripemd160"
@@ -55,12 +55,12 @@ func NewKey() (*Key, error) {
 
 	entity, err = openpgp.NewEntity("", "", "", nil)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to create a new OpenPGP entity")
+		return nil, vperror.Chain(err, "unable to create a new OpenPGP entity")
 	}
 
 	err = entity.SerializePrivate(&byteWriter, nil)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to serialize private key")
+		return nil, vperror.Chain(err, "unable to serialize private key")
 	}
 
 	key.entity = entity
@@ -76,7 +76,7 @@ func (key Key) ExportPub() ([]byte, error) {
 
 	err = key.entity.Serialize(&byteWriter)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to serialize public key")
+		return nil, vperror.Chain(err, "unable to serialize public key")
 	}
 
 	pubKey = byteWriter.Bytes()
@@ -96,7 +96,7 @@ func ImportPubKey(key []byte) (*Key, error) {
 	packetReader = packet.NewReader(byteReader)
 	entity, err = openpgp.ReadEntity(packetReader)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to read entity from public key")
+		return nil, vperror.Chain(err, "unable to read entity from public key")
 	}
 
 	pubKey.entity = entity
@@ -116,7 +116,7 @@ func (key Key) Sign(content []byte) ([]byte, error) {
 	byteReader = bytes.NewReader(content)
 	err = openpgp.DetachSign(&byteWriter, key.entity, byteReader, nil)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to sign content")
+		return nil, vperror.Chain(err, "unable to sign content")
 	}
 
 	sig = byteWriter.Bytes()
@@ -169,7 +169,7 @@ func (key Key) Encrypt(content []byte) ([]byte, error) {
 
 	output, err = openpgp.Encrypt(&byteWriter, keyRing, nil, &hints, nil)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to encrypt content")
+		return nil, vperror.Chain(err, "unable to encrypt content")
 	}
 	gzipOutput = gzip.NewWriter(output)
 	gzipOutput.Write(content)
@@ -205,7 +205,7 @@ func (key Key) decrypt(content []byte) ([]byte, error) {
 	byteReader = bytes.NewReader(content)
 	messageDetails, err = openpgp.ReadMessage(byteReader, keyRing, nil, nil)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to read PGP content")
+		return nil, vperror.Chain(err, "unable to read PGP content")
 	}
 
 	if !messageDetails.IsEncrypted {
@@ -214,14 +214,14 @@ func (key Key) decrypt(content []byte) ([]byte, error) {
 	gzipReader, err = gzip.NewReader(messageDetails.UnverifiedBody)
 	defer gzipReader.Close()
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to open GZIP within PGP encrypted content")
+		return nil, vperror.Chain(err, "unable to open GZIP within PGP encrypted content")
 	}
 	ret, err = ioutil.ReadAll(gzipReader)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to read GZIP within PGP encrypted content")
+		return nil, vperror.Chain(err, "unable to read GZIP within PGP encrypted content")
 	}
 	if len(ret) <= 0 {
-		return nil, vpsys.ErrorChain(err, "no data in GZIP within PGP encrypted content")
+		return nil, vperror.Chain(err, "no data in GZIP within PGP encrypted content")
 	}
 	return ret, nil
 }

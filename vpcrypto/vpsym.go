@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -23,6 +23,7 @@ import (
 	"bytes"
 	"compress/gzip"
 	"errors"
+	"github.com/ufoot/vapor/vperror"
 	"github.com/ufoot/vapor/vpsys"
 	"golang.org/x/crypto/openpgp"
 	"io"
@@ -51,7 +52,7 @@ func SymEncrypt(content, password []byte) ([]byte, error) {
 
 	output, err = openpgp.SymmetricallyEncrypt(&byteWriter, password, &hints, nil)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to encrypt content")
+		return nil, vperror.Chain(err, "unable to encrypt content")
 	}
 	gzipOutput = gzip.NewWriter(output)
 	gzipOutput.Write(content)
@@ -91,7 +92,7 @@ func symDecrypt(content, password []byte) ([]byte, error) {
 		return password, nil
 	}, nil)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to read PGP content")
+		return nil, vperror.Chain(err, "unable to read PGP content")
 	}
 
 	if !messageDetails.IsEncrypted {
@@ -100,14 +101,14 @@ func symDecrypt(content, password []byte) ([]byte, error) {
 	gzipReader, err = gzip.NewReader(messageDetails.UnverifiedBody)
 	defer gzipReader.Close()
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to open GZIP within PGP encrypted content")
+		return nil, vperror.Chain(err, "unable to open GZIP within PGP encrypted content")
 	}
 	ret, err = ioutil.ReadAll(gzipReader)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to read GZIP within PGP encrypted content")
+		return nil, vperror.Chain(err, "unable to read GZIP within PGP encrypted content")
 	}
 	if len(ret) <= 0 {
-		return nil, vpsys.ErrorChain(err, "no data in GZIP within PGP encrypted content")
+		return nil, vperror.Chain(err, "no data in GZIP within PGP encrypted content")
 	}
 
 	return ret, err
@@ -117,7 +118,7 @@ func symDecrypt(content, password []byte) ([]byte, error) {
 func SymDecrypt(content, password []byte) ([]byte, error) {
 	ret, err := symDecrypt(content, password)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to decrypt")
+		return nil, vperror.Chain(err, "unable to decrypt")
 	}
 	if ret == nil {
 		return nil, errors.New("unable to decrypt, no content")

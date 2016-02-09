@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ import (
 	"encoding/binary"
 	"encoding/hex"
 	"errors"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 	"hash/crc32"
 	"hash/crc64"
 	"math/big"
@@ -89,12 +89,12 @@ func strToIntN(checksum string, bits int) (*big.Int, error) {
 
 	buf, err = strToBufN(checksum, bits)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to decode checksum hex string")
+		return nil, vperror.Chain(err, "unable to decode checksum hex string")
 	}
 
 	ret, err = bufToIntN(buf, bits)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to get checksum bytes")
+		return nil, vperror.Chain(err, "unable to get checksum bytes")
 	}
 
 	return ret, nil
@@ -109,7 +109,7 @@ func strToBufN(checksum string, bits int) ([]byte, error) {
 	}
 	ret, err = hex.DecodeString(checksum)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to decode checksum hex string")
+		return nil, vperror.Chain(err, "unable to decode checksum hex string")
 	}
 
 	return ret, nil
@@ -281,7 +281,7 @@ func StrToInt128(checksum string) (*big.Int, error) {
 func StrToInt64(checksum string) (uint64, error) {
 	bytes, err := strToBufN(checksum, 64)
 	if err != nil {
-		return 0, vpsys.ErrorChain(err, "can't convert string to bytes")
+		return 0, vperror.Chain(err, "can't convert string to bytes")
 	}
 	return BufToInt64(bytes)
 }
@@ -292,7 +292,7 @@ func StrToInt64(checksum string) (uint64, error) {
 func StrToInt32(checksum string) (uint32, error) {
 	bytes, err := strToBufN(checksum, 32)
 	if err != nil {
-		return 0, vpsys.ErrorChain(err, "can't convert string to bytes")
+		return 0, vperror.Chain(err, "can't convert string to bytes")
 	}
 	return BufToInt32(bytes)
 }

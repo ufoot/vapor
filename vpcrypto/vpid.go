@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 package vpcrypto
 
 import (
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 	"math/big"
 	"time"
 )
@@ -61,7 +61,7 @@ func GenerateID512(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 				tmpData = IntToBuf512(tmpInt)
 				tmpSig, err = key.Sign(tmpData)
 				if err != nil {
-					return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+					return nil, nil, 0, vperror.Chain(err, "can't sign id")
 				}
 			}
 			tmpZ = ZeroesInBuf(Checksum512(tmpSig))
@@ -101,7 +101,7 @@ func GenerateID256(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 				tmpData = IntToBuf256(tmpInt)
 				tmpSig, err = key.Sign(tmpData)
 				if err != nil {
-					return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+					return nil, nil, 0, vperror.Chain(err, "can't sign id")
 				}
 			}
 			tmpZ = ZeroesInBuf(Checksum256(tmpSig))
@@ -141,7 +141,7 @@ func GenerateID128(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 				tmpData = IntToBuf128(tmpInt)
 				tmpSig, err = key.Sign(tmpData)
 				if err != nil {
-					return nil, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+					return nil, nil, 0, vperror.Chain(err, "can't sign id")
 				}
 			}
 			tmpZ = ZeroesInBuf(Checksum128(tmpSig))
@@ -184,7 +184,7 @@ func GenerateID64(key *Key, filterChecker FilterChecker, seconds int) (uint64, [
 				tmpData = IntToBuf64(tmpInt)
 				tmpSig, err = key.Sign(tmpData)
 				if err != nil {
-					return 0, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+					return 0, nil, 0, vperror.Chain(err, "can't sign id")
 				}
 			}
 			tmpZ = ZeroesInBuf(Checksum64(tmpSig))
@@ -227,7 +227,7 @@ func GenerateID32(key *Key, filterChecker FilterChecker, seconds int) (uint32, [
 				tmpData = IntToBuf32(tmpInt)
 				tmpSig, err = key.Sign(tmpData)
 				if err != nil {
-					return 0, nil, 0, vpsys.ErrorChain(err, "can't sign id")
+					return 0, nil, 0, vperror.Chain(err, "can't sign id")
 				}
 			}
 			tmpZ = ZeroesInBuf(Checksum32(tmpSig))

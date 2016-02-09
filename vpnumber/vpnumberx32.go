@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ package vpnumber
 
 import (
 	"encoding/json"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 )
 
 // X32 is a fixed point number on 32 bits. The idea is to arbitrary
@@ -86,7 +86,7 @@ func X32ToF64(x X32) float64 {
 func (x *X32) MarshalJSON() ([]byte, error) {
 	ret, err := json.Marshal(int32(*x))
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal X32")
+		return nil, vperror.Chain(err, "unable to marshal X32")
 	}
 
 	return ret, nil
@@ -98,7 +98,7 @@ func (x *X32) UnmarshalJSON(data []byte) error {
 
 	err := json.Unmarshal(data, &tmp)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal X32")
+		return vperror.Chain(err, "unable to unmarshal X32")
 	}
 
 	*x = X32(tmp)

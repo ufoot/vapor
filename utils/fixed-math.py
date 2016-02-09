@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
 # Vapor is a toolkit designed to support Liquid War 7.
-# Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+# Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ X64_TABLE_MASK = 0x1FFF
 X64_TABLE_SHIFT = 13
 
 content_begin="""// Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by

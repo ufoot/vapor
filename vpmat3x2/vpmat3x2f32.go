@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,8 +21,8 @@ package vpmat3x2
 
 import (
 	"encoding/json"
+	"github.com/ufoot/vapor/vperror"
 	"github.com/ufoot/vapor/vpnumber"
-	"github.com/ufoot/vapor/vpsys"
 	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpvec3"
 	"math"
@@ -161,7 +161,7 @@ func (mat *F32) MarshalJSON() ([]byte, error) {
 
 	ret, err := json.Marshal(tmpArray)
 	if err != nil {
-		return nil, vpsys.ErrorChain(err, "unable to marshal F32")
+		return nil, vperror.Chain(err, "unable to marshal F32")
 	}
 
 	return ret, nil
@@ -173,7 +173,7 @@ func (mat *F32) UnmarshalJSON(data []byte) error {
 
 	err := json.Unmarshal(data, &tmpArray)
 	if err != nil {
-		return vpsys.ErrorChain(err, "unable to unmarshal F32")
+		return vperror.Chain(err, "unable to unmarshal F32")
 	}
 
 	for col := range tmpArray {

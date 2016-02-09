@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ package vpkeydx
 
 import (
 	"github.com/ufoot/vapor/vpcrypto"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpvec3"
 	"math/big"
@@ -33,7 +33,7 @@ import (
 func GetX(keyID []byte) (int32, error) {
 	keyInt, err := vpcrypto.BufToInt256(keyID)
 	if err != nil {
-		return 0, vpsys.ErrorChain(err, "unable to generate 1d keydx")
+		return 0, vperror.Chain(err, "unable to generate 1d keydx")
 	}
 	xInt := big.NewInt(0)
 	for i := 0; i < n31; i++ {
@@ -49,7 +49,7 @@ func GetX(keyID []byte) (int32, error) {
 func GetXY(keyID []byte) (int32, int32, error) {
 	keyInt, err := vpcrypto.BufToInt256(keyID)
 	if err != nil {
-		return 0, 0, vpsys.ErrorChain(err, "unable to generate 2d keydx")
+		return 0, 0, vperror.Chain(err, "unable to generate 2d keydx")
 	}
 	xInt := big.NewInt(0)
 	yInt := big.NewInt(0)
@@ -67,7 +67,7 @@ func GetXY(keyID []byte) (int32, int32, error) {
 func GetXYZ(keyID []byte) (int32, int32, int32, error) {
 	keyInt, err := vpcrypto.BufToInt256(keyID)
 	if err != nil {
-		return 0, 0, 0, vpsys.ErrorChain(err, "unable to generate 3dd keydx")
+		return 0, 0, 0, vperror.Chain(err, "unable to generate 3dd keydx")
 	}
 	xInt := big.NewInt(0)
 	yInt := big.NewInt(0)

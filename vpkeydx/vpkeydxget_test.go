@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -22,7 +22,7 @@ package vpkeydx
 import (
 	"fmt"
 	"github.com/ufoot/vapor/vpcrypto"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpvec3"
 	"testing"
@@ -35,12 +35,12 @@ func init() {
 func TestGetX(t *testing.T) {
 	keydx, err := GenX(testSeedBuf, testKeyName, testX)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to generate X key"))
+		t.Error(vperror.Chain(err, "unable to generate X key"))
 	}
 	t.Logf("generated X key %s", vpcrypto.BufToStr256(keydx))
 	x, err := GetX(keydx)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to get X coord"))
+		t.Error(vperror.Chain(err, "unable to get X coord"))
 	}
 	if x != testX {
 		t.Error(fmt.Errorf("x and testX differ %d %d", x, testX))
@@ -50,12 +50,12 @@ func TestGetX(t *testing.T) {
 func TestGetXY(t *testing.T) {
 	keydx, err := GenXY(testSeedBuf, testKeyName, testX, testY)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to generate XY key"))
+		t.Error(vperror.Chain(err, "unable to generate XY key"))
 	}
 	t.Logf("generated XY key %s", vpcrypto.BufToStr256(keydx))
 	x, y, err := GetXY(keydx)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to get XY coord"))
+		t.Error(vperror.Chain(err, "unable to get XY coord"))
 	}
 	if x != testX {
 		t.Error(fmt.Errorf("x and testX differ %d %d", x, testX))
@@ -68,12 +68,12 @@ func TestGetXY(t *testing.T) {
 func TestGetXYZ(t *testing.T) {
 	keydx, err := GenXYZ(testSeedBuf, testKeyName, testX, testY, testZ)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to generate XYZ key"))
+		t.Error(vperror.Chain(err, "unable to generate XYZ key"))
 	}
 	t.Logf("generated XYZ key %s", vpcrypto.BufToStr256(keydx))
 	x, y, z, err := GetXYZ(keydx)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to get XYZ coord"))
+		t.Error(vperror.Chain(err, "unable to get XYZ coord"))
 	}
 	if x != testX {
 		t.Error(fmt.Errorf("x and testX differ %d %d", x, testX))
@@ -89,12 +89,12 @@ func TestGetXYZ(t *testing.T) {
 func TestGetVec1(t *testing.T) {
 	keydx, err := GenVec1(testSeedBuf, testKeyName, testX)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to generate Vec1 key"))
+		t.Error(vperror.Chain(err, "unable to generate Vec1 key"))
 	}
 	t.Logf("generated Vec1 key %s", vpcrypto.BufToStr256(keydx))
 	x, err := GetVec1(keydx)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to get Vec1 coord"))
+		t.Error(vperror.Chain(err, "unable to get Vec1 coord"))
 	}
 	if x != testX {
 		t.Error(fmt.Errorf("v and testX differ %d %d", x, testX))
@@ -104,12 +104,12 @@ func TestGetVec1(t *testing.T) {
 func TestGetVec2(t *testing.T) {
 	keydx, err := GenVec2(testSeedBuf, testKeyName, vpvec2.I32New(testX, testY))
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to generate Vec1 key"))
+		t.Error(vperror.Chain(err, "unable to generate Vec1 key"))
 	}
 	t.Logf("generated Vec1 key %s", vpcrypto.BufToStr256(keydx))
 	vec2, err := GetVec2(keydx)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to get Vec1 coord"))
+		t.Error(vperror.Chain(err, "unable to get Vec1 coord"))
 	}
 	if vec2[vpvec2.X] != testX {
 		t.Error(fmt.Errorf("x and testX differ %d %d", vec2[vpvec2.X], testX))
@@ -122,12 +122,12 @@ func TestGetVec2(t *testing.T) {
 func TestGetVec3(t *testing.T) {
 	keydx, err := GenVec3(testSeedBuf, testKeyName, vpvec3.I32New(testX, testY, testZ))
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to generate Vec1 key"))
+		t.Error(vperror.Chain(err, "unable to generate Vec1 key"))
 	}
 	t.Logf("generated Vec1 key %s", vpcrypto.BufToStr256(keydx))
 	vec3, err := GetVec3(keydx)
 	if err != nil {
-		t.Error(vpsys.ErrorChain(err, "unable to get Vec1 coord"))
+		t.Error(vperror.Chain(err, "unable to get Vec1 coord"))
 	}
 	if vec3[vpvec3.X] != testX {
 		t.Error(fmt.Errorf("x and testX differ %d %d", vec3[vpvec3.X], testX))

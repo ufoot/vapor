@@ -1,5 +1,5 @@
 // Vapor is a toolkit designed to support Liquid War 7.
-// Copyright (C)  2015  Christian Mauduit <ufoot@ufoot.org>
+// Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ package vpconf
 
 import (
 	"fmt"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vperror"
 	"strconv"
 	"strings"
 )
@@ -145,7 +145,7 @@ func (n *ConfNode) GetInt32(key string) (int32, error) {
 
 	ret, err = strconv.ParseInt(strVal, 32, 10)
 
-	return int32(ret), vpsys.ErrorChain(err, "unable to parse int")
+	return int32(ret), vperror.Chain(err, "unable to parse int")
 }
 
 // SetFloat32 set a key to the given int value.
