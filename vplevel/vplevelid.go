@@ -21,7 +21,7 @@ package vplevel
 
 import (
 	"github.com/ufoot/vapor/vpcrypto"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vplog"
 	"github.com/ufoot/vapor/vptypes"
 	"math/big"
 )
@@ -154,7 +154,7 @@ type levelFilterChecker struct {
 func (fc levelFilterChecker) Filter(id *big.Int) *big.Int {
 	var ret big.Int
 
-	vpsys.LogDebug("filter for levelid")
+	vplog.LogDebug("filter for levelid")
 
 	ret.Set(id)
 
@@ -166,7 +166,7 @@ func (fc levelFilterChecker) Filter(id *big.Int) *big.Int {
 }
 
 func (fc levelFilterChecker) Check(id *big.Int) bool {
-	vpsys.LogDebug("check for levelid")
+	vplog.LogDebug("check for levelid")
 
 	if getSize(id, squareIndex) != fc.sizes.SquareSize {
 		return false

@@ -20,15 +20,15 @@
 package main
 
 import (
+	"github.com/ufoot/vapor/vplog"
 	"github.com/ufoot/vapor/vploop"
-	"github.com/ufoot/vapor/vpsys"
 )
 
 func main() {
 	var state NibblesState
 	var server NibblesServer
 
-	vpsys.LogInit("vpdemo")
+	vplog.LogInit("vpdemo")
 	vploop.MainLoop(state, server)
 
 	return

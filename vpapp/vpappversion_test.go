@@ -24,7 +24,7 @@ import (
 )
 
 func TestCompare(t *testing.T) {
-	v1 := BuildVersion()
+	v1 := DefaultVersion()
 	v2 := NewVersion(2, 1, "toto")
 	v3 := NewVersion(2, 3, "tata")
 
@@ -50,7 +50,7 @@ func TestCompare(t *testing.T) {
 }
 
 func TestEqual(t *testing.T) {
-	v1 := BuildVersion()
+	v1 := DefaultVersion()
 	v2 := NewVersion(2, 1, "foobar")
 
 	if !Equal(v1, v1) {

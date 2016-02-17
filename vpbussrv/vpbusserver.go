@@ -24,7 +24,7 @@ import (
 	"github.com/ufoot/vapor/vpbus"
 	"github.com/ufoot/vapor/vpbusapi"
 	"github.com/ufoot/vapor/vperror"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vplog"
 	"time"
 )
 
@@ -37,12 +37,12 @@ func newServer(transportFactory thrift.TTransportFactory, protocolFactory thrift
 	if err != nil {
 		return nil, vperror.Chain(err, "unable to create server socket")
 	}
-	vpsys.LogNoticef("%T", transport)
+	vplog.LogNoticef("%T", transport)
 	handler := vpbus.New()
 	processor := vpbusapi.NewVpBusApiProcessor(handler)
 	server := thrift.NewTSimpleServer4(processor, transport, transportFactory, protocolFactory)
 
-	vpsys.LogNoticef("New Thrift server on %s", addr)
+	vplog.LogNoticef("New Thrift server on %s", addr)
 
 	return server, nil
 }
@@ -58,13 +58,13 @@ func AsyncServe(server *thrift.TSimpleServer) error {
 
 	start := time.Now()
 	go func() {
-		vpsys.LogNoticef("Start Thrift server")
+		vplog.LogNoticef("Start Thrift server")
 
 		err = server.Serve()
 		if err == nil {
-			vpsys.LogNotice("Done with Thrift server")
+			vplog.LogNotice("Done with Thrift server")
 		} else {
-			vpsys.LogWarning("unable to start Thrift server ", err)
+			vplog.LogWarning("unable to start Thrift server ", err)
 		}
 	}()
 
@@ -73,9 +73,9 @@ func AsyncServe(server *thrift.TSimpleServer) error {
 	}
 
 	if err == nil {
-		vpsys.LogNoticef("Started Thrift server")
+		vplog.LogNoticef("Started Thrift server")
 	} else {
-		vpsys.LogWarning("Unable to start Thrift server", err)
+		vplog.LogWarning("Unable to start Thrift server", err)
 	}
 
 	return err

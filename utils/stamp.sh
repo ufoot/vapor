@@ -31,8 +31,10 @@ PACKAGE_TARNAME="vapor"
 PACKAGE_NAME="Vapor Toolkit"
 PACKAGE_EMAIL="ufoot@ufoot.org"
 PACKAGE_URL="https:\\/\\/github.com\\/ufoot\\/vapor"
+PACKAGE_COPYRIGHT="Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>"
+PACKAGE_LICENSE="GNU GPL v3"
+
 VERSION_MAJOR=0
-VERSION_MINOR=1
 
 find_configure_ac () {
     if [ -f configure.ac ] ; then
@@ -49,32 +51,17 @@ find_configure_ac () {
     fi
 }
 
-find_vpversion_go () {
-    if [ -f vpbuild/vpversion.go ] ; then
-	    VPVERSION_GO="vpbuild/vpversion.go"
-	    if [ -f ${CONFIGURE_AC} ] ; then
+find_version_go () {
+    if [ -f $1/version.go ] ; then
+	    VERSION_GO="$1/version.go"
+	    if [ -f ${VERSION_GO} ] ; then
             true
 	    else
-            echo "unable to open ${VPVERSION_GO}"
+            echo "unable to open ${VERSION_GO}"
             exit 2
 	    fi
     else
-	    echo "unable to find vpbuild/vpversion.go"
-	    exit 1
-    fi
-}
-
-find_vppackage_go () {
-    if [ -f vpbuild/vppackage.go ] ; then
-	    VPPACKAGE_GO="vpbuild/vppackage.go"
-	    if [ -f ${CONFIGURE_AC} ] ; then
-            true
-	    else
-            echo "unable to open ${VPPACKAGE_GO}"
-            exit 2
-	    fi
-    else
-	    echo "unable to find vpbuild/vppackage.go"
+	    echo "unable to find version.go"
 	    exit 1
     fi
 }
@@ -95,56 +82,50 @@ git_changelog () {
     fi
 }
 
-calc_branch () {
-    VERSION_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    if [ "x${VERSION_BRANCH}" = "x" ] ; then
-        VERSION_BRANCH=unknown
-    fi
-    if [ "x${VERSION_BRANCH}" = "xmaster" ] ; then
-        VERSION_BRANCH=
-    fi
+calc_minor () {
+    export VERSION_MINOR=$(git log --oneline --color=never -- $(find $1 -name "vp*.go" | grep -v version | sort) | wc -l)
+    export VERSION_GO="$1/version.go"
 }
 
-calc_commits () {
-    if [ "x${VERSION_BRANCH}" = "x" ] ; then
-	SRC_GO=$(ls -d vp* | grep -v "vpbuild" | sort | tr "\n" " ")
-	VERSION_COMMITS=$(git log --oneline --color=never -- ${SRC_GO} | wc -l)
-    else
-	VERSION_COMMITS=
-    fi
+calc_stamp () {
+    export VERSION_STAMP=$(git log --oneline --color=never -- $(find $1 -name "vp*.go" | grep -v version | sort) | head -n 1 | awk '{print $1}')
+    export VERSION_GO="$1/version.go"
 }
 
-do_patch () {
-    VERSION_STAMP=${VERSION_COMMITS}${VERSION_BRANCH}
+patch_autotools () {
+calc_minor .
+calc_stamp .
     VERSION_DOT=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_STAMP}
     if grep -q ${VERSION_DOT} ${CONFIGURE_AC} ; then
         echo "current version is ${VERSION_DOT}"
         touch ${CONFIGURE_AC}
     else
-        echo "patching ${VPPACKAGE_GO} with package tarname=${PACKAGE_TARNAME} name=${PACKAGE_NAME} email=${PACKAGE_EMAIL} url=${PACKAGE_URL}"
-        sed -i "s/const.*\/\/.*PackageTarname.*stamp.sh/const PackageTarname = \"${PACKAGE_TARNAME}\" \/\/ PackageTarname set by stamp.sh/g" ${VPPACKAGE_GO}
-        sed -i "s/const.*\/\/.*PackageName.*stamp.sh/const PackageName = \"${PACKAGE_NAME}\" \/\/ PackageName set by stamp.sh/g" ${VPPACKAGE_GO}
-        sed -i "s/const.*\/\/.*PackageEmail.*stamp.sh/const PackageEmail = \"${PACKAGE_EMAIL}\" \/\/ PackageEmail set by stamp.sh/g" ${VPPACKAGE_GO}
-        sed -i "s/const.*\/\/.*PackageURL.*stamp.sh/const PackageURL = \"${PACKAGE_URL}\" \/\/ PackageURL set by stamp.sh/g" ${VPPACKAGE_GO}
-        go vet ${VPPACKAGE_GO}
-        go fmt ${VPPACKAGE_GO}
-        echo "patching ${VPVERSION_GO} with version major=${VERSION_MAJOR} minor=${VERSION_MINOR} stamp=${VERSION_STAMP}"
-        sed -i "s/const.*\/\/.*VersionMajor.*stamp.sh/const VersionMajor = ${VERSION_MAJOR} \/\/ VersionMajor set by stamp.sh/g" ${VPVERSION_GO}
-        sed -i "s/const.*\/\/.*VersionMinor.*stamp.sh/const VersionMinor = ${VERSION_MINOR} \/\/ VersionMinor set by stamp.sh/g" ${VPVERSION_GO}
-        sed -i "s/const.*\/\/.*VersionStamp.*stamp.sh/const VersionStamp = \"${VERSION_STAMP}\" \/\/ VersionStamp set by stamp.sh/g" ${VPVERSION_GO}
-        go vet ${VPVERSION_GO}
-        go fmt ${VPVERSION_GO}
         echo "patching ${CONFIGURE_AC} with version ${VERSION_DOT}"
         sed -i "s/^AC_INIT.*/AC_INIT([${PACKAGE_NAME}],[${VERSION_DOT}],[${PACKAGE_EMAIL}],[${PACKAGE_TARNAME}],[${PACKAGE_URL}])/g" ${CONFIGURE_AC}
     fi
 }
 
+patch_go () {
+	find_version_go $1
+	calc_minor $1
+	calc_stamp $1
+        sed -i "s/const.*\/\/.*PackageTarname.*stamp.sh/const PackageTarname = \"${PACKAGE_TARNAME}\" \/\/ PackageTarname set by stamp.sh/g" ${VERSION_GO}
+        sed -i "s/const.*\/\/.*PackageName.*stamp.sh/const PackageName = \"${PACKAGE_NAME}\" \/\/ PackageName set by stamp.sh/g" ${VERSION_GO}
+        sed -i "s/const.*\/\/.*PackageEmail.*stamp.sh/const PackageEmail = \"${PACKAGE_EMAIL}\" \/\/ PackageEmail set by stamp.sh/g" ${VERSION_GO}
+        sed -i "s/const.*\/\/.*PackageURL.*stamp.sh/const PackageURL = \"${PACKAGE_URL}\" \/\/ PackageURL set by stamp.sh/g" ${VERSION_GO}
+        sed -i "s/const.*\/\/.*PackageCopyright.*stamp.sh/const PackageCopyright = \"${PACKAGE_COPYRIGHT}\" \/\/ PackageCopyright set by stamp.sh/g" ${VERSION_GO}
+        sed -i "s/const.*\/\/.*VersionMajor.*stamp.sh/const VersionMajor = ${VERSION_MAJOR} \/\/ VersionMajor set by stamp.sh/g" ${VERSION_GO}
+        sed -i "s/const.*\/\/.*VersionMinor.*stamp.sh/const VersionMinor = ${VERSION_MINOR} \/\/ VersionMinor set by stamp.sh/g" ${VERSION_GO}
+        sed -i "s/const.*\/\/.*VersionStamp.*stamp.sh/const VersionStamp = \"${VERSION_STAMP}\" \/\/ VersionStamp set by stamp.sh/g" ${VERSION_GO}
+        go vet ${VERSION_GO}
+        go fmt ${VERSION_GO}
+}
+
 find_configure_ac
-find_vpversion_go
-find_vppackage_go
 git_check
 git_changelog
-calc_branch
-calc_commits
-do_patch
+patch_autotools
+for i in vp* ; do
+	patch_go $i
+done
 

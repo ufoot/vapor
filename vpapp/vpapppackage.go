@@ -21,7 +21,6 @@ package vpapp
 
 import (
 	"fmt"
-	"github.com/ufoot/vapor/vpbuild"
 	"strings"
 )
 
@@ -36,16 +35,20 @@ type Package struct {
 	Email string
 	// URL of program, to get info about it
 	URL string
+	// Copyright, short copyright notice.
+	Copyright string
+	// License, short license description.
+	License string
 }
 
 // NewPackage creates a new package object.
-func NewPackage(tarname, name, email, url string) *Package {
-	return &Package{tarname, name, email, url}
+func NewPackage(tarname, name, email, url, copyright, license string) *Package {
+	return &Package{tarname, name, email, url, copyright, license}
 }
 
-// BuildPackage creates a new default object.
-func BuildPackage() *Package {
-	return NewPackage(vpbuild.PackageTarname, vpbuild.PackageName, vpbuild.PackageEmail, vpbuild.PackageURL)
+// DefaultPackage creates a new default object.
+func DefaultPackage() *Package {
+	return NewPackage(PackageTarname, PackageName, PackageEmail, PackageURL, PackageCopyright, PackageLicense)
 }
 
 // Compatible tells wether two packages refer to the same application,

@@ -46,6 +46,8 @@ struct Package {
   2: string Name,
   3: string Email,
   4: string URL,
+  5: string Copyright,
+  6: string License,
 }
 
 /**

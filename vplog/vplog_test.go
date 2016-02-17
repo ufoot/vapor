@@ -17,11 +17,11 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpsys
+package vplog
 
 import (
+	"bytes"
 	"fmt"
-	"io/ioutil"
 	"strings"
 	"testing"
 )
@@ -39,80 +39,102 @@ const checkInfoStringf = "info2\ninfo3\n"
 const checkDebugString = "debug1"
 const checkDebugStringf = "debug2\ndebug3\n"
 
-func checkContains(t *testing.T, filename string, text string) {
-	content, err := ioutil.ReadFile(filename)
+func initLog() *bytes.Buffer {
+	var testBuffer bytes.Buffer
+	logInitWithWriter("test", &testBuffer)
+	return &testBuffer
+}
 
-	if err != nil {
-		t.Errorf("unable to open %s, %s\n", filename, err)
-	}
-	if strings.Contains(string(content), text) {
-		t.Logf("%s contains %s\n", filename, text)
+func checkContains(t *testing.T, haystack string, needle string) {
+	if strings.Contains(haystack, needle) {
+		t.Logf("log contains \"%s\"", needle)
 	} else {
-		t.Errorf("%s does not contain %s\n", filename, text)
+		report := haystack
+		for _, chr := range "\n\r\t" {
+			report = strings.Replace(report, string(chr), " ", -1)
+		}
+		t.Errorf("log \"%s\" does not contains \"%s\"", report, needle)
 	}
 }
 
 func TestLogCrit(t *testing.T) {
+	buffer := initLog()
+
 	LogCrit(fmt.Sprintf("%s", checkCritString))
 	LogCritf("%s", checkCritStringf)
 	// no flush as Crit must be auto-flushed
 
-	filename := LogFilename()
-	checkContains(t, filename, checkCritString)
+	content := buffer.String()
+
+	checkContains(t, content, checkCritString)
 	for _, line := range strings.Split(checkCritStringf, "\n") {
-		checkContains(t, filename, line)
+		checkContains(t, content, line)
 	}
 }
 
 func TestLogErr(t *testing.T) {
+	buffer := initLog()
+
 	LogErr(fmt.Sprintf("%s", checkErrString))
 	LogErrf("%s", checkErrStringf)
 	// no flush as Err must be auto-flushed
 
-	filename := LogFilename()
-	checkContains(t, filename, checkErrString)
+	content := buffer.String()
+
+	checkContains(t, content, checkErrString)
 	for _, line := range strings.Split(checkErrStringf, "\n") {
-		checkContains(t, filename, line)
+		checkContains(t, content, line)
 	}
 }
 
 func TestLogWarning(t *testing.T) {
+	buffer := initLog()
+
 	LogWarning(fmt.Sprintf("%s", checkWarningString))
 	LogWarningf("%s", checkWarningStringf)
 	// no flush as Warning must be auto-flushed
 
-	filename := LogFilename()
-	checkContains(t, filename, checkWarningString)
+	content := buffer.String()
+
+	checkContains(t, content, checkWarningString)
 	for _, line := range strings.Split(checkWarningStringf, "\n") {
-		checkContains(t, filename, line)
+		checkContains(t, content, line)
 	}
 }
 
 func TestLogNotice(t *testing.T) {
+	buffer := initLog()
+
 	LogNotice(fmt.Sprintf("%s", checkNoticeString))
 	LogNoticef("%s", checkNoticeStringf)
 	// no flush as Notice must be auto-flushed
 
-	filename := LogFilename()
-	checkContains(t, filename, checkNoticeString)
+	content := buffer.String()
+
+	checkContains(t, content, checkNoticeString)
 	for _, line := range strings.Split(checkNoticeStringf, "\n") {
-		checkContains(t, filename, line)
+		checkContains(t, content, line)
 	}
 }
 
 func TestLogInfo(t *testing.T) {
+	buffer := initLog()
+
 	LogInfo(fmt.Sprintf("%s", checkInfoString))
 	LogInfof("%s", checkInfoStringf)
 	LogFlush()
 
-	filename := LogFilename()
-	checkContains(t, filename, checkInfoString)
+	content := buffer.String()
+
+	checkContains(t, content, checkInfoString)
 	for _, line := range strings.Split(checkInfoStringf, "\n") {
-		checkContains(t, filename, line)
+		checkContains(t, content, line)
 	}
 }
 
 func TestLogDebug(t *testing.T) {
+	buffer := initLog()
+
 	p := LogGetPriority()
 	LogSetPriority(PriorityDebug)
 
@@ -122,9 +144,10 @@ func TestLogDebug(t *testing.T) {
 
 	LogSetPriority(p)
 
-	filename := LogFilename()
-	checkContains(t, filename, checkDebugString)
+	content := buffer.String()
+
+	checkContains(t, content, checkDebugString)
 	for _, line := range strings.Split(checkDebugStringf, "\n") {
-		checkContains(t, filename, line)
+		checkContains(t, content, line)
 	}
 }

@@ -188,11 +188,15 @@ func (p *Version) String() string {
 //  - Name
 //  - Email
 //  - URL
+//  - Copyright
+//  - License
 type Package struct {
-	Tarname string `thrift:"Tarname,1" json:"Tarname"`
-	Name    string `thrift:"Name,2" json:"Name"`
-	Email   string `thrift:"Email,3" json:"Email"`
-	URL     string `thrift:"URL,4" json:"URL"`
+	Tarname   string `thrift:"Tarname,1" json:"Tarname"`
+	Name      string `thrift:"Name,2" json:"Name"`
+	Email     string `thrift:"Email,3" json:"Email"`
+	URL       string `thrift:"URL,4" json:"URL"`
+	Copyright string `thrift:"Copyright,5" json:"Copyright"`
+	License   string `thrift:"License,6" json:"License"`
 }
 
 func NewPackage() *Package {
@@ -213,6 +217,14 @@ func (p *Package) GetEmail() string {
 
 func (p *Package) GetURL() string {
 	return p.URL
+}
+
+func (p *Package) GetCopyright() string {
+	return p.Copyright
+}
+
+func (p *Package) GetLicense() string {
+	return p.License
 }
 func (p *Package) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -242,6 +254,14 @@ func (p *Package) Read(iprot thrift.TProtocol) error {
 			}
 		case 4:
 			if err := p.readField4(iprot); err != nil {
+				return err
+			}
+		case 5:
+			if err := p.readField5(iprot); err != nil {
+				return err
+			}
+		case 6:
+			if err := p.readField6(iprot); err != nil {
 				return err
 			}
 		default:
@@ -295,6 +315,24 @@ func (p *Package) readField4(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *Package) readField5(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 5: ", err)
+	} else {
+		p.Copyright = v
+	}
+	return nil
+}
+
+func (p *Package) readField6(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadString(); err != nil {
+		return thrift.PrependError("error reading field 6: ", err)
+	} else {
+		p.License = v
+	}
+	return nil
+}
+
 func (p *Package) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("Package"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
@@ -309,6 +347,12 @@ func (p *Package) Write(oprot thrift.TProtocol) error {
 		return err
 	}
 	if err := p.writeField4(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField5(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField6(oprot); err != nil {
 		return err
 	}
 	if err := oprot.WriteFieldStop(); err != nil {
@@ -368,6 +412,32 @@ func (p *Package) writeField4(oprot thrift.TProtocol) (err error) {
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:URL: ", p), err)
+	}
+	return err
+}
+
+func (p *Package) writeField5(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("Copyright", thrift.STRING, 5); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:Copyright: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.Copyright)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.Copyright (5) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:Copyright: ", p), err)
+	}
+	return err
+}
+
+func (p *Package) writeField6(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("License", thrift.STRING, 6); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 6:License: ", p), err)
+	}
+	if err := oprot.WriteString(string(p.License)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.License (6) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 6:License: ", p), err)
 	}
 	return err
 }

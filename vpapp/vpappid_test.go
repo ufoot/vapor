@@ -25,8 +25,8 @@ import (
 )
 
 func TestCalcID(t *testing.T) {
-	p := BuildPackage()
-	v := BuildVersion()
+	p := DefaultPackage()
+	v := DefaultVersion()
 
 	i := CalcID(p, v)
 	if len(i) != 16 {

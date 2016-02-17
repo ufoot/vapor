@@ -17,17 +17,6 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpsys
-
-import (
-	"github.com/ufoot/vapor/vpbuild"
-	"testing"
-)
-
-func TestHome(t *testing.T) {
-	var home string
-
-	home = Home(vpbuild.PackageTarname)
-
-	t.Logf("home=%s", home)
-}
+// Package vplog contains a simple log helper which logs on both
+// stderr and syslog.
+package vplog

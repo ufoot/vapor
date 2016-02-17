@@ -17,11 +17,24 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpbuild
+package vpmat3x2
+
+// PackageTarname contains a short name of the package, suitable for a filename.
+const PackageTarname = "vapor" // PackageTarname set by stamp.sh
+// PackageName contains a readable name of the package, suitable for display.
+const PackageName = "Vapor Toolkit" // PackageName set by stamp.sh
+// PackageEmail contains a contact email for the package.
+const PackageEmail = "ufoot@ufoot.org" // PackageEmail set by stamp.sh
+// PackageURL contains the address of the project homepage.
+const PackageURL = "https://github.com/ufoot/vapor" // PackageURL set by stamp.sh
+// PackageCopyright contains a short copyright notice.
+const PackageCopyright = "Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>" // PackageCopyright set by stamp.sh
+// PackageLicense contains a short license information.
+const PackageLicense = "https://github.com/ufoot/vapor" // PackageLicense set by stamp.sh
 
 // VersionMajor is the project major version.
 const VersionMajor = 0 // VersionMajor set by stamp.sh
 // VersionMinor is the project minor version.
-const VersionMinor = 1 // VersionMinor set by stamp.sh
+const VersionMinor = 16 // VersionMinor set by stamp.sh
 // VersionStamp is the project stamp, possibly changes for each build.
-const VersionStamp = "develop" // VersionStamp set by stamp.sh
+const VersionStamp = "2a1bd24" // VersionStamp set by stamp.sh

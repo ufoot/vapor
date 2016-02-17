@@ -24,9 +24,9 @@ import (
 )
 
 func TestCompatible(t *testing.T) {
-	p1 := NewPackage("foo", "Foo", "foo@bar.com", "http://bar.com")
-	p2 := NewPackage("foo", "Bar", "bar@foo.com", "http://foo.com")
-	p3 := BuildPackage()
+	p1 := NewPackage("foo", "Foo", "foo@bar.com", "http://bar.com", "Copyright Bar", "BSD")
+	p2 := NewPackage("foo", "Bar", "bar@foo.com", "http://foo.com", "Copyright Foo", "Artistic")
+	p3 := DefaultPackage()
 
 	t.Logf("p1=%s", p1.String())
 	t.Logf("p2=%s", p2.String())

@@ -29,7 +29,7 @@ func TestLookup(t *testing.T) {
 	key := vpcrypto.Checksum256([]byte("toto"))
 	keyShift := vpcrypto.Checksum256([]byte("toto"))
 	imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
-	ai := vpapp.CalcID(vpapp.BuildPackage(), vpapp.BuildVersion())
+	ai := vpapp.CalcID(vpapp.DefaultPackage(), vpapp.DefaultVersion())
 	h, err := NewHost("foo bar", "http://foo.com", []byte("sadhjkagfnjka"))
 	if err != nil {
 		t.Error("error creating host", err)

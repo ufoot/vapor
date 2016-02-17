@@ -17,25 +17,22 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpsys
+package vplog
 
 import (
 	"bufio"
 	"fmt"
-	"github.com/ufoot/vapor/vpbuild"
 	"io"
 	"log"
 	"log/syslog"
 	"os"
-	"path"
 	"strings"
 	"sync"
 )
 
 const basename = "log.txt"
-const stderrPriority = PriorityNotice
+const stderrPriority = PriorityDebug
 const problemPriority = PriorityWarning
-const filePriority = PriorityDebug
 const syslogPriority = PriorityWarning
 const flushPriority = PriorityNotice
 const sepHeaderContent = "-"
@@ -52,63 +49,40 @@ func (sw stderrWriter) Write(p []byte) (n int, err error) {
 }
 
 // Log is a default implementation of the Logger interface.
-// It basically logs informations in three places,
-// which are the console (stderr), a log file (typically
-// placed in the user's home directory) and syslog. The log file contains
-// everything while the console and syslog will only display important
-// messages. Under the hood, it uses the log.Logger object, so it's safe
-// to call it in a multithread environment. It also uses bufferized streams
-// so you should be able to brutalize it with massive data without a too
-// big slow down. On important messages (notice and above) it's in autoflush
-// mode so it could typically slow down in such cases but hey, those messages
-// should be rare by design. A set of functions which require no args but
-// what you need to log are here if you don't want to carry the logger object
-// arround between all func calls. The implementation just initializes an
-// internal shared global object. As it's safe to call it concurrently,
-// it should fit most cases.
+// It basically logs informations in two places,
+// which are the console (stderr) and syslog.
 type Log struct {
-	filename     string
 	p            Priority
-	f            *os.File
-	w            io.Writer
-	fileBuffer   *bufio.Writer
 	stderrBuffer *bufio.Writer
-	fileLogger   *log.Logger
 	stderrLogger *log.Logger
 	syslogLogger *log.Logger
 	flushMutex   sync.Mutex
 }
 
-// NewLog Constructs a new log object, note that this is called under the hood
-// by the global shared object constructor.
-func NewLog(program string) *Log {
+func newLog(program string, writer io.Writer) *Log {
 	var logger Log
 	var err error
-	var s stderrWriter
 
 	prefix := fmt.Sprintf("%s: ", program)
-	logger.filename = path.Join(Home(program), basename)
 	logger.p = PriorityInfo
 
-	logger.f, err = os.Create(logger.filename)
-	if err != nil {
-		panic(err)
-	}
+	logger.stderrBuffer = bufio.NewWriter(writer)
 
-	logger.fileBuffer = bufio.NewWriter(io.Writer(logger.f))
-	logger.stderrBuffer = bufio.NewWriter(s)
-
-	logger.fileLogger = log.New(logger.fileBuffer, prefix, log.Ldate|log.Ltime|log.Lmicroseconds|log.Lshortfile)
 	logger.stderrLogger = log.New(logger.stderrBuffer, prefix, log.Ltime)
 	logger.syslogLogger, err = syslog.NewLogger(syslog.Priority(int(syslogPriority))|syslog.LOG_SYSLOG, log.Lshortfile)
 	if err != nil {
 		panic(err)
 	}
 
-	logger.Logpf(PriorityNotice, "Log file: %s", logger.filename)
 	logger.Flush()
 
 	return &logger
+}
+
+// NewLog Constructs a new log object, note that this is called under the hood
+// by the global shared object constructor.
+func NewLog(program string) *Log {
+	return (newLog(program, os.Stderr))
 }
 
 func (l *Log) output(p Priority, ps, ms string) {
@@ -123,9 +97,6 @@ func (l *Log) output(p Priority, ps, ms string) {
 				} else {
 					l.stderrLogger.Output(outputCalldepth, line)
 				}
-			}
-			if p <= filePriority {
-				l.fileLogger.Output(outputCalldepth, ps+line)
 			}
 			if p <= syslogPriority {
 				l.syslogLogger.Output(outputCalldepth, ps+line)
@@ -157,11 +128,6 @@ func (l *Log) Logpf(p Priority, format string, v ...interface{}) {
 	}
 }
 
-// Filename returns the path of the log file.
-func (l *Log) Filename() string {
-	return l.filename
-}
-
 // SetPriority sets the priority above which message won't be displayed any more.
 func (l *Log) SetPriority(p Priority) {
 	l.p = p
@@ -176,12 +142,7 @@ func (l *Log) GetPriority() Priority {
 // This is automatically called if priority is CRIT, ERR, WARNING or NOTICE.
 func (l *Log) Flush() {
 	l.flushMutex.Lock()
-	l.fileBuffer.Flush()
 	l.stderrBuffer.Flush()
-	// This is why we use a Mutex and a Lock, while buffers buried
-	// under the log.Logger API might be thread-safe, the file
-	// direct access is another story.
-	l.f.Sync()
 	l.flushMutex.Unlock()
 }
 
@@ -193,6 +154,10 @@ func getGlobalLog(program string) *Log {
 	}
 
 	return globalLog
+}
+
+func logInitWithWriter(program string, writer io.Writer) {
+	globalLog = newLog(program, writer)
 }
 
 // LogInit initializes the log system. This is not mandatory, you might use
@@ -209,95 +174,89 @@ func LogInit(program string) {
 // LogCrit logs a critical message, no formatting.
 // Uses the default global logging backend.
 func LogCrit(v ...interface{}) {
-	LoggerCrit(getGlobalLog(vpbuild.PackageTarname), v...)
+	LoggerCrit(getGlobalLog(PackageTarname), v...)
 }
 
 // LogCritf logs a critical message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogCritf(f string, v ...interface{}) {
-	LoggerCritf(getGlobalLog(vpbuild.PackageTarname), f, v...)
+	LoggerCritf(getGlobalLog(PackageTarname), f, v...)
 }
 
 // LogErr logs an error message, no formatting.
 // Uses the default global logging backend.
 func LogErr(v ...interface{}) {
-	LoggerErr(getGlobalLog(vpbuild.PackageTarname), v...)
+	LoggerErr(getGlobalLog(PackageTarname), v...)
 }
 
 // LogErrf logs an error message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogErrf(f string, v ...interface{}) {
-	LoggerErrf(getGlobalLog(vpbuild.PackageTarname), f, v...)
+	LoggerErrf(getGlobalLog(PackageTarname), f, v...)
 }
 
 // LogWarning logs a warning message, no formatting.
 // Uses the default global logging backend.
 func LogWarning(v ...interface{}) {
-	LoggerWarning(getGlobalLog(vpbuild.PackageTarname), v...)
+	LoggerWarning(getGlobalLog(PackageTarname), v...)
 }
 
 // LogWarningf logs a warning message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogWarningf(f string, v ...interface{}) {
-	LoggerWarningf(getGlobalLog(vpbuild.PackageTarname), f, v...)
+	LoggerWarningf(getGlobalLog(PackageTarname), f, v...)
 }
 
 // LogNotice logs a notice message, no formatting.
 // Uses the default global logging backend.
 func LogNotice(v ...interface{}) {
-	LoggerNotice(getGlobalLog(vpbuild.PackageTarname), v...)
+	LoggerNotice(getGlobalLog(PackageTarname), v...)
 }
 
 // LogNoticef logs a notice message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogNoticef(f string, v ...interface{}) {
-	LoggerNoticef(getGlobalLog(vpbuild.PackageTarname), f, v...)
+	LoggerNoticef(getGlobalLog(PackageTarname), f, v...)
 }
 
 // LogInfo logs an information message, no formatting.
 // Uses the default global logging backend.
 func LogInfo(v ...interface{}) {
-	LoggerInfo(getGlobalLog(vpbuild.PackageTarname), v...)
+	LoggerInfo(getGlobalLog(PackageTarname), v...)
 }
 
 // LogInfof logs an information message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogInfof(f string, v ...interface{}) {
-	LoggerInfof(getGlobalLog(vpbuild.PackageTarname), f, v...)
+	LoggerInfof(getGlobalLog(PackageTarname), f, v...)
 }
 
 // LogDebug logs a debug message, no formatting.
 // Uses the default global logging backend.
 func LogDebug(v ...interface{}) {
-	LoggerDebug(getGlobalLog(vpbuild.PackageTarname), v...)
+	LoggerDebug(getGlobalLog(PackageTarname), v...)
 }
 
 // LogDebugf logs a debug message, formatting "à la" printf.
 // Uses the default global logging backend.
 func LogDebugf(f string, v ...interface{}) {
-	LoggerDebugf(getGlobalLog(vpbuild.PackageTarname), f, v...)
-}
-
-// LogFilename returns the path of the file used for global, default logging.
-// Uses the default global logging backend.
-func LogFilename() string {
-	return getGlobalLog(vpbuild.PackageTarname).Filename()
+	LoggerDebugf(getGlobalLog(PackageTarname), f, v...)
 }
 
 // LogSetPriority sets the global, default logging level.
 // Uses the default global logging backend.
 func LogSetPriority(p Priority) {
-	getGlobalLog(vpbuild.PackageTarname).SetPriority(p)
+	getGlobalLog(PackageTarname).SetPriority(p)
 }
 
 // LogGetPriority returns the global, default logging level.
 // Uses the default global logging backend.
 func LogGetPriority() Priority {
-	return getGlobalLog(vpbuild.PackageTarname).GetPriority()
+	return getGlobalLog(PackageTarname).GetPriority()
 }
 
 // LogFlush flushes the global logging system, more precisely, flushes
-// stderr and the log file.
+// stderr.
 func LogFlush() {
-	getGlobalLog(vpbuild.PackageTarname).Flush()
+	getGlobalLog(PackageTarname).Flush()
 }

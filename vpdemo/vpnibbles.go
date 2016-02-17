@@ -23,7 +23,7 @@ import (
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"github.com/ufoot/vapor/vpbussrv"
 	"github.com/ufoot/vapor/vperror"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vplog"
 	"time"
 )
 
@@ -40,7 +40,7 @@ func (state NibblesState) Duration() time.Duration {
 
 // Init initializes the game state.
 func (state NibblesState) Init(timestamp time.Time) error {
-	vpsys.LogNoticef("game state init")
+	vplog.LogNoticef("game state init")
 	state.start = time.Now()
 
 	return nil
@@ -50,17 +50,17 @@ func (state NibblesState) Init(timestamp time.Time) error {
 // when receiving events.
 func (state NibblesState) Do(timestamp time.Time, iteration int64, quit chan<- bool) {
 	if state.start.Unix()+3 > time.Now().Unix() {
-		vpsys.LogNoticef("game state loop iteration=%d", iteration)
+		vplog.LogNoticef("game state loop iteration=%d", iteration)
 	} else {
-		vpsys.LogNoticef("game state end iteration=%d 1/2", iteration)
+		vplog.LogNoticef("game state end iteration=%d 1/2", iteration)
 		quit <- true
-		vpsys.LogNoticef("game state end iteration=%d 2/2", iteration)
+		vplog.LogNoticef("game state end iteration=%d 2/2", iteration)
 	}
 }
 
 // Quit should be called at the end of a game.
 func (state NibblesState) Quit(timestamp time.Time) {
-	vpsys.LogNoticef("game state quit")
+	vplog.LogNoticef("game state quit")
 }
 
 // NibblesServer stores the game server.
@@ -76,7 +76,7 @@ func (server NibblesServer) Duration() time.Duration {
 
 // Init initializes the game server.
 func (server NibblesServer) Init(timestamp time.Time) error {
-	vpsys.LogNoticef("game server init")
+	vplog.LogNoticef("game server init")
 	var err error
 
 	server.server, err = vpbussrv.NewDefault()
@@ -96,17 +96,17 @@ func (server NibblesServer) Init(timestamp time.Time) error {
 // when receiving events.
 func (server NibblesServer) Do(timestamp time.Time, iteration int64, quit chan<- bool) {
 	if server.start.Unix()+3 > time.Now().Unix() {
-		vpsys.LogNoticef("game server loop iteration=%d", iteration)
+		vplog.LogNoticef("game server loop iteration=%d", iteration)
 	} else {
-		vpsys.LogNoticef("game server end iteration=%d 1/2", iteration)
+		vplog.LogNoticef("game server end iteration=%d 1/2", iteration)
 		quit <- true
-		vpsys.LogNoticef("game server end iteration=%d 2/2", iteration)
+		vplog.LogNoticef("game server end iteration=%d 2/2", iteration)
 	}
 }
 
 // Quit should be called at the end of a game.
 func (server NibblesServer) Quit(timestamp time.Time) {
-	vpsys.LogNoticef("game server quit")
+	vplog.LogNoticef("game server quit")
 	if server.server != nil {
 		server.server.Stop()
 	}

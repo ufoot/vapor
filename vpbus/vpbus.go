@@ -20,9 +20,8 @@
 package vpbus
 
 import (
-	"github.com/ufoot/vapor/vpbuild"
 	"github.com/ufoot/vapor/vpcommonapi"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vplog"
 	"time"
 )
 
@@ -49,10 +48,12 @@ func (bus *VpBus) Ping() (err error) {
 func (bus *VpBus) GetPackage() (r *vpcommonapi.Package, err error) {
 	var p vpcommonapi.Package
 
-	p.Tarname = vpbuild.PackageTarname
-	p.Name = vpbuild.PackageName
-	p.Email = vpbuild.PackageEmail
-	p.URL = vpbuild.PackageURL
+	p.Tarname = PackageTarname
+	p.Name = PackageName
+	p.Email = PackageEmail
+	p.URL = PackageURL
+	p.Copyright = PackageCopyright
+	p.License = PackageLicense
 
 	return &p, nil
 }
@@ -61,9 +62,9 @@ func (bus *VpBus) GetPackage() (r *vpcommonapi.Package, err error) {
 func (bus *VpBus) GetVersion() (r *vpcommonapi.Version, err error) {
 	var v vpcommonapi.Version
 
-	v.Major = vpbuild.VersionMajor
-	v.Minor = vpbuild.VersionMinor
-	v.Stamp = vpbuild.VersionStamp
+	v.Major = VersionMajor
+	v.Minor = VersionMinor
+	v.Stamp = VersionStamp
 
 	return &v, nil
 }
@@ -75,7 +76,7 @@ func (bus *VpBus) Uptime() (r int64, err error) {
 
 // Halt stops the server.
 func (bus *VpBus) Halt() (err error) {
-	vpsys.LogNotice("FIXME Halt")
+	vplog.LogNotice("FIXME Halt")
 
 	return nil
 }

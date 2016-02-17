@@ -24,7 +24,7 @@ import (
 	"compress/gzip"
 	"errors"
 	"github.com/ufoot/vapor/vperror"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vplog"
 	"golang.org/x/crypto/openpgp"
 	"io"
 	"io/ioutil"
@@ -79,7 +79,7 @@ func symDecrypt(content, password []byte) ([]byte, error) {
 	err = errors.New("Unable to decrypt")
 	defer func() {
 		if rec := recover(); rec != nil {
-			vpsys.LogDebugf("symDecrypt error decrypting %d bytes (catched)", len(content))
+			vplog.LogDebugf("symDecrypt error decrypting %d bytes (catched)", len(content))
 		}
 	}()
 

@@ -17,6 +17,5 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpsys contains general purpose utility functions such as
-// logging or error handling.
-package vpsys
+// Package vperror contains utilities to handle errors.
+package vperror

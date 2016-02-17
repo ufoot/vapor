@@ -17,7 +17,7 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpsys
+package vplog
 
 import (
 	"log/syslog"
@@ -59,7 +59,6 @@ const unknownString = "UNKNOWN"
 type Logger interface {
 	Logp(p Priority, v ...interface{})
 	Logpf(p Priority, f string, v ...interface{})
-	Filename() string
 	SetPriority(p Priority)
 	GetPriority() Priority
 	Flush()

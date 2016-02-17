@@ -20,7 +20,7 @@
 package vploop
 
 import (
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vplog"
 	"time"
 )
 
@@ -33,7 +33,7 @@ func MainLoop(handlers ...LoopHandler) int64 {
 	var localIterations int64
 	var totalIterations int64
 
-	vpsys.LogNoticef("loop initial")
+	vplog.LogNoticef("loop initial")
 
 	for i, handler := range handlers {
 		handler.Init(time.Now())
@@ -41,22 +41,22 @@ func MainLoop(handlers ...LoopHandler) int64 {
 		defer handler.Quit(time.Now())
 	}
 
-	vpsys.LogNoticef("loop all begin")
+	vplog.LogNoticef("loop all begin")
 	for i, channel := range channels {
 		go func(i int, channel <-chan time.Time) {
-			vpsys.LogNoticef("loop %d begin", i)
+			vplog.LogNoticef("loop %d begin", i)
 			var iteration int64
 			for {
 				iteration = iteration + 1
 				select {
 				case q := <-quit:
-					vpsys.LogNoticef("quit received %d iteration=%d", i, iteration)
+					vplog.LogNoticef("quit received %d iteration=%d", i, iteration)
 					if q == true {
-						vpsys.LogNoticef("loop %d end 1/3", i)
+						vplog.LogNoticef("loop %d end 1/3", i)
 						quit <- true
-						vpsys.LogNoticef("loop %d end 2/3", i)
+						vplog.LogNoticef("loop %d end 2/3", i)
 						iterations <- iteration
-						vpsys.LogNoticef("loop %d end 3/3", i)
+						vplog.LogNoticef("loop %d end 3/3", i)
 						return
 					}
 				default:
@@ -68,17 +68,17 @@ func MainLoop(handlers ...LoopHandler) int64 {
 			}
 		}(i, channel)
 	}
-	vpsys.LogNoticef("loop all end")
+	vplog.LogNoticef("loop all end")
 
 	for {
 		select {
 		case localIterations = <-iterations:
-			vpsys.LogNoticef("local iterations %d", localIterations)
+			vplog.LogNoticef("local iterations %d", localIterations)
 			totalIterations += localIterations
 			done++
 		default:
 			if done >= len(handlers) {
-				vpsys.LogNoticef("loop final")
+				vplog.LogNoticef("loop final")
 				return totalIterations
 			}
 		}

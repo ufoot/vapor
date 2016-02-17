@@ -21,7 +21,7 @@ package vpp2p
 
 import (
 	"fmt"
-	"github.com/ufoot/vapor/vpsys"
+	"github.com/ufoot/vapor/vplog"
 )
 
 // NodeInfo stores the static data for a Node.
@@ -151,11 +151,10 @@ func (lp *LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, 
 		if walker.GtLe(imaginaryNode, curInfo.NodeID, successorInfo.NodeID) {
 			for _, d := range node.D {
 				upstreamPath, err := d.Lookup(key, walker.NextFirst(keyShift), walker.ForwardElem(keyShift, imaginaryNode, 1))
-				if err == nil {
-					return append(ret, upstreamPath...), nil
-				} else {
-					vpsys.LogDebug("error contacting remote host", err)
+				if err != nil {
+					vplog.LogDebug("error contacting remote host", err)
 				}
+				return append(ret, upstreamPath...), nil
 			}
 		}
 	}
