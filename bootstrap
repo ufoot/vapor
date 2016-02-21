@@ -19,4 +19,11 @@
 # Vapor homepage: https://github.com/ufoot/vapor
 # Contact author: ufoot@ufoot.org
 
+if which go > /dev/null ; then
+    true
+else
+    "$0: unable to find go, please install golang http://golang.org/"
+    exit 1
+fi
+
 autoreconf && utils/get.sh

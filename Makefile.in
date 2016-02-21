@@ -38,7 +38,7 @@ VP_TOPSRCDIR = @VP_TOPSRCDIR@
 .PHONY: stamp
 .PHONY: indent
 
-all: vp
+all: configure.ac vp
 
 check: dep stamp check-vp
 

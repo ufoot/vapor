@@ -81,23 +81,23 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
         fi
     done
     echo ".PHONY: $i" >> Makefile.dep
-    echo "$i: configure.ac $k # $m" >> Makefile.dep
+    echo "$i: $k # $m" >> Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && go install $j\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: check-$i" >> Makefile.dep
-    echo "check-$i: configure.ac $k" >> Makefile.dep
+    echo "check-$i: $k" >> Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && go test $j\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: bench-$i" >> Makefile.dep
-    echo "bench-$i: configure.ac $k" >> Makefile.dep
+    echo "bench-$i: $k" >> Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && go test -bench=. $j\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: lint-$i" >> Makefile.dep
-    echo "lint-$i: configure.ac $k" >> Makefile.dep
+    echo "lint-$i: $k" >> Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && go vet $j && \$(VP_TOPSRCDIR)/bin/golint $j\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: devel-$i" >> Makefile.dep
-    echo "devel-$i: configure.ac $k" >> Makefile.dep
+    echo "devel-$i: $k" >> Makefile.dep
     printf "\techo check $i\n" >> Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((go test -v -o test/$i-check.bin -coverprofile=test/$i-cover.cov $j | tee test/$i-check.log) || true)\n" >> Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((\$(VP_TOPSRCDIR)/bin/go-junit-report < test/$i-check.log > test/$i-junit.xml) || true)\n" >> Makefile.dep
@@ -107,7 +107,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && ((\$(VP_TOPSRCDIR)/bin/gobench2plot < test/$i-bench.log > test/$i-plot.xml) || true)\n" >> Makefile.dep
     echo >> Makefile.dep
     echo ".PHONY: doc-$i" >> Makefile.dep
-    echo "doc-$i: configure.ac $k" >> Makefile.dep
+    echo "doc-$i: $k" >> Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR) && godoc $j > doc/txt/$i.txt && godoc -html $j > doc/html/$i.html\n" >> Makefile.dep
     echo >> Makefile.dep
 done
