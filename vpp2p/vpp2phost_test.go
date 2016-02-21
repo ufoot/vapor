@@ -36,7 +36,7 @@ func init() {
 }
 
 func TestNewHost(t *testing.T) {
-	_, err := NewHost(testHostTitle, testHostUrl, testPubKey)
+	_, err := NewHost(testHostTitle, testHostURL, testPubKey)
 	if err != nil {
 		t.Error("unable to create host", err)
 	}

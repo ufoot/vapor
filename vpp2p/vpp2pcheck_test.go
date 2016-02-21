@@ -27,7 +27,7 @@ import (
 var testID []byte
 
 const testHostTitle = "Toto"
-const testHostUrl = "http://toto.bar/foo"
+const testHostURL = "http://toto.bar/foo"
 
 var testKey vpcrypto.Key
 var testPubKey []byte
