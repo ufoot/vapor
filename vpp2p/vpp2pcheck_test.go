@@ -20,12 +20,20 @@
 package vpp2p
 
 import (
-	"github.com/ufoot/vapor/vpapp"
 	"github.com/ufoot/vapor/vpcrypto"
 	"testing"
 )
 
+var testID []byte
+
+const testHostTitle = "Toto"
+const testHostUrl = "http://toto.bar/foo"
+
+var testKey vpcrypto.Key
+var testPubKey []byte
+
 func init() {
+	testID = []byte("abcdefghij")
 	testKey, err := vpcrypto.NewKey()
 	if err != nil {
 		panic("vpcrypto.NewKey failed")
@@ -36,24 +44,25 @@ func init() {
 	}
 }
 
-func TestLookup(t *testing.T) {
-	key := vpcrypto.Checksum256([]byte("toto"))
-	keyShift := vpcrypto.Checksum256([]byte("toto"))
-	imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
-	ai := vpapp.CalcID(vpapp.DefaultPackage(), vpapp.DefaultVersion())
-	h, err := NewHost("foo bar", "http://foo.com", testPubKey)
-	if err != nil {
-		t.Error("error creating host", err)
+func TestCheckID(t *testing.T) {
+	b, err := CheckID(testID)
+	if b != true || err != nil {
+		t.Error("CheckID returned an error", err)
 	}
-	r, err := NewRing([]byte("tutu"), "foo bar", ai, []byte("abcd"), DefaultRingConfig())
-	if err != nil {
-		t.Error("error creating ring", err)
+	b, err = CheckID(make([]byte, MinLenID))
+	if b != true || err != nil {
+		t.Error("CheckID returned an error on short ID", err)
 	}
-	lp, err := NewLocalProxy(vpcrypto.Checksum256([]byte("tata")), h, r)
-	if err != nil {
-		t.Error("error creating local proxy", err)
+	b, err = CheckID(make([]byte, MaxLenID))
+	if b != true || err != nil {
+		t.Error("CheckID returned an error on long ID", err)
 	}
-
-	path, err := lp.Lookup(key, keyShift, imaginaryNode)
-	t.Log("todo...", path, err)
+	b, err = CheckID(make([]byte, MinLenID-1))
+	if b == true || err == nil {
+		t.Error("CheckID does not report an error on too shot ID")
+	}
+	b, err = CheckID(make([]byte, MaxLenID+1))
+	if b == true || err == nil {
+		t.Error("CheckID does not report an error on too long ID")
+	}
 }

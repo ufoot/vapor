@@ -20,7 +20,6 @@
 package vpp2p
 
 import (
-	"github.com/ufoot/vapor/vpapp"
 	"github.com/ufoot/vapor/vpcrypto"
 	"testing"
 )
@@ -36,24 +35,10 @@ func init() {
 	}
 }
 
-func TestLookup(t *testing.T) {
-	key := vpcrypto.Checksum256([]byte("toto"))
-	keyShift := vpcrypto.Checksum256([]byte("toto"))
-	imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
-	ai := vpapp.CalcID(vpapp.DefaultPackage(), vpapp.DefaultVersion())
-	h, err := NewHost("foo bar", "http://foo.com", testPubKey)
+func TestNewHost(t *testing.T) {
+	_, err := NewHost(testHostTitle, testHostUrl, testPubKey)
 	if err != nil {
-		t.Error("error creating host", err)
-	}
-	r, err := NewRing([]byte("tutu"), "foo bar", ai, []byte("abcd"), DefaultRingConfig())
-	if err != nil {
-		t.Error("error creating ring", err)
-	}
-	lp, err := NewLocalProxy(vpcrypto.Checksum256([]byte("tata")), h, r)
-	if err != nil {
-		t.Error("error creating local proxy", err)
+		t.Error("unable to create host", err)
 	}
 
-	path, err := lp.Lookup(key, keyShift, imaginaryNode)
-	t.Log("todo...", path, err)
 }

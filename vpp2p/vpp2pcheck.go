@@ -21,6 +21,8 @@ package vpp2p
 
 import (
 	"fmt"
+	"github.com/ufoot/vapor/vpcrypto"
+	"net/url"
 	"unicode/utf8"
 )
 
@@ -33,39 +35,97 @@ const (
 	MinLenTitle = 1
 	// MaxLenTitle is the maximum length for Title fields
 	MaxLenTitle = 100
+	// MinLenURL is the minimum length for URL fields
+	MinLenURL = 3
+	// MaxLenURL is the maximum length for URL fields
+	MaxLenURL = 1000
+	// MinLenPubKey is the minimum length for PubKey fields
+	MinLenPubKey = 100
+	// MaxLenPubKey is the maximum length for PubKey fields
+	MaxLenPubKey = 10000
 )
 
-// CheckID checks that an ID has the right format.
-func CheckID(ID []byte) (bool, error) {
-	lenID := len(ID)
+func checkLenByte(fieldName string, content []byte, minLen, maxLen int) (bool, error) {
+	l := len(content)
 
-	if lenID < MinLenID {
-		return false, fmt.Errorf("ID is too short len=%d  min=%d", lenID, MinLenID)
+	if l < minLen {
+		return false, fmt.Errorf("%s is too short len=%d min=%d", fieldName, l, minLen)
 	}
-	if lenID > MaxLenID {
-		return false, fmt.Errorf("ID is too long len=%d max=%d", lenID, MaxLenID)
+	if l > maxLen {
+		return false, fmt.Errorf("%s is too long len=%d max=%d", fieldName, l, maxLen)
 	}
 
 	return true, nil
 }
 
+func checkLenString(fieldName, content string, minLen, maxLen int) (bool, error) {
+	return checkLenByte(fieldName, []byte(content), minLen, maxLen)
+}
+
+func checkUTF8(fieldName, content string) (bool, error) {
+	if !utf8.ValidString(content) {
+		return false, fmt.Errorf("%s is not a valid UTF-8 string", fieldName)
+	}
+	for i, r := range content {
+		if int(r) < 32 {
+			return false, fmt.Errorf("%s contains invalid char %d at pos %d", fieldName, int(r), i)
+		}
+	}
+
+	return true, nil
+}
+
+// CheckID checks that an ID has the right format.
+func CheckID(ID []byte) (bool, error) {
+	return checkLenByte("ID", ID, MinLenID, MaxLenID)
+}
+
 // CheckTitle checks that a title is correct
 func CheckTitle(title string) (bool, error) {
-	lenTitle := len(title)
+	b, err := checkLenString("Title", title, MinLenTitle, MaxLenTitle)
+	if b != true || err != nil {
+		return false, err
+	}
+	b, err = checkUTF8("title", title)
+	if b != true || err != nil {
+		return false, err
+	}
 
-	if lenTitle < MinLenTitle {
-		return false, fmt.Errorf("Title is too short len=%d  min=%d", lenTitle, MinLenTitle)
+	return true, nil
+}
+
+// CheckURL checks that a a URL is correct
+func CheckURL(u string) (bool, error) {
+	var parsedURL *url.URL
+
+	b, err := checkLenString("URL", u, MinLenURL, MaxLenURL)
+	if b != true || err != nil {
+		return false, err
 	}
-	if lenTitle > MaxLenTitle {
-		return false, fmt.Errorf("Title is too long len=%d max=%d", lenTitle, MaxLenTitle)
+	b, err = checkUTF8("URL", u)
+	if b != true || err != nil {
+		return false, err
 	}
-	if !utf8.ValidString(title) {
-		return false, fmt.Errorf("Title is not a valid UTF-8 string, len=%d", lenTitle)
+	parsedURL, err = url.Parse(u)
+	if err != nil {
+		return false, err
 	}
-	for i, r := range title {
-		if int(r) < 32 {
-			return false, fmt.Errorf("Title contains invalid char %d at pos %d", int(r), i)
-		}
+	if !parsedURL.IsAbs() {
+		return false, fmt.Errorf("URL \"%s\" is not  absolute", u)
+	}
+
+	return true, nil
+}
+
+// CheckPubKey checks that a public key is correct
+func CheckPubKey(pubKey []byte) (bool, error) {
+	b, err := checkLenByte("PubKey", pubKey, MinLenPubKey, MaxLenPubKey)
+	if b != true || err != nil {
+		return false, err
+	}
+	_, err = vpcrypto.ImportPubKey(pubKey)
+	if err != nil {
+		return false, err
 	}
 
 	return true, nil

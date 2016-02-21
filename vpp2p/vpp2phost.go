@@ -47,6 +47,14 @@ func NewHost(title, url string, pubKey []byte) (*Host, error) {
 	if err != nil || !ok {
 		return nil, err
 	}
+	ok, err = CheckURL(url)
+	if err != nil || !ok {
+		return nil, err
+	}
+	ok, err = CheckPubKey(pubKey)
+	if err != nil || !ok {
+		return nil, err
+	}
 
 	ret.Info = HostInfo{title, url, pubKey}
 	ret.localNodes = make([]Node, 0)
