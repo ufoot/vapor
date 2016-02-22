@@ -72,3 +72,8 @@ func NewHost(title, url string, pubKey []byte) (*Host, error) {
 
 	return &ret, nil
 }
+
+// CanSign returns true if the host has a key it can sign with.
+func (host *Host) CanSign() bool {
+	return host.key != nil
+}

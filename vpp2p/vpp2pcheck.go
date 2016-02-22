@@ -114,7 +114,7 @@ func CheckURL(u string) (bool, error) {
 	if b != true || err != nil {
 		return false, err
 	}
-	b, err = checkUTF8("URL", u)
+	b, err = checkASCII("URL", u)
 	if b != true || err != nil {
 		return false, err
 	}
@@ -132,10 +132,6 @@ func CheckURL(u string) (bool, error) {
 // CheckPubKey checks that a public key is correct
 func CheckPubKey(pubKey []byte) (bool, error) {
 	b, err := checkLenByte("PubKey", pubKey, MinLenPubKey, MaxLenPubKey)
-	if b != true || err != nil {
-		return false, err
-	}
-	b, err = checkASCII("PubKey", pubKey)
 	if b != true || err != nil {
 		return false, err
 	}
