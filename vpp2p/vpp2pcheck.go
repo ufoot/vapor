@@ -21,7 +21,6 @@ package vpp2p
 
 import (
 	"fmt"
-	"github.com/ufoot/vapor/vpcrypto"
 	"net/url"
 	"unicode/utf8"
 )
@@ -68,6 +67,19 @@ func checkUTF8(fieldName, content string) (bool, error) {
 	}
 	for i, r := range content {
 		if int(r) < 32 {
+			return false, fmt.Errorf("%s contains invalid char %d at pos %d", fieldName, int(r), i)
+		}
+	}
+
+	return true, nil
+}
+
+func checkASCII(fieldName, content string) (bool, error) {
+	if !utf8.ValidString(content) {
+		return false, fmt.Errorf("%s is not a valid UTF-8 string", fieldName)
+	}
+	for i, r := range content {
+		if int(r) < 32 || int(r) > 127 {
 			return false, fmt.Errorf("%s contains invalid char %d at pos %d", fieldName, int(r), i)
 		}
 	}
@@ -123,8 +135,8 @@ func CheckPubKey(pubKey []byte) (bool, error) {
 	if b != true || err != nil {
 		return false, err
 	}
-	_, err = vpcrypto.ImportPubKey(pubKey)
-	if err != nil {
+	b, err = checkASCII("PubKey", pubKey)
+	if b != true || err != nil {
 		return false, err
 	}
 

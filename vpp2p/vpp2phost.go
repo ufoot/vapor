@@ -19,6 +19,11 @@
 
 package vpp2p
 
+import (
+	"github.com/ufoot/vapor/vpcrypto"
+	"github.com/ufoot/vapor/vplog"
+)
+
 // HostInfo stores the static data of a Host.
 type HostInfo struct {
 	// Human readable hostname, not necessarily the DNS hostname.
@@ -36,6 +41,7 @@ type Host struct {
 	// Info about the host
 	Info HostInfo
 
+	key        *vpcrypto.Key
 	localNodes []Node
 }
 
@@ -57,6 +63,11 @@ func NewHost(title, url string, pubKey []byte) (*Host, error) {
 	}
 
 	ret.Info = HostInfo{title, url, pubKey}
+	ret.key, err = vpcrypto.ImportPubKey(pubKey)
+	if err != nil {
+		// not a critical error, it's allowed to use non-signing pubKeys
+		vplog.LogInfof("pubKey can't be imported, host won't be signing")
+	}
 	ret.localNodes = make([]Node, 0)
 
 	return &ret, nil
