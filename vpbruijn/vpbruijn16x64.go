@@ -303,3 +303,11 @@ func (b *bruijn16x64) RingPos(x []byte) float64 {
 func (b *bruijn16x64) RingRange(x, y []byte) float64 {
 	return b.implGeneric.RingRange(x, y)
 }
+
+func (b *bruijn16x64) BytesToIntArray(x []byte) []int {
+	return b.implGeneric.BytesToIntArray(x)
+}
+
+func (b *bruijn16x64) IntArrayToBytes(x []int) []byte {
+	return b.implGeneric.IntArrayToBytes(x)
+}

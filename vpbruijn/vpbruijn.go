@@ -111,6 +111,12 @@ type BruijnWalker interface {
 	// RingRange returns the range which x to y represents on the ring. The result
 	// is between 0 and 1.
 	RingRange(x, y []byte) float64
+	// BytesToIntArray converts from the compact bytes format to a more readable
+	// int array structure, with N different elements.
+	BytesToIntArray(x []byte) []int
+	// BytesToIntArray converts from the more readable int array structure,
+	// with N different elements, to the compact bytes format.
+	IntArrayToBytes(x []int) []byte
 }
 
 // BruijnNew creates a new BruijnWalker compatible object,

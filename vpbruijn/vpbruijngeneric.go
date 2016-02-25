@@ -338,3 +338,33 @@ func (b *bruijnGeneric) RingRange(x, y []byte) float64 {
 
 	return ret
 }
+
+func (b *bruijnGeneric) BytesToIntArray(x []byte) []int {
+	ret := make([]int, b.n)
+	var tmpInt big.Int
+
+	bigX := bytesToBig(x, b.bigMax)
+
+	for i := 0; i < b.n; i++ {
+		tmpInt.Set(bigX)
+		tmpInt.Mod(&tmpInt, b.bigM)
+		ret[b.n-i-1] = int(tmpInt.Int64())
+		bigX.Div(bigX, b.bigM)
+	}
+
+	return ret
+}
+
+func (b *bruijnGeneric) IntArrayToBytes(x []int) []byte {
+	var tmpInt big.Int
+	var bigRet big.Int
+
+	for i := 0; i < b.n; i++ {
+		bigRet.Mul(&bigRet, b.bigM)
+		tmpInt.SetInt64(int64(x[i]))
+		tmpInt.Mod(&tmpInt, b.bigM)
+		bigRet.Add(&bigRet, &tmpInt)
+	}
+
+	return bigToBytes(&bigRet, b.nbBytes)
+}
