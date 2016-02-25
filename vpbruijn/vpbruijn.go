@@ -78,7 +78,9 @@ type BruijnWalker interface {
 	// the to element. Uses the backward, alternative path.
 	BackwardElem(from, to []byte, i int) []byte
 	// Filter a key, typically doing a modulo on it, making sure the result
-	// is within the allowed key range. This is not a hash.
+	// is within the allowed key range. This is not a hash, but it could typically
+	// be called with a hash value, the hast having a greater range than the key
+	// ring used.
 	Filter(x []byte) []byte
 	// Add 2 keys, if result is too big, will loop with Mod() and keep it
 	// within the allowed key range.
