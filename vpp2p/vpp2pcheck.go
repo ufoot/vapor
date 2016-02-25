@@ -39,7 +39,7 @@ const (
 	// MaxLenURL is the maximum length for URL fields
 	MaxLenURL = 1000
 	// MinLenPubKey is the minimum length for PubKey fields
-	MinLenPubKey = 100
+	MinLenPubKey = 10
 	// MaxLenPubKey is the maximum length for PubKey fields
 	MaxLenPubKey = 10000
 )

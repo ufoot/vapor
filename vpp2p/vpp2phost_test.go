@@ -36,11 +36,20 @@ func init() {
 }
 
 func TestNewHost(t *testing.T) {
+	t.Logf("testPubKey len=%d", len(testPubKey))
 	host, err := NewHost(testHostTitle, testHostURL, testPubKey)
 	if err != nil {
-		t.Error("unable to create host", err)
+		t.Error("unable to create host with a valid pubKey", err)
 	}
-	if host.CanSign() != true {
+	if host.CanSign() == false {
 		t.Error("host can't sign but it should")
+	}
+	t.Logf("testFakeKey len=%d", len(testFakeKey))
+	host, err = NewHost(testHostTitle, testHostURL, testFakeKey)
+	if err != nil {
+		t.Error("unable to create host with a dummy pubKey", err)
+	}
+	if host.CanSign() == true {
+		t.Error("host can sign but it shouldn't")
 	}
 }
