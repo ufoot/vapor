@@ -24,14 +24,14 @@ import (
 )
 
 func TestNewHost(t *testing.T) {
-	host, err := NewHost(testHostTitle, testHostURL, true)
+	host, err := NewHost(testTitle, testURL, true)
 	if err != nil {
 		t.Error("unable to create host with a valid pubKey", err)
 	}
 	if host.CanSign() == false {
 		t.Error("host can't sign but it should")
 	}
-	host, err = NewHost(testHostTitle, testHostURL, false)
+	host, err = NewHost(testTitle, testURL, false)
 	if err != nil {
 		t.Error("unable to create host with a dummy pubKey", err)
 	}

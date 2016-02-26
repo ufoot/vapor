@@ -20,16 +20,23 @@
 package vpp2p
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 )
 
 var testID []byte
 
-const testHostTitle = "Toto"
-const testHostURL = "http://toto.bar/foo"
+const testTitle = "Toto"
+const testURL = "http://toto.bar/foo"
+
+var testPubKey []byte
+var testSig []byte
 
 func init() {
 	testID = []byte("abcdefghij")
+	testPubKey = make([]byte, 300)
+	testSig = make([]byte, 300)
 }
 
 func TestCheckID(t *testing.T) {
@@ -52,5 +59,81 @@ func TestCheckID(t *testing.T) {
 	b, err = CheckID(make([]byte, MaxLenID+1))
 	if b == true || err == nil {
 		t.Error("CheckID does not report an error on too long ID")
+	}
+}
+
+func TestCheckTitle(t *testing.T) {
+	b, err := CheckTitle(testTitle)
+	if b != true || err != nil {
+		t.Error("CheckTitle returned an error", err)
+	}
+	b, err = CheckTitle(strings.Repeat(" ", MinLenTitle))
+	if b != true || err != nil {
+		t.Error("CheckTitle returned an error on short Title", err)
+	}
+	b, err = CheckTitle(strings.Repeat(" ", MaxLenTitle))
+	if b != true || err != nil {
+		t.Error("CheckTitle returned an error on long Title", err)
+	}
+	b, err = CheckTitle(strings.Repeat(" ", MinLenTitle-1))
+	if b == true || err == nil {
+		t.Error("CheckTitle does not report an error on too shot Title")
+	}
+	b, err = CheckTitle(strings.Repeat(" ", MaxLenTitle+1))
+	if b == true || err == nil {
+		t.Error("CheckTitle does not report an error on too long Title")
+	}
+}
+
+func TestCheckURL(t *testing.T) {
+	b, err := CheckURL(testURL)
+	if b != true || err != nil {
+		t.Error("CheckURL returned an error", err)
+	}
+	b, err = CheckURL(fmt.Sprintf("%s%s", testURL, strings.Repeat("x", MaxLenURL+1)))
+	if b == true || err == nil {
+		t.Error("CheckURL does not report an error on too long URL")
+	}
+}
+
+func TestCheckPubKey(t *testing.T) {
+	b, err := CheckPubKey(testPubKey)
+	if b != true || err != nil {
+		t.Error("CheckPubKey returned an error", err)
+	}
+	b, err = CheckPubKey(make([]byte, MinLenPubKey))
+	if b != true || err != nil {
+		t.Error("CheckPubKey returned an error on short PubKey", err)
+	}
+	b, err = CheckPubKey(make([]byte, MaxLenPubKey))
+	if b != true || err != nil {
+		t.Error("CheckPubKey returned an error on long PubKey", err)
+	}
+	b, err = CheckPubKey(make([]byte, MinLenPubKey-1))
+	if b == true || err == nil {
+		t.Error("CheckPubKey does not report an error on too shot PubKey")
+	}
+	b, err = CheckPubKey(make([]byte, MaxLenPubKey+1))
+	if b == true || err == nil {
+		t.Error("CheckPubKey does not report an error on too long PubKey")
+	}
+}
+
+func TestCheckSig(t *testing.T) {
+	b, err := CheckSig(testSig)
+	if b != true || err != nil {
+		t.Error("CheckSig returned an error", err)
+	}
+	b, err = CheckSig(make([]byte, MinLenSig))
+	if b != true || err != nil {
+		t.Error("CheckSig returned an error on short Sig", err)
+	}
+	b, err = CheckSig(make([]byte, MaxLenSig))
+	if b != true || err != nil {
+		t.Error("CheckSig returned an error on long Sig", err)
+	}
+	b, err = CheckSig(make([]byte, MaxLenSig+1))
+	if b == true || err == nil {
+		t.Error("CheckSig does not report an error on too long Sig")
 	}
 }

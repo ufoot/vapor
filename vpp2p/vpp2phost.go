@@ -35,8 +35,8 @@ type Host struct {
 	localNodes []Node
 }
 
-// SigBytes returns the byte buffer that needs to be signed.
-func SigBytesTitleUrl(title, url string) []byte {
+// SigBytesTitleURL returns the byte buffer that needs to be signed.
+func SigBytesTitleURL(title, url string) []byte {
 	return []byte(fmt.Sprintf("%s;%s", title, url))
 }
 
@@ -68,7 +68,7 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 		if err != nil || !ok {
 			return nil, err
 		}
-		sig, err = ret.key.Sign(SigBytesTitleUrl(title, url))
+		sig, err = ret.key.Sign(SigBytesTitleURL(title, url))
 		if err != nil {
 			return nil, err
 		}
@@ -81,7 +81,7 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 		sig = []byte("")
 	}
 
-	ret.Info = vpp2papi.HostInfo{title, url, pubKey, sig}
+	ret.Info = vpp2papi.HostInfo{HostTitle: title, HostURL: url, HostPubKey: pubKey, HostSig: sig}
 	ret.localNodes = make([]Node, 0)
 
 	return &ret, nil
