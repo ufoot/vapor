@@ -32,12 +32,31 @@ namespace php vpp2papi
 include "vpcommonapi.thrift"
 
 /**
+ * HostInfo contains static informations about a host.
+ */
+struct HostInfo {
+  1: string HostTitle,
+  2: string HostURL,
+  3: binary HostPubKey,
+  4: binary HostSig,
+}
+
+/**
  * NodeInfo contains static informations about a node.
  */
 struct NodeInfo {
   1: binary NodeID,
   2: binary HostPubKey,
   3: binary RingID,
+}
+
+/**
+ * RingInfo contains static informations about a ring.
+ */
+struct RingInfo {
+  1: binary RingID,
+  2: string RingTitle,
+  3: binary AppID,
 }
 
 /**

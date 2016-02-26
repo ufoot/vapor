@@ -25,23 +25,12 @@ import (
 	"testing"
 )
 
-func init() {
-	testKey, err := vpcrypto.NewKey()
-	if err != nil {
-		panic("vpcrypto.NewKey failed")
-	}
-	testPubKey, err = testKey.ExportPub()
-	if err != nil {
-		panic("vpcrypto.ExportPub failed")
-	}
-}
-
 func TestLookup(t *testing.T) {
 	key := vpcrypto.Checksum256([]byte("toto"))
 	keyShift := vpcrypto.Checksum256([]byte("toto"))
 	imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
 	ai := vpapp.CalcID(vpapp.DefaultPackage(), vpapp.DefaultVersion())
-	h, err := NewHost("foo bar", "http://foo.com", testPubKey)
+	h, err := NewHost("foo bar", "http://foo.com", true)
 	if err != nil {
 		t.Error("error creating host", err)
 	}

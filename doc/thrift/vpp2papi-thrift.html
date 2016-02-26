@@ -200,18 +200,33 @@ code { line-height: 20px; }
 </ul>
 </td>
 <td><a href="#Struct_GetData">GetData</a><br/>
+<a href="#Struct_HostInfo">HostInfo</a><br/>
 <a href="#Struct_LookupData">LookupData</a><br/>
 <a href="#Struct_NodeInfo">NodeInfo</a><br/>
+<a href="#Struct_RingInfo">RingInfo</a><br/>
 </td>
 <td></code></td>
 </tr></table>
 <hr/><h2 id="Structs">Data structures</h2>
-<div class="definition"><h3 id="Struct_NodeInfo">Struct: NodeInfo</h3>
+<div class="definition"><h3 id="Struct_HostInfo">Struct: HostInfo</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>HostTitle</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>HostURL</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>HostPubKey</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>HostSig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+</table><br/>HostInfo contains static informations about a host.
+<br/></div><div class="definition"><h3 id="Struct_NodeInfo">Struct: NodeInfo</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>NodeID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>2</td><td>HostPubKey</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>3</td><td>RingID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>NodeInfo contains static informations about a node.
+<br/></div><div class="definition"><h3 id="Struct_RingInfo">Struct: RingInfo</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>RingID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>RingTitle</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>AppID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+</table><br/>RingInfo contains static informations about a ring.
 <br/></div><div class="definition"><h3 id="Struct_LookupData">Struct: LookupData</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>path</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>

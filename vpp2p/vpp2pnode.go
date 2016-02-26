@@ -91,8 +91,8 @@ func NewLocalProxy(nodeID []byte, hostPtr *Host, ringPtr *Ring) (*LocalProxy, er
 	}
 
 	ret.localNode.Info.NodeID = ringPtr.walker.Filter(nodeID)
-	ret.localNode.Info.HostPubKey = make([]byte, len(hostPtr.Info.PubKey))
-	copy(ret.localNode.Info.HostPubKey, hostPtr.Info.PubKey)
+	ret.localNode.Info.HostPubKey = make([]byte, len(hostPtr.Info.HostPubKey))
+	copy(ret.localNode.Info.HostPubKey, hostPtr.Info.HostPubKey)
 	ret.localNode.Info.RingID = make([]byte, len(ringPtr.Info.RingID))
 	copy(ret.localNode.Info.RingID, ringPtr.Info.RingID)
 	ret.localNode.hostPtr = hostPtr

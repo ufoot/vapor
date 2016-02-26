@@ -39,9 +39,13 @@ const (
 	// MaxLenURL is the maximum length for URL fields
 	MaxLenURL = 1000
 	// MinLenPubKey is the minimum length for PubKey fields
-	MinLenPubKey = 10
+	MinLenPubKey = 50
 	// MaxLenPubKey is the maximum length for PubKey fields
-	MaxLenPubKey = 10000
+	MaxLenPubKey = 5000
+	// MinLenSig is the minimum length for Sig fields
+	MinLenSig = 0
+	// MaxLenSig is the maximum length for Sig fields
+	MaxLenSig = 5000
 )
 
 func checkLenByte(fieldName string, content []byte, minLen, maxLen int) (bool, error) {
@@ -132,6 +136,16 @@ func CheckURL(u string) (bool, error) {
 // CheckPubKey checks that a public key is correct
 func CheckPubKey(pubKey []byte) (bool, error) {
 	b, err := checkLenByte("PubKey", pubKey, MinLenPubKey, MaxLenPubKey)
+	if b != true || err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+// CheckSig checks that a public key is correct
+func CheckSig(pubKey []byte) (bool, error) {
+	b, err := checkLenByte("Sig", pubKey, MinLenSig, MaxLenSig)
 	if b != true || err != nil {
 		return false, err
 	}

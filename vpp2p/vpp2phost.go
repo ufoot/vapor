@@ -20,34 +20,31 @@
 package vpp2p
 
 import (
+	"fmt"
 	"github.com/ufoot/vapor/vpcrypto"
-	"github.com/ufoot/vapor/vplog"
+	"github.com/ufoot/vapor/vpp2papi"
 )
-
-// HostInfo stores the static data of a Host.
-type HostInfo struct {
-	// Human readable hostname, not necessarily the DNS hostname.
-	HostTitle string
-	// URL used to connect to this host
-	URL string
-	// Public Key used to communicate and sign/decryp messages.
-	// It's also the host unique identifier (AKA ID).
-	PubKey []byte
-}
 
 // Host is a physical host, it is used to uniquely identify
 // a host, it can be used to handle several apps or rings.
 type Host struct {
 	// Info about the host
-	Info HostInfo
+	Info vpp2papi.HostInfo
 
 	key        *vpcrypto.Key
 	localNodes []Node
 }
 
+// SigBytes returns the byte buffer that needs to be signed.
+func SigBytesTitleUrl(title, url string) []byte {
+	return []byte(fmt.Sprintf("%s;%s", title, url))
+}
+
 // NewHost returns a new host object
-func NewHost(title, url string, pubKey []byte) (*Host, error) {
+func NewHost(title, url string, useSig bool) (*Host, error) {
 	var ret Host
+	var pubKey []byte
+	var sig []byte
 
 	ok, err := CheckTitle(title)
 	if err != nil || !ok {
@@ -57,17 +54,34 @@ func NewHost(title, url string, pubKey []byte) (*Host, error) {
 	if err != nil || !ok {
 		return nil, err
 	}
-	ok, err = CheckPubKey(pubKey)
-	if err != nil || !ok {
-		return nil, err
+
+	if useSig {
+		ret.key, err = vpcrypto.NewKey()
+		if err != nil {
+			return nil, err
+		}
+		pubKey, err = ret.key.ExportPub()
+		if err != nil {
+			return nil, err
+		}
+		ok, err = CheckPubKey(pubKey)
+		if err != nil || !ok {
+			return nil, err
+		}
+		sig, err = ret.key.Sign(SigBytesTitleUrl(title, url))
+		if err != nil {
+			return nil, err
+		}
+		ok, err = CheckSig(pubKey)
+		if err != nil || !ok {
+			return nil, err
+		}
+	} else {
+		pubKey = vpcrypto.IntToBuf512(vpcrypto.Rand512(vpcrypto.NewRand(), nil))
+		sig = []byte("")
 	}
 
-	ret.Info = HostInfo{title, url, pubKey}
-	ret.key, err = vpcrypto.ImportPubKey(pubKey)
-	if err != nil {
-		// not a critical error, it's allowed to use non-signing pubKeys
-		vplog.LogInfof("pubKey can't be imported, host won't be signing")
-	}
+	ret.Info = vpp2papi.HostInfo{title, url, pubKey, sig}
 	ret.localNodes = make([]Node, 0)
 
 	return &ret, nil

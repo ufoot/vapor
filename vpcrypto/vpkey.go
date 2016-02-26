@@ -53,7 +53,8 @@ func NewKey() (*Key, error) {
 	var key Key
 	var byteWriter bytes.Buffer
 
-	entity, err = openpgp.NewEntity("", "", "", nil)
+	// NewEntity params: name, comment, email
+	entity, err = openpgp.NewEntity(PackageName, PackageURL, PackageEmail, nil)
 	if err != nil {
 		return nil, vperror.Chain(err, "unable to create a new OpenPGP entity")
 	}

@@ -71,10 +71,12 @@ type RingInfo struct {
 	RingTitle string
 	// App ID
 	AppID []byte
+}
+
+// RingSecret stores the secret data of a Ring.
+type RingSecret struct {
 	// Password hash
 	PasswordHash []byte
-	// RingConfig contains technical parameters.
-	Config RingConfig
 }
 
 // Ring is a community, a network of related nodes, which communicate
@@ -82,7 +84,9 @@ type RingInfo struct {
 // together.
 type Ring struct {
 	// Info about the ring
-	Info RingInfo
+	Info   RingInfo
+	config RingConfig
+	secret RingSecret
 
 	walker     vpbruijn.BruijnWalker
 	localNodes []Node
@@ -116,8 +120,8 @@ func NewRing(ringID []byte, ringTitle string, appID []byte, passwordHash []byte,
 	ret.Info.RingID = ringID
 	ret.Info.RingTitle = ringTitle
 	ret.Info.AppID = appID
-	ret.Info.PasswordHash = passwordHash
-	ret.Info.Config = *config
+	ret.secret.PasswordHash = passwordHash
+	ret.config = *config
 
 	return &ret, nil
 }

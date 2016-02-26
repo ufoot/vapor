@@ -20,7 +20,6 @@
 package vpp2p
 
 import (
-	"github.com/ufoot/vapor/vpcrypto"
 	"testing"
 )
 
@@ -29,21 +28,8 @@ var testID []byte
 const testHostTitle = "Toto"
 const testHostURL = "http://toto.bar/foo"
 
-var testFakeKey []byte
-var testKey vpcrypto.Key
-var testPubKey []byte
-
 func init() {
 	testID = []byte("abcdefghij")
-	testFakeKey = []byte("tititototata")
-	testKey, err := vpcrypto.NewKey()
-	if err != nil {
-		panic("vpcrypto.NewKey failed")
-	}
-	testPubKey, err = testKey.ExportPub()
-	if err != nil {
-		panic("vpcrypto.ExportPub failed")
-	}
 }
 
 func TestCheckID(t *testing.T) {

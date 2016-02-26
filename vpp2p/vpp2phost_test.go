@@ -20,32 +20,18 @@
 package vpp2p
 
 import (
-	"github.com/ufoot/vapor/vpcrypto"
 	"testing"
 )
 
-func init() {
-	testKey, err := vpcrypto.NewKey()
-	if err != nil {
-		panic("vpcrypto.NewKey failed")
-	}
-	testPubKey, err = testKey.ExportPub()
-	if err != nil {
-		panic("vpcrypto.ExportPub failed")
-	}
-}
-
 func TestNewHost(t *testing.T) {
-	t.Logf("testPubKey len=%d", len(testPubKey))
-	host, err := NewHost(testHostTitle, testHostURL, testPubKey)
+	host, err := NewHost(testHostTitle, testHostURL, true)
 	if err != nil {
 		t.Error("unable to create host with a valid pubKey", err)
 	}
 	if host.CanSign() == false {
 		t.Error("host can't sign but it should")
 	}
-	t.Logf("testFakeKey len=%d", len(testFakeKey))
-	host, err = NewHost(testHostTitle, testHostURL, testFakeKey)
+	host, err = NewHost(testHostTitle, testHostURL, false)
 	if err != nil {
 		t.Error("unable to create host with a dummy pubKey", err)
 	}
