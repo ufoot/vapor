@@ -196,6 +196,7 @@ code { line-height: 20px; }
 <tr>
 <td>vpp2papi</td><td><a href="#Svc_VpP2pApi">VpP2pApi</a><br/>
 <ul>
+<li><a href="#Fn_VpP2pApi_IAmPrev">IAmPrev</a></li>
 <li><a href="#Fn_VpP2pApi_Lookup">Lookup</a></li>
 </ul>
 </td>
@@ -218,8 +219,9 @@ code { line-height: 20px; }
 <br/></div><div class="definition"><h3 id="Struct_NodeInfo">Struct: NodeInfo</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>NodeID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>2</td><td>HostPubKey</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>3</td><td>RingID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>RingID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>HostPubKey</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>NodeSig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>NodeInfo contains static informations about a node.
 <br/></div><div class="definition"><h3 id="Struct_RingInfo">Struct: RingInfo</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
@@ -243,7 +245,11 @@ code { line-height: 20px; }
 <div class="extends"><em>extends</em> <code><a href="vpcommonapi.html#Svc_VpCommonApi">vpcommonapi.VpCommonApi</a></code></div>
 VpP2pApi is used to communicate between 2 Vapor nodes
 in peer-to-peer mode.
-<br/><div class="definition"><h4 id="Fn_VpP2pApi_Lookup">Function: VpP2pApi.Lookup</h4>
+<br/><div class="definition"><h4 id="Fn_VpP2pApi_IAmPrev">Function: VpP2pApi.IAmPrev</h4>
+<pre><code><a href="#Struct_LookupData">LookupData</a></code> IAmPrev(<code>binary</code> key,
+                   <code>binary</code> keyShift,
+                   <code>binary</code> imaginaryNode)
+</pre></div><div class="definition"><h4 id="Fn_VpP2pApi_Lookup">Function: VpP2pApi.Lookup</h4>
 <pre><code><a href="#Struct_LookupData">LookupData</a></code> Lookup(<code>binary</code> key,
                   <code>binary</code> keyShift,
                   <code>binary</code> imaginaryNode)

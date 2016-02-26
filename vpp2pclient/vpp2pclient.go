@@ -20,6 +20,7 @@ func Usage() {
 	fmt.Fprintln(os.Stderr, "Usage of ", os.Args[0], " [-h host:port] [-u url] [-f[ramed]] function [arg1 [arg2...]]:")
 	flag.PrintDefaults()
 	fmt.Fprintln(os.Stderr, "\nFunctions:")
+	fmt.Fprintln(os.Stderr, "  LookupData IAmPrev(string key, string keyShift, string imaginaryNode)")
 	fmt.Fprintln(os.Stderr, "  LookupData Lookup(string key, string keyShift, string imaginaryNode)")
 	fmt.Fprintln(os.Stderr, "  void ping()")
 	fmt.Fprintln(os.Stderr, "  Version getVersion()")
@@ -119,6 +120,20 @@ func main() {
 	}
 
 	switch cmd {
+	case "IAmPrev":
+		if flag.NArg()-1 != 3 {
+			fmt.Fprintln(os.Stderr, "IAmPrev requires 3 args")
+			flag.Usage()
+		}
+		argvalue0 := []byte(flag.Arg(1))
+		value0 := argvalue0
+		argvalue1 := []byte(flag.Arg(2))
+		value1 := argvalue1
+		argvalue2 := []byte(flag.Arg(3))
+		value2 := argvalue2
+		fmt.Print(client.IAmPrev(value0, value1, value2))
+		fmt.Print("\n")
+		break
 	case "Lookup":
 		if flag.NArg()-1 != 3 {
 			fmt.Fprintln(os.Stderr, "Lookup requires 3 args")

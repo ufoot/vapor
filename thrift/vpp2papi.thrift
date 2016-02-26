@@ -46,8 +46,9 @@ struct HostInfo {
  */
 struct NodeInfo {
   1: binary NodeID,
-  2: binary HostPubKey,
-  3: binary RingID,
+  2: binary RingID,
+  3: binary HostPubKey,
+  4: binary NodeSig,
 }
 
 /**
@@ -82,6 +83,11 @@ struct GetData {
  */
 service VpP2pApi extends vpcommonapi.VpCommonApi
 {
+  LookupData IAmPrev(
+    1:binary key,
+    2:binary keyShift,
+    3:binary imaginaryNode
+  ),
   LookupData Lookup(
     1:binary key,
     2:binary keyShift,

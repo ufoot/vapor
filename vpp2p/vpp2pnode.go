@@ -22,24 +22,14 @@ package vpp2p
 import (
 	"fmt"
 	"github.com/ufoot/vapor/vplog"
+	"github.com/ufoot/vapor/vpp2papi"
 )
-
-// NodeInfo stores the static data for a Node.
-type NodeInfo struct {
-	// 256-bit id, generated randomly, this is what allows us to
-	// have several nodes per host/ring.
-	NodeID []byte
-	// Refers to the physical host.
-	HostPubKey []byte
-	// Refers to the ring on which this nodes participates.
-	RingID []byte
-}
 
 // Node is the link between a ring (AKA a session) and a host (AKA a physical
 // end-point).
 type Node struct {
 	// Info about the node
-	Info NodeInfo
+	Info vpp2papi.NodeInfo
 
 	hostPtr *Host
 	ringPtr *Ring
@@ -50,7 +40,7 @@ type Node struct {
 	// PredecessorInfo describes the previous node within the ring. This is not used
 	// to walk along the ring but just to know what is the range of keys
 	// this node is responsible for.
-	PredecessorInfo *NodeInfo
+	PredecessorInfo *vpp2papi.NodeInfo
 	// D is a  list of nodes preceeding m*Id (the 1st Bruijn node),
 	// so that it contains about O(Log(n)) before stumbling on D.
 	// The first element is actually D, the other ones go backwards on the ring.
@@ -63,16 +53,16 @@ type NodeProxy interface {
 	// Info returns information about the Node, this should be a
 	// very fast function, with data kept locally, and should not
 	// require any network calls.
-	Info() *NodeInfo
+	Info() *vpp2papi.NodeInfo
 	// Lookup searches for the host responsible for a given key
 	// and returns the path found to it.
-	Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error)
+	Lookup(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeInfo, error)
 	// Set sets a key to a value, returns the path to the node.
-	Set(key, keyShift, imaginaryNode, value []byte) ([]*NodeInfo, error)
+	Set(key, keyShift, imaginaryNode, value []byte) ([]*vpp2papi.NodeInfo, error)
 	// Get returns the value of a key, and returns the path to the node.
-	Get(key, keyShift, imaginaryNode []byte) ([]byte, []*NodeInfo, error)
+	Get(key, keyShift, imaginaryNode []byte) ([]byte, []*vpp2papi.NodeInfo, error)
 	// Get clears a key, and returns the path to the node.
-	Clear(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error)
+	Clear(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeInfo, error)
 }
 
 // LocalProxy is a proxy which contacts other nodes directly without
@@ -102,12 +92,12 @@ func NewLocalProxy(nodeID []byte, hostPtr *Host, ringPtr *Ring) (*LocalProxy, er
 }
 
 // Info returns this node's info.
-func (lp *LocalProxy) Info() *NodeInfo {
+func (lp *LocalProxy) Info() *vpp2papi.NodeInfo {
 	return &(lp.localNode.Info)
 }
 
 // Lookup a key and return the path of nodes to this key.
-func (lp *LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
+func (lp *LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeInfo, error) {
 	// pseudo code :
 	// procedure m.LOOKUP(k, kshift, i)
 	//   if k is in (m,successor] then return (successor)
@@ -121,7 +111,7 @@ func (lp *LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, 
 	node := lp.localNode
 	walker := lp.localNode.ringPtr.walker
 
-	ret := make([]*NodeInfo, 1)
+	ret := make([]*vpp2papi.NodeInfo, 1)
 	ret[0] = &(node.Info)
 
 	if node.Successor == nil || len(node.Successor) == 0 || node.D == nil || len(node.D) == 0 || node.PredecessorInfo == nil {
@@ -135,7 +125,7 @@ func (lp *LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, 
 	}
 
 	for i, successor := range node.Successor {
-		var curInfo *NodeInfo
+		var curInfo *vpp2papi.NodeInfo
 		if i == 0 {
 			curInfo = &(node.Info)
 		} else {
@@ -174,16 +164,16 @@ func (lp *LocalProxy) Lookup(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, 
 }
 
 // Set a key and return the path of nodes to this key.
-func (lp *LocalProxy) Set(key, keyShift, imaginaryNode, value []byte) ([]*NodeInfo, error) {
+func (lp *LocalProxy) Set(key, keyShift, imaginaryNode, value []byte) ([]*vpp2papi.NodeInfo, error) {
 	return nil, nil // todo
 }
 
 // Get a key and returns the path of nodes to this key.
-func (lp *LocalProxy) Get(key, keyShift, imaginaryNode []byte) ([]byte, []*NodeInfo, error) {
+func (lp *LocalProxy) Get(key, keyShift, imaginaryNode []byte) ([]byte, []*vpp2papi.NodeInfo, error) {
 	return nil, nil, nil // todo
 }
 
 // Clear a key and returns the path of nodes to this key.
-func (lp *LocalProxy) Clear(key, keyShift, imaginaryNode []byte) ([]*NodeInfo, error) {
+func (lp *LocalProxy) Clear(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeInfo, error) {
 	return nil, nil // todo
 }

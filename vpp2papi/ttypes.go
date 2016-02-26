@@ -220,12 +220,14 @@ func (p *HostInfo) String() string {
 //
 // Attributes:
 //  - NodeID
-//  - HostPubKey
 //  - RingID
+//  - HostPubKey
+//  - NodeSig
 type NodeInfo struct {
 	NodeID     []byte `thrift:"NodeID,1" json:"NodeID"`
-	HostPubKey []byte `thrift:"HostPubKey,2" json:"HostPubKey"`
-	RingID     []byte `thrift:"RingID,3" json:"RingID"`
+	RingID     []byte `thrift:"RingID,2" json:"RingID"`
+	HostPubKey []byte `thrift:"HostPubKey,3" json:"HostPubKey"`
+	NodeSig    []byte `thrift:"NodeSig,4" json:"NodeSig"`
 }
 
 func NewNodeInfo() *NodeInfo {
@@ -236,12 +238,16 @@ func (p *NodeInfo) GetNodeID() []byte {
 	return p.NodeID
 }
 
+func (p *NodeInfo) GetRingID() []byte {
+	return p.RingID
+}
+
 func (p *NodeInfo) GetHostPubKey() []byte {
 	return p.HostPubKey
 }
 
-func (p *NodeInfo) GetRingID() []byte {
-	return p.RingID
+func (p *NodeInfo) GetNodeSig() []byte {
+	return p.NodeSig
 }
 func (p *NodeInfo) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -267,6 +273,10 @@ func (p *NodeInfo) Read(iprot thrift.TProtocol) error {
 			}
 		case 3:
 			if err := p.readField3(iprot); err != nil {
+				return err
+			}
+		case 4:
+			if err := p.readField4(iprot); err != nil {
 				return err
 			}
 		default:
@@ -297,7 +307,7 @@ func (p *NodeInfo) readField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadBinary(); err != nil {
 		return thrift.PrependError("error reading field 2: ", err)
 	} else {
-		p.HostPubKey = v
+		p.RingID = v
 	}
 	return nil
 }
@@ -306,7 +316,16 @@ func (p *NodeInfo) readField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadBinary(); err != nil {
 		return thrift.PrependError("error reading field 3: ", err)
 	} else {
-		p.RingID = v
+		p.HostPubKey = v
+	}
+	return nil
+}
+
+func (p *NodeInfo) readField4(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadBinary(); err != nil {
+		return thrift.PrependError("error reading field 4: ", err)
+	} else {
+		p.NodeSig = v
 	}
 	return nil
 }
@@ -322,6 +341,9 @@ func (p *NodeInfo) Write(oprot thrift.TProtocol) error {
 		return err
 	}
 	if err := p.writeField3(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField4(oprot); err != nil {
 		return err
 	}
 	if err := oprot.WriteFieldStop(); err != nil {
@@ -347,27 +369,40 @@ func (p *NodeInfo) writeField1(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *NodeInfo) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("HostPubKey", thrift.STRING, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:HostPubKey: ", p), err)
+	if err := oprot.WriteFieldBegin("RingID", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:RingID: ", p), err)
 	}
-	if err := oprot.WriteBinary(p.HostPubKey); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.HostPubKey (2) field write error: ", p), err)
+	if err := oprot.WriteBinary(p.RingID); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.RingID (2) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:HostPubKey: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:RingID: ", p), err)
 	}
 	return err
 }
 
 func (p *NodeInfo) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("RingID", thrift.STRING, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:RingID: ", p), err)
+	if err := oprot.WriteFieldBegin("HostPubKey", thrift.STRING, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:HostPubKey: ", p), err)
 	}
-	if err := oprot.WriteBinary(p.RingID); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.RingID (3) field write error: ", p), err)
+	if err := oprot.WriteBinary(p.HostPubKey); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.HostPubKey (3) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:RingID: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:HostPubKey: ", p), err)
+	}
+	return err
+}
+
+func (p *NodeInfo) writeField4(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("NodeSig", thrift.STRING, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:NodeSig: ", p), err)
+	}
+	if err := oprot.WriteBinary(p.NodeSig); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.NodeSig (4) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:NodeSig: ", p), err)
 	}
 	return err
 }
