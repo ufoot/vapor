@@ -21,9 +21,13 @@ package vpp2p
 
 import (
 	"fmt"
+	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vplog"
 	"github.com/ufoot/vapor/vpp2papi"
 )
+
+// how many seconds should we spend on creating node keys in signed mode
+const nodeKeySeconds = 3
 
 // Node is the link between a ring (AKA a session) and a host (AKA a physical
 // end-point).
@@ -69,6 +73,45 @@ type NodeProxy interface {
 // using any network interface whatsoever.
 type LocalProxy struct {
 	localNode Node
+}
+
+// SigBytesNode returns the byte buffer that needs to be signed.
+func SigBytesNode(nodeID, ringID []byte) []byte {
+	ret := make([]byte, len(nodeID)+len(ringID))
+	copy(ret[0:len(nodeID)], nodeID)
+	copy(ret[len(nodeID):len(nodeID)+len(ringID)], ringID)
+	return ret
+}
+
+// NewNode builds a new node object.
+func NewNode(host *Host, ringID []byte) (*Node, error) {
+	var ret Node
+	var err error
+
+	if host.CanSign() {
+		_, ret.Info.NodeID, _, err = vpcrypto.GenerateID256(host.key, nil, nodeKeySeconds)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		ret.Info.NodeID = vpcrypto.IntToBuf256(vpcrypto.Rand256(vpcrypto.NewRand(), nil))
+	}
+
+	ret.Info.RingID = make([]byte, len(ringID))
+	copy(ret.Info.RingID, ringID)
+	ret.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
+	copy(ret.Info.HostPubKey, host.Info.HostPubKey)
+
+	if host.CanSign() {
+		ret.Info.NodeSig, err = host.key.Sign(SigBytesNode(ret.Info.NodeID, ringID))
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		ret.Info.NodeSig = []byte("")
+	}
+
+	return &ret, nil
 }
 
 // NewLocalProxy creates a new local proxy.

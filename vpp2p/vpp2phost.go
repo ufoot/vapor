@@ -35,8 +35,8 @@ type Host struct {
 	localNodes []Node
 }
 
-// SigBytesTitleURL returns the byte buffer that needs to be signed.
-func SigBytesTitleURL(title, url string) []byte {
+// SigBytesHost returns the byte buffer that needs to be signed.
+func SigBytesHost(title, url string) []byte {
 	return []byte(fmt.Sprintf("%s;%s", title, url))
 }
 
@@ -68,7 +68,7 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 		if err != nil || !ok {
 			return nil, err
 		}
-		sig, err = ret.key.Sign(SigBytesTitleURL(title, url))
+		sig, err = ret.key.Sign(SigBytesHost(title, url))
 		if err != nil {
 			return nil, err
 		}
