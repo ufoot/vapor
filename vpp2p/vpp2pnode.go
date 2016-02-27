@@ -103,8 +103,8 @@ func NewNode(host *Host, ringID []byte) (*Node, error) {
 	var err error
 	var intNodeID *big.Int
 	var sig []byte
-	ria := ringIDAppender{ringID: ringID}
 
+	ria := ringIDAppender{ringID: ringID}
 	if host.CanSign() {
 		intNodeID, sig, _, err = vpcrypto.GenerateID256(host.key, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
 		if err != nil {

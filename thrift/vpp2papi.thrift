@@ -52,12 +52,27 @@ struct NodeInfo {
 }
 
 /**
+ * RingConfig contains functional parameters of a ring.
+ */
+struct RingConfig {
+  1: i32 BruijnM,
+  2: i32 BruijnN,
+  3: i32 NbCopy,
+  4: i32 NbStep,
+}
+
+/**
  * RingInfo contains static informations about a ring.
  */
 struct RingInfo {
   1: binary RingID,
   2: string RingTitle,
-  3: binary AppID,
+  3: string RingDescription,
+  4: binary AppID,
+  5: RingConfig Config,
+  6: bool HasPassword,
+  7: binary HostPubKey,
+  8: binary RingSig,
 }
 
 /**

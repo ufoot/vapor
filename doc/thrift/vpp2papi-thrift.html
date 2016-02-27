@@ -204,6 +204,7 @@ code { line-height: 20px; }
 <a href="#Struct_HostInfo">HostInfo</a><br/>
 <a href="#Struct_LookupData">LookupData</a><br/>
 <a href="#Struct_NodeInfo">NodeInfo</a><br/>
+<a href="#Struct_RingConfig">RingConfig</a><br/>
 <a href="#Struct_RingInfo">RingInfo</a><br/>
 </td>
 <td></code></td>
@@ -223,11 +224,23 @@ code { line-height: 20px; }
 <tr><td>3</td><td>HostPubKey</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>4</td><td>NodeSig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>NodeInfo contains static informations about a node.
+<br/></div><div class="definition"><h3 id="Struct_RingConfig">Struct: RingConfig</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>BruijnM</td><td><code>i32</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>BruijnN</td><td><code>i32</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>NbCopy</td><td><code>i32</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>NbStep</td><td><code>i32</code></td><td></td><td>default</td><td></td></tr>
+</table><br/>RingConfig contains functional parameters of a ring.
 <br/></div><div class="definition"><h3 id="Struct_RingInfo">Struct: RingInfo</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
 <tr><td>1</td><td>RingID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>2</td><td>RingTitle</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>3</td><td>AppID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>RingDescription</td><td><code>string</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>AppID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>5</td><td>Config</td><td><code><a href="#Struct_RingConfig">RingConfig</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>6</td><td>HasPassword</td><td><code>bool</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>7</td><td>HostPubKey</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>8</td><td>RingSig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>RingInfo contains static informations about a ring.
 <br/></div><div class="definition"><h3 id="Struct_LookupData">Struct: LookupData</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>

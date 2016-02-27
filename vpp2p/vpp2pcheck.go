@@ -33,7 +33,11 @@ const (
 	// MinLenTitle is the minimum length for Title fields
 	MinLenTitle = 1
 	// MaxLenTitle is the maximum length for Title fields
-	MaxLenTitle = 100
+	MaxLenTitle = 72
+	// MinLenDescription is the minimum length for Description fields
+	MinLenDescription = 0
+	// MaxLenDescription is the maximum length for Description fields
+	MaxLenDescription = 10000
 	// MinLenURL is the minimum length for URL fields
 	MinLenURL = 3
 	// MaxLenURL is the maximum length for URL fields
@@ -103,6 +107,20 @@ func CheckTitle(title string) (bool, error) {
 		return false, err
 	}
 	b, err = checkUTF8("title", title)
+	if b != true || err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+// CheckDescription checks that a description is correct
+func CheckDescription(description string) (bool, error) {
+	b, err := checkLenString("Description", description, MinLenDescription, MaxLenDescription)
+	if b != true || err != nil {
+		return false, err
+	}
+	b, err = checkUTF8("description", description)
 	if b != true || err != nil {
 		return false, err
 	}

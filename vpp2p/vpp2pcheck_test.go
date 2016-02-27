@@ -85,6 +85,29 @@ func TestCheckTitle(t *testing.T) {
 	}
 }
 
+func TestCheckDescription(t *testing.T) {
+	b, err := CheckDescription(testDescription)
+	if b != true || err != nil {
+		t.Error("CheckDescription returned an error", err)
+	}
+	b, err = CheckDescription(strings.Repeat(" ", MinLenDescription))
+	if b != true || err != nil {
+		t.Error("CheckDescription returned an error on short Description", err)
+	}
+	b, err = CheckDescription(strings.Repeat(" ", MaxLenDescription))
+	if b != true || err != nil {
+		t.Error("CheckDescription returned an error on long Description", err)
+	}
+	b, err = CheckDescription(strings.Repeat(" ", MinLenDescription-1))
+	if b == true || err == nil {
+		t.Error("CheckDescription does not report an error on too shot Description")
+	}
+	b, err = CheckDescription(strings.Repeat(" ", MaxLenDescription+1))
+	if b == true || err == nil {
+		t.Error("CheckDescription does not report an error on too long Description")
+	}
+}
+
 func TestCheckURL(t *testing.T) {
 	b, err := CheckURL(testURL)
 	if b != true || err != nil {
