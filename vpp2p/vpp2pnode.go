@@ -24,10 +24,16 @@ import (
 	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vplog"
 	"github.com/ufoot/vapor/vpp2papi"
+	"math/big"
 )
 
-// how many seconds should we spend on creating node keys in signed mode
-const nodeKeySeconds = 3
+// NodeKeySeconds specifies how many seconds should we spend on creating
+// node keys in signed mode.
+const NodeKeySeconds = 2
+
+// NodeKeyZeroes specifies how many zeroes there should be at the end of
+// a node key sig in signed mode.
+const NodeKeyZeroes = 10
 
 // Node is the link between a ring (AKA a session) and a host (AKA a physical
 // end-point).
@@ -75,6 +81,14 @@ type LocalProxy struct {
 	localNode Node
 }
 
+type ringIDAppender struct {
+	ringID []byte
+}
+
+func (r *ringIDAppender) Transform(nodeID []byte) []byte {
+	return SigBytesNode(nodeID, r.ringID)
+}
+
 // SigBytesNode returns the byte buffer that needs to be signed.
 func SigBytesNode(nodeID, ringID []byte) []byte {
 	ret := make([]byte, len(nodeID)+len(ringID))
@@ -87,29 +101,29 @@ func SigBytesNode(nodeID, ringID []byte) []byte {
 func NewNode(host *Host, ringID []byte) (*Node, error) {
 	var ret Node
 	var err error
+	var intNodeID *big.Int
+	var sig []byte
+	ria := ringIDAppender{ringID: ringID}
 
 	if host.CanSign() {
-		_, ret.Info.NodeID, _, err = vpcrypto.GenerateID256(host.key, nil, nodeKeySeconds)
+		intNodeID, sig, _, err = vpcrypto.GenerateID256(host.key, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		ret.Info.NodeID = vpcrypto.IntToBuf256(vpcrypto.Rand256(vpcrypto.NewRand(), nil))
+		intNodeID, _, _, err = vpcrypto.GenerateID256(nil, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
+		if err != nil {
+			return nil, err
+		}
+		sig = []byte("")
 	}
 
+	ret.Info.NodeID = vpcrypto.IntToBuf256(intNodeID)
 	ret.Info.RingID = make([]byte, len(ringID))
 	copy(ret.Info.RingID, ringID)
 	ret.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
 	copy(ret.Info.HostPubKey, host.Info.HostPubKey)
-
-	if host.CanSign() {
-		ret.Info.NodeSig, err = host.key.Sign(SigBytesNode(ret.Info.NodeID, ringID))
-		if err != nil {
-			return nil, err
-		}
-	} else {
-		ret.Info.NodeSig = []byte("")
-	}
+	ret.Info.NodeSig = sig
 
 	return &ret, nil
 }
@@ -219,4 +233,9 @@ func (lp *LocalProxy) Get(key, keyShift, imaginaryNode []byte) ([]byte, []*vpp2p
 // Clear a key and returns the path of nodes to this key.
 func (lp *LocalProxy) Clear(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeInfo, error) {
 	return nil, nil // todo
+}
+
+// IsSigned returns true if the node has been signed by corresponding host.
+func (node *Node) IsSigned() bool {
+	return node.Info.NodeSig != nil && len(node.Info.NodeSig) > 0
 }

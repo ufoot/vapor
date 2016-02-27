@@ -25,6 +25,45 @@ import (
 	"testing"
 )
 
+func TestNewNode(t *testing.T) {
+	var host *Host
+	var node *Node
+	var err error
+	ringID := vpcrypto.Checksum128([]byte("myring"))
+	var zeroes int
+
+	host, err = NewHost(testTitle, testURL, true)
+	if err != nil {
+		t.Error("unable to create host with a valid pubKey", err)
+	}
+	node, err = NewNode(host, ringID)
+	if err != nil {
+		t.Error("unable to create node with a valid pubKey", err)
+	}
+	if node.IsSigned() == false {
+		t.Error("node is unsigned, when it should be")
+	}
+	zeroes = vpcrypto.ZeroesInBuf(vpcrypto.Checksum256(node.Info.NodeSig))
+	if zeroes < NodeKeyZeroes {
+		t.Errorf("Node created, but not enough zeroes in sig (%d)", zeroes)
+	}
+	t.Logf("Node created, number of zeroes in sig is %d", zeroes)
+
+	host, err = NewHost(testTitle, testURL, false)
+	if err != nil {
+		t.Error("unable to create host with a valid pubKey", err)
+	}
+	node, err = NewNode(host, ringID)
+	if err != nil {
+		t.Error("unable to create node with a valid pubKey", err)
+	}
+	if node.IsSigned() == true {
+		t.Error("node is signed, when it should not be")
+	}
+	zeroes = vpcrypto.ZeroesInBuf(vpcrypto.Checksum256(node.Info.NodeSig))
+	t.Logf("Node created, number of zeroes in sig is %d", zeroes)
+}
+
 func TestLookup(t *testing.T) {
 	key := vpcrypto.Checksum256([]byte("toto"))
 	keyShift := vpcrypto.Checksum256([]byte("toto"))

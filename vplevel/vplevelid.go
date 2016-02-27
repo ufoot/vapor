@@ -102,6 +102,18 @@ const MaxSystemSizeLarge = 42
 // generate a system when playing network games.
 const NetworkIDSeconds = 5
 
+// NetworkIDZeroes is the number of zeroes we should expect in
+// ID signature when generating a system for network games.
+const NetworkIDZeroes = 12
+
+// LocalIDSeconds is the number of seconds it should take to
+// generate a system when playing local games.
+const LocalIDSeconds = 0
+
+// LocalIDZeroes is the number of zeroes we should expect in
+// ID signature when generating a system for network games.
+const LocalIDZeroes = 0
+
 // Sizes is used to hold together the three major level size
 // settings, concerning squares, planets and systems.
 type Sizes struct {
@@ -188,7 +200,7 @@ func NetworkID(sizes Sizes, key *vpcrypto.Key) (*big.Int, []byte, error) {
 
 	fc.sizes = sizes
 
-	ret, sig, _, err := vpcrypto.GenerateID512(key, fc, NetworkIDSeconds)
+	ret, sig, _, err := vpcrypto.GenerateID512(key, fc, nil, NetworkIDSeconds, NetworkIDZeroes)
 
 	return ret, sig, err
 }
@@ -200,7 +212,7 @@ func LocalID(sizes Sizes) (*big.Int, error) {
 
 	fc.sizes = sizes
 
-	ret, _, _, err := vpcrypto.GenerateID512(nil, fc, NetworkIDSeconds)
+	ret, _, _, err := vpcrypto.GenerateID512(nil, fc, nil, LocalIDSeconds, LocalIDZeroes)
 
 	return ret, err
 }

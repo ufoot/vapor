@@ -36,29 +36,42 @@ type FilterChecker interface {
 	Check(*big.Int) bool
 }
 
+// BytesTransformer is used to process a bytes buffer before
+// signing, it
+type BytesTransformer interface {
+	// Transform takes a bytes buffer and returns a transformed bytes buffer
+	Transform([]byte) []byte
+}
+
 // GenerateID512 generates a 512 bits id, and signs it.
 // If key is nil, no signature is generated.
-// If filterChecker is not nil, it is garanteed that the property
+// If fc is not nil, it is garanteed that the property
 // is verified by the id.
-// If seconds is greater than 0, will wait for this amount of
+// If maxSeconds is greater than 0, will wait for this amount of
 // time and try and find an id that has a signature with a
 // checksum containing a maximum of zeroes. This allows deep
 // per-key personnalisation.
-func GenerateID512(key *Key, filterChecker FilterChecker, seconds int) (*big.Int, []byte, int, error) {
+// If minZeroes is greater than 0, will wait until at least that
+// amount of zeroes is achieved, regardless of the maxSeconds setting.
+// This can take a lot of time...
+func GenerateID512(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (*big.Int, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
 	var tmpData, tmpSig, sig []byte
 	var err error
 
-	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
+	for start := time.Now().Unix(); ret == nil || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
 		tmpInt = Rand512(r, nil)
-		if filterChecker != nil {
-			tmpInt = filterChecker.Filter(tmpInt)
+		if fc != nil {
+			tmpInt = fc.Filter(tmpInt)
 		}
-		if filterChecker == nil || filterChecker.Check(tmpInt) {
+		if fc == nil || fc.Check(tmpInt) {
 			if key != nil {
 				tmpData = IntToBuf512(tmpInt)
+				if bt != nil {
+					tmpData = bt.Transform(tmpData)
+				}
 				tmpSig, err = key.Sign(tmpData)
 				if err != nil {
 					return nil, nil, 0, vperror.Chain(err, "can't sign id")
@@ -78,27 +91,33 @@ func GenerateID512(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 
 // GenerateID256 generates a 256 bits id, and signs it.
 // If key is nil, no signature is generated.
-// If filterChecker is not nil, it is garanteed that the property
+// If fc is not nil, it is garanteed that the property
 // is verified by the id.
-// If seconds is greater than 0, will wait for this amount of
+// If maxSeconds is greater than 0, will wait for this amount of
 // time and try and find an id that has a signature with a
 // checksum containing a maximum of zeroes. This allows deep
 // per-key personnalisation.
-func GenerateID256(key *Key, filterChecker FilterChecker, seconds int) (*big.Int, []byte, int, error) {
+// If minZeroes is greater than 0, will wait until at least that
+// amount of zeroes is achieved, regardless of the maxSeconds setting.
+// This can take a lot of time...
+func GenerateID256(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (*big.Int, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
 	var tmpData, tmpSig, sig []byte
 	var err error
 
-	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
+	for start := time.Now().Unix(); ret == nil || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
 		tmpInt = Rand256(r, nil)
-		if filterChecker != nil {
-			tmpInt = filterChecker.Filter(tmpInt)
+		if fc != nil {
+			tmpInt = fc.Filter(tmpInt)
 		}
-		if filterChecker == nil || filterChecker.Check(tmpInt) {
+		if fc == nil || fc.Check(tmpInt) {
 			if key != nil {
 				tmpData = IntToBuf256(tmpInt)
+				if bt != nil {
+					tmpData = bt.Transform(tmpData)
+				}
 				tmpSig, err = key.Sign(tmpData)
 				if err != nil {
 					return nil, nil, 0, vperror.Chain(err, "can't sign id")
@@ -118,27 +137,33 @@ func GenerateID256(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 
 // GenerateID128 generates a 128 bits id, and signs it.
 // If key is nil, no signature is generated.
-// If filterChecker is not nil, it is garanteed that the property
+// If fc is not nil, it is garanteed that the property
 // is verified by the id.
-// If seconds is greater than 0, will wait for this amount of
+// If maxSeconds is greater than 0, will wait for this amount of
 // time and try and find an id that has a signature with a
 // checksum containing a maximum of zeroes. This allows deep
 // per-key personnalisation.
-func GenerateID128(key *Key, filterChecker FilterChecker, seconds int) (*big.Int, []byte, int, error) {
+// If minZeroes is greater than 0, will wait until at least that
+// amount of zeroes is achieved, regardless of the maxSeconds setting.
+// This can take a lot of time...
+func GenerateID128(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (*big.Int, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
 	var tmpData, tmpSig, sig []byte
 	var err error
 
-	for start := time.Now().Unix(); ret == nil || time.Now().Unix() < start+int64(seconds); {
+	for start := time.Now().Unix(); ret == nil || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
 		tmpInt = Rand128(r, nil)
-		if filterChecker != nil {
-			tmpInt = filterChecker.Filter(tmpInt)
+		if fc != nil {
+			tmpInt = fc.Filter(tmpInt)
 		}
-		if filterChecker == nil || filterChecker.Check(tmpInt) {
+		if fc == nil || fc.Check(tmpInt) {
 			if key != nil {
 				tmpData = IntToBuf128(tmpInt)
+				if bt != nil {
+					tmpData = bt.Transform(tmpData)
+				}
 				tmpSig, err = key.Sign(tmpData)
 				if err != nil {
 					return nil, nil, 0, vperror.Chain(err, "can't sign id")
@@ -158,13 +183,16 @@ func GenerateID128(key *Key, filterChecker FilterChecker, seconds int) (*big.Int
 
 // GenerateID64 generates a 64 bits id, and signs it.
 // If key is nil, no signature is generated.
-// If filterChecker is not nil, it is garanteed that the property
+// If fc is not nil, it is garanteed that the property
 // is verified by the id.
-// If seconds is greater than 0, will wait for this amount of
+// If maxSeconds is greater than 0, will wait for this amount of
 // time and try and find an id that has a signature with a
 // checksum containing a maximum of zeroes. This allows deep
 // per-key personnalisation.
-func GenerateID64(key *Key, filterChecker FilterChecker, seconds int) (uint64, []byte, int, error) {
+// If minZeroes is greater than 0, will wait until at least that
+// amount of zeroes is achieved, regardless of the maxSeconds setting.
+// This can take a lot of time...
+func GenerateID64(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (uint64, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt uint64
 	var tmpBig big.Int
@@ -172,16 +200,19 @@ func GenerateID64(key *Key, filterChecker FilterChecker, seconds int) (uint64, [
 	var tmpData, tmpSig, sig []byte
 	var err error
 
-	for start := time.Now().Unix(); ret == 0 || time.Now().Unix() < start+int64(seconds); {
+	for start := time.Now().Unix(); ret == 0 || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
 		tmpInt = Rand64(r, 0)
 		tmpBig.SetUint64(tmpInt)
-		if filterChecker != nil {
-			tmpBig = *filterChecker.Filter(&tmpBig)
+		if fc != nil {
+			tmpBig = *fc.Filter(&tmpBig)
 		}
 		tmpInt = tmpBig.Uint64()
-		if filterChecker == nil || filterChecker.Check(&tmpBig) {
+		if fc == nil || fc.Check(&tmpBig) {
 			if key != nil {
 				tmpData = IntToBuf64(tmpInt)
+				if bt != nil {
+					tmpData = bt.Transform(tmpData)
+				}
 				tmpSig, err = key.Sign(tmpData)
 				if err != nil {
 					return 0, nil, 0, vperror.Chain(err, "can't sign id")
@@ -201,13 +232,16 @@ func GenerateID64(key *Key, filterChecker FilterChecker, seconds int) (uint64, [
 
 // GenerateID32 generates a 32 bits id, and signs it.
 // If key is nil, no signature is generated.
-// If filterChecker is not nil, it is garanteed that the property
+// If fc is not nil, it is garanteed that the property
 // is verified by the id.
-// If seconds is greater than 0, will wait for this amount of
+// If maxSeconds is greater than 0, will wait for this amount of
 // time and try and find an id that has a signature with a
 // checksum containing a maximum of zeroes. This allows deep
 // per-key personnalisation.
-func GenerateID32(key *Key, filterChecker FilterChecker, seconds int) (uint32, []byte, int, error) {
+// If minZeroes is greater than 0, will wait until at least that
+// amount of zeroes is achieved, regardless of the maxSeconds setting.
+// This can take a lot of time...
+func GenerateID32(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (uint32, []byte, int, error) {
 	r := NewRand()
 	var ret, tmpInt uint32
 	var tmpBig big.Int
@@ -215,16 +249,19 @@ func GenerateID32(key *Key, filterChecker FilterChecker, seconds int) (uint32, [
 	var tmpData, tmpSig, sig []byte
 	var err error
 
-	for start := time.Now().Unix(); ret == 0 || time.Now().Unix() < start+int64(seconds); {
+	for start := time.Now().Unix(); ret == 0 || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
 		tmpInt = Rand32(r, 0)
 		tmpBig.SetUint64(uint64(tmpInt))
-		if filterChecker != nil {
-			tmpBig = *filterChecker.Filter(&tmpBig)
+		if fc != nil {
+			tmpBig = *fc.Filter(&tmpBig)
 		}
 		tmpInt = uint32(tmpBig.Uint64())
-		if filterChecker == nil || filterChecker.Check(&tmpBig) {
+		if fc == nil || fc.Check(&tmpBig) {
 			if key != nil {
 				tmpData = IntToBuf32(tmpInt)
+				if bt != nil {
+					tmpData = bt.Transform(tmpData)
+				}
 				tmpSig, err = key.Sign(tmpData)
 				if err != nil {
 					return 0, nil, 0, vperror.Chain(err, "can't sign id")
