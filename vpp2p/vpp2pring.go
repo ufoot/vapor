@@ -180,3 +180,28 @@ func NewRing(host *Host, ringTitle, ringDescription string, appID []byte, config
 func (ring *Ring) IsSigned() bool {
 	return ring.Info.RingSig != nil && len(ring.Info.RingSig) > 0
 }
+
+// RingInfoCheckSig checks if the ring signature is OK, if it's not, returns 0 and an error.
+// If it's OK, returns the number of zeroes in the signature hash.
+func RingInfoCheckSig(ringInfo *vpp2papi.RingInfo) (int, error) {
+	var z int
+
+	if ringInfo.HostPubKey == nil || len(ringInfo.HostPubKey) <= 0 {
+		return 0, fmt.Errorf("no public key")
+	}
+	if ringInfo.RingSig == nil || len(ringInfo.RingSig) <= 0 {
+		return 0, fmt.Errorf("no signature")
+	}
+
+	key, err := vpcrypto.ImportPubKey(ringInfo.HostPubKey)
+	if err != nil {
+		return 0, err
+	}
+	_, err = key.CheckSig(SigBytesRing(ringInfo.RingID, ringInfo.RingTitle, ringInfo.RingDescription, ringInfo.AppID, ringInfo.Config, ringInfo.HasPassword), ringInfo.RingSig)
+	if err != nil {
+		return 0, err
+	}
+	z = vpcrypto.ZeroesInBuf(vpcrypto.Checksum512(ringInfo.RingSig))
+
+	return z, nil
+}

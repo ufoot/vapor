@@ -239,3 +239,28 @@ func (lp *LocalProxy) Clear(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.No
 func (node *Node) IsSigned() bool {
 	return node.Info.NodeSig != nil && len(node.Info.NodeSig) > 0
 }
+
+// NodeInfoCheckSig checks if the node signature is OK, if it's not, returns 0 and an error.
+// If it's OK, returns the number of zeroes in the signature hash.
+func NodeInfoCheckSig(nodeInfo *vpp2papi.NodeInfo) (int, error) {
+	var z int
+
+	if nodeInfo.HostPubKey == nil || len(nodeInfo.HostPubKey) <= 0 {
+		return 0, fmt.Errorf("no public key")
+	}
+	if nodeInfo.NodeSig == nil || len(nodeInfo.NodeSig) <= 0 {
+		return 0, fmt.Errorf("no signature")
+	}
+
+	key, err := vpcrypto.ImportPubKey(nodeInfo.HostPubKey)
+	if err != nil {
+		return 0, err
+	}
+	_, err = key.CheckSig(SigBytesNode(nodeInfo.NodeID, nodeInfo.RingID), nodeInfo.NodeSig)
+	if err != nil {
+		return 0, err
+	}
+	z = vpcrypto.ZeroesInBuf(vpcrypto.Checksum256(nodeInfo.NodeSig))
+
+	return z, nil
+}

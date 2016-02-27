@@ -31,11 +31,20 @@ func TestNewHost(t *testing.T) {
 	if host.CanSign() == false {
 		t.Error("host can't sign but it should")
 	}
+	_, err = HostInfoCheckSig(&(host.Info))
+	if err != nil {
+		t.Error("wrong sig", err)
+	}
+
 	host, err = NewHost(testTitle, testURL, false)
 	if err != nil {
 		t.Error("unable to create host with a dummy pubKey", err)
 	}
 	if host.CanSign() == true {
 		t.Error("host can sign but it shouldn't")
+	}
+	_, err = HostInfoCheckSig(&(host.Info))
+	if err == nil {
+		t.Error("sig reported as good when it's not")
 	}
 }

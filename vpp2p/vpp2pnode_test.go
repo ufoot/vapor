@@ -30,7 +30,7 @@ func TestNewNode(t *testing.T) {
 	var node *Node
 	var err error
 	ringID := vpcrypto.Checksum128([]byte("myring"))
-	var zeroes int
+	var zeroes, zeroes2 int
 
 	host, err = NewHost(testTitle, testURL, true)
 	if err != nil {
@@ -48,6 +48,13 @@ func TestNewNode(t *testing.T) {
 		t.Errorf("Node created, but not enough zeroes in sig (%d)", zeroes)
 	}
 	t.Logf("Node created, number of zeroes in sig is %d", zeroes)
+	zeroes2, err = NodeInfoCheckSig(&(node.Info))
+	if err != nil {
+		t.Error("wrong sig", err)
+	}
+	if zeroes != zeroes2 {
+		t.Errorf("NodeInfoCheckSig returned bad number of zeroes %d!=%d", zeroes, zeroes2)
+	}
 
 	host, err = NewHost(testTitle, testURL, false)
 	if err != nil {
@@ -62,6 +69,10 @@ func TestNewNode(t *testing.T) {
 	}
 	zeroes = vpcrypto.ZeroesInBuf(vpcrypto.Checksum256(node.Info.NodeSig))
 	t.Logf("Node created, number of zeroes in sig is %d", zeroes)
+	zeroes2, err = NodeInfoCheckSig(&(node.Info))
+	if err == nil {
+		t.Error("sig reported as good when it's not")
+	}
 }
 
 func TestLookup(t *testing.T) {

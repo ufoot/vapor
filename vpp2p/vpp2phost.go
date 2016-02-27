@@ -91,3 +91,26 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 func (host *Host) CanSign() bool {
 	return host.key != nil
 }
+
+// HostInfoCheckSig checks if the host signature is OK, if it's not, returns false and an error.
+func HostInfoCheckSig(hostInfo *vpp2papi.HostInfo) (bool, error) {
+	var ok bool
+
+	if hostInfo.HostPubKey == nil || len(hostInfo.HostPubKey) <= 0 {
+		return false, fmt.Errorf("no public key")
+	}
+	if hostInfo.HostSig == nil || len(hostInfo.HostSig) <= 0 {
+		return false, fmt.Errorf("no signature")
+	}
+
+	key, err := vpcrypto.ImportPubKey(hostInfo.HostPubKey)
+	if err != nil {
+		return false, err
+	}
+	ok, err = key.CheckSig(SigBytesHost(hostInfo.HostTitle, hostInfo.HostURL), hostInfo.HostSig)
+	if err != nil {
+		return false, err
+	}
+
+	return ok, nil
+}
