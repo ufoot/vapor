@@ -73,7 +73,7 @@ func TestLookup(t *testing.T) {
 	if err != nil {
 		t.Error("error creating host", err)
 	}
-	r, err := NewRing([]byte("tutu"), "foo bar", ai, []byte("abcd"), DefaultRingConfig())
+	r, err := NewRing(h, testTitle, testDescription, ai, nil, nil, nil)
 	if err != nil {
 		t.Error("error creating ring", err)
 	}

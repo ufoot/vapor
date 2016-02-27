@@ -175,3 +175,8 @@ func NewRing(host *Host, ringTitle, ringDescription string, appID []byte, config
 
 	return &ret, nil
 }
+
+// IsSigned returns true if the ring has been signed by corresponding host.
+func (ring *Ring) IsSigned() bool {
+	return ring.Info.RingSig != nil && len(ring.Info.RingSig) > 0
+}

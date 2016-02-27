@@ -28,6 +28,7 @@ import (
 var testID []byte
 
 const testTitle = "Toto"
+const testDescription = "Toto = zero la tete a toto"
 const testURL = "http://toto.bar/foo"
 
 var testPubKey []byte
@@ -97,10 +98,6 @@ func TestCheckDescription(t *testing.T) {
 	b, err = CheckDescription(strings.Repeat(" ", MaxLenDescription))
 	if b != true || err != nil {
 		t.Error("CheckDescription returned an error on long Description", err)
-	}
-	b, err = CheckDescription(strings.Repeat(" ", MinLenDescription-1))
-	if b == true || err == nil {
-		t.Error("CheckDescription does not report an error on too shot Description")
 	}
 	b, err = CheckDescription(strings.Repeat(" ", MaxLenDescription+1))
 	if b == true || err == nil {
