@@ -20,7 +20,7 @@
 package vpbruijn
 
 import (
-	"github.com/ufoot/vapor/vpcrypto"
+	"github.com/ufoot/vapor/vpsum"
 	"testing"
 )
 
@@ -31,22 +31,22 @@ func TestBruijn16x64Next(t *testing.T) {
 	implGeneric := bruijnGenericNew(m, n)
 	impl16x64 := bruijn16x64New()
 
-	i := vpcrypto.Checksum256([]byte("toto"))
+	i := vpsum.Checksum256([]byte("toto"))
 
 	nfGeneric := implGeneric.NextFirst(i)
 	nf16x64 := impl16x64.NextFirst(i)
 	if implGeneric.Cmp(nfGeneric, nf16x64) == 0 {
-		t.Logf("i=%s nf=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(nf16x64))
+		t.Logf("i=%s nf=%s", vpsum.BufToStr256(i), vpsum.BufToStr256(nf16x64))
 	} else {
-		t.Errorf("bad nf i=%s big=%s hex=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(nfGeneric), vpcrypto.BufToStr256(nf16x64))
+		t.Errorf("bad nf i=%s big=%s hex=%s", vpsum.BufToStr256(i), vpsum.BufToStr256(nfGeneric), vpsum.BufToStr256(nf16x64))
 	}
 
 	nlGeneric := implGeneric.NextFirst(i)
 	nl16x64 := impl16x64.NextFirst(i)
 	if implGeneric.Cmp(nlGeneric, nl16x64) == 0 {
-		t.Logf("i=%s nl=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(nl16x64))
+		t.Logf("i=%s nl=%s", vpsum.BufToStr256(i), vpsum.BufToStr256(nl16x64))
 	} else {
-		t.Errorf("bad nl i=%s big=%s hex=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(nlGeneric), vpcrypto.BufToStr256(nl16x64))
+		t.Errorf("bad nl i=%s big=%s hex=%s", vpsum.BufToStr256(i), vpsum.BufToStr256(nlGeneric), vpsum.BufToStr256(nl16x64))
 	}
 }
 
@@ -57,28 +57,28 @@ func TestBruijn16x64Prev(t *testing.T) {
 	implGeneric := bruijnGenericNew(m, n)
 	impl16x64 := bruijn16x64New()
 
-	i := vpcrypto.Checksum256([]byte("toto"))
+	i := vpsum.Checksum256([]byte("toto"))
 
 	pfGeneric := implGeneric.PrevFirst(i)
 	pf16x64 := impl16x64.PrevFirst(i)
 	if implGeneric.Cmp(pfGeneric, pf16x64) == 0 {
-		t.Logf("i=%s pf=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(pf16x64))
+		t.Logf("i=%s pf=%s", vpsum.BufToStr256(i), vpsum.BufToStr256(pf16x64))
 	} else {
-		t.Errorf("bad pf i=%s big=%s hex=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(pfGeneric), vpcrypto.BufToStr256(pf16x64))
+		t.Errorf("bad pf i=%s big=%s hex=%s", vpsum.BufToStr256(i), vpsum.BufToStr256(pfGeneric), vpsum.BufToStr256(pf16x64))
 	}
 
 	plGeneric := implGeneric.PrevFirst(i)
 	pl16x64 := impl16x64.PrevFirst(i)
 	if implGeneric.Cmp(plGeneric, pl16x64) == 0 {
-		t.Logf("i=%s pl=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(pl16x64))
+		t.Logf("i=%s pl=%s", vpsum.BufToStr256(i), vpsum.BufToStr256(pl16x64))
 	} else {
-		t.Errorf("bad pl i=%s big=%s hex=%s", vpcrypto.BufToStr256(i), vpcrypto.BufToStr256(plGeneric), vpcrypto.BufToStr256(pl16x64))
+		t.Errorf("bad pl i=%s big=%s hex=%s", vpsum.BufToStr256(i), vpsum.BufToStr256(plGeneric), vpsum.BufToStr256(pl16x64))
 	}
 }
 
 func BenchmarkBruijn16x64Next(b *testing.B) {
 	impl16x64 := bruijn16x64New()
-	v := vpcrypto.Checksum256([]byte("toto"))
+	v := vpsum.Checksum256([]byte("toto"))
 	for i := 0; i < b.N; i++ {
 		impl16x64.NextFirst(v)
 	}
@@ -86,7 +86,7 @@ func BenchmarkBruijn16x64Next(b *testing.B) {
 
 func BenchmarkBruijn16x64Prev(b *testing.B) {
 	impl16x64 := bruijn16x64New()
-	v := vpcrypto.Checksum256([]byte("toto"))
+	v := vpsum.Checksum256([]byte("toto"))
 	for i := 0; i < b.N; i++ {
 		impl16x64.PrevFirst(v)
 	}

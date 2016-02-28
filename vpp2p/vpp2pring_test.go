@@ -20,7 +20,8 @@
 package vpp2p
 
 import (
-	"github.com/ufoot/vapor/vpcrypto"
+	"github.com/ufoot/vapor/vpid"
+	"github.com/ufoot/vapor/vpsum"
 	"testing"
 )
 
@@ -41,7 +42,7 @@ func TestNewRing(t *testing.T) {
 	if ring.IsSigned() == false {
 		t.Error("ring is unsigned, when it should be")
 	}
-	zeroes = vpcrypto.ZeroesInBuf(vpcrypto.Checksum512(ring.Info.RingSig))
+	zeroes = vpid.ZeroesInBuf(vpsum.Checksum512(ring.Info.RingSig))
 	if zeroes < RingKeyZeroes {
 		t.Errorf("Ring created, but not enough zeroes in sig (%d)", zeroes)
 	}
@@ -65,7 +66,7 @@ func TestNewRing(t *testing.T) {
 	if ring.IsSigned() == true {
 		t.Error("ring is signed, when it should not be")
 	}
-	zeroes = vpcrypto.ZeroesInBuf(vpcrypto.Checksum512(ring.Info.RingSig))
+	zeroes = vpid.ZeroesInBuf(vpsum.Checksum512(ring.Info.RingSig))
 	t.Logf("Ring created, number of zeroes in sig is %d", zeroes)
 	zeroes2, err = RingInfoCheckSig(&(ring.Info))
 	if err == nil {

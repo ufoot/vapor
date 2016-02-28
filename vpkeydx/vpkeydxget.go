@@ -20,8 +20,8 @@
 package vpkeydx
 
 import (
-	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vperror"
+	"github.com/ufoot/vapor/vpsum"
 	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpvec3"
 	"math/big"
@@ -31,7 +31,7 @@ import (
 // Note that it can be used for any key, even possibly those which have
 // not be generated with Gen1d.
 func GetX(keyID []byte) (int32, error) {
-	keyInt, err := vpcrypto.BufToInt256(keyID)
+	keyInt, err := vpsum.BufToInt256(keyID)
 	if err != nil {
 		return 0, vperror.Chain(err, "unable to generate 1d keydx")
 	}
@@ -47,7 +47,7 @@ func GetX(keyID []byte) (int32, error) {
 // Note that it can be used for any key, even possibly those which have
 // not be generated with Gen1d.
 func GetXY(keyID []byte) (int32, int32, error) {
-	keyInt, err := vpcrypto.BufToInt256(keyID)
+	keyInt, err := vpsum.BufToInt256(keyID)
 	if err != nil {
 		return 0, 0, vperror.Chain(err, "unable to generate 2d keydx")
 	}
@@ -65,7 +65,7 @@ func GetXY(keyID []byte) (int32, int32, error) {
 // Note that it can be used for any key, even possibly those which have
 // not be generated with Gen1d.
 func GetXYZ(keyID []byte) (int32, int32, int32, error) {
-	keyInt, err := vpcrypto.BufToInt256(keyID)
+	keyInt, err := vpsum.BufToInt256(keyID)
 	if err != nil {
 		return 0, 0, 0, vperror.Chain(err, "unable to generate 3dd keydx")
 	}

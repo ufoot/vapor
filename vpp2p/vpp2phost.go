@@ -23,6 +23,8 @@ import (
 	"fmt"
 	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vpp2papi"
+	"github.com/ufoot/vapor/vprand"
+	"github.com/ufoot/vapor/vpsum"
 )
 
 // Host is a physical host, it is used to uniquely identify
@@ -77,7 +79,7 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 			return nil, err
 		}
 	} else {
-		pubKey = vpcrypto.IntToBuf512(vpcrypto.Rand512(vpcrypto.NewRand(), nil))
+		pubKey = vpsum.IntToBuf512(vprand.Rand512(vprand.NewRand(), nil))
 		sig = []byte("")
 	}
 

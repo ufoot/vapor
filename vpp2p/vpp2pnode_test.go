@@ -21,7 +21,8 @@ package vpp2p
 
 import (
 	"github.com/ufoot/vapor/vpapp"
-	"github.com/ufoot/vapor/vpcrypto"
+	"github.com/ufoot/vapor/vpid"
+	"github.com/ufoot/vapor/vpsum"
 	"testing"
 )
 
@@ -29,7 +30,7 @@ func TestNewNode(t *testing.T) {
 	var host *Host
 	var node *Node
 	var err error
-	ringID := vpcrypto.Checksum128([]byte("myring"))
+	ringID := vpsum.Checksum128([]byte("myring"))
 	var zeroes, zeroes2 int
 
 	host, err = NewHost(testTitle, testURL, true)
@@ -43,7 +44,7 @@ func TestNewNode(t *testing.T) {
 	if node.IsSigned() == false {
 		t.Error("node is unsigned, when it should be")
 	}
-	zeroes = vpcrypto.ZeroesInBuf(vpcrypto.Checksum256(node.Info.NodeSig))
+	zeroes = vpid.ZeroesInBuf(vpsum.Checksum256(node.Info.NodeSig))
 	if zeroes < NodeKeyZeroes {
 		t.Errorf("Node created, but not enough zeroes in sig (%d)", zeroes)
 	}
@@ -67,7 +68,7 @@ func TestNewNode(t *testing.T) {
 	if node.IsSigned() == true {
 		t.Error("node is signed, when it should not be")
 	}
-	zeroes = vpcrypto.ZeroesInBuf(vpcrypto.Checksum256(node.Info.NodeSig))
+	zeroes = vpid.ZeroesInBuf(vpsum.Checksum256(node.Info.NodeSig))
 	t.Logf("Node created, number of zeroes in sig is %d", zeroes)
 	zeroes2, err = NodeInfoCheckSig(&(node.Info))
 	if err == nil {
@@ -76,9 +77,9 @@ func TestNewNode(t *testing.T) {
 }
 
 func TestLookup(t *testing.T) {
-	key := vpcrypto.Checksum256([]byte("toto"))
-	keyShift := vpcrypto.Checksum256([]byte("toto"))
-	imaginaryNode := vpcrypto.Checksum256([]byte("titi"))
+	key := vpsum.Checksum256([]byte("toto"))
+	keyShift := vpsum.Checksum256([]byte("toto"))
+	imaginaryNode := vpsum.Checksum256([]byte("titi"))
 	ai := vpapp.CalcID(vpapp.DefaultPackage(), vpapp.DefaultVersion())
 	h, err := NewHost("foo bar", "http://foo.com", true)
 	if err != nil {
@@ -88,7 +89,7 @@ func TestLookup(t *testing.T) {
 	if err != nil {
 		t.Error("error creating ring", err)
 	}
-	lp, err := NewLocalProxy(vpcrypto.Checksum256([]byte("tata")), h, r)
+	lp, err := NewLocalProxy(vpsum.Checksum256([]byte("tata")), h, r)
 	if err != nil {
 		t.Error("error creating local proxy", err)
 	}

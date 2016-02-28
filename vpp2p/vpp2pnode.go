@@ -22,8 +22,10 @@ package vpp2p
 import (
 	"fmt"
 	"github.com/ufoot/vapor/vpcrypto"
+	"github.com/ufoot/vapor/vpid"
 	"github.com/ufoot/vapor/vplog"
 	"github.com/ufoot/vapor/vpp2papi"
+	"github.com/ufoot/vapor/vpsum"
 	"math/big"
 )
 
@@ -106,19 +108,19 @@ func NewNode(host *Host, ringID []byte) (*Node, error) {
 
 	ria := ringIDAppender{ringID: ringID}
 	if host.CanSign() {
-		intNodeID, sig, _, err = vpcrypto.GenerateID256(host.key, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
+		intNodeID, sig, _, err = vpid.GenerateID256(host.key, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		intNodeID, _, _, err = vpcrypto.GenerateID256(nil, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
+		intNodeID, _, _, err = vpid.GenerateID256(nil, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
 		if err != nil {
 			return nil, err
 		}
 		sig = []byte("")
 	}
 
-	ret.Info.NodeID = vpcrypto.IntToBuf256(intNodeID)
+	ret.Info.NodeID = vpsum.IntToBuf256(intNodeID)
 	ret.Info.RingID = make([]byte, len(ringID))
 	copy(ret.Info.RingID, ringID)
 	ret.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
@@ -260,7 +262,7 @@ func NodeInfoCheckSig(nodeInfo *vpp2papi.NodeInfo) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	z = vpcrypto.ZeroesInBuf(vpcrypto.Checksum256(nodeInfo.NodeSig))
+	z = vpid.ZeroesInBuf(vpsum.Checksum256(nodeInfo.NodeSig))
 
 	return z, nil
 }

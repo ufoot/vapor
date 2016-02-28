@@ -23,7 +23,9 @@ import (
 	"fmt"
 	"github.com/ufoot/vapor/vpbruijn"
 	"github.com/ufoot/vapor/vpcrypto"
+	"github.com/ufoot/vapor/vpid"
 	"github.com/ufoot/vapor/vpp2papi"
+	"github.com/ufoot/vapor/vpsum"
 	"math/big"
 )
 
@@ -108,7 +110,7 @@ func SigBytesRing(ringID []byte, ringTitle, ringDescription string, appID []byte
 }
 
 // NewRing creates a new ring from static data.
-func NewRing(host *Host, ringTitle, ringDescription string, appID []byte, config *vpp2papi.RingConfig, fc vpcrypto.FilterChecker, passwordHash []byte) (*Ring, error) {
+func NewRing(host *Host, ringTitle, ringDescription string, appID []byte, config *vpp2papi.RingConfig, fc vpid.FilterChecker, passwordHash []byte) (*Ring, error) {
 	var ret Ring
 	var ok bool
 	var err error
@@ -147,19 +149,19 @@ func NewRing(host *Host, ringTitle, ringDescription string, appID []byte, config
 	hasPassword := (passwordHash != nil) && (len(passwordHash) > 0)
 	rsa := ringStuffAppender{ringTitle: ringTitle, ringDescription: ringDescription, appID: appID, config: config, hasPassword: hasPassword}
 	if host.CanSign() {
-		intRingID, sig, _, err = vpcrypto.GenerateID512(host.key, fc, &rsa, RingKeySeconds, RingKeyZeroes)
+		intRingID, sig, _, err = vpid.GenerateID512(host.key, fc, &rsa, RingKeySeconds, RingKeyZeroes)
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		intRingID, _, _, err = vpcrypto.GenerateID512(nil, fc, &rsa, RingKeySeconds, RingKeyZeroes)
+		intRingID, _, _, err = vpid.GenerateID512(nil, fc, &rsa, RingKeySeconds, RingKeyZeroes)
 		if err != nil {
 			return nil, err
 		}
 		sig = []byte("")
 	}
 
-	ret.Info.RingID = vpcrypto.IntToBuf512(intRingID)
+	ret.Info.RingID = vpsum.IntToBuf512(intRingID)
 	ret.Info.RingTitle = ringTitle
 	ret.Info.RingDescription = ringDescription
 	ret.Info.AppID = appID
@@ -201,7 +203,7 @@ func RingInfoCheckSig(ringInfo *vpp2papi.RingInfo) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	z = vpcrypto.ZeroesInBuf(vpcrypto.Checksum512(ringInfo.RingSig))
+	z = vpid.ZeroesInBuf(vpsum.Checksum512(ringInfo.RingSig))
 
 	return z, nil
 }

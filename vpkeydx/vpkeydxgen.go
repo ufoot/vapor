@@ -21,8 +21,8 @@ package vpkeydx
 
 import (
 	"fmt"
-	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vperror"
+	"github.com/ufoot/vapor/vpsum"
 	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpvec3"
 )
@@ -39,7 +39,7 @@ func Gen(seed []byte, keyName string) ([]byte, error) {
 		return nil, fmt.Errorf("key is not long enough")
 	}
 
-	return vpcrypto.Checksum256(append(seed, []byte(keyName)...)), nil
+	return vpsum.Checksum256(append(seed, []byte(keyName)...)), nil
 }
 
 // GenX generates a unique ID for a key, given a seed.
@@ -54,7 +54,7 @@ func GenX(seed []byte, keyName string, x int32) ([]byte, error) {
 	if err != nil {
 		return nil, vperror.Chain(err, "unable to generate X keydx")
 	}
-	keyInt, err := vpcrypto.BufToInt256(keyBuf)
+	keyInt, err := vpsum.BufToInt256(keyBuf)
 	if err != nil {
 		return nil, vperror.Chain(err, "unable to generate X keydx")
 	}
@@ -65,7 +65,7 @@ func GenX(seed []byte, keyName string, x int32) ([]byte, error) {
 	for i := 0; i < n31; i++ {
 		keyInt = keyInt.SetBit(keyInt, nOffset1+i, xInt.Bit(i))
 	}
-	return vpcrypto.IntToBuf256(keyInt), nil
+	return vpsum.IntToBuf256(keyInt), nil
 }
 
 // GenXY generates a unique ID for a key, given a seed.
@@ -82,7 +82,7 @@ func GenXY(seed []byte, keyName string, x int32, y int32) ([]byte, error) {
 	if err != nil {
 		return nil, vperror.Chain(err, "unable to generate XY keydx")
 	}
-	keyInt, err := vpcrypto.BufToInt256(keyBuf)
+	keyInt, err := vpsum.BufToInt256(keyBuf)
 	if err != nil {
 		return nil, vperror.Chain(err, "unable to generate XY keydx")
 	}
@@ -98,7 +98,7 @@ func GenXY(seed []byte, keyName string, x int32, y int32) ([]byte, error) {
 		keyInt = keyInt.SetBit(keyInt, nOffset2+2*i, xInt.Bit(i))
 		keyInt = keyInt.SetBit(keyInt, nOffset2+2*i+1, yInt.Bit(i))
 	}
-	return vpcrypto.IntToBuf256(keyInt), nil
+	return vpsum.IntToBuf256(keyInt), nil
 }
 
 // GenXYZ generates a unique ID for a key, given a seed.
@@ -115,7 +115,7 @@ func GenXYZ(seed []byte, keyName string, x int32, y int32, z int32) ([]byte, err
 	if err != nil {
 		return nil, vperror.Chain(err, "unable to generate XYZ keydx")
 	}
-	keyInt, err := vpcrypto.BufToInt256(keyBuf)
+	keyInt, err := vpsum.BufToInt256(keyBuf)
 	if err != nil {
 		return nil, vperror.Chain(err, "unable to generate XYZ keydx")
 	}
@@ -136,7 +136,7 @@ func GenXYZ(seed []byte, keyName string, x int32, y int32, z int32) ([]byte, err
 		keyInt = keyInt.SetBit(keyInt, nOffset3+3*i+1, yInt.Bit(i))
 		keyInt = keyInt.SetBit(keyInt, nOffset3+3*i+2, zInt.Bit(i))
 	}
-	return vpcrypto.IntToBuf256(keyInt), nil
+	return vpsum.IntToBuf256(keyInt), nil
 }
 
 // GenVec1 is a simple alias on GenX.

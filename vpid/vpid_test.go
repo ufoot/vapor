@@ -17,22 +17,24 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpcrypto
+package vpid
 
 import (
 	"encoding/hex"
+	"github.com/ufoot/vapor/vpcrypto"
+	"github.com/ufoot/vapor/vpsum"
 	"math/big"
 	"testing"
 )
 
-var testKey *Key
+var testKey *vpcrypto.Key
 
 const testMaxSecondsShort = 1
 const testMaxSecondsLong = 3
 const testMinZeroes = 7
 
 func init() {
-	testKey, _ = NewKey()
+	testKey, _ = vpcrypto.NewKey()
 }
 
 const filterCheckerMod = 31
@@ -99,19 +101,19 @@ func TestGenerateID512(t *testing.T) {
 
 	id, sig, z, err := GenerateID512(testKey, nil, nil, 0, 0)
 	if err == nil {
-		t.Logf("GenerateID512 (short) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID512 (short) OK id=%s sig=%s z=%d", vpsum.IntToStr512(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID512")
 	}
 	id, sig, z, err = GenerateID512(testKey, nil, nil, testMaxSecondsLong, 0)
 	if err == nil {
-		t.Logf("GenerateID512 (long) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID512 (long) OK id=%s sig=%s z=%d", vpsum.IntToStr512(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID512")
 	}
 	id, sig, z, err = GenerateID512(testKey, nil, nil, testMaxSecondsLong, testMinZeroes)
 	if err == nil {
-		t.Logf("GenerateID512 (very long) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID512 (very long) OK id=%s sig=%s z=%d", vpsum.IntToStr512(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID512")
 	}
@@ -120,30 +122,30 @@ func TestGenerateID512(t *testing.T) {
 	}
 	id, sig, z, err = GenerateID512(testKey, co, nil, testMaxSecondsShort, 0)
 	if err == nil && co.Check(id) {
-		t.Logf("GenerateID512 (checked) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID512 (checked) OK id=%s sig=%s z=%d", vpsum.IntToStr512(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to generate checked  ID512 id=%s", id.String())
 	}
 	id, sig, z, err = GenerateID512(testKey, fo, nil, testMaxSecondsShort, 0)
 	// note, checking with co what has been filter with fo
 	if err == nil && co.Check(id) {
-		t.Logf("GenerateID512 (filtered) OK id=%s sig=%s z=%d", IntToStr512(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID512 (filtered) OK id=%s sig=%s z=%d", vpsum.IntToStr512(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to generate filtered  ID512 id=%s", id.String())
 	}
 	id, sig, z, err = GenerateID512(testKey, co, nil, testMaxSecondsShort, 0)
 	if err == nil && co.Check(id) {
-		t.Logf("GenerateID512 (checked) OK id=%s sig=nil z=%d", IntToStr512(id), z)
+		t.Logf("GenerateID512 (checked) OK id=%s sig=nil z=%d", vpsum.IntToStr512(id), z)
 	} else {
 		t.Errorf("unable to generate checked  ID512 id=%s", id.String())
 	}
 	id, sig, z, err = GenerateID512(testKey, nil, &dt, testMaxSecondsShort, testMinZeroes)
 	if err == nil {
-		t.Logf("GenerateID512 (transformed) OK id=%s sig=nil z=%d", IntToStr512(id), z)
+		t.Logf("GenerateID512 (transformed) OK id=%s sig=nil z=%d", vpsum.IntToStr512(id), z)
 	} else {
 		t.Errorf("unable to generate checked  ID512 id=%s", id.String())
 	}
-	if ZeroesInBuf(Checksum512(sig)) < testMinZeroes {
+	if ZeroesInBuf(vpsum.Checksum512(sig)) < testMinZeroes {
 		t.Errorf("GenerateID512 generated z=%d<%d", z, testMinZeroes)
 	}
 }
@@ -155,19 +157,19 @@ func TestGenerateID256(t *testing.T) {
 
 	id, sig, z, err := GenerateID256(testKey, nil, nil, 0, 0)
 	if err == nil {
-		t.Logf("GenerateID256 (short) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID256 (short) OK id=%s sig=%s z=%d", vpsum.IntToStr256(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID256")
 	}
 	id, sig, z, err = GenerateID256(testKey, nil, nil, testMaxSecondsLong, 0)
 	if err == nil {
-		t.Logf("GenerateID256 (long) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID256 (long) OK id=%s sig=%s z=%d", vpsum.IntToStr256(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID256")
 	}
 	id, sig, z, err = GenerateID256(testKey, nil, nil, testMaxSecondsLong, testMinZeroes)
 	if err == nil {
-		t.Logf("GenerateID256 (very long) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID256 (very long) OK id=%s sig=%s z=%d", vpsum.IntToStr256(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID256")
 	}
@@ -176,30 +178,30 @@ func TestGenerateID256(t *testing.T) {
 	}
 	id, sig, z, err = GenerateID256(testKey, co, nil, testMaxSecondsShort, 0)
 	if err == nil && co.Check(id) {
-		t.Logf("GenerateID256 (checked) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID256 (checked) OK id=%s sig=%s z=%d", vpsum.IntToStr256(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to generate checked  ID256 id=%s", id.String())
 	}
 	id, sig, z, err = GenerateID256(testKey, fo, nil, testMaxSecondsShort, 0)
 	// note, checking with co what has been filter with fo
 	if err == nil && co.Check(id) {
-		t.Logf("GenerateID256 (filtered) OK id=%s sig=%s z=%d", IntToStr256(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID256 (filtered) OK id=%s sig=%s z=%d", vpsum.IntToStr256(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to generate filtered ID256 id=%s", id.String())
 	}
 	id, sig, z, err = GenerateID256(testKey, co, nil, testMaxSecondsShort, 0)
 	if err == nil && co.Check(id) {
-		t.Logf("GenerateID256 (checked) OK id=%s sig=nil z=%d", IntToStr256(id), z)
+		t.Logf("GenerateID256 (checked) OK id=%s sig=nil z=%d", vpsum.IntToStr256(id), z)
 	} else {
 		t.Errorf("unable to generate checked  ID256 id=%s", id.String())
 	}
 	id, sig, z, err = GenerateID256(testKey, nil, &dt, testMaxSecondsShort, testMinZeroes)
 	if err == nil {
-		t.Logf("GenerateID256 (transformed) OK id=%s sig=nil z=%d", IntToStr256(id), z)
+		t.Logf("GenerateID256 (transformed) OK id=%s sig=nil z=%d", vpsum.IntToStr256(id), z)
 	} else {
 		t.Errorf("unable to generate checked  ID256 id=%s", id.String())
 	}
-	if ZeroesInBuf(Checksum256(sig)) < testMinZeroes {
+	if ZeroesInBuf(vpsum.Checksum256(sig)) < testMinZeroes {
 		t.Errorf("GenerateID256 generated z=%d<%d", z, testMinZeroes)
 	}
 }
@@ -211,19 +213,19 @@ func TestGenerateID128(t *testing.T) {
 
 	id, sig, z, err := GenerateID128(testKey, nil, nil, 0, 0)
 	if err == nil {
-		t.Logf("GenerateID128 (short) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID128 (short) OK id=%s sig=%s z=%d", vpsum.IntToStr128(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID128")
 	}
 	id, sig, z, err = GenerateID128(testKey, nil, nil, testMaxSecondsLong, 0)
 	if err == nil {
-		t.Logf("GenerateID128 (long) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID128 (long) OK id=%s sig=%s z=%d", vpsum.IntToStr128(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID128")
 	}
 	id, sig, z, err = GenerateID128(testKey, nil, nil, testMaxSecondsLong, testMinZeroes)
 	if err == nil {
-		t.Logf("GenerateID128 (very long) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID128 (very long) OK id=%s sig=%s z=%d", vpsum.IntToStr128(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID128")
 	}
@@ -232,30 +234,30 @@ func TestGenerateID128(t *testing.T) {
 	}
 	id, sig, z, err = GenerateID128(testKey, co, nil, testMaxSecondsShort, 0)
 	if err == nil && co.Check(id) {
-		t.Logf("GenerateID128 (checked) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID128 (checked) OK id=%s sig=%s z=%d", vpsum.IntToStr128(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to generate checked  ID128 id=%s", id.String())
 	}
 	id, sig, z, err = GenerateID128(testKey, fo, nil, testMaxSecondsShort, 0)
 	// note, checking with co what has been filter with fo
 	if err == nil && co.Check(id) {
-		t.Logf("GenerateID128 (filtered) OK id=%s sig=%s z=%d", IntToStr128(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID128 (filtered) OK id=%s sig=%s z=%d", vpsum.IntToStr128(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to generate filtered ID128 id=%s", id.String())
 	}
 	id, sig, z, err = GenerateID128(testKey, co, nil, testMaxSecondsShort, 0)
 	if err == nil && co.Check(id) {
-		t.Logf("GenerateID128 (checked) OK id=%s sig=nil z=%d", IntToStr128(id), z)
+		t.Logf("GenerateID128 (checked) OK id=%s sig=nil z=%d", vpsum.IntToStr128(id), z)
 	} else {
 		t.Errorf("unable to generate checked  ID128 id=%s", id.String())
 	}
 	id, sig, z, err = GenerateID128(testKey, nil, &dt, testMaxSecondsShort, testMinZeroes)
 	if err == nil {
-		t.Logf("GenerateID128 (transformed) OK id=%s sig=nil z=%d", IntToStr128(id), z)
+		t.Logf("GenerateID128 (transformed) OK id=%s sig=nil z=%d", vpsum.IntToStr128(id), z)
 	} else {
 		t.Errorf("unable to generate checked  ID128 id=%s", id.String())
 	}
-	if ZeroesInBuf(Checksum128(sig)) < testMinZeroes {
+	if ZeroesInBuf(vpsum.Checksum128(sig)) < testMinZeroes {
 		t.Errorf("GenerateID128 generated z=%d<%d", z, testMinZeroes)
 	}
 }
@@ -268,19 +270,19 @@ func TestGenerateID64(t *testing.T) {
 
 	id, sig, z, err := GenerateID64(testKey, nil, nil, 0, 0)
 	if err == nil {
-		t.Logf("GenerateID64 (short) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID64 (short) OK id=%s sig=%s z=%d", vpsum.IntToStr64(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID64")
 	}
 	id, sig, z, err = GenerateID64(testKey, nil, nil, testMaxSecondsLong, 0)
 	if err == nil {
-		t.Logf("GenerateID64 (long) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID64 (long) OK id=%s sig=%s z=%d", vpsum.IntToStr64(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID64")
 	}
 	id, sig, z, err = GenerateID64(testKey, nil, nil, testMaxSecondsLong, testMinZeroes)
 	if err == nil {
-		t.Logf("GenerateID64 (very long) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID64 (very long) OK id=%s sig=%s z=%d", vpsum.IntToStr64(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID64")
 	}
@@ -290,7 +292,7 @@ func TestGenerateID64(t *testing.T) {
 	id, sig, z, err = GenerateID64(testKey, co, nil, testMaxSecondsShort, 0)
 	bigInt.SetUint64(uint64(id))
 	if err == nil && co.Check(&bigInt) {
-		t.Logf("GenerateID64 (checked) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID64 (checked) OK id=%s sig=%s z=%d", vpsum.IntToStr64(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to generate checked  ID64 id=%d", id)
 	}
@@ -298,24 +300,24 @@ func TestGenerateID64(t *testing.T) {
 	bigInt.SetUint64(uint64(id))
 	// note, checking with co what has been filter with fo
 	if err == nil && co.Check(&bigInt) {
-		t.Logf("GenerateID64 (filtered) OK id=%s sig=%s z=%d", IntToStr64(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID64 (filtered) OK id=%s sig=%s z=%d", vpsum.IntToStr64(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to generate filtered ID64 id=%d", id)
 	}
 	id, sig, z, err = GenerateID64(testKey, co, nil, testMaxSecondsShort, 0)
 	bigInt.SetUint64(uint64(id))
 	if err == nil && co.Check(&bigInt) {
-		t.Logf("GenerateID64 (checked) OK id=%s sig=nil z=%d", IntToStr64(id), z)
+		t.Logf("GenerateID64 (checked) OK id=%s sig=nil z=%d", vpsum.IntToStr64(id), z)
 	} else {
 		t.Errorf("unable to generate checked  ID64 id=%d", id)
 	}
 	id, sig, z, err = GenerateID64(testKey, nil, &dt, testMaxSecondsShort, testMinZeroes)
 	if err == nil {
-		t.Logf("GenerateID64 (transformed) OK id=%s sig=nil z=%d", IntToStr64(id), z)
+		t.Logf("GenerateID64 (transformed) OK id=%s sig=nil z=%d", vpsum.IntToStr64(id), z)
 	} else {
 		t.Errorf("unable to generate checked  ID64 id=%d", id)
 	}
-	if ZeroesInBuf(Checksum64(sig)) < testMinZeroes {
+	if ZeroesInBuf(vpsum.Checksum64(sig)) < testMinZeroes {
 		t.Errorf("GenerateID64 generated z=%d<%d", z, testMinZeroes)
 	}
 }
@@ -328,19 +330,19 @@ func TestGenerateID32(t *testing.T) {
 
 	id, sig, z, err := GenerateID32(testKey, nil, nil, 0, 0)
 	if err == nil {
-		t.Logf("GenerateID32 (short) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID32 (short) OK id=%s sig=%s z=%d", vpsum.IntToStr32(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID32")
 	}
 	id, sig, z, err = GenerateID32(testKey, nil, nil, testMaxSecondsLong, 0)
 	if err == nil {
-		t.Logf("GenerateID32 (long) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID32 (long) OK id=%s sig=%s z=%d", vpsum.IntToStr32(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID32")
 	}
 	id, sig, z, err = GenerateID32(testKey, nil, nil, testMaxSecondsLong, testMinZeroes)
 	if err == nil {
-		t.Logf("GenerateID32 (very long) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID32 (very long) OK id=%s sig=%s z=%d", vpsum.IntToStr32(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Error("unable to generate ID32")
 	}
@@ -350,7 +352,7 @@ func TestGenerateID32(t *testing.T) {
 	id, sig, z, err = GenerateID32(testKey, co, nil, testMaxSecondsShort, 0)
 	bigInt.SetUint64(uint64(id))
 	if err == nil && co.Check(&bigInt) {
-		t.Logf("GenerateID32 (checked) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID32 (checked) OK id=%s sig=%s z=%d", vpsum.IntToStr32(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to generate checked ID32 id=%d", id)
 	}
@@ -358,24 +360,24 @@ func TestGenerateID32(t *testing.T) {
 	bigInt.SetUint64(uint64(id))
 	// note, checking with co what has been filter with fo
 	if err == nil && co.Check(&bigInt) {
-		t.Logf("GenerateID32 (filtered) OK id=%s sig=%s z=%d", IntToStr32(id), hex.EncodeToString(sig), z)
+		t.Logf("GenerateID32 (filtered) OK id=%s sig=%s z=%d", vpsum.IntToStr32(id), hex.EncodeToString(sig), z)
 	} else {
 		t.Errorf("unable to generate filtered ID32 id=%d", id)
 	}
 	id, sig, z, err = GenerateID32(testKey, co, nil, testMaxSecondsShort, 0)
 	bigInt.SetUint64(uint64(id))
 	if err == nil && co.Check(&bigInt) {
-		t.Logf("GenerateID32 (checked) OK id=%s sig=nil z=%d", IntToStr32(id), z)
+		t.Logf("GenerateID32 (checked) OK id=%s sig=nil z=%d", vpsum.IntToStr32(id), z)
 	} else {
 		t.Errorf("unable to generate checked  ID32 id=%d", id)
 	}
 	id, sig, z, err = GenerateID32(testKey, nil, &dt, testMaxSecondsShort, testMinZeroes)
 	if err == nil {
-		t.Logf("GenerateID32 (transformed) OK id=%s sig=nil z=%d", IntToStr32(id), z)
+		t.Logf("GenerateID32 (transformed) OK id=%s sig=nil z=%d", vpsum.IntToStr32(id), z)
 	} else {
 		t.Errorf("unable to generate checked  ID32 id=%d", id)
 	}
-	if ZeroesInBuf(Checksum32(sig)) < testMinZeroes {
+	if ZeroesInBuf(vpsum.Checksum32(sig)) < testMinZeroes {
 		t.Errorf("GenerateID32 generated z=%d<%d", z, testMinZeroes)
 	}
 }

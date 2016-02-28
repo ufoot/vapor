@@ -21,6 +21,7 @@ package vplevel
 
 import (
 	"github.com/ufoot/vapor/vpcrypto"
+	"github.com/ufoot/vapor/vpid"
 	"github.com/ufoot/vapor/vplog"
 	"github.com/ufoot/vapor/vptypes"
 	"math/big"
@@ -200,7 +201,7 @@ func NetworkID(sizes Sizes, key *vpcrypto.Key) (*big.Int, []byte, error) {
 
 	fc.sizes = sizes
 
-	ret, sig, _, err := vpcrypto.GenerateID512(key, fc, nil, NetworkIDSeconds, NetworkIDZeroes)
+	ret, sig, _, err := vpid.GenerateID512(key, fc, nil, NetworkIDSeconds, NetworkIDZeroes)
 
 	return ret, sig, err
 }
@@ -212,7 +213,7 @@ func LocalID(sizes Sizes) (*big.Int, error) {
 
 	fc.sizes = sizes
 
-	ret, _, _, err := vpcrypto.GenerateID512(nil, fc, nil, LocalIDSeconds, LocalIDZeroes)
+	ret, _, _, err := vpid.GenerateID512(nil, fc, nil, LocalIDSeconds, LocalIDZeroes)
 
 	return ret, err
 }

@@ -20,8 +20,8 @@
 package vpkeydx
 
 import (
-	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vperror"
+	"github.com/ufoot/vapor/vpsum"
 	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpvec3"
 	"testing"
@@ -45,7 +45,7 @@ func TestGen(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate flat key"))
 	}
-	t.Logf("generated key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated key %s", vpsum.BufToStr256(keydx))
 }
 
 func TestGenX(t *testing.T) {
@@ -53,7 +53,7 @@ func TestGenX(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate X key"))
 	}
-	t.Logf("generated X key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated X key %s", vpsum.BufToStr256(keydx))
 }
 
 func TestGenXY(t *testing.T) {
@@ -61,7 +61,7 @@ func TestGenXY(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate XY key"))
 	}
-	t.Logf("generated XY key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated XY key %s", vpsum.BufToStr256(keydx))
 }
 
 func TestGenXYZ(t *testing.T) {
@@ -69,7 +69,7 @@ func TestGenXYZ(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate XYZ key"))
 	}
-	t.Logf("generated XYZ key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated XYZ key %s", vpsum.BufToStr256(keydx))
 }
 
 func TestGenVec1(t *testing.T) {
@@ -77,7 +77,7 @@ func TestGenVec1(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate Vec1 key"))
 	}
-	t.Logf("generated Vec1 key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated Vec1 key %s", vpsum.BufToStr256(keydx))
 }
 
 func TestGenVec2(t *testing.T) {
@@ -85,7 +85,7 @@ func TestGenVec2(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate Vec2 key"))
 	}
-	t.Logf("generated Vec2 key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated Vec2 key %s", vpsum.BufToStr256(keydx))
 }
 
 func TestGenVec3(t *testing.T) {
@@ -93,7 +93,7 @@ func TestGenVec3(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate Vec3 key"))
 	}
-	t.Logf("generated Vec3 key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated Vec3 key %s", vpsum.BufToStr256(keydx))
 }
 
 func BenchmarkGen(b *testing.B) {

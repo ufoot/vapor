@@ -17,10 +17,13 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpcrypto
+package vpid
 
 import (
+	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vperror"
+	"github.com/ufoot/vapor/vprand"
+	"github.com/ufoot/vapor/vpsum"
 	"math/big"
 	"time"
 )
@@ -54,21 +57,21 @@ type BytesTransformer interface {
 // If minZeroes is greater than 0, will wait until at least that
 // amount of zeroes is achieved, regardless of the maxSeconds setting.
 // This can take a lot of time...
-func GenerateID512(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (*big.Int, []byte, int, error) {
-	r := NewRand()
+func GenerateID512(key *vpcrypto.Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (*big.Int, []byte, int, error) {
+	r := vprand.NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
 	var tmpData, tmpSig, sig []byte
 	var err error
 
 	for start := time.Now().Unix(); ret == nil || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
-		tmpInt = Rand512(r, nil)
+		tmpInt = vprand.Rand512(r, nil)
 		if fc != nil {
 			tmpInt = fc.Filter(tmpInt)
 		}
 		if fc == nil || fc.Check(tmpInt) {
 			if key != nil {
-				tmpData = IntToBuf512(tmpInt)
+				tmpData = vpsum.IntToBuf512(tmpInt)
 				if bt != nil {
 					tmpData = bt.Transform(tmpData)
 				}
@@ -77,7 +80,7 @@ func GenerateID512(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, 
 					return nil, nil, 0, vperror.Chain(err, "can't sign id")
 				}
 			}
-			tmpZ = ZeroesInBuf(Checksum512(tmpSig))
+			tmpZ = ZeroesInBuf(vpsum.Checksum512(tmpSig))
 			if tmpZ >= z {
 				ret = tmpInt
 				z = tmpZ
@@ -100,21 +103,21 @@ func GenerateID512(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, 
 // If minZeroes is greater than 0, will wait until at least that
 // amount of zeroes is achieved, regardless of the maxSeconds setting.
 // This can take a lot of time...
-func GenerateID256(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (*big.Int, []byte, int, error) {
-	r := NewRand()
+func GenerateID256(key *vpcrypto.Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (*big.Int, []byte, int, error) {
+	r := vprand.NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
 	var tmpData, tmpSig, sig []byte
 	var err error
 
 	for start := time.Now().Unix(); ret == nil || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
-		tmpInt = Rand256(r, nil)
+		tmpInt = vprand.Rand256(r, nil)
 		if fc != nil {
 			tmpInt = fc.Filter(tmpInt)
 		}
 		if fc == nil || fc.Check(tmpInt) {
 			if key != nil {
-				tmpData = IntToBuf256(tmpInt)
+				tmpData = vpsum.IntToBuf256(tmpInt)
 				if bt != nil {
 					tmpData = bt.Transform(tmpData)
 				}
@@ -123,7 +126,7 @@ func GenerateID256(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, 
 					return nil, nil, 0, vperror.Chain(err, "can't sign id")
 				}
 			}
-			tmpZ = ZeroesInBuf(Checksum256(tmpSig))
+			tmpZ = ZeroesInBuf(vpsum.Checksum256(tmpSig))
 			if tmpZ >= z {
 				ret = tmpInt
 				z = tmpZ
@@ -146,21 +149,21 @@ func GenerateID256(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, 
 // If minZeroes is greater than 0, will wait until at least that
 // amount of zeroes is achieved, regardless of the maxSeconds setting.
 // This can take a lot of time...
-func GenerateID128(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (*big.Int, []byte, int, error) {
-	r := NewRand()
+func GenerateID128(key *vpcrypto.Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (*big.Int, []byte, int, error) {
+	r := vprand.NewRand()
 	var ret, tmpInt *big.Int
 	var tmpZ, z int
 	var tmpData, tmpSig, sig []byte
 	var err error
 
 	for start := time.Now().Unix(); ret == nil || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
-		tmpInt = Rand128(r, nil)
+		tmpInt = vprand.Rand128(r, nil)
 		if fc != nil {
 			tmpInt = fc.Filter(tmpInt)
 		}
 		if fc == nil || fc.Check(tmpInt) {
 			if key != nil {
-				tmpData = IntToBuf128(tmpInt)
+				tmpData = vpsum.IntToBuf128(tmpInt)
 				if bt != nil {
 					tmpData = bt.Transform(tmpData)
 				}
@@ -169,7 +172,7 @@ func GenerateID128(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, 
 					return nil, nil, 0, vperror.Chain(err, "can't sign id")
 				}
 			}
-			tmpZ = ZeroesInBuf(Checksum128(tmpSig))
+			tmpZ = ZeroesInBuf(vpsum.Checksum128(tmpSig))
 			if tmpZ >= z {
 				ret = tmpInt
 				z = tmpZ
@@ -192,8 +195,8 @@ func GenerateID128(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, 
 // If minZeroes is greater than 0, will wait until at least that
 // amount of zeroes is achieved, regardless of the maxSeconds setting.
 // This can take a lot of time...
-func GenerateID64(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (uint64, []byte, int, error) {
-	r := NewRand()
+func GenerateID64(key *vpcrypto.Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (uint64, []byte, int, error) {
+	r := vprand.NewRand()
 	var ret, tmpInt uint64
 	var tmpBig big.Int
 	var tmpZ, z int
@@ -201,7 +204,7 @@ func GenerateID64(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, m
 	var err error
 
 	for start := time.Now().Unix(); ret == 0 || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
-		tmpInt = Rand64(r, 0)
+		tmpInt = vprand.Rand64(r, 0)
 		tmpBig.SetUint64(tmpInt)
 		if fc != nil {
 			tmpBig = *fc.Filter(&tmpBig)
@@ -209,7 +212,7 @@ func GenerateID64(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, m
 		tmpInt = tmpBig.Uint64()
 		if fc == nil || fc.Check(&tmpBig) {
 			if key != nil {
-				tmpData = IntToBuf64(tmpInt)
+				tmpData = vpsum.IntToBuf64(tmpInt)
 				if bt != nil {
 					tmpData = bt.Transform(tmpData)
 				}
@@ -218,7 +221,7 @@ func GenerateID64(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, m
 					return 0, nil, 0, vperror.Chain(err, "can't sign id")
 				}
 			}
-			tmpZ = ZeroesInBuf(Checksum64(tmpSig))
+			tmpZ = ZeroesInBuf(vpsum.Checksum64(tmpSig))
 			if tmpZ >= z {
 				ret = tmpInt
 				z = tmpZ
@@ -241,8 +244,8 @@ func GenerateID64(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, m
 // If minZeroes is greater than 0, will wait until at least that
 // amount of zeroes is achieved, regardless of the maxSeconds setting.
 // This can take a lot of time...
-func GenerateID32(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (uint32, []byte, int, error) {
-	r := NewRand()
+func GenerateID32(key *vpcrypto.Key, fc FilterChecker, bt BytesTransformer, maxSeconds, minZeroes int) (uint32, []byte, int, error) {
+	r := vprand.NewRand()
 	var ret, tmpInt uint32
 	var tmpBig big.Int
 	var tmpZ, z int
@@ -250,7 +253,7 @@ func GenerateID32(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, m
 	var err error
 
 	for start := time.Now().Unix(); ret == 0 || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
-		tmpInt = Rand32(r, 0)
+		tmpInt = vprand.Rand32(r, 0)
 		tmpBig.SetUint64(uint64(tmpInt))
 		if fc != nil {
 			tmpBig = *fc.Filter(&tmpBig)
@@ -258,7 +261,7 @@ func GenerateID32(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, m
 		tmpInt = uint32(tmpBig.Uint64())
 		if fc == nil || fc.Check(&tmpBig) {
 			if key != nil {
-				tmpData = IntToBuf32(tmpInt)
+				tmpData = vpsum.IntToBuf32(tmpInt)
 				if bt != nil {
 					tmpData = bt.Transform(tmpData)
 				}
@@ -267,7 +270,7 @@ func GenerateID32(key *Key, fc FilterChecker, bt BytesTransformer, maxSeconds, m
 					return 0, nil, 0, vperror.Chain(err, "can't sign id")
 				}
 			}
-			tmpZ = ZeroesInBuf(Checksum32(tmpSig))
+			tmpZ = ZeroesInBuf(vpsum.Checksum32(tmpSig))
 			if tmpZ >= z {
 				ret = tmpInt
 				z = tmpZ

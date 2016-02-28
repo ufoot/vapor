@@ -20,7 +20,7 @@
 package vpapp
 
 import (
-	"github.com/ufoot/vapor/vpcrypto"
+	"github.com/ufoot/vapor/vpsum"
 )
 
 // CalcID generates an Application ID from Package and Version
@@ -35,5 +35,5 @@ func CalcID(p *Package, v *Version) []byte {
 	buf = append(buf, byte(v.Minor))
 	//buf = append(buf, v.Stamp...)
 
-	return vpcrypto.Checksum128(buf)
+	return vpsum.Checksum128(buf)
 }

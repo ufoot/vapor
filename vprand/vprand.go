@@ -17,9 +17,10 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpcrypto
+package vprand
 
 import (
+	"github.com/ufoot/vapor/vpsum"
 	"math/big"
 	"math/rand"
 	"time"
@@ -45,7 +46,7 @@ func newSource() rand.Source {
 	var now time.Time
 
 	now = time.Now()
-	seed = PseudoRand64(uint64(now.Unix()<<32)^uint64(now.Nanosecond()), 0)
+	seed = vpsum.PseudoRand64(uint64(now.Unix()<<32)^uint64(now.Nanosecond()), 0)
 	source = rand.NewSource(int64(seed))
 
 	return source

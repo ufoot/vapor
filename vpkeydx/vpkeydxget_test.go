@@ -21,8 +21,8 @@ package vpkeydx
 
 import (
 	"fmt"
-	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vperror"
+	"github.com/ufoot/vapor/vpsum"
 	"github.com/ufoot/vapor/vpvec2"
 	"github.com/ufoot/vapor/vpvec3"
 	"testing"
@@ -37,7 +37,7 @@ func TestGetX(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate X key"))
 	}
-	t.Logf("generated X key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated X key %s", vpsum.BufToStr256(keydx))
 	x, err := GetX(keydx)
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to get X coord"))
@@ -52,7 +52,7 @@ func TestGetXY(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate XY key"))
 	}
-	t.Logf("generated XY key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated XY key %s", vpsum.BufToStr256(keydx))
 	x, y, err := GetXY(keydx)
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to get XY coord"))
@@ -70,7 +70,7 @@ func TestGetXYZ(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate XYZ key"))
 	}
-	t.Logf("generated XYZ key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated XYZ key %s", vpsum.BufToStr256(keydx))
 	x, y, z, err := GetXYZ(keydx)
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to get XYZ coord"))
@@ -91,7 +91,7 @@ func TestGetVec1(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate Vec1 key"))
 	}
-	t.Logf("generated Vec1 key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated Vec1 key %s", vpsum.BufToStr256(keydx))
 	x, err := GetVec1(keydx)
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to get Vec1 coord"))
@@ -106,7 +106,7 @@ func TestGetVec2(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate Vec1 key"))
 	}
-	t.Logf("generated Vec1 key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated Vec1 key %s", vpsum.BufToStr256(keydx))
 	vec2, err := GetVec2(keydx)
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to get Vec1 coord"))
@@ -124,7 +124,7 @@ func TestGetVec3(t *testing.T) {
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to generate Vec1 key"))
 	}
-	t.Logf("generated Vec1 key %s", vpcrypto.BufToStr256(keydx))
+	t.Logf("generated Vec1 key %s", vpsum.BufToStr256(keydx))
 	vec3, err := GetVec3(keydx)
 	if err != nil {
 		t.Error(vperror.Chain(err, "unable to get Vec1 coord"))

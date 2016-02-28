@@ -17,6 +17,5 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpcrypto contains some cryptographic utilities to sign and crypt
-// content, mostly a wrapper over openpgp API.
-package vpcrypto
+// Package vpid contains helpers to generate cryptographic IDs.
+package vpid
