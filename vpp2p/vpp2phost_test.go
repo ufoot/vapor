@@ -35,6 +35,11 @@ func TestNewHost(t *testing.T) {
 	if err != nil {
 		t.Error("wrong sig", err)
 	}
+	host.Info.HostSig = host.Info.HostPubKey
+	_, err = HostInfoCheckSig(&(host.Info))
+	if err == nil {
+		t.Error("failed to report a broken sig", err)
+	}
 
 	host, err = NewHost(testTitle, testURL, false)
 	if err != nil {
@@ -44,7 +49,7 @@ func TestNewHost(t *testing.T) {
 		t.Error("host can sign but it shouldn't")
 	}
 	_, err = HostInfoCheckSig(&(host.Info))
-	if err == nil {
-		t.Error("sig reported as good when it's not")
+	if err != nil {
+		t.Error("sig reported as wrong when it's legal to have an empty sig")
 	}
 }

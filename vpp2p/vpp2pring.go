@@ -192,6 +192,15 @@ func RingInfoCheckSig(ringInfo *vpp2papi.RingInfo) (int, error) {
 		return 0, fmt.Errorf("no public key")
 	}
 	if ringInfo.RingSig == nil || len(ringInfo.RingSig) <= 0 {
+		switch len(ringInfo.HostPubKey) {
+		// OK, if HostPubKey is of these lenghts, clearly identified
+		// as possible checksums, and also clearly below what is likely
+		// to happen for an openpgp public key, then we assume we're in
+		// non-signed mode, so report everthing is OK, there's no sig and
+		// we don't need one, that's all.
+		case 64:
+			return 0, nil
+		}
 		return 0, fmt.Errorf("no signature")
 	}
 

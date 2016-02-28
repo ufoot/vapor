@@ -54,6 +54,11 @@ func TestNewRing(t *testing.T) {
 	if zeroes != zeroes2 {
 		t.Errorf("RingInfoCheckSig returned bad number of zeroes %d!=%d", zeroes, zeroes2)
 	}
+	ring.Info.RingSig = ring.Info.HostPubKey
+	_, err = RingInfoCheckSig(&(ring.Info))
+	if err == nil {
+		t.Error("failed to report a broken sig", err)
+	}
 
 	host, err = NewHost(testTitle, testURL, false)
 	if err != nil {
@@ -69,7 +74,7 @@ func TestNewRing(t *testing.T) {
 	zeroes = vpid.ZeroesInBuf(vpsum.Checksum512(ring.Info.RingSig))
 	t.Logf("Ring created, number of zeroes in sig is %d", zeroes)
 	zeroes2, err = RingInfoCheckSig(&(ring.Info))
-	if err == nil {
-		t.Error("sig reported as good when it's not")
+	if err != nil {
+		t.Error("sig reported as wrong when it's legal to have an empty sig")
 	}
 }

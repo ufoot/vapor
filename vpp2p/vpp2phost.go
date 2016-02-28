@@ -94,6 +94,11 @@ func (host *Host) CanSign() bool {
 	return host.key != nil
 }
 
+// IsSigned returns true if the has been self-signed.
+func (host *Host) IsSigned() bool {
+	return host.Info.HostSig != nil && len(host.Info.HostSig) > 0
+}
+
 // HostInfoCheckSig checks if the host signature is OK, if it's not, returns false and an error.
 func HostInfoCheckSig(hostInfo *vpp2papi.HostInfo) (bool, error) {
 	var ok bool
@@ -102,6 +107,15 @@ func HostInfoCheckSig(hostInfo *vpp2papi.HostInfo) (bool, error) {
 		return false, fmt.Errorf("no public key")
 	}
 	if hostInfo.HostSig == nil || len(hostInfo.HostSig) <= 0 {
+		switch len(hostInfo.HostPubKey) {
+		// OK, if HostPubKey is of these lenghts, clearly identified
+		// as possible checksums, and also clearly below what is likely
+		// to happen for an openpgp public key, then we assume we're in
+		// non-signed mode, so report everthing is OK, there's no sig and
+		// we don't need one, that's all.
+		case 64:
+			return true, nil
+		}
 		return false, fmt.Errorf("no signature")
 	}
 

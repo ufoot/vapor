@@ -56,6 +56,11 @@ func TestNewNode(t *testing.T) {
 	if zeroes != zeroes2 {
 		t.Errorf("NodeInfoCheckSig returned bad number of zeroes %d!=%d", zeroes, zeroes2)
 	}
+	node.Info.NodeSig = node.Info.HostPubKey
+	_, err = NodeInfoCheckSig(&(node.Info))
+	if err == nil {
+		t.Error("failed to report a broken sig", err)
+	}
 
 	host, err = NewHost(testTitle, testURL, false)
 	if err != nil {
@@ -71,8 +76,8 @@ func TestNewNode(t *testing.T) {
 	zeroes = vpid.ZeroesInBuf(vpsum.Checksum256(node.Info.NodeSig))
 	t.Logf("Node created, number of zeroes in sig is %d", zeroes)
 	zeroes2, err = NodeInfoCheckSig(&(node.Info))
-	if err == nil {
-		t.Error("sig reported as good when it's not")
+	if err != nil {
+		t.Error("sig reported as wrong when it's legal to have an empty sig")
 	}
 }
 
