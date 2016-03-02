@@ -95,4 +95,12 @@ func TestBuiltinRing0(t *testing.T) {
 	if err != nil {
 		t.Error("ring0 has wrong sig", err)
 	}
+
+	ring0.Info.HasPassword = true
+	ring0.secret.PasswordHash = []byte("toto")
+
+	_, err = ring0.CheckSig()
+	if err == nil {
+		t.Error("ring0 reported to have a right sig when it's not")
+	}
 }
