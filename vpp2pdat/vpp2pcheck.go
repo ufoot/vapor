@@ -17,7 +17,7 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpp2p
+package vpp2pdat
 
 import (
 	"fmt"
@@ -159,6 +159,29 @@ func CheckPubKey(pubKey []byte) (bool, error) {
 	}
 
 	return true, nil
+}
+
+// IsPubKeyExpectedToSign checks wether a public key is likely to be able
+// to sign. This is based on a very simple heuristic: if key is defined
+// and not of a typical hash-size (64 bytes/512 bits) then consider it should
+// be a valid GnuPG public key. Wether this is true must be checked by importing
+// the key but the idea here is just to make a super-fast pre-check.
+func IsPubKeyExpectedToSign(pubKey []byte) bool {
+	if pubKey == nil {
+		return false
+	}
+	switch len(pubKey) {
+	case 0:
+		// empty -> we can't expect it to sign anything
+		return false
+	case 64:
+		// 512-bit -> too short to be a valid GnuPG key and exactly
+		// the size of a randomly generated hash -> do not expect
+		// it to sign anything, it's obviously something random
+		return false
+	}
+
+	return true
 }
 
 // CheckSig checks that a public key is correct

@@ -26,6 +26,14 @@ import (
 	"testing"
 )
 
+const testDescription = "This is a description, it is longer than a title"
+
+var testID []byte
+
+func init() {
+	testID = []byte("1234567890abcdef")
+}
+
 func TestNewNode(t *testing.T) {
 	var host *Host
 	var node *Node
@@ -49,7 +57,7 @@ func TestNewNode(t *testing.T) {
 		t.Errorf("Node created, but not enough zeroes in sig (%d)", zeroes)
 	}
 	t.Logf("Node created, number of zeroes in sig is %d", zeroes)
-	zeroes2, err = NodeInfoCheckSig(&(node.Info))
+	zeroes2, err = node.CheckSig()
 	if err != nil {
 		t.Error("wrong sig", err)
 	}
@@ -57,7 +65,7 @@ func TestNewNode(t *testing.T) {
 		t.Errorf("NodeInfoCheckSig returned bad number of zeroes %d!=%d", zeroes, zeroes2)
 	}
 	node.Info.NodeSig = node.Info.HostPubKey
-	_, err = NodeInfoCheckSig(&(node.Info))
+	_, err = node.CheckSig()
 	if err == nil {
 		t.Error("failed to report a broken sig", err)
 	}
@@ -75,7 +83,7 @@ func TestNewNode(t *testing.T) {
 	}
 	zeroes = vpid.ZeroesInBuf(vpsum.Checksum256(node.Info.NodeSig))
 	t.Logf("Node created, number of zeroes in sig is %d", zeroes)
-	zeroes2, err = NodeInfoCheckSig(&(node.Info))
+	zeroes2, err = node.CheckSig()
 	if err != nil {
 		t.Error("sig reported as wrong when it's legal to have an empty sig")
 	}

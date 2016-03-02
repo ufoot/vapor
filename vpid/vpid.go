@@ -28,6 +28,9 @@ import (
 	"time"
 )
 
+// NanoScale is the number we should use to transform seconds to nanoseconds.
+const NanoScale = 1000000000
+
 // FilterChecker is used to filter and check wether a number,
 // typically an id, verifies a property or not.
 type FilterChecker interface {
@@ -64,7 +67,7 @@ func GenerateID512(key *vpcrypto.Key, fc FilterChecker, bt BytesTransformer, max
 	var tmpData, tmpSig, sig []byte
 	var err error
 
-	for start := time.Now().Unix(); ret == nil || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
+	for start := time.Now().UnixNano(); ret == nil || (key != nil && (time.Now().UnixNano() < start+(int64(maxSeconds)*NanoScale) || z < minZeroes)); {
 		tmpInt = vprand.Rand512(r, nil)
 		if fc != nil {
 			tmpInt = fc.Filter(tmpInt)
@@ -110,7 +113,7 @@ func GenerateID256(key *vpcrypto.Key, fc FilterChecker, bt BytesTransformer, max
 	var tmpData, tmpSig, sig []byte
 	var err error
 
-	for start := time.Now().Unix(); ret == nil || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
+	for start := time.Now().UnixNano(); ret == nil || (key != nil && (time.Now().UnixNano() < start+(int64(maxSeconds)*NanoScale) || z < minZeroes)); {
 		tmpInt = vprand.Rand256(r, nil)
 		if fc != nil {
 			tmpInt = fc.Filter(tmpInt)
@@ -156,7 +159,7 @@ func GenerateID128(key *vpcrypto.Key, fc FilterChecker, bt BytesTransformer, max
 	var tmpData, tmpSig, sig []byte
 	var err error
 
-	for start := time.Now().Unix(); ret == nil || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
+	for start := time.Now().UnixNano(); ret == nil || (key != nil && (time.Now().UnixNano() < start+(int64(maxSeconds)*NanoScale) || z < minZeroes)); {
 		tmpInt = vprand.Rand128(r, nil)
 		if fc != nil {
 			tmpInt = fc.Filter(tmpInt)
@@ -203,7 +206,7 @@ func GenerateID64(key *vpcrypto.Key, fc FilterChecker, bt BytesTransformer, maxS
 	var tmpData, tmpSig, sig []byte
 	var err error
 
-	for start := time.Now().Unix(); ret == 0 || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
+	for start := time.Now().UnixNano(); ret == 0 || (key != nil && (time.Now().UnixNano() < start+(int64(maxSeconds)*NanoScale) || z < minZeroes)); {
 		tmpInt = vprand.Rand64(r, 0)
 		tmpBig.SetUint64(tmpInt)
 		if fc != nil {
@@ -252,7 +255,7 @@ func GenerateID32(key *vpcrypto.Key, fc FilterChecker, bt BytesTransformer, maxS
 	var tmpData, tmpSig, sig []byte
 	var err error
 
-	for start := time.Now().Unix(); ret == 0 || (key != nil && (time.Now().Unix() < start+int64(maxSeconds) || z < minZeroes)); {
+	for start := time.Now().UnixNano(); ret == 0 || (key != nil && (time.Now().UnixNano() < start+(int64(maxSeconds)*NanoScale) || z < minZeroes)); {
 		tmpInt = vprand.Rand32(r, 0)
 		tmpBig.SetUint64(uint64(tmpInt))
 		if fc != nil {

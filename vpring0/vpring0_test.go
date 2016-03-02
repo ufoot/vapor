@@ -17,42 +17,21 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpp2p
+package main
 
 import (
 	"testing"
 )
 
-const testTitle = "This is a title"
-const testURL = "http://thisisatestwebsite7896538.com"
+func TestBase64Ring0(t *testing.T) {
+	base64RingID, base64AppID, base64HostPubKey, base64RingSig, err := Base64Ring0()
 
-func TestNewHost(t *testing.T) {
-	host, err := NewHost(testTitle, testURL, true)
 	if err != nil {
-		t.Error("unable to create host with a valid pubKey", err)
-	}
-	if host.CanSign() == false {
-		t.Error("host can't sign but it should")
-	}
-	_, err = host.CheckSig()
-	if err != nil {
-		t.Error("wrong sig", err)
-	}
-	host.Info.HostSig = host.Info.HostPubKey
-	_, err = host.CheckSig()
-	if err == nil {
-		t.Error("failed to report a broken sig", err)
+		t.Error("unable to generate ring0", err)
 	}
 
-	host, err = NewHost(testTitle, testURL, false)
-	if err != nil {
-		t.Error("unable to create host with a dummy pubKey", err)
-	}
-	if host.CanSign() == true {
-		t.Error("host can sign but it shouldn't")
-	}
-	_, err = host.CheckSig()
-	if err != nil {
-		t.Error("sig reported as wrong when it's legal to have an empty sig")
-	}
+	t.Logf("Ring0Base64RingID = \"%s\"\n", base64RingID)
+	t.Logf("Ring0Base64AppID = \"%s\"\n", base64AppID)
+	t.Logf("Ring0Base64HostPubKey = \"%s\"\n", base64HostPubKey)
+	t.Logf("Ring0Base64RingSig = \"%s\"\n", base64RingSig)
 }

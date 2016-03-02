@@ -17,42 +17,17 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpp2p
+package vpp2pdat
 
 import (
+	"bytes"
 	"testing"
 )
 
-const testTitle = "This is a title"
-const testURL = "http://thisisatestwebsite7896538.com"
+func TestSigBytesHost(t *testing.T) {
+	sbh := SigBytesHost("foo", "bar")
 
-func TestNewHost(t *testing.T) {
-	host, err := NewHost(testTitle, testURL, true)
-	if err != nil {
-		t.Error("unable to create host with a valid pubKey", err)
-	}
-	if host.CanSign() == false {
-		t.Error("host can't sign but it should")
-	}
-	_, err = host.CheckSig()
-	if err != nil {
-		t.Error("wrong sig", err)
-	}
-	host.Info.HostSig = host.Info.HostPubKey
-	_, err = host.CheckSig()
-	if err == nil {
-		t.Error("failed to report a broken sig", err)
-	}
-
-	host, err = NewHost(testTitle, testURL, false)
-	if err != nil {
-		t.Error("unable to create host with a dummy pubKey", err)
-	}
-	if host.CanSign() == true {
-		t.Error("host can sign but it shouldn't")
-	}
-	_, err = host.CheckSig()
-	if err != nil {
-		t.Error("sig reported as wrong when it's legal to have an empty sig")
+	if bytes.Compare(sbh, []byte("foo;bar")) != 0 {
+		t.Errorf("bad SigBytesHost return value \"%s\"", string(sbh))
 	}
 }

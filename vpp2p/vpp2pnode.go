@@ -21,24 +21,25 @@ package vpp2p
 
 import (
 	"fmt"
-	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vpid"
 	"github.com/ufoot/vapor/vplog"
 	"github.com/ufoot/vapor/vpp2papi"
+	"github.com/ufoot/vapor/vpp2pdat"
 	"github.com/ufoot/vapor/vpsum"
 	"math/big"
 )
 
-// NodeKeySeconds specifies how many seconds should we spend on creating
-// node keys in signed mode.
-const NodeKeySeconds = 2
+const (
+	// NodeKeySeconds specifies how many seconds should we spend on creating
+	// node keys in signed mode.
+	NodeKeySeconds = 1
+	// NodeKeyZeroes specifies how many zeroes there should be at the end of
+	// a node key sig in signed mode.
+	NodeKeyZeroes = 8
+)
 
-// NodeKeyZeroes specifies how many zeroes there should be at the end of
-// a node key sig in signed mode.
-const NodeKeyZeroes = 10
-
-// Node is the link between a ring (AKA a session) and a host (AKA a physical
-// end-point).
+// Node is the link between a Ring and a Host. Basically a node is a point
+// on the ring, which joins on the ring using the host as a connexion tool.
 type Node struct {
 	// Info about the node
 	Info vpp2papi.NodeInfo
@@ -88,15 +89,7 @@ type ringIDAppender struct {
 }
 
 func (r *ringIDAppender) Transform(nodeID []byte) []byte {
-	return SigBytesNode(nodeID, r.ringID)
-}
-
-// SigBytesNode returns the byte buffer that needs to be signed.
-func SigBytesNode(nodeID, ringID []byte) []byte {
-	ret := make([]byte, len(nodeID)+len(ringID))
-	copy(ret[0:len(nodeID)], nodeID)
-	copy(ret[len(nodeID):len(nodeID)+len(ringID)], ringID)
-	return ret
+	return vpp2pdat.SigBytesNode(nodeID, r.ringID)
 }
 
 // NewNode builds a new node object.
@@ -134,7 +127,7 @@ func NewNode(host *Host, ringID []byte) (*Node, error) {
 func NewLocalProxy(nodeID []byte, hostPtr *Host, ringPtr *Ring) (*LocalProxy, error) {
 	var ret LocalProxy
 
-	ok, err := CheckID(nodeID)
+	ok, err := vpp2pdat.CheckID(nodeID)
 	if err != nil || !ok {
 		return nil, err
 	}
@@ -238,40 +231,13 @@ func (lp *LocalProxy) Clear(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.No
 }
 
 // IsSigned returns true if the node has been signed by corresponding host.
+// It does not check if the signature is valid.
 func (node *Node) IsSigned() bool {
-	return node.Info.NodeSig != nil && len(node.Info.NodeSig) > 0
+	return vpp2pdat.NodeInfoIsSigned(&node.Info)
 }
 
-// NodeInfoCheckSig checks if the node signature is OK, if it's not, returns 0 and an error.
+// CheckSig checks if the node signature is OK, if it's not, returns 0 and an error.
 // If it's OK, returns the number of zeroes in the signature hash.
-func NodeInfoCheckSig(nodeInfo *vpp2papi.NodeInfo) (int, error) {
-	var z int
-
-	if nodeInfo.HostPubKey == nil || len(nodeInfo.HostPubKey) <= 0 {
-		return 0, fmt.Errorf("no public key")
-	}
-	if nodeInfo.NodeSig == nil || len(nodeInfo.NodeSig) <= 0 {
-		switch len(nodeInfo.HostPubKey) {
-		// OK, if HostPubKey is of these lenghts, clearly identified
-		// as possible checksums, and also clearly below what is likely
-		// to happen for an openpgp public key, then we assume we're in
-		// non-signed mode, so report everthing is OK, there's no sig and
-		// we don't need one, that's all.
-		case 64:
-			return 0, nil
-		}
-		return 0, fmt.Errorf("no signature")
-	}
-
-	key, err := vpcrypto.ImportPubKey(nodeInfo.HostPubKey)
-	if err != nil {
-		return 0, err
-	}
-	_, err = key.CheckSig(SigBytesNode(nodeInfo.NodeID, nodeInfo.RingID), nodeInfo.NodeSig)
-	if err != nil {
-		return 0, err
-	}
-	z = vpid.ZeroesInBuf(vpsum.Checksum256(nodeInfo.NodeSig))
-
-	return z, nil
+func (node *Node) CheckSig() (int, error) {
+	return vpp2pdat.NodeInfoCheckSig(&node.Info)
 }

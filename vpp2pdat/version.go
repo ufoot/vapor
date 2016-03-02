@@ -17,7 +17,7 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpp2p
+package vpp2pdat
 
 // PackageTarname contains a short name of the package, suitable for a filename.
 const PackageTarname = "vapor" // PackageTarname set by stamp.sh
@@ -35,6 +35,6 @@ const PackageLicense = "https://github.com/ufoot/vapor" // PackageLicense set by
 // VersionMajor is the project major version.
 const VersionMajor = 0 // VersionMajor set by stamp.sh
 // VersionMinor is the project minor version.
-const VersionMinor = 39 // VersionMinor set by stamp.sh
+const VersionMinor = 4 // VersionMinor set by stamp.sh
 // VersionStamp is the project stamp, possibly changes for each build.
-const VersionStamp = "4cb7107" // VersionStamp set by stamp.sh
+const VersionStamp = "9390a9a" // VersionStamp set by stamp.sh

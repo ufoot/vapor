@@ -20,9 +20,9 @@
 package vpp2p
 
 import (
-	"fmt"
 	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vpp2papi"
+	"github.com/ufoot/vapor/vpp2pdat"
 	"github.com/ufoot/vapor/vprand"
 	"github.com/ufoot/vapor/vpsum"
 )
@@ -37,22 +37,17 @@ type Host struct {
 	localNodes []Node
 }
 
-// SigBytesHost returns the byte buffer that needs to be signed.
-func SigBytesHost(title, url string) []byte {
-	return []byte(fmt.Sprintf("%s;%s", title, url))
-}
-
 // NewHost returns a new host object
 func NewHost(title, url string, useSig bool) (*Host, error) {
 	var ret Host
 	var pubKey []byte
 	var sig []byte
 
-	ok, err := CheckTitle(title)
+	ok, err := vpp2pdat.CheckTitle(title)
 	if err != nil || !ok {
 		return nil, err
 	}
-	ok, err = CheckURL(url)
+	ok, err = vpp2pdat.CheckURL(url)
 	if err != nil || !ok {
 		return nil, err
 	}
@@ -66,15 +61,15 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 		if err != nil {
 			return nil, err
 		}
-		ok, err = CheckPubKey(pubKey)
+		ok, err = vpp2pdat.CheckPubKey(pubKey)
 		if err != nil || !ok {
 			return nil, err
 		}
-		sig, err = ret.key.Sign(SigBytesHost(title, url))
+		sig, err = ret.key.Sign(vpp2pdat.SigBytesHost(title, url))
 		if err != nil {
 			return nil, err
 		}
-		ok, err = CheckSig(pubKey)
+		ok, err = vpp2pdat.CheckSig(pubKey)
 		if err != nil || !ok {
 			return nil, err
 		}
@@ -95,38 +90,12 @@ func (host *Host) CanSign() bool {
 }
 
 // IsSigned returns true if the has been self-signed.
+// It does not check if the signature is valid.
 func (host *Host) IsSigned() bool {
-	return host.Info.HostSig != nil && len(host.Info.HostSig) > 0
+	return vpp2pdat.HostInfoIsSigned(&host.Info)
 }
 
-// HostInfoCheckSig checks if the host signature is OK, if it's not, returns false and an error.
-func HostInfoCheckSig(hostInfo *vpp2papi.HostInfo) (bool, error) {
-	var ok bool
-
-	if hostInfo.HostPubKey == nil || len(hostInfo.HostPubKey) <= 0 {
-		return false, fmt.Errorf("no public key")
-	}
-	if hostInfo.HostSig == nil || len(hostInfo.HostSig) <= 0 {
-		switch len(hostInfo.HostPubKey) {
-		// OK, if HostPubKey is of these lenghts, clearly identified
-		// as possible checksums, and also clearly below what is likely
-		// to happen for an openpgp public key, then we assume we're in
-		// non-signed mode, so report everthing is OK, there's no sig and
-		// we don't need one, that's all.
-		case 64:
-			return true, nil
-		}
-		return false, fmt.Errorf("no signature")
-	}
-
-	key, err := vpcrypto.ImportPubKey(hostInfo.HostPubKey)
-	if err != nil {
-		return false, err
-	}
-	ok, err = key.CheckSig(SigBytesHost(hostInfo.HostTitle, hostInfo.HostURL), hostInfo.HostSig)
-	if err != nil {
-		return false, err
-	}
-
-	return ok, nil
+// CheckSig checks if the host signature is OK, if it's not, returns false and an error.
+func (host *Host) CheckSig() (bool, error) {
+	return vpp2pdat.HostInfoCheckSig(&host.Info)
 }

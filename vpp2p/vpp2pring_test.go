@@ -47,7 +47,7 @@ func TestNewRing(t *testing.T) {
 		t.Errorf("Ring created, but not enough zeroes in sig (%d)", zeroes)
 	}
 	t.Logf("Ring created, number of zeroes in sig is %d", zeroes)
-	zeroes2, err = RingInfoCheckSig(&(ring.Info))
+	zeroes2, err = ring.CheckSig()
 	if err != nil {
 		t.Error("wrong sig", err)
 	}
@@ -55,7 +55,7 @@ func TestNewRing(t *testing.T) {
 		t.Errorf("RingInfoCheckSig returned bad number of zeroes %d!=%d", zeroes, zeroes2)
 	}
 	ring.Info.RingSig = ring.Info.HostPubKey
-	_, err = RingInfoCheckSig(&(ring.Info))
+	_, err = ring.CheckSig()
 	if err == nil {
 		t.Error("failed to report a broken sig", err)
 	}
@@ -73,8 +73,26 @@ func TestNewRing(t *testing.T) {
 	}
 	zeroes = vpid.ZeroesInBuf(vpsum.Checksum512(ring.Info.RingSig))
 	t.Logf("Ring created, number of zeroes in sig is %d", zeroes)
-	zeroes2, err = RingInfoCheckSig(&(ring.Info))
+	zeroes2, err = ring.CheckSig()
 	if err != nil {
 		t.Error("sig reported as wrong when it's legal to have an empty sig")
+	}
+}
+
+func TestBuiltinRing0(t *testing.T) {
+	ring0, err := BuiltinRing0()
+	if err != nil {
+		t.Error("unable to create builtin ring0", err)
+	}
+
+	t.Logf("ring0, RingTitle=%s RingDescription=%s", ring0.Info.RingTitle, ring0.Info.RingDescription)
+
+	if !ring0.IsSigned() {
+		t.Error("ring0 is not signed")
+	}
+
+	_, err = ring0.CheckSig()
+	if err != nil {
+		t.Error("ring0 has wrong sig", err)
 	}
 }

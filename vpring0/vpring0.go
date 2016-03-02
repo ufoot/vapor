@@ -17,42 +17,28 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package vpp2p
+package main
 
 import (
-	"testing"
+	"encoding/base64"
+	"github.com/ufoot/vapor/vpp2p"
 )
 
-const testTitle = "This is a title"
-const testURL = "http://thisisatestwebsite7896538.com"
+// Base64Ring0 creates a new instance of the default directory ring
+// and returns its major parameters as base64 encoded strings. These
+// can typically be copy/pasted into the code to immortalize the
+// reference instance of that ring.
+func Base64Ring0() (string, string, string, string, error) {
+	ring0, err := vpp2p.NewRing0()
 
-func TestNewHost(t *testing.T) {
-	host, err := NewHost(testTitle, testURL, true)
 	if err != nil {
-		t.Error("unable to create host with a valid pubKey", err)
-	}
-	if host.CanSign() == false {
-		t.Error("host can't sign but it should")
-	}
-	_, err = host.CheckSig()
-	if err != nil {
-		t.Error("wrong sig", err)
-	}
-	host.Info.HostSig = host.Info.HostPubKey
-	_, err = host.CheckSig()
-	if err == nil {
-		t.Error("failed to report a broken sig", err)
+		return "", "", "", "", err
 	}
 
-	host, err = NewHost(testTitle, testURL, false)
-	if err != nil {
-		t.Error("unable to create host with a dummy pubKey", err)
-	}
-	if host.CanSign() == true {
-		t.Error("host can sign but it shouldn't")
-	}
-	_, err = host.CheckSig()
-	if err != nil {
-		t.Error("sig reported as wrong when it's legal to have an empty sig")
-	}
+	base64RingID := base64.URLEncoding.EncodeToString(ring0.Info.RingID)
+	base64AppID := base64.URLEncoding.EncodeToString(ring0.Info.AppID)
+	base64HostPubKey := base64.URLEncoding.EncodeToString(ring0.Info.HostPubKey)
+	base64RingSig := base64.URLEncoding.EncodeToString(ring0.Info.RingSig)
+
+	return base64RingID, base64AppID, base64HostPubKey, base64RingSig, nil
 }
