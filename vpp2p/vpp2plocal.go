@@ -20,29 +20,58 @@
 package vpp2p
 
 import (
+	"fmt"
 	"github.com/ufoot/vapor/vpp2papi"
+	"github.com/ufoot/vapor/vpp2pdat"
 	"sync"
 )
 
 type LocalNodeCatalog struct {
-	access sync.Mutex
-	nodes  []*Node
+	access sync.RWMutex
+	nodes  map[[vpp2pdat.NodeIDNbBytes]byte]*Node
 }
 
-func (c *LocalNodeCatalog) ConnectToNode(NodeID []byte) (*vpp2papi.VpP2pApi, error) {
-	defer c.access.Unlock()
-	c.access.Lock()
+var globalNodeCatalog LocalNodeCatalog = *NewLocalNodeCatalog()
 
-	// todo...
+func NewLocalNodeCatalog() *LocalNodeCatalog {
+	return &LocalNodeCatalog{nodes: make(map[[vpp2pdat.NodeIDNbBytes]byte]*Node)}
+}
+
+func GlobalNodeCatalog() *LocalNodeCatalog {
+	return &globalNodeCatalog
+}
+
+func (c *LocalNodeCatalog) ConnectToNode(nodeID []byte) (*vpp2papi.VpP2pApi, error) {
+	defer c.access.RUnlock()
+	c.access.RLock()
+
+	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
+	n := c.nodes[nodeIDBuf]
+	if n == nil {
+		return nil, fmt.Errorf("node does not exist")
+	}
 
 	return nil, nil
 }
 
-func (c *LocalNodeCatalog) RegisterNode(node *Node) {
+func (c *LocalNodeCatalog) RegisterNode(node *Node) error {
 	defer c.access.Unlock()
 	c.access.Lock()
 
-	// todo...
+	nodeID := node.Info.NodeID
+	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
+	c.nodes[nodeIDBuf] = node
 
-	return
+	return nil
+}
+
+func (c *LocalNodeCatalog) UnregisterNode(node *Node) error {
+	defer c.access.Unlock()
+	c.access.Lock()
+
+	nodeID := node.Info.NodeID
+	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
+	delete(c.nodes, nodeIDBuf)
+
+	return nil
 }

@@ -20,8 +20,8 @@
 package vpp2p
 
 import (
-	"github.com/ufoot/vapor/vpapp"
 	"github.com/ufoot/vapor/vpid"
+	"github.com/ufoot/vapor/vpp2pdat"
 	"github.com/ufoot/vapor/vpsum"
 	"testing"
 )
@@ -36,16 +36,20 @@ func init() {
 
 func TestNewNode(t *testing.T) {
 	var host *Host
+	var ring *Ring
 	var node *Node
 	var err error
-	ringID := vpsum.Checksum128([]byte("myring"))
 	var zeroes, zeroes2 int
 
 	host, err = NewHost(testTitle, testURL, true)
 	if err != nil {
 		t.Error("unable to create host with a valid pubKey", err)
 	}
-	node, err = NewNode(host, ringID)
+	ring, err = NewRing(host, testTitle, testDescription, testID, vpp2pdat.DefaultRingConfig(), nil, nil)
+	if err != nil {
+		t.Error("unable to create ring with a valid pubKey", err)
+	}
+	node, err = NewNode(host, ring, nil)
 	if err != nil {
 		t.Error("unable to create node with a valid pubKey", err)
 	}
@@ -72,11 +76,15 @@ func TestNewNode(t *testing.T) {
 
 	host, err = NewHost(testTitle, testURL, false)
 	if err != nil {
-		t.Error("unable to create host with a valid pubKey", err)
+		t.Error("unable to create host", err)
 	}
-	node, err = NewNode(host, ringID)
+	ring, err = NewRing(host, testTitle, testDescription, testID, vpp2pdat.DefaultRingConfig(), nil, nil)
 	if err != nil {
-		t.Error("unable to create node with a valid pubKey", err)
+		t.Error("unable to create ring", err)
+	}
+	node, err = NewNode(host, ring, nil)
+	if err != nil {
+		t.Error("unable to create node", err)
 	}
 	if node.IsSigned() == true {
 		t.Error("node is signed, when it should not be")
@@ -89,6 +97,7 @@ func TestNewNode(t *testing.T) {
 	}
 }
 
+/*
 func TestLookup(t *testing.T) {
 	key := vpsum.Checksum256([]byte("toto"))
 	keyShift := vpsum.Checksum256([]byte("toto"))
@@ -110,3 +119,4 @@ func TestLookup(t *testing.T) {
 	path, err := lp.Lookup(key, keyShift, imaginaryNode)
 	t.Log("todo...", path, err)
 }
+*/
