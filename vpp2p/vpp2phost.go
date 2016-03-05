@@ -27,6 +27,7 @@ import (
 	"github.com/ufoot/vapor/vpp2pdat"
 	"github.com/ufoot/vapor/vprand"
 	"github.com/ufoot/vapor/vpsum"
+	"time"
 )
 
 // Host is a physical host, it is used to uniquely identify
@@ -35,8 +36,9 @@ type Host struct {
 	// Info about the host
 	Info vpp2papi.HostInfo
 
-	key        *vpcrypto.Key
-	localNodes []Node
+	key              *vpcrypto.Key
+	localNodeCatalog *NodeCatalog
+	startTime        time.Time
 }
 
 // NewHost returns a new host object
@@ -81,7 +83,8 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 	}
 
 	ret.Info = vpp2papi.HostInfo{HostTitle: title, HostURL: url, HostPubKey: pubKey, HostSig: sig}
-	ret.localNodes = make([]Node, 0)
+	ret.localNodeCatalog = NewNodeCatalog()
+	ret.startTime = time.Now()
 
 	return &ret, nil
 }
@@ -109,9 +112,7 @@ func (host *Host) Ping() error {
 
 // Uptime is a simple uptime function, returns time since host was created.
 func (host *Host) Uptime() (int64, error) {
-	// todo...
-
-	return 0, nil
+	return time.Now().Unix() - host.startTime.Unix(), nil
 }
 
 // GetPackage returns the package version. Program general information.

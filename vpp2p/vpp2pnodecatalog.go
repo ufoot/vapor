@@ -26,27 +26,27 @@ import (
 	"sync"
 )
 
-// LocalNodeCatalog is structure used to contain locally-known hosts.
-type LocalNodeCatalog struct {
+// NodeCatalog is structure used to contain locally-known hosts.
+type NodeCatalog struct {
 	access sync.RWMutex
 	nodes  map[[vpp2pdat.NodeIDNbBytes]byte]*Node
 }
 
-var globalNodeCatalog LocalNodeCatalog = *NewLocalNodeCatalog()
+var globalNodeCatalog = NewNodeCatalog()
 
-// NewLocalNodeCatalog creates a new instance of a local node catalog
-func NewLocalNodeCatalog() *LocalNodeCatalog {
-	return &LocalNodeCatalog{nodes: make(map[[vpp2pdat.NodeIDNbBytes]byte]*Node)}
+// NewNodeCatalog creates a new instance of a local node catalog
+func NewNodeCatalog() *NodeCatalog {
+	return &NodeCatalog{nodes: make(map[[vpp2pdat.NodeIDNbBytes]byte]*Node)}
 }
 
 // GlobalNodeCatalog returns a catalog containing all local nodes.
-func GlobalNodeCatalog() *LocalNodeCatalog {
-	return &globalNodeCatalog
+func GlobalNodeCatalog() *NodeCatalog {
+	return globalNodeCatalog
 }
 
 // ConnectToNode returns a handler which makes possible API calls on it.
 // It's thread-safe.
-func (c *LocalNodeCatalog) ConnectToNode(nodeID []byte) (vpp2papi.VpP2pApi, error) {
+func (c *NodeCatalog) ConnectToNode(nodeID []byte) (vpp2papi.VpP2pApi, error) {
 	defer c.access.RUnlock()
 	c.access.RLock()
 
@@ -59,28 +59,52 @@ func (c *LocalNodeCatalog) ConnectToNode(nodeID []byte) (vpp2papi.VpP2pApi, erro
 	return n.hostPtr, nil
 }
 
+// HasNode returns a handler which makes possible API calls on it.
+// It's thread-safe.
+func (c *NodeCatalog) HasNode(nodeID []byte) bool {
+	defer c.access.RUnlock()
+	c.access.RLock()
+
+	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
+	n := c.nodes[nodeIDBuf]
+
+	return n != nil
+}
+
 // RegisterNode registers a node within the catalog.
 // It's thread-safe.
-func (c *LocalNodeCatalog) RegisterNode(node *Node) error {
+func (c *NodeCatalog) RegisterNode(node *Node) {
 	defer c.access.Unlock()
 	c.access.Lock()
 
 	nodeID := node.Info.NodeID
 	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
 	c.nodes[nodeIDBuf] = node
-
-	return nil
 }
 
 // UnregisterNode unregisters a node within the catalog.
 // It's thread-safe.
-func (c *LocalNodeCatalog) UnregisterNode(node *Node) error {
+func (c *NodeCatalog) UnregisterNode(node *Node) {
 	defer c.access.Unlock()
 	c.access.Lock()
 
 	nodeID := node.Info.NodeID
 	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
 	delete(c.nodes, nodeIDBuf)
+}
 
-	return nil
+// List returns a list of local nodes. It returns static
+// data about the node, node the nodes themselves.
+func (c *NodeCatalog) List() []*vpp2papi.NodeInfo {
+	defer c.access.RUnlock()
+	c.access.RLock()
+
+	i := 0
+	ret := make([]*vpp2papi.NodeInfo, len(c.nodes))
+	for _, value := range c.nodes {
+		ret[i] = &value.Info
+		i++
+	}
+
+	return ret
 }

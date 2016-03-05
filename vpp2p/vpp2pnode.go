@@ -47,7 +47,8 @@ type Node struct {
 	hostPtr *Host
 	ringPtr *Ring
 
-	registerer NodeRegisterer
+	registerers []NodeRegisterer
+	up          bool
 
 	// Successors is list of successing nodes within the ring,
 	// use 1st elem for direct successor.
@@ -65,27 +66,9 @@ type Node struct {
 // NodeRegisterer is and interface that records node registring and unregistring.
 type NodeRegisterer interface {
 	// RegisterNode should be called when the node is started, ready for action.
-	RegisterNode(node *Node) error
+	RegisterNode(node *Node)
 	// UnregisterNode should be called when node is stopped, not responding any more.
-	UnregisterNode(node *Node) error
-}
-
-// NodeProxy is an interface used to perform node operations.
-// All calls return the complete call stack
-type NodeProxy interface {
-	// Info returns information about the Node, this should be a
-	// very fast function, with data kept locally, and should not
-	// require any network calls.
-	Info() *vpp2papi.NodeInfo
-	// Lookup searches for the host responsible for a given key
-	// and returns the path found to it.
-	Lookup(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeInfo, error)
-	// Set sets a key to a value, returns the path to the node.
-	Set(key, keyShift, imaginaryNode, value []byte) ([]*vpp2papi.NodeInfo, error)
-	// Get returns the value of a key, and returns the path to the node.
-	Get(key, keyShift, imaginaryNode []byte) ([]byte, []*vpp2papi.NodeInfo, error)
-	// Get clears a key, and returns the path to the node.
-	Clear(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeInfo, error)
+	UnregisterNode(node *Node)
 }
 
 type ringIDAppender struct {
@@ -97,7 +80,7 @@ func (r *ringIDAppender) Transform(nodeID []byte) []byte {
 }
 
 // NewNode builds a new node object.
-func NewNode(host *Host, ring *Ring, registerer NodeRegisterer) (*Node, error) {
+func NewNode(host *Host, ring *Ring) (*Node, error) {
 	var ret Node
 	var err error
 	var intNodeID *big.Int
@@ -120,6 +103,13 @@ func NewNode(host *Host, ring *Ring, registerer NodeRegisterer) (*Node, error) {
 	ret.hostPtr = host
 	ret.ringPtr = ring
 
+	// by doing this, nodes will always be (un)registerered within hosts
+	// and the global node register. This is usefull when one wants to
+	// quickly access them by reference.
+	ret.registerers = make([]NodeRegisterer, 2)
+	ret.registerers[0] = GlobalNodeCatalog()
+	ret.registerers[1] = host.localNodeCatalog
+
 	ret.Info.NodeID = vpsum.IntToBuf256(intNodeID)
 	ret.Info.RingID = make([]byte, len(ring.Info.RingID))
 	copy(ret.Info.RingID, ring.Info.RingID)
@@ -128,6 +118,33 @@ func NewNode(host *Host, ring *Ring, registerer NodeRegisterer) (*Node, error) {
 	ret.Info.NodeSig = sig
 
 	return &ret, nil
+}
+
+// Start starts the node, that is, makes it available and registers it into
+// all the local node catalogs.
+func (node *Node) Start() {
+	node.up = true
+	if node.registerers != nil {
+		for _, r := range node.registerers {
+			r.RegisterNode(node)
+		}
+	}
+}
+
+// Stop stops the node, that is, makes it unavailable and unregisters it from
+// all the local node catalogs.
+func (node *Node) Stop() {
+	if node.registerers != nil {
+		for _, r := range node.registerers {
+			r.UnregisterNode(node)
+		}
+	}
+	node.up = false
+}
+
+// Up tells wether the node is up or not
+func (node *Node) Up() bool {
+	return node.up
 }
 
 // Lookup a key and return the path of nodes to this key.
