@@ -26,6 +26,7 @@ import (
 	"sync"
 )
 
+// LocalNodeCatalog is structure used to contain locally-known hosts.
 type LocalNodeCatalog struct {
 	access sync.RWMutex
 	nodes  map[[vpp2pdat.NodeIDNbBytes]byte]*Node
@@ -33,15 +34,19 @@ type LocalNodeCatalog struct {
 
 var globalNodeCatalog LocalNodeCatalog = *NewLocalNodeCatalog()
 
+// NewLocalNodeCatalog creates a new instance of a local node catalog
 func NewLocalNodeCatalog() *LocalNodeCatalog {
 	return &LocalNodeCatalog{nodes: make(map[[vpp2pdat.NodeIDNbBytes]byte]*Node)}
 }
 
+// GlobalNodeCatalog returns a catalog containing all local nodes.
 func GlobalNodeCatalog() *LocalNodeCatalog {
 	return &globalNodeCatalog
 }
 
-func (c *LocalNodeCatalog) ConnectToNode(nodeID []byte) (*vpp2papi.VpP2pApi, error) {
+// ConnectToNode returns a handler which makes possible API calls on it.
+// It's thread-safe.
+func (c *LocalNodeCatalog) ConnectToNode(nodeID []byte) (vpp2papi.VpP2pApi, error) {
 	defer c.access.RUnlock()
 	c.access.RLock()
 
@@ -51,9 +56,11 @@ func (c *LocalNodeCatalog) ConnectToNode(nodeID []byte) (*vpp2papi.VpP2pApi, err
 		return nil, fmt.Errorf("node does not exist")
 	}
 
-	return nil, nil
+	return n.hostPtr, nil
 }
 
+// RegisterNode registers a node within the catalog.
+// It's thread-safe.
 func (c *LocalNodeCatalog) RegisterNode(node *Node) error {
 	defer c.access.Unlock()
 	c.access.Lock()
@@ -65,6 +72,8 @@ func (c *LocalNodeCatalog) RegisterNode(node *Node) error {
 	return nil
 }
 
+// UnregisterNode unregisters a node within the catalog.
+// It's thread-safe.
 func (c *LocalNodeCatalog) UnregisterNode(node *Node) error {
 	defer c.access.Unlock()
 	c.access.Lock()

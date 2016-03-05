@@ -22,10 +22,11 @@ package vpp2pdat
 const (
 	// NodeIDNbBytes gives the number of bytes for a node ID.
 	NodeIDNbBytes = 32
-	// NodeIDNbBytes gives the number of bytes for a ring ID.
+	// RingIDNbBytes gives the number of bytes for a ring ID.
 	RingIDNbBytes = 64
 )
 
+// NodeIDToBuf converts a slice to a fixed-length 32 bytes buffer.
 func NodeIDToBuf(nodeID []byte) [NodeIDNbBytes]byte {
 	var ret [NodeIDNbBytes]byte
 
@@ -42,6 +43,7 @@ func NodeIDToBuf(nodeID []byte) [NodeIDNbBytes]byte {
 	return ret
 }
 
+// RingIDToBuf converts a slice to a fixed-length 64 bytes buffer.
 func RingIDToBuf(ringID []byte) [RingIDNbBytes]byte {
 	var ret [RingIDNbBytes]byte
 

@@ -20,11 +20,12 @@
 package vpapp
 
 import (
+	"github.com/ufoot/vapor/vpcommonapi"
 	"github.com/ufoot/vapor/vpsum"
 )
 
 // CalcID generates an Application ID from Package and Version
-func CalcID(p *Package, v *Version) []byte {
+func CalcID(p *vpcommonapi.Package, v *vpcommonapi.Version) []byte {
 	var buf []byte
 
 	buf = append(buf, p.Tarname...)

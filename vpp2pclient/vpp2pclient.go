@@ -20,8 +20,8 @@ func Usage() {
 	fmt.Fprintln(os.Stderr, "Usage of ", os.Args[0], " [-h host:port] [-u url] [-f[ramed]] function [arg1 [arg2...]]:")
 	flag.PrintDefaults()
 	fmt.Fprintln(os.Stderr, "\nFunctions:")
-	fmt.Fprintln(os.Stderr, "  LookupData IAmPrev(string key, string keyShift, string imaginaryNode)")
-	fmt.Fprintln(os.Stderr, "  LookupData Lookup(string key, string keyShift, string imaginaryNode)")
+	fmt.Fprintln(os.Stderr, "  SyncData Sync(ContextInfo context)")
+	fmt.Fprintln(os.Stderr, "  LookupData Lookup(ContextInfo context, string key, string keyShift, string imaginaryNode)")
 	fmt.Fprintln(os.Stderr, "  void ping()")
 	fmt.Fprintln(os.Stderr, "  Version getVersion()")
 	fmt.Fprintln(os.Stderr, "  Package getPackage()")
@@ -120,32 +120,60 @@ func main() {
 	}
 
 	switch cmd {
-	case "IAmPrev":
-		if flag.NArg()-1 != 3 {
-			fmt.Fprintln(os.Stderr, "IAmPrev requires 3 args")
+	case "Sync":
+		if flag.NArg()-1 != 1 {
+			fmt.Fprintln(os.Stderr, "Sync requires 1 args")
 			flag.Usage()
 		}
-		argvalue0 := []byte(flag.Arg(1))
+		arg9 := flag.Arg(1)
+		mbTrans10 := thrift.NewTMemoryBufferLen(len(arg9))
+		defer mbTrans10.Close()
+		_, err11 := mbTrans10.WriteString(arg9)
+		if err11 != nil {
+			Usage()
+			return
+		}
+		factory12 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt13 := factory12.GetProtocol(mbTrans10)
+		argvalue0 := vpp2papi.NewContextInfo()
+		err14 := argvalue0.Read(jsProt13)
+		if err14 != nil {
+			Usage()
+			return
+		}
 		value0 := argvalue0
-		argvalue1 := []byte(flag.Arg(2))
-		value1 := argvalue1
-		argvalue2 := []byte(flag.Arg(3))
-		value2 := argvalue2
-		fmt.Print(client.IAmPrev(value0, value1, value2))
+		fmt.Print(client.Sync(value0))
 		fmt.Print("\n")
 		break
 	case "Lookup":
-		if flag.NArg()-1 != 3 {
-			fmt.Fprintln(os.Stderr, "Lookup requires 3 args")
+		if flag.NArg()-1 != 4 {
+			fmt.Fprintln(os.Stderr, "Lookup requires 4 args")
 			flag.Usage()
 		}
-		argvalue0 := []byte(flag.Arg(1))
+		arg15 := flag.Arg(1)
+		mbTrans16 := thrift.NewTMemoryBufferLen(len(arg15))
+		defer mbTrans16.Close()
+		_, err17 := mbTrans16.WriteString(arg15)
+		if err17 != nil {
+			Usage()
+			return
+		}
+		factory18 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt19 := factory18.GetProtocol(mbTrans16)
+		argvalue0 := vpp2papi.NewContextInfo()
+		err20 := argvalue0.Read(jsProt19)
+		if err20 != nil {
+			Usage()
+			return
+		}
 		value0 := argvalue0
 		argvalue1 := []byte(flag.Arg(2))
 		value1 := argvalue1
 		argvalue2 := []byte(flag.Arg(3))
 		value2 := argvalue2
-		fmt.Print(client.Lookup(value0, value1, value2))
+		argvalue3 := []byte(flag.Arg(4))
+		value3 := argvalue3
+		fmt.Print(client.Lookup(value0, value1, value2, value3))
 		fmt.Print("\n")
 		break
 	case "ping":

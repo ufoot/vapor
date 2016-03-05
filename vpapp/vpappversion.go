@@ -21,32 +21,23 @@ package vpapp
 
 import (
 	"fmt"
+	"github.com/ufoot/vapor/vpcommonapi"
 )
 
-// Version is used to identify the program version.
-type Version struct {
-	// Major version number
-	Major int
-	// Minor version number
-	Minor int
-	// Stamp, to differenciate between builds
-	Stamp string
-}
-
 // NewVersion creates a new version object.
-func NewVersion(major, minor int, stamp string) *Version {
-	return &Version{major, minor, stamp}
+func NewVersion(major, minor int, stamp string) *vpcommonapi.Version {
+	return &vpcommonapi.Version{Major: int32(major), Minor: int32(minor), Stamp: stamp}
 }
 
 // DefaultVersion creates a new default object.
-func DefaultVersion() *Version {
+func DefaultVersion() *vpcommonapi.Version {
 	return NewVersion(VersionMajor, VersionMinor, VersionStamp)
 }
 
 // Compare compares two versions, returns -1 if v1<v2,
 // 0 if they are equal, and +1 if v1>v2. Stamp is just
 // ignored, only major and minor are considered.
-func Compare(v1, v2 *Version) int {
+func Compare(v1, v2 *vpcommonapi.Version) int {
 	if v1.Major < v2.Major {
 		return -1
 	}
@@ -64,11 +55,11 @@ func Compare(v1, v2 *Version) int {
 
 // Equal returns true if the versions are exactly the same.
 // Stamp is still just ignored, only major and minor are considered.
-func Equal(v1, v2 *Version) bool {
+func Equal(v1, v2 *vpcommonapi.Version) bool {
 	return Compare(v1, v2) == 0
 }
 
-// String returns the version as a string
-func (v *Version) String() string {
+// VersionToString returns the version as a string
+func VersionToString(v *vpcommonapi.Version) string {
 	return fmt.Sprintf("%d.%d.%s", v.Major, v.Minor, v.Stamp)
 }

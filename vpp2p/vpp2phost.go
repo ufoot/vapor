@@ -20,6 +20,8 @@
 package vpp2p
 
 import (
+	"github.com/ufoot/vapor/vpapp"
+	"github.com/ufoot/vapor/vpcommonapi"
 	"github.com/ufoot/vapor/vpcrypto"
 	"github.com/ufoot/vapor/vpp2papi"
 	"github.com/ufoot/vapor/vpp2pdat"
@@ -98,4 +100,40 @@ func (host *Host) IsSigned() bool {
 // CheckSig checks if the host signature is OK, if it's not, returns false and an error.
 func (host *Host) CheckSig() (bool, error) {
 	return vpp2pdat.HostInfoCheckSig(&host.Info)
+}
+
+// Ping is a simple ping function
+func (host *Host) Ping() error {
+	return nil
+}
+
+// Uptime is a simple uptime function, returns time since host was created.
+func (host *Host) Uptime() (int64, error) {
+	// todo...
+
+	return 0, nil
+}
+
+// GetPackage returns the package version. Program general information.
+func (host *Host) GetPackage() (*vpcommonapi.Package, error) {
+	return vpapp.DefaultPackage(), nil
+}
+
+// GetVersion returns the version version. Program general information.
+func (host *Host) GetVersion() (*vpcommonapi.Version, error) {
+	return vpapp.DefaultVersion(), nil
+}
+
+// Sync is called to synchronise between nodes.
+func (host *Host) Sync(context *vpp2papi.ContextInfo) (*vpp2papi.SyncData, error) {
+	// todo...
+
+	return nil, nil
+}
+
+// Lookup searches for a key on a given ring.
+func (host *Host) Lookup(context *vpp2papi.ContextInfo, key, keyShift, imaginaryNode []byte) (*vpp2papi.LookupData, error) {
+	// todo...
+
+	return nil, nil
 }

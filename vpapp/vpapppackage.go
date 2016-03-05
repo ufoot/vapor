@@ -21,44 +21,28 @@ package vpapp
 
 import (
 	"fmt"
+	"github.com/ufoot/vapor/vpcommonapi"
 	"strings"
 )
 
-// Package is used to identify the program package, think
-// of it as old good old autotools PACKAGE (name on steroids).
-type Package struct {
-	// Tarname, for instance myapp
-	Tarname string
-	// Readable name, for instance My App
-	Name string
-	// Email of maintainer
-	Email string
-	// URL of program, to get info about it
-	URL string
-	// Copyright, short copyright notice.
-	Copyright string
-	// License, short license description.
-	License string
-}
-
 // NewPackage creates a new package object.
-func NewPackage(tarname, name, email, url, copyright, license string) *Package {
-	return &Package{tarname, name, email, url, copyright, license}
+func NewPackage(tarname, name, email, url, copyright, license string) *vpcommonapi.Package {
+	return &vpcommonapi.Package{Tarname: tarname, Name: name, Email: email, URL: url, Copyright: copyright, License: license}
 }
 
 // DefaultPackage creates a new default object.
-func DefaultPackage() *Package {
+func DefaultPackage() *vpcommonapi.Package {
 	return NewPackage(PackageTarname, PackageName, PackageEmail, PackageURL, PackageCopyright, PackageLicense)
 }
 
 // Compatible tells wether two packages refer to the same application,
 // basically only the Tarname is checked, the rest is considered
 // informative.
-func Compatible(v1, v2 *Package) bool {
+func Compatible(v1, v2 *vpcommonapi.Package) bool {
 	return strings.EqualFold(v1.Tarname, v2.Tarname)
 }
 
-// String returns the package as a string
-func (p *Package) String() string {
+// PackageToString returns the package as a string
+func PackageToString(p *vpcommonapi.Package) string {
 	return fmt.Sprintf("%s (%s) email: %s, url:%s", p.Tarname, p.Name, p.Email, p.URL)
 }

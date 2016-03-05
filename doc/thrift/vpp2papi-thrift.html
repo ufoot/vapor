@@ -196,16 +196,17 @@ code { line-height: 20px; }
 <tr>
 <td>vpp2papi</td><td><a href="#Svc_VpP2pApi">VpP2pApi</a><br/>
 <ul>
-<li><a href="#Fn_VpP2pApi_IAmPrev">IAmPrev</a></li>
 <li><a href="#Fn_VpP2pApi_Lookup">Lookup</a></li>
+<li><a href="#Fn_VpP2pApi_Sync">Sync</a></li>
 </ul>
 </td>
-<td><a href="#Struct_GetData">GetData</a><br/>
+<td><a href="#Struct_ContextInfo">ContextInfo</a><br/>
 <a href="#Struct_HostInfo">HostInfo</a><br/>
 <a href="#Struct_LookupData">LookupData</a><br/>
 <a href="#Struct_NodeInfo">NodeInfo</a><br/>
 <a href="#Struct_RingConfig">RingConfig</a><br/>
 <a href="#Struct_RingInfo">RingInfo</a><br/>
+<a href="#Struct_SyncData">SyncData</a><br/>
 </td>
 <td></code></td>
 </tr></table>
@@ -242,28 +243,36 @@ code { line-height: 20px; }
 <tr><td>7</td><td>HostPubKey</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>8</td><td>RingSig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>RingInfo contains static informations about a ring.
+<br/></div><div class="definition"><h3 id="Struct_ContextInfo">Struct: ContextInfo</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>sourceHost</td><td><code><a href="#Struct_HostInfo">HostInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>sourceRing</td><td><code><a href="#Struct_RingInfo">RingInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>sourceNode</td><td><code><a href="#Struct_NodeInfo">NodeInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>targetNodeID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+</table><br/>ContextInfo contains static informations about the program
+calling a fonction, it gives context.
 <br/></div><div class="definition"><h3 id="Struct_LookupData">Struct: LookupData</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>path</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>2</td><td>errcode</td><td><code>i32</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>1</td><td>found</td><td><code>bool</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>nodesPath</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>hostsRef</td><td><code>list&lt;<code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>Used to store results when doing Lookup-like requests.
-<br/></div><div class="definition"><h3 id="Struct_GetData">Struct: GetData</h3>
+<br/></div><div class="definition"><h3 id="Struct_SyncData">Struct: SyncData</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>value</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>2</td><td>path</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>3</td><td>errcode</td><td><code>i32</code></td><td></td><td>default</td><td></td></tr>
-</table><br/>Used to store results when doing Get-like requests.
+<tr><td>1</td><td>accepted</td><td><code>bool</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>nextNodes</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>hostsRef</td><td><code>list&lt;<code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+</table><br/>Used to store results when doing Sync requests.
 <br/></div><hr/><h2 id="Services">Services</h2>
 <h3 id="Svc_VpP2pApi">Service: VpP2pApi</h3>
 <div class="extends"><em>extends</em> <code><a href="vpcommonapi.html#Svc_VpCommonApi">vpcommonapi.VpCommonApi</a></code></div>
 VpP2pApi is used to communicate between 2 Vapor nodes
 in peer-to-peer mode.
-<br/><div class="definition"><h4 id="Fn_VpP2pApi_IAmPrev">Function: VpP2pApi.IAmPrev</h4>
-<pre><code><a href="#Struct_LookupData">LookupData</a></code> IAmPrev(<code>binary</code> key,
-                   <code>binary</code> keyShift,
-                   <code>binary</code> imaginaryNode)
+<br/><div class="definition"><h4 id="Fn_VpP2pApi_Sync">Function: VpP2pApi.Sync</h4>
+<pre><code><a href="#Struct_SyncData">SyncData</a></code> Sync(<code><a href="#Struct_ContextInfo">ContextInfo</a></code> context)
 </pre></div><div class="definition"><h4 id="Fn_VpP2pApi_Lookup">Function: VpP2pApi.Lookup</h4>
-<pre><code><a href="#Struct_LookupData">LookupData</a></code> Lookup(<code>binary</code> key,
+<pre><code><a href="#Struct_LookupData">LookupData</a></code> Lookup(<code><a href="#Struct_ContextInfo">ContextInfo</a></code> context,
+                  <code>binary</code> key,
                   <code>binary</code> keyShift,
                   <code>binary</code> imaginaryNode)
 </pre></div></div></body></html>

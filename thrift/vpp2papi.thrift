@@ -76,20 +76,32 @@ struct RingInfo {
 }
 
 /**
- * Used to store results when doing Lookup-like requests.
+ * ContextInfo contains static informations about the program
+ * calling a fonction, it gives context.
  */
-struct LookupData {
-  1: list<NodeInfo> path,
-  2: i32 errcode,
+struct ContextInfo {
+  1: HostInfo sourceHost,
+  2: RingInfo sourceRing,
+  3: NodeInfo sourceNode,
+  4: binary targetNodeID,
 }
 
 /**
- * Used to store results when doing Get-like requests.
+ * Used to store results when doing Lookup-like requests.
  */
-struct GetData {
-  1: binary value,
-  2: list<NodeInfo> path,
-  3: i32 errcode,
+struct LookupData {
+  1: bool found,
+  2: list<NodeInfo> nodesPath,
+  3: list<HostInfo> hostsRef,
+}
+
+/**
+ * Used to store results when doing Sync requests.
+ */
+struct SyncData {
+  1: bool accepted,
+  2: list<NodeInfo> nextNodes,
+  3: list<HostInfo> hostsRef,
 }
 
 /**
@@ -98,14 +110,13 @@ struct GetData {
  */
 service VpP2pApi extends vpcommonapi.VpCommonApi
 {
-  LookupData IAmPrev(
-    1:binary key,
-    2:binary keyShift,
-    3:binary imaginaryNode
+  SyncData Sync(
+    1:ContextInfo context,
   ),
   LookupData Lookup(
-    1:binary key,
-    2:binary keyShift,
-    3:binary imaginaryNode
+    1:ContextInfo context,
+    2:binary key,
+    3:binary keyShift,
+    4:binary imaginaryNode
   ),
 }
