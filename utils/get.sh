@@ -27,7 +27,7 @@ if [ ! -d utils ] ; then
     exit 1
 fi
 
-export GOPATH=$(pwd)
+. ./utils/env.sh
 
 get() {
     echo "go get $1"
@@ -47,7 +47,7 @@ get golang.org/x/crypto/openpgp/packet
 get git.apache.org/thrift.git/lib/go/thrift
 get github.com/llgcode/draw2d
 
-rm -rf src/github.com/ufoot/vapor
-install -d src/github.com/ufoot/vapor
-for i in vp*; do ln -s $(pwd)/$i src/github.com/ufoot/vapor/$i ; done
+rm -rf go/src/github.com/ufoot/vapor
+install -d go/src/github.com/ufoot/vapor/go
+for i in go/vp*; do ln -s $(pwd)/$i go/src/github.com/ufoot/vapor/$i ; done
 

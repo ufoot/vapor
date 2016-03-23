@@ -93,8 +93,8 @@ calc_stamp () {
 }
 
 patch_autotools () {
-calc_minor .
-calc_stamp .
+    calc_minor go
+    calc_stamp go
     VERSION_DOT=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_STAMP}
     if grep -q ${VERSION_DOT} ${CONFIGURE_AC} ; then
         echo "current version is ${VERSION_DOT}"
@@ -125,7 +125,7 @@ find_configure_ac
 git_check
 git_changelog
 patch_autotools
-for i in vp* ; do
+for i in go/vp* ; do
 	patch_go $i
 done
 

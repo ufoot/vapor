@@ -27,7 +27,7 @@ if [ ! -d utils ] ; then
     exit 1
 fi
 
-for i in vp*/*.go ; do
+for i in go/vp*/*.go ; do
     go fmt "$i"
 done
 
