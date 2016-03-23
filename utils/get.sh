@@ -27,7 +27,7 @@ if [ ! -d utils ] ; then
     exit 1
 fi
 
-. ./utils/env.sh
+export GOPATH=$(pwd)/go
 
 get() {
     echo "go get $1"
