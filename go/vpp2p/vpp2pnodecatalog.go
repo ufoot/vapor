@@ -77,7 +77,7 @@ func (c *NodeCatalog) RegisterNode(node *Node) {
 	defer c.access.Unlock()
 	c.access.Lock()
 
-	nodeID := node.Info.NodeID
+	nodeID := node.Details.Info.NodeID
 	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
 	c.nodes[nodeIDBuf] = node
 }
@@ -88,7 +88,7 @@ func (c *NodeCatalog) UnregisterNode(node *Node) {
 	defer c.access.Unlock()
 	c.access.Lock()
 
-	nodeID := node.Info.NodeID
+	nodeID := node.Details.Info.NodeID
 	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
 	delete(c.nodes, nodeIDBuf)
 }
@@ -102,7 +102,7 @@ func (c *NodeCatalog) List() []*vpp2papi.NodeInfo {
 	i := 0
 	ret := make([]*vpp2papi.NodeInfo, len(c.nodes))
 	for _, value := range c.nodes {
-		ret[i] = &value.Info
+		ret[i] = value.Details.Info
 		i++
 	}
 

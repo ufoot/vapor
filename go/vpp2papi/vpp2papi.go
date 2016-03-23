@@ -22,6 +22,7 @@ type VpP2pApi interface {
 	//VpP2pApi is used to communicate between 2 Vapor nodes
 	//in peer-to-peer mode.
 
+	Status() (r *StatusData, err error)
 	// Parameters:
 	//  - Context
 	Sync(context *ContextInfo) (r *SyncData, err error)
@@ -45,6 +46,79 @@ func NewVpP2pApiClientFactory(t thrift.TTransport, f thrift.TProtocolFactory) *V
 
 func NewVpP2pApiClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, oprot thrift.TProtocol) *VpP2pApiClient {
 	return &VpP2pApiClient{VpCommonApiClient: vpcommonapi.NewVpCommonApiClientProtocol(t, iprot, oprot)}
+}
+
+func (p *VpP2pApiClient) Status() (r *StatusData, err error) {
+	if err = p.sendStatus(); err != nil {
+		return
+	}
+	return p.recvStatus()
+}
+
+func (p *VpP2pApiClient) sendStatus() (err error) {
+	oprot := p.OutputProtocol
+	if oprot == nil {
+		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
+		p.OutputProtocol = oprot
+	}
+	p.SeqId++
+	if err = oprot.WriteMessageBegin("Status", thrift.CALL, p.SeqId); err != nil {
+		return
+	}
+	args := VpP2pApiStatusArgs{}
+	if err = args.Write(oprot); err != nil {
+		return
+	}
+	if err = oprot.WriteMessageEnd(); err != nil {
+		return
+	}
+	return oprot.Flush()
+}
+
+func (p *VpP2pApiClient) recvStatus() (value *StatusData, err error) {
+	iprot := p.InputProtocol
+	if iprot == nil {
+		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
+		p.InputProtocol = iprot
+	}
+	method, mTypeId, seqId, err := iprot.ReadMessageBegin()
+	if err != nil {
+		return
+	}
+	if method != "Status" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "Status failed: wrong method name")
+		return
+	}
+	if p.SeqId != seqId {
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "Status failed: out of sequence response")
+		return
+	}
+	if mTypeId == thrift.EXCEPTION {
+		error9 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+		var error10 error
+		error10, err = error9.Read(iprot)
+		if err != nil {
+			return
+		}
+		if err = iprot.ReadMessageEnd(); err != nil {
+			return
+		}
+		err = error10
+		return
+	}
+	if mTypeId != thrift.REPLY {
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "Status failed: invalid message type")
+		return
+	}
+	result := VpP2pApiStatusResult{}
+	if err = result.Read(iprot); err != nil {
+		return
+	}
+	if err = iprot.ReadMessageEnd(); err != nil {
+		return
+	}
+	value = result.GetSuccess()
+	return
 }
 
 // Parameters:
@@ -97,16 +171,16 @@ func (p *VpP2pApiClient) recvSync() (value *SyncData, err error) {
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
-		error4 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-		var error5 error
-		error5, err = error4.Read(iprot)
+		error11 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+		var error12 error
+		error12, err = error11.Read(iprot)
 		if err != nil {
 			return
 		}
 		if err = iprot.ReadMessageEnd(); err != nil {
 			return
 		}
-		err = error5
+		err = error12
 		return
 	}
 	if mTypeId != thrift.REPLY {
@@ -180,16 +254,16 @@ func (p *VpP2pApiClient) recvLookup() (value *LookupData, err error) {
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
-		error6 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-		var error7 error
-		error7, err = error6.Read(iprot)
+		error13 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+		var error14 error
+		error14, err = error13.Read(iprot)
 		if err != nil {
 			return
 		}
 		if err = iprot.ReadMessageEnd(); err != nil {
 			return
 		}
-		err = error7
+		err = error14
 		return
 	}
 	if mTypeId != thrift.REPLY {
@@ -212,10 +286,59 @@ type VpP2pApiProcessor struct {
 }
 
 func NewVpP2pApiProcessor(handler VpP2pApi) *VpP2pApiProcessor {
-	self8 := &VpP2pApiProcessor{vpcommonapi.NewVpCommonApiProcessor(handler)}
-	self8.AddToProcessorMap("Sync", &vpP2pApiProcessorSync{handler: handler})
-	self8.AddToProcessorMap("Lookup", &vpP2pApiProcessorLookup{handler: handler})
-	return self8
+	self15 := &VpP2pApiProcessor{vpcommonapi.NewVpCommonApiProcessor(handler)}
+	self15.AddToProcessorMap("Status", &vpP2pApiProcessorStatus{handler: handler})
+	self15.AddToProcessorMap("Sync", &vpP2pApiProcessorSync{handler: handler})
+	self15.AddToProcessorMap("Lookup", &vpP2pApiProcessorLookup{handler: handler})
+	return self15
+}
+
+type vpP2pApiProcessorStatus struct {
+	handler VpP2pApi
+}
+
+func (p *vpP2pApiProcessorStatus) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := VpP2pApiStatusArgs{}
+	if err = args.Read(iprot); err != nil {
+		iprot.ReadMessageEnd()
+		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
+		oprot.WriteMessageBegin("Status", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush()
+		return false, err
+	}
+
+	iprot.ReadMessageEnd()
+	result := VpP2pApiStatusResult{}
+	var retval *StatusData
+	var err2 error
+	if retval, err2 = p.handler.Status(); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing Status: "+err2.Error())
+		oprot.WriteMessageBegin("Status", thrift.EXCEPTION, seqId)
+		x.Write(oprot)
+		oprot.WriteMessageEnd()
+		oprot.Flush()
+		return true, err2
+	} else {
+		result.Success = retval
+	}
+	if err2 = oprot.WriteMessageBegin("Status", thrift.REPLY, seqId); err2 != nil {
+		err = err2
+	}
+	if err2 = result.Write(oprot); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.WriteMessageEnd(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err2 = oprot.Flush(); err == nil && err2 != nil {
+		err = err2
+	}
+	if err != nil {
+		return
+	}
+	return true, err
 }
 
 type vpP2pApiProcessorSync struct {
@@ -315,6 +438,160 @@ func (p *vpP2pApiProcessorLookup) Process(seqId int32, iprot, oprot thrift.TProt
 }
 
 // HELPER FUNCTIONS AND STRUCTURES
+
+type VpP2pApiStatusArgs struct {
+}
+
+func NewVpP2pApiStatusArgs() *VpP2pApiStatusArgs {
+	return &VpP2pApiStatusArgs{}
+}
+
+func (p *VpP2pApiStatusArgs) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		if err := iprot.Skip(fieldTypeId); err != nil {
+			return err
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *VpP2pApiStatusArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("Status_args"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *VpP2pApiStatusArgs) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VpP2pApiStatusArgs(%+v)", *p)
+}
+
+// Attributes:
+//  - Success
+type VpP2pApiStatusResult struct {
+	Success *StatusData `thrift:"success,0" json:"success,omitempty"`
+}
+
+func NewVpP2pApiStatusResult() *VpP2pApiStatusResult {
+	return &VpP2pApiStatusResult{}
+}
+
+var VpP2pApiStatusResult_Success_DEFAULT *StatusData
+
+func (p *VpP2pApiStatusResult) GetSuccess() *StatusData {
+	if !p.IsSetSuccess() {
+		return VpP2pApiStatusResult_Success_DEFAULT
+	}
+	return p.Success
+}
+func (p *VpP2pApiStatusResult) IsSetSuccess() bool {
+	return p.Success != nil
+}
+
+func (p *VpP2pApiStatusResult) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 0:
+			if err := p.readField0(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *VpP2pApiStatusResult) readField0(iprot thrift.TProtocol) error {
+	p.Success = &StatusData{}
+	if err := p.Success.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
+	}
+	return nil
+}
+
+func (p *VpP2pApiStatusResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("Status_result"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if err := p.writeField0(oprot); err != nil {
+		return err
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *VpP2pApiStatusResult) writeField0(oprot thrift.TProtocol) (err error) {
+	if p.IsSetSuccess() {
+		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
+		}
+		if err := p.Success.Write(oprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Success), err)
+		}
+		if err := oprot.WriteFieldEnd(); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T write field end error 0:success: ", p), err)
+		}
+	}
+	return err
+}
+
+func (p *VpP2pApiStatusResult) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("VpP2pApiStatusResult(%+v)", *p)
+}
 
 // Attributes:
 //  - Context

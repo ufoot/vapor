@@ -52,6 +52,24 @@ struct NodeInfo {
 }
 
 /**
+ * NodePeers contains informations about node peers,
+ * those it should contact.
+ */
+struct NodePeers {
+  1: list<NodeInfo> Successor,
+  2: list<NodeInfo> D,
+}
+
+/**
+ * NodeDetails contains details about a node.
+ */
+struct NodeDetails {
+  1: NodeInfo Info,
+  2: NodePeers Peers,
+  3: NodeInfo Predecessor,
+}
+
+/**
  * RingConfig contains functional parameters of a ring.
  */
 struct RingConfig {
@@ -87,6 +105,16 @@ struct ContextInfo {
 }
 
 /**
+ * Used to return data when calling status.
+ */
+struct StatusData {
+  1: HostInfo thisHostInfo,
+  2: list<NodeDetails> localNodeDetails,
+  3: list<RingInfo> ringsRef,
+  4: list<HostInfo> hostsRef,
+}
+
+/**
  * Used to store results when doing Lookup-like requests.
  */
 struct LookupData {
@@ -100,7 +128,7 @@ struct LookupData {
  */
 struct SyncData {
   1: bool accepted,
-  2: list<NodeInfo> nextNodes,
+  2: list<NodeInfo> successorNodes,
   3: list<HostInfo> hostsRef,
 }
 
@@ -110,6 +138,8 @@ struct SyncData {
  */
 service VpP2pApi extends vpcommonapi.VpCommonApi
 {
+  StatusData Status(
+  ),
   SyncData Sync(
     1:ContextInfo context,
   ),

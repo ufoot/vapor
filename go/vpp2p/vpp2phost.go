@@ -125,6 +125,13 @@ func (host *Host) GetVersion() (*vpcommonapi.Version, error) {
 	return vpapp.DefaultVersion(), nil
 }
 
+// Status is called to get another host status.
+func (host *Host) Status() (*vpp2papi.StatusData, error) {
+	// todo...
+
+	return nil, nil
+}
+
 // Sync is called to synchronise between nodes.
 func (host *Host) Sync(context *vpp2papi.ContextInfo) (*vpp2papi.SyncData, error) {
 	// todo...

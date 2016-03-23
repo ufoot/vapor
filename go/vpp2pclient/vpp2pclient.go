@@ -20,6 +20,7 @@ func Usage() {
 	fmt.Fprintln(os.Stderr, "Usage of ", os.Args[0], " [-h host:port] [-u url] [-f[ramed]] function [arg1 [arg2...]]:")
 	flag.PrintDefaults()
 	fmt.Fprintln(os.Stderr, "\nFunctions:")
+	fmt.Fprintln(os.Stderr, "  StatusData Status()")
 	fmt.Fprintln(os.Stderr, "  SyncData Sync(ContextInfo context)")
 	fmt.Fprintln(os.Stderr, "  LookupData Lookup(ContextInfo context, string key, string keyShift, string imaginaryNode)")
 	fmt.Fprintln(os.Stderr, "  void ping()")
@@ -120,24 +121,32 @@ func main() {
 	}
 
 	switch cmd {
+	case "Status":
+		if flag.NArg()-1 != 0 {
+			fmt.Fprintln(os.Stderr, "Status requires 0 args")
+			flag.Usage()
+		}
+		fmt.Print(client.Status())
+		fmt.Print("\n")
+		break
 	case "Sync":
 		if flag.NArg()-1 != 1 {
 			fmt.Fprintln(os.Stderr, "Sync requires 1 args")
 			flag.Usage()
 		}
-		arg9 := flag.Arg(1)
-		mbTrans10 := thrift.NewTMemoryBufferLen(len(arg9))
-		defer mbTrans10.Close()
-		_, err11 := mbTrans10.WriteString(arg9)
-		if err11 != nil {
+		arg16 := flag.Arg(1)
+		mbTrans17 := thrift.NewTMemoryBufferLen(len(arg16))
+		defer mbTrans17.Close()
+		_, err18 := mbTrans17.WriteString(arg16)
+		if err18 != nil {
 			Usage()
 			return
 		}
-		factory12 := thrift.NewTSimpleJSONProtocolFactory()
-		jsProt13 := factory12.GetProtocol(mbTrans10)
+		factory19 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt20 := factory19.GetProtocol(mbTrans17)
 		argvalue0 := vpp2papi.NewContextInfo()
-		err14 := argvalue0.Read(jsProt13)
-		if err14 != nil {
+		err21 := argvalue0.Read(jsProt20)
+		if err21 != nil {
 			Usage()
 			return
 		}
@@ -150,19 +159,19 @@ func main() {
 			fmt.Fprintln(os.Stderr, "Lookup requires 4 args")
 			flag.Usage()
 		}
-		arg15 := flag.Arg(1)
-		mbTrans16 := thrift.NewTMemoryBufferLen(len(arg15))
-		defer mbTrans16.Close()
-		_, err17 := mbTrans16.WriteString(arg15)
-		if err17 != nil {
+		arg22 := flag.Arg(1)
+		mbTrans23 := thrift.NewTMemoryBufferLen(len(arg22))
+		defer mbTrans23.Close()
+		_, err24 := mbTrans23.WriteString(arg22)
+		if err24 != nil {
 			Usage()
 			return
 		}
-		factory18 := thrift.NewTSimpleJSONProtocolFactory()
-		jsProt19 := factory18.GetProtocol(mbTrans16)
+		factory25 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt26 := factory25.GetProtocol(mbTrans23)
 		argvalue0 := vpp2papi.NewContextInfo()
-		err20 := argvalue0.Read(jsProt19)
-		if err20 != nil {
+		err27 := argvalue0.Read(jsProt26)
+		if err27 != nil {
 			Usage()
 			return
 		}

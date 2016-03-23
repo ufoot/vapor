@@ -41,8 +41,8 @@ const (
 // Node is the link between a Ring and a Host. Basically a node is a point
 // on the ring, which joins on the ring using the host as a connexion tool.
 type Node struct {
-	// Info about the node
-	Info vpp2papi.NodeInfo
+	// Details about the node
+	Details vpp2papi.NodeDetails
 
 	hostPtr *Host
 	ringPtr *Ring
@@ -53,10 +53,6 @@ type Node struct {
 	// Successors is list of successing nodes within the ring,
 	// use 1st elem for direct successor.
 	Successor []vpp2papi.VpP2pApi
-	// PredecessorInfo describes the previous node within the ring. This is not used
-	// to walk along the ring but just to know what is the range of keys
-	// this node is responsible for.
-	PredecessorInfo *vpp2papi.NodeInfo
 	// D is a  list of nodes preceeding m*Id (the 1st Bruijn node),
 	// so that it contains about O(Log(n)) before stumbling on D.
 	// The first element is actually D, the other ones go backwards on the ring.
@@ -82,6 +78,7 @@ func (r *ringIDAppender) Transform(nodeID []byte) []byte {
 // NewNode builds a new node object.
 func NewNode(host *Host, ring *Ring) (*Node, error) {
 	var ret Node
+	var info vpp2papi.NodeInfo
 	var err error
 	var intNodeID *big.Int
 	var sig []byte
@@ -102,6 +99,7 @@ func NewNode(host *Host, ring *Ring) (*Node, error) {
 
 	ret.hostPtr = host
 	ret.ringPtr = ring
+	ret.Details.Info = &info
 
 	// by doing this, nodes will always be (un)registerered within hosts
 	// and the global node register. This is usefull when one wants to
@@ -110,12 +108,12 @@ func NewNode(host *Host, ring *Ring) (*Node, error) {
 	ret.registerers[0] = GlobalNodeCatalog()
 	ret.registerers[1] = host.localNodeCatalog
 
-	ret.Info.NodeID = vpsum.IntToBuf256(intNodeID)
-	ret.Info.RingID = make([]byte, len(ring.Info.RingID))
-	copy(ret.Info.RingID, ring.Info.RingID)
-	ret.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
-	copy(ret.Info.HostPubKey, host.Info.HostPubKey)
-	ret.Info.NodeSig = sig
+	ret.Details.Info.NodeID = vpsum.IntToBuf256(intNodeID)
+	ret.Details.Info.RingID = make([]byte, len(ring.Info.RingID))
+	copy(ret.Details.Info.RingID, ring.Info.RingID)
+	ret.Details.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
+	copy(ret.Details.Info.HostPubKey, host.Info.HostPubKey)
+	ret.Details.Info.NodeSig = sig
 
 	return &ret, nil
 }
@@ -217,11 +215,11 @@ func (node *Node) Lookup(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeI
 // IsSigned returns true if the node has been signed by corresponding host.
 // It does not check if the signature is valid.
 func (node *Node) IsSigned() bool {
-	return vpp2pdat.NodeInfoIsSigned(&node.Info)
+	return vpp2pdat.NodeInfoIsSigned(node.Details.Info)
 }
 
 // CheckSig checks if the node signature is OK, if it's not, returns 0 and an error.
 // If it's OK, returns the number of zeroes in the signature hash.
 func (node *Node) CheckSig() (int, error) {
-	return vpp2pdat.NodeInfoCheckSig(&node.Info)
+	return vpp2pdat.NodeInfoCheckSig(node.Details.Info)
 }
