@@ -29,16 +29,20 @@ fi
 
 THRIFT_GO_OPTIONS="package_prefix=github.com/ufoot/vapor/"
 THRIFT_CPP_OPTIONS=""
-THRIFT_JS_OPTIONS="standalone"
+THRIFT_JS_OPTIONS="jquery"
 THRIFT_HTML_OPTIONS="standalone"
 
 for i in common bus p2p ; do
     cd thrift && \
-	thrift --gen "go:$THRIFT_GO_OPTIONS" --gen "cpp:$THIFT_CPP_OPTIONS" --gen js:$THRIFT_JS_OPTIONS --gen html:$THRIFT_HTML_OPTIONS vp${i}api.thrift && \
+	thrift --gen "go:$THRIFT_GO_OPTIONS" --gen "cpp:$THIFT_CPP_OPTIONS" --gen "js:$THRIFT_JS_OPTIONS" --gen "html:$THRIFT_HTML_OPTIONS" vp${i}api.thrift && \
 	cp ./gen-go/vp${i}api/*.go ../vp${i}api/ && \
 	cp ./gen-go/vp${i}api/vp_${i}_api-remote/vp_${i}_api-remote.go ../vp${i}client/vp${i}client.go && \
 	sed -i "s/\"vp${i}api\"/\"github.com\/ufoot\/vapor\/vp${i}api\"/" ../vp${i}client/vp${i}client.go && \
-	cp ./gen-html/vp${i}api.html ../doc/thrift/vp${i}api-thrift.html && \
-	cd ..
+	cp ./gen-html/vp${i}api.html ../doc/thrift/vp${i}api-thrift.html
+    cd ..
     rm -f vp*/vp_*.go
 done
+
+if [ -f ./src/git.apache.org/thrift.git/lib/js/src/thrift.js ] && [ -d ./thrift/gen-js/ ] ; then cp ./src/git.apache.org/thrift.git/lib/js/src/thrift.js ./thrift/gen-js/ ; fi
+if which wget > /dev/null 2>&1 ; then wget https://code.jquery.com/jquery.js -O ./thrift/gen-js/jquery.js ; fi
+
