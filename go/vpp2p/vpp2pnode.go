@@ -41,8 +41,8 @@ const (
 // Node is the link between a Ring and a Host. Basically a node is a point
 // on the ring, which joins on the ring using the host as a connexion tool.
 type Node struct {
-	// Details about the node
-	Details vpp2papi.NodeDetails
+	// Status about the node
+	Status vpp2papi.NodeStatus
 
 	hostPtr *Host
 	ringPtr *Ring
@@ -99,7 +99,7 @@ func NewNode(host *Host, ring *Ring) (*Node, error) {
 
 	ret.hostPtr = host
 	ret.ringPtr = ring
-	ret.Details.Info = &info
+	ret.Status.Info = &info
 
 	// by doing this, nodes will always be (un)registerered within hosts
 	// and the global node register. This is usefull when one wants to
@@ -108,12 +108,12 @@ func NewNode(host *Host, ring *Ring) (*Node, error) {
 	ret.registerers[0] = GlobalNodeCatalog()
 	ret.registerers[1] = host.localNodeCatalog
 
-	ret.Details.Info.NodeID = vpsum.IntToBuf256(intNodeID)
-	ret.Details.Info.RingID = make([]byte, len(ring.Info.RingID))
-	copy(ret.Details.Info.RingID, ring.Info.RingID)
-	ret.Details.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
-	copy(ret.Details.Info.HostPubKey, host.Info.HostPubKey)
-	ret.Details.Info.NodeSig = sig
+	ret.Status.Info.NodeID = vpsum.IntToBuf256(intNodeID)
+	ret.Status.Info.RingID = make([]byte, len(ring.Info.RingID))
+	copy(ret.Status.Info.RingID, ring.Info.RingID)
+	ret.Status.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
+	copy(ret.Status.Info.HostPubKey, host.Info.HostPubKey)
+	ret.Status.Info.NodeSig = sig
 
 	return &ret, nil
 }
@@ -215,11 +215,11 @@ func (node *Node) Lookup(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeI
 // IsSigned returns true if the node has been signed by corresponding host.
 // It does not check if the signature is valid.
 func (node *Node) IsSigned() bool {
-	return vpp2pdat.NodeInfoIsSigned(node.Details.Info)
+	return vpp2pdat.NodeInfoIsSigned(node.Status.Info)
 }
 
 // CheckSig checks if the node signature is OK, if it's not, returns 0 and an error.
 // If it's OK, returns the number of zeroes in the signature hash.
 func (node *Node) CheckSig() (int, error) {
-	return vpp2pdat.NodeInfoCheckSig(node.Details.Info)
+	return vpp2pdat.NodeInfoCheckSig(node.Status.Info)
 }

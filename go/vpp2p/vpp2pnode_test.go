@@ -56,7 +56,7 @@ func TestNewNode(t *testing.T) {
 	if node.IsSigned() == false {
 		t.Error("node is unsigned, when it should be")
 	}
-	zeroes = vpid.ZeroesInBuf(vpsum.Checksum256(node.Details.Info.NodeSig))
+	zeroes = vpid.ZeroesInBuf(vpsum.Checksum256(node.Status.Info.NodeSig))
 	if zeroes < NodeKeyZeroes {
 		t.Errorf("Node created, but not enough zeroes in sig (%d)", zeroes)
 	}
@@ -68,7 +68,7 @@ func TestNewNode(t *testing.T) {
 	if zeroes != zeroes2 {
 		t.Errorf("NodeInfoCheckSig returned bad number of zeroes %d!=%d", zeroes, zeroes2)
 	}
-	node.Details.Info.NodeSig = node.Details.Info.HostPubKey
+	node.Status.Info.NodeSig = node.Status.Info.HostPubKey
 	_, err = node.CheckSig()
 	if err == nil {
 		t.Error("failed to report a broken sig", err)
@@ -89,7 +89,7 @@ func TestNewNode(t *testing.T) {
 	if node.IsSigned() == true {
 		t.Error("node is signed, when it should not be")
 	}
-	zeroes = vpid.ZeroesInBuf(vpsum.Checksum256(node.Details.Info.NodeSig))
+	zeroes = vpid.ZeroesInBuf(vpsum.Checksum256(node.Status.Info.NodeSig))
 	t.Logf("Node created, number of zeroes in sig is %d", zeroes)
 	zeroes2, err = node.CheckSig()
 	if err != nil {

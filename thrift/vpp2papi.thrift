@@ -61,9 +61,9 @@ struct NodePeers {
 }
 
 /**
- * NodeDetails contains details about a node.
+ * NodeStatus contains details about a node.
  */
-struct NodeDetails {
+struct NodeStatus {
   1: NodeInfo Info,
   2: NodePeers Peers,
   3: NodeInfo Predecessor,
@@ -107,9 +107,9 @@ struct ContextInfo {
 /**
  * Used to return data when calling status.
  */
-struct StatusData {
+struct HostStatus {
   1: HostInfo thisHostInfo,
-  2: list<NodeDetails> localNodeDetails,
+  2: list<NodeStatus> localNodeStatus,
   3: list<RingInfo> ringsRef,
   4: list<HostInfo> hostsRef,
 }
@@ -138,7 +138,7 @@ struct SyncData {
  */
 service VpP2pApi extends vpcommonapi.VpCommonApi
 {
-  StatusData Status(
+  HostStatus Status(
   ),
   SyncData Sync(
     1:ContextInfo context,

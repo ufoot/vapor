@@ -47,30 +47,30 @@ func TestGlobalCatalog(t *testing.T) {
 		t.Error("unable to create node2", err)
 	}
 
-	if GlobalNodeCatalog().HasNode(node1.Details.Info.NodeID) {
+	if GlobalNodeCatalog().HasNode(node1.Status.Info.NodeID) {
 		t.Error("global catalog has node1, but it's not started yet")
 	}
-	if host.localNodeCatalog.HasNode(node1.Details.Info.NodeID) {
+	if host.localNodeCatalog.HasNode(node1.Status.Info.NodeID) {
 		t.Error("host local catalog has node1, but it's not started yet")
 	}
-	if GlobalNodeCatalog().HasNode(node2.Details.Info.NodeID) {
+	if GlobalNodeCatalog().HasNode(node2.Status.Info.NodeID) {
 		t.Error("global catalog has node2, but it's not started yet")
 	}
-	if host.localNodeCatalog.HasNode(node2.Details.Info.NodeID) {
+	if host.localNodeCatalog.HasNode(node2.Status.Info.NodeID) {
 		t.Error("host local catalog has node2, but it's not started yet")
 	}
 	node1.Start()
 	node2.Start()
-	if !GlobalNodeCatalog().HasNode(node1.Details.Info.NodeID) {
+	if !GlobalNodeCatalog().HasNode(node1.Status.Info.NodeID) {
 		t.Error("global catalog does not have node1, but it has been started")
 	}
-	if !host.localNodeCatalog.HasNode(node1.Details.Info.NodeID) {
+	if !host.localNodeCatalog.HasNode(node1.Status.Info.NodeID) {
 		t.Error("host local catalog does not have node1, but it has been started")
 	}
-	if !GlobalNodeCatalog().HasNode(node2.Details.Info.NodeID) {
+	if !GlobalNodeCatalog().HasNode(node2.Status.Info.NodeID) {
 		t.Error("global catalog does not have node2, but it has been started")
 	}
-	if !host.localNodeCatalog.HasNode(node2.Details.Info.NodeID) {
+	if !host.localNodeCatalog.HasNode(node2.Status.Info.NodeID) {
 		t.Error("host local catalog does not have node2, but it has been started")
 	}
 	if len(GlobalNodeCatalog().List()) != 2 {
@@ -80,16 +80,16 @@ func TestGlobalCatalog(t *testing.T) {
 		t.Error("host local catalog length should be 2")
 	}
 	node1.Stop()
-	if GlobalNodeCatalog().HasNode(node1.Details.Info.NodeID) {
+	if GlobalNodeCatalog().HasNode(node1.Status.Info.NodeID) {
 		t.Error("global catalog has node1, but it has been stopped")
 	}
-	if host.localNodeCatalog.HasNode(node1.Details.Info.NodeID) {
+	if host.localNodeCatalog.HasNode(node1.Status.Info.NodeID) {
 		t.Error("host local catalog has node1, but has been stopped")
 	}
-	if !GlobalNodeCatalog().HasNode(node2.Details.Info.NodeID) {
+	if !GlobalNodeCatalog().HasNode(node2.Status.Info.NodeID) {
 		t.Error("global catalog does not have node2, but it should still be started")
 	}
-	if !host.localNodeCatalog.HasNode(node2.Details.Info.NodeID) {
+	if !host.localNodeCatalog.HasNode(node2.Status.Info.NodeID) {
 		t.Error("host local catalog does not have node2, but it shoulto still be started")
 	}
 }

@@ -581,61 +581,61 @@ func (p *NodePeers) String() string {
 	return fmt.Sprintf("NodePeers(%+v)", *p)
 }
 
-// NodeDetails contains details about a node.
+// NodeStatus contains details about a node.
 //
 // Attributes:
 //  - Info
 //  - Peers
 //  - Predecessor
-type NodeDetails struct {
+type NodeStatus struct {
 	Info        *NodeInfo  `thrift:"Info,1" json:"Info"`
 	Peers       *NodePeers `thrift:"Peers,2" json:"Peers"`
 	Predecessor *NodeInfo  `thrift:"Predecessor,3" json:"Predecessor"`
 }
 
-func NewNodeDetails() *NodeDetails {
-	return &NodeDetails{}
+func NewNodeStatus() *NodeStatus {
+	return &NodeStatus{}
 }
 
-var NodeDetails_Info_DEFAULT *NodeInfo
+var NodeStatus_Info_DEFAULT *NodeInfo
 
-func (p *NodeDetails) GetInfo() *NodeInfo {
+func (p *NodeStatus) GetInfo() *NodeInfo {
 	if !p.IsSetInfo() {
-		return NodeDetails_Info_DEFAULT
+		return NodeStatus_Info_DEFAULT
 	}
 	return p.Info
 }
 
-var NodeDetails_Peers_DEFAULT *NodePeers
+var NodeStatus_Peers_DEFAULT *NodePeers
 
-func (p *NodeDetails) GetPeers() *NodePeers {
+func (p *NodeStatus) GetPeers() *NodePeers {
 	if !p.IsSetPeers() {
-		return NodeDetails_Peers_DEFAULT
+		return NodeStatus_Peers_DEFAULT
 	}
 	return p.Peers
 }
 
-var NodeDetails_Predecessor_DEFAULT *NodeInfo
+var NodeStatus_Predecessor_DEFAULT *NodeInfo
 
-func (p *NodeDetails) GetPredecessor() *NodeInfo {
+func (p *NodeStatus) GetPredecessor() *NodeInfo {
 	if !p.IsSetPredecessor() {
-		return NodeDetails_Predecessor_DEFAULT
+		return NodeStatus_Predecessor_DEFAULT
 	}
 	return p.Predecessor
 }
-func (p *NodeDetails) IsSetInfo() bool {
+func (p *NodeStatus) IsSetInfo() bool {
 	return p.Info != nil
 }
 
-func (p *NodeDetails) IsSetPeers() bool {
+func (p *NodeStatus) IsSetPeers() bool {
 	return p.Peers != nil
 }
 
-func (p *NodeDetails) IsSetPredecessor() bool {
+func (p *NodeStatus) IsSetPredecessor() bool {
 	return p.Predecessor != nil
 }
 
-func (p *NodeDetails) Read(iprot thrift.TProtocol) error {
+func (p *NodeStatus) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -676,7 +676,7 @@ func (p *NodeDetails) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *NodeDetails) readField1(iprot thrift.TProtocol) error {
+func (p *NodeStatus) readField1(iprot thrift.TProtocol) error {
 	p.Info = &NodeInfo{}
 	if err := p.Info.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Info), err)
@@ -684,7 +684,7 @@ func (p *NodeDetails) readField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *NodeDetails) readField2(iprot thrift.TProtocol) error {
+func (p *NodeStatus) readField2(iprot thrift.TProtocol) error {
 	p.Peers = &NodePeers{}
 	if err := p.Peers.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Peers), err)
@@ -692,7 +692,7 @@ func (p *NodeDetails) readField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *NodeDetails) readField3(iprot thrift.TProtocol) error {
+func (p *NodeStatus) readField3(iprot thrift.TProtocol) error {
 	p.Predecessor = &NodeInfo{}
 	if err := p.Predecessor.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Predecessor), err)
@@ -700,8 +700,8 @@ func (p *NodeDetails) readField3(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *NodeDetails) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("NodeDetails"); err != nil {
+func (p *NodeStatus) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("NodeStatus"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if err := p.writeField1(oprot); err != nil {
@@ -722,7 +722,7 @@ func (p *NodeDetails) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *NodeDetails) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *NodeStatus) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("Info", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:Info: ", p), err)
 	}
@@ -735,7 +735,7 @@ func (p *NodeDetails) writeField1(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *NodeDetails) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *NodeStatus) writeField2(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("Peers", thrift.STRUCT, 2); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:Peers: ", p), err)
 	}
@@ -748,7 +748,7 @@ func (p *NodeDetails) writeField2(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *NodeDetails) writeField3(oprot thrift.TProtocol) (err error) {
+func (p *NodeStatus) writeField3(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("Predecessor", thrift.STRUCT, 3); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:Predecessor: ", p), err)
 	}
@@ -761,11 +761,11 @@ func (p *NodeDetails) writeField3(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *NodeDetails) String() string {
+func (p *NodeStatus) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("NodeDetails(%+v)", *p)
+	return fmt.Sprintf("NodeStatus(%+v)", *p)
 }
 
 // RingConfig contains functional parameters of a ring.
@@ -1539,14 +1539,14 @@ func (p *ContextInfo) String() string {
 //
 // Attributes:
 //  - ThisHostInfo
-//  - LocalNodeDetails
+//  - LocalNodeStatus
 //  - RingsRef
 //  - HostsRef
 type StatusData struct {
-	ThisHostInfo     *HostInfo      `thrift:"thisHostInfo,1" json:"thisHostInfo"`
-	LocalNodeDetails []*NodeDetails `thrift:"localNodeDetails,2" json:"localNodeDetails"`
-	RingsRef         []*RingInfo    `thrift:"ringsRef,3" json:"ringsRef"`
-	HostsRef         []*HostInfo    `thrift:"hostsRef,4" json:"hostsRef"`
+	ThisHostInfo    *HostInfo     `thrift:"thisHostInfo,1" json:"thisHostInfo"`
+	LocalNodeStatus []*NodeStatus `thrift:"localNodeStatus,2" json:"localNodeStatus"`
+	RingsRef        []*RingInfo   `thrift:"ringsRef,3" json:"ringsRef"`
+	HostsRef        []*HostInfo   `thrift:"hostsRef,4" json:"hostsRef"`
 }
 
 func NewStatusData() *StatusData {
@@ -1562,8 +1562,8 @@ func (p *StatusData) GetThisHostInfo() *HostInfo {
 	return p.ThisHostInfo
 }
 
-func (p *StatusData) GetLocalNodeDetails() []*NodeDetails {
-	return p.LocalNodeDetails
+func (p *StatusData) GetLocalNodeStatus() []*NodeStatus {
+	return p.LocalNodeStatus
 }
 
 func (p *StatusData) GetRingsRef() []*RingInfo {
@@ -1635,14 +1635,14 @@ func (p *StatusData) readField2(iprot thrift.TProtocol) error {
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
 	}
-	tSlice := make([]*NodeDetails, 0, size)
-	p.LocalNodeDetails = tSlice
+	tSlice := make([]*NodeStatus, 0, size)
+	p.LocalNodeStatus = tSlice
 	for i := 0; i < size; i++ {
-		_elem2 := &NodeDetails{}
+		_elem2 := &NodeStatus{}
 		if err := _elem2.Read(iprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem2), err)
 		}
-		p.LocalNodeDetails = append(p.LocalNodeDetails, _elem2)
+		p.LocalNodeStatus = append(p.LocalNodeStatus, _elem2)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -1729,13 +1729,13 @@ func (p *StatusData) writeField1(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *StatusData) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("localNodeDetails", thrift.LIST, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:localNodeDetails: ", p), err)
+	if err := oprot.WriteFieldBegin("localNodeStatus", thrift.LIST, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:localNodeStatus: ", p), err)
 	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.LocalNodeDetails)); err != nil {
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.LocalNodeStatus)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
 	}
-	for _, v := range p.LocalNodeDetails {
+	for _, v := range p.LocalNodeStatus {
 		if err := v.Write(oprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", v), err)
 		}
@@ -1744,7 +1744,7 @@ func (p *StatusData) writeField2(oprot thrift.TProtocol) (err error) {
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:localNodeDetails: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:localNodeStatus: ", p), err)
 	}
 	return err
 }
