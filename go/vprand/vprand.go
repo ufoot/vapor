@@ -67,6 +67,9 @@ func Rand512(r *rand.Rand, n *big.Int) *big.Int {
 	if n == nil || n.Cmp(bigZero) <= 0 || n.Cmp(bigOne512) > 0 {
 		n = bigOne512
 	}
+	if r == nil {
+		r = NewRand()
+	}
 
 	return ret.Rand(r, n)
 }
@@ -79,6 +82,9 @@ func Rand256(r *rand.Rand, n *big.Int) *big.Int {
 
 	if n == nil || n.Cmp(bigZero) <= 0 || n.Cmp(bigOne256) > 0 {
 		n = bigOne256
+	}
+	if r == nil {
+		r = NewRand()
 	}
 
 	return ret.Rand(r, n)
@@ -93,6 +99,9 @@ func Rand128(r *rand.Rand, n *big.Int) *big.Int {
 	if n == nil || n.Cmp(bigZero) <= 0 || n.Cmp(bigOne128) > 0 {
 		n = bigOne128
 	}
+	if r == nil {
+		r = NewRand()
+	}
 
 	return ret.Rand(r, n)
 }
@@ -100,7 +109,12 @@ func Rand128(r *rand.Rand, n *big.Int) *big.Int {
 // Rand64 returns a random number on 64 bits.
 // If n 0 then everything is done as if n was 2^64.
 func Rand64(r *rand.Rand, n uint64) uint64 {
+	if r == nil {
+		r = NewRand()
+	}
+
 	ret := uint64(r.Int63()<<1) ^ uint64(r.Int31())
+
 	if n > 0 {
 		ret %= n
 	}
@@ -111,7 +125,12 @@ func Rand64(r *rand.Rand, n uint64) uint64 {
 // Rand32 returns a random number on 64 bits.
 // If n 0 then everything is done as if n was 2^32.
 func Rand32(r *rand.Rand, n uint32) uint32 {
+	if r == nil {
+		r = NewRand()
+	}
+
 	ret := uint32(r.Int63())
+
 	if n > 0 {
 		ret %= n
 	}
