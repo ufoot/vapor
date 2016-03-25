@@ -64,9 +64,9 @@ const (
 	DefaultNbStep = 8
 )
 
-// SigBytesHost returns the byte buffer that needs to be signed.
-func SigBytesHost(title, url string) []byte {
-	return []byte(fmt.Sprintf("%s;%s", title, url))
+// HostInfoSigBytes returns the byte buffer that needs to be signed.
+func HostInfoSigBytes(hostInfo *vpp2papi.HostInfo) []byte {
+	return []byte(fmt.Sprintf("%s;%s", hostInfo.HostTitle, hostInfo.HostURL))
 }
 
 // HostInfoIsSigned returns true if the has been self-signed.
@@ -97,7 +97,7 @@ func HostInfoCheckSig(hostInfo *vpp2papi.HostInfo) (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	ok, err = key.CheckSig(SigBytesHost(hostInfo.HostTitle, hostInfo.HostURL), hostInfo.HostSig)
+	ok, err = key.CheckSig(HostInfoSigBytes(hostInfo), hostInfo.HostSig)
 	if err != nil {
 		return false, err
 	}
@@ -105,11 +105,11 @@ func HostInfoCheckSig(hostInfo *vpp2papi.HostInfo) (bool, error) {
 	return ok, nil
 }
 
-// SigBytesNode returns the byte buffer that needs to be signed.
-func SigBytesNode(nodeID, ringID []byte) []byte {
-	ret := make([]byte, len(nodeID)+len(ringID))
-	copy(ret[0:len(nodeID)], nodeID)
-	copy(ret[len(nodeID):len(nodeID)+len(ringID)], ringID)
+// NodeInfoSigBytes returns the byte buffer that needs to be signed.
+func NodeInfoSigBytes(nodeInfo *vpp2papi.NodeInfo) []byte {
+	ret := make([]byte, len(nodeInfo.NodeID)+len(nodeInfo.RingID))
+	copy(ret[0:len(nodeInfo.NodeID)], nodeInfo.NodeID)
+	copy(ret[len(nodeInfo.NodeID):len(nodeInfo.NodeID)+len(nodeInfo.RingID)], nodeInfo.RingID)
 	return ret
 }
 
@@ -142,7 +142,7 @@ func NodeInfoCheckSig(nodeInfo *vpp2papi.NodeInfo) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	_, err = key.CheckSig(SigBytesNode(nodeInfo.NodeID, nodeInfo.RingID), nodeInfo.NodeSig)
+	_, err = key.CheckSig(NodeInfoSigBytes(nodeInfo), nodeInfo.NodeSig)
 	if err != nil {
 		return 0, err
 	}
@@ -156,25 +156,25 @@ func DefaultRingConfig() *vpp2papi.RingConfig {
 	return &vpp2papi.RingConfig{BruijnM: DefaultBruijnM, BruijnN: DefaultBruijnN, NbCopy: DefaultNbCopy, NbStep: DefaultNbStep}
 }
 
-// SigBytesRing returns the byte buffer that needs to be signed.
-func SigBytesRing(ringID []byte, ringTitle, ringDescription string, appID []byte, config *vpp2papi.RingConfig, hasPassword bool) []byte {
-	bufTitle := []byte(ringTitle)
-	bufDescription := []byte(ringDescription)
-	bufScalar := fmt.Sprintf("(%d,%d,%d,%d,%t)", config.BruijnM, config.BruijnN, config.NbCopy, config.NbStep, hasPassword)
-	ret := make([]byte, len(ringID)+len(ringTitle)+len(ringDescription)+len(appID)+len(bufScalar))
+// RingInfoSigBytes returns the byte buffer that needs to be signed.
+func RingInfoSigBytes(ringInfo *vpp2papi.RingInfo) []byte {
+	bufTitle := []byte(ringInfo.RingTitle)
+	bufDescription := []byte(ringInfo.RingDescription)
+	bufScalar := fmt.Sprintf("(%d,%d,%d,%d,%t)", ringInfo.Config.BruijnM, ringInfo.Config.BruijnN, ringInfo.Config.NbCopy, ringInfo.Config.NbStep, ringInfo.HasPassword)
+	ret := make([]byte, len(ringInfo.RingID)+len(bufTitle)+len(bufDescription)+len(ringInfo.AppID)+len(bufScalar))
 	begin := 0
-	end := begin + len(ringID)
-	copy(ret[begin:end], ringID)
-	begin += len(ringID)
+	end := begin + len(ringInfo.RingID)
+	copy(ret[begin:end], ringInfo.RingID)
+	begin += len(ringInfo.RingID)
 	end = begin + len(bufTitle)
 	copy(ret[begin:end], bufTitle)
 	begin += len(bufTitle)
 	end = begin + len(bufDescription)
 	copy(ret[begin:end], bufDescription)
 	begin += len(bufDescription)
-	end = begin + len(appID)
-	copy(ret[begin:end], appID)
-	begin += len(appID)
+	end = begin + len(ringInfo.AppID)
+	copy(ret[begin:end], ringInfo.AppID)
+	begin += len(ringInfo.AppID)
 	end = begin + len(bufScalar)
 	copy(ret[begin:end], bufScalar)
 
@@ -228,11 +228,31 @@ func RingInfoCheckSig(ringInfo *vpp2papi.RingInfo) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	_, err = key.CheckSig(SigBytesRing(ringInfo.RingID, ringInfo.RingTitle, ringInfo.RingDescription, ringInfo.AppID, ringInfo.Config, ringInfo.HasPassword), ringInfo.RingSig)
+	_, err = key.CheckSig(RingInfoSigBytes(ringInfo), ringInfo.RingSig)
 	if err != nil {
 		return 0, err
 	}
 	z = vpid.ZeroesInBuf(vpsum.Checksum512(ringInfo.RingSig))
 
 	return z, nil
+}
+
+// CheckContextInfo checks wether a contextinfo struct is viable
+func CheckContextInfo(context *vpp2papi.ContextInfo) (bool, error) {
+	var err error
+
+	_, err = HostInfoCheckSig(context.SourceHost)
+	if err != nil {
+		return false, err
+	}
+	_, err = RingInfoCheckSig(context.SourceRing)
+	if err != nil {
+		return false, err
+	}
+	_, err = NodeInfoCheckSig(context.SourceNode)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }

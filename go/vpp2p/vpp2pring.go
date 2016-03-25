@@ -66,8 +66,15 @@ type ringStuffAppender struct {
 	hasPassword     bool
 }
 
-func (r *ringStuffAppender) Transform(ringID []byte) []byte {
-	return vpp2pdat.SigBytesRing(ringID, r.ringTitle, r.ringDescription, r.appID, r.config, r.hasPassword)
+func (rsa *ringStuffAppender) Transform(ringID []byte) []byte {
+	ri := vpp2papi.NewRingInfo()
+	ri.RingID = ringID
+	ri.RingTitle = rsa.ringTitle
+	ri.RingDescription = rsa.ringDescription
+	ri.AppID = rsa.appID
+	ri.Config = rsa.config
+	ri.HasPassword = rsa.hasPassword
+	return vpp2pdat.RingInfoSigBytes(ri)
 }
 
 // NewRing creates a new ring from static data.
@@ -106,6 +113,16 @@ func NewRing(host *Host, ringTitle, ringDescription string, appID []byte, config
 	}
 
 	hasPassword := (passwordHash != nil) && (len(passwordHash) > 0)
+
+	ret.Info.RingTitle = ringTitle
+	ret.Info.RingDescription = ringDescription
+	ret.Info.AppID = appID
+	ret.Info.Config = vpp2pdat.DefaultRingConfig()
+	*ret.Info.Config = *config
+	ret.Info.HasPassword = hasPassword
+	ret.secret.PasswordHash = passwordHash
+	ret.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
+
 	rsa := ringStuffAppender{ringTitle: ringTitle, ringDescription: ringDescription, appID: appID, config: config, hasPassword: hasPassword}
 	if host.CanSign() {
 		intRingID, sig, _, err = vpid.GenerateID512(host.key, fc, &rsa, RingKeySeconds, RingKeyZeroes)
@@ -121,14 +138,6 @@ func NewRing(host *Host, ringTitle, ringDescription string, appID []byte, config
 	}
 
 	ret.Info.RingID = vpsum.IntToBuf512(intRingID)
-	ret.Info.RingTitle = ringTitle
-	ret.Info.RingDescription = ringDescription
-	ret.Info.AppID = appID
-	ret.Info.Config = vpp2pdat.DefaultRingConfig()
-	*ret.Info.Config = *config
-	ret.Info.HasPassword = hasPassword
-	ret.secret.PasswordHash = passwordHash
-	ret.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
 	copy(ret.Info.HostPubKey, host.Info.HostPubKey)
 	ret.Info.RingSig = sig
 

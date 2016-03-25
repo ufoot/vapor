@@ -71,8 +71,11 @@ type ringIDAppender struct {
 	ringID []byte
 }
 
-func (r *ringIDAppender) Transform(nodeID []byte) []byte {
-	return vpp2pdat.SigBytesNode(nodeID, r.ringID)
+func (ria *ringIDAppender) Transform(nodeID []byte) []byte {
+	ni := vpp2papi.NewNodeInfo()
+	ni.NodeID = nodeID
+	ni.RingID = ria.ringID
+	return vpp2pdat.NodeInfoSigBytes(ni)
 }
 
 // NewNode builds a new node object.
@@ -82,6 +85,21 @@ func NewNode(host *Host, ring *Ring) (*Node, error) {
 	var err error
 	var intNodeID *big.Int
 	var sig []byte
+
+	ret.hostPtr = host
+	ret.ringPtr = ring
+	ret.Status.Info = &info
+
+	// by doing this, nodes will always be (un)registerered within hosts
+	// and the global node register. This is usefull when one wants to
+	// quickly access them by reference.
+	ret.registerers = make([]NodeRegisterer, 2)
+	ret.registerers[0] = GlobalNodeCatalog()
+	ret.registerers[1] = host.localNodeCatalog
+
+	ret.Status.Info.RingID = make([]byte, len(ring.Info.RingID))
+	copy(ret.Status.Info.RingID, ring.Info.RingID)
+	ret.Status.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
 
 	ria := ringIDAppender{ringID: ring.Info.RingID}
 	if host.CanSign() {
@@ -97,21 +115,7 @@ func NewNode(host *Host, ring *Ring) (*Node, error) {
 		sig = []byte("")
 	}
 
-	ret.hostPtr = host
-	ret.ringPtr = ring
-	ret.Status.Info = &info
-
-	// by doing this, nodes will always be (un)registerered within hosts
-	// and the global node register. This is usefull when one wants to
-	// quickly access them by reference.
-	ret.registerers = make([]NodeRegisterer, 2)
-	ret.registerers[0] = GlobalNodeCatalog()
-	ret.registerers[1] = host.localNodeCatalog
-
 	ret.Status.Info.NodeID = vpsum.IntToBuf256(intNodeID)
-	ret.Status.Info.RingID = make([]byte, len(ring.Info.RingID))
-	copy(ret.Status.Info.RingID, ring.Info.RingID)
-	ret.Status.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
 	copy(ret.Status.Info.HostPubKey, host.Info.HostPubKey)
 	ret.Status.Info.NodeSig = sig
 

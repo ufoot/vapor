@@ -59,16 +59,22 @@ func (c *NodeCatalog) ConnectToNode(nodeID []byte) (vpp2papi.VpP2pApi, error) {
 	return n.hostPtr, nil
 }
 
-// HasNode returns a handler which makes possible API calls on it.
+// HasNode returns true if the node exists in the catalog.
 // It's thread-safe.
 func (c *NodeCatalog) HasNode(nodeID []byte) bool {
+	return (c.GetNode(nodeID) != nil)
+}
+
+// GetNode returns a handler which makes possible API calls on it.
+// It's thread-safe.
+func (c *NodeCatalog) GetNode(nodeID []byte) *Node {
 	defer c.access.RUnlock()
 	c.access.RLock()
 
 	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
 	n := c.nodes[nodeIDBuf]
 
-	return n != nil
+	return n
 }
 
 // RegisterNode registers a node within the catalog.

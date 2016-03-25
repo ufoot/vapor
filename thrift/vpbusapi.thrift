@@ -25,7 +25,7 @@
 
 namespace cpp vpbusapi
 namespace go vpbusapi
-namespace php vpbusapi
+namespace js vpbusapi
 
 include "vpcommonapi.thrift"
 
@@ -38,5 +38,6 @@ service VpBusApi extends vpcommonapi.VpCommonApi
   /**
    * Halt stops the server.
    */
-  oneway void halt ()
+  oneway void halt (
+  )
 }

@@ -56,6 +56,8 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 		return nil, err
 	}
 
+	ret.Info = vpp2papi.HostInfo{HostTitle: title, HostURL: url, HostPubKey: nil, HostSig: nil}
+
 	if useSig {
 		ret.key, err = vpcrypto.NewKey()
 		if err != nil {
@@ -69,7 +71,7 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 		if err != nil || !ok {
 			return nil, err
 		}
-		sig, err = ret.key.Sign(vpp2pdat.SigBytesHost(title, url))
+		sig, err = ret.key.Sign(vpp2pdat.HostInfoSigBytes(&(ret.Info)))
 		if err != nil {
 			return nil, err
 		}
@@ -82,7 +84,9 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 		sig = []byte("")
 	}
 
-	ret.Info = vpp2papi.HostInfo{HostTitle: title, HostURL: url, HostPubKey: pubKey, HostSig: sig}
+	ret.Info.HostPubKey = pubKey
+	ret.Info.HostSig = sig
+
 	ret.localNodeCatalog = NewNodeCatalog()
 	ret.startTime = time.Now()
 
@@ -126,21 +130,31 @@ func (host *Host) GetVersion() (*vpcommonapi.Version, error) {
 }
 
 // Status is called to get another host status.
-func (host *Host) Status() (*vpp2papi.StatusData, error) {
+func (host *Host) Status() (*vpp2papi.HostStatus, error) {
 	// todo...
 
 	return nil, nil
 }
 
-// Sync is called to synchronise between nodes.
-func (host *Host) Sync(context *vpp2papi.ContextInfo) (*vpp2papi.SyncData, error) {
+// Get is called to synchronise between nodes.
+func (host *Host) GetSuccessors(request *vpp2papi.GetSuccessorsRequest) (*vpp2papi.GetSuccessorsResponse, error) {
+	_, err := vpp2pdat.CheckContextInfo(request.Context)
+	if err != nil {
+		return nil, err
+	}
+
 	// todo...
 
 	return nil, nil
 }
 
 // Lookup searches for a key on a given ring.
-func (host *Host) Lookup(context *vpp2papi.ContextInfo, key, keyShift, imaginaryNode []byte) (*vpp2papi.LookupData, error) {
+func (host *Host) Lookup(request *vpp2papi.LookupRequest) (*vpp2papi.LookupResponse, error) {
+	_, err := vpp2pdat.CheckContextInfo(request.Context)
+	if err != nil {
+		return nil, err
+	}
+
 	// todo...
 
 	return nil, nil

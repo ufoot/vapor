@@ -21,13 +21,17 @@ package vpp2pdat
 
 import (
 	"bytes"
+	"github.com/ufoot/vapor/go/vpp2papi"
 	"testing"
 )
 
-func TestSigBytesHost(t *testing.T) {
-	sbh := SigBytesHost("foo", "bar")
+func TestHostInfoSigBytes(t *testing.T) {
+	hi := vpp2papi.NewHostInfo()
+	hi.HostTitle = "foo"
+	hi.HostURL = "bar"
+	sbh := HostInfoSigBytes(hi)
 
 	if bytes.Compare(sbh, []byte("foo;bar")) != 0 {
-		t.Errorf("bad SigBytesHost return value \"%s\"", string(sbh))
+		t.Errorf("bad HostInfoSigBytes return value \"%s\"", string(sbh))
 	}
 }

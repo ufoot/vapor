@@ -1542,42 +1542,42 @@ func (p *ContextInfo) String() string {
 //  - LocalNodeStatus
 //  - RingsRef
 //  - HostsRef
-type StatusData struct {
+type HostStatus struct {
 	ThisHostInfo    *HostInfo     `thrift:"thisHostInfo,1" json:"thisHostInfo"`
 	LocalNodeStatus []*NodeStatus `thrift:"localNodeStatus,2" json:"localNodeStatus"`
 	RingsRef        []*RingInfo   `thrift:"ringsRef,3" json:"ringsRef"`
 	HostsRef        []*HostInfo   `thrift:"hostsRef,4" json:"hostsRef"`
 }
 
-func NewStatusData() *StatusData {
-	return &StatusData{}
+func NewHostStatus() *HostStatus {
+	return &HostStatus{}
 }
 
-var StatusData_ThisHostInfo_DEFAULT *HostInfo
+var HostStatus_ThisHostInfo_DEFAULT *HostInfo
 
-func (p *StatusData) GetThisHostInfo() *HostInfo {
+func (p *HostStatus) GetThisHostInfo() *HostInfo {
 	if !p.IsSetThisHostInfo() {
-		return StatusData_ThisHostInfo_DEFAULT
+		return HostStatus_ThisHostInfo_DEFAULT
 	}
 	return p.ThisHostInfo
 }
 
-func (p *StatusData) GetLocalNodeStatus() []*NodeStatus {
+func (p *HostStatus) GetLocalNodeStatus() []*NodeStatus {
 	return p.LocalNodeStatus
 }
 
-func (p *StatusData) GetRingsRef() []*RingInfo {
+func (p *HostStatus) GetRingsRef() []*RingInfo {
 	return p.RingsRef
 }
 
-func (p *StatusData) GetHostsRef() []*HostInfo {
+func (p *HostStatus) GetHostsRef() []*HostInfo {
 	return p.HostsRef
 }
-func (p *StatusData) IsSetThisHostInfo() bool {
+func (p *HostStatus) IsSetThisHostInfo() bool {
 	return p.ThisHostInfo != nil
 }
 
-func (p *StatusData) Read(iprot thrift.TProtocol) error {
+func (p *HostStatus) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1622,7 +1622,7 @@ func (p *StatusData) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *StatusData) readField1(iprot thrift.TProtocol) error {
+func (p *HostStatus) readField1(iprot thrift.TProtocol) error {
 	p.ThisHostInfo = &HostInfo{}
 	if err := p.ThisHostInfo.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.ThisHostInfo), err)
@@ -1630,7 +1630,7 @@ func (p *StatusData) readField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *StatusData) readField2(iprot thrift.TProtocol) error {
+func (p *HostStatus) readField2(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
@@ -1650,7 +1650,7 @@ func (p *StatusData) readField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *StatusData) readField3(iprot thrift.TProtocol) error {
+func (p *HostStatus) readField3(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
@@ -1670,7 +1670,7 @@ func (p *StatusData) readField3(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *StatusData) readField4(iprot thrift.TProtocol) error {
+func (p *HostStatus) readField4(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
@@ -1690,8 +1690,8 @@ func (p *StatusData) readField4(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *StatusData) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("StatusData"); err != nil {
+func (p *HostStatus) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("HostStatus"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if err := p.writeField1(oprot); err != nil {
@@ -1715,7 +1715,7 @@ func (p *StatusData) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *StatusData) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *HostStatus) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("thisHostInfo", thrift.STRUCT, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:thisHostInfo: ", p), err)
 	}
@@ -1728,7 +1728,7 @@ func (p *StatusData) writeField1(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *StatusData) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *HostStatus) writeField2(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("localNodeStatus", thrift.LIST, 2); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:localNodeStatus: ", p), err)
 	}
@@ -1749,7 +1749,7 @@ func (p *StatusData) writeField2(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *StatusData) writeField3(oprot thrift.TProtocol) (err error) {
+func (p *HostStatus) writeField3(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("ringsRef", thrift.LIST, 3); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:ringsRef: ", p), err)
 	}
@@ -1770,7 +1770,7 @@ func (p *StatusData) writeField3(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *StatusData) writeField4(oprot thrift.TProtocol) (err error) {
+func (p *HostStatus) writeField4(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("hostsRef", thrift.LIST, 4); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:hostsRef: ", p), err)
 	}
@@ -1791,11 +1791,252 @@ func (p *StatusData) writeField4(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *StatusData) String() string {
+func (p *HostStatus) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("StatusData(%+v)", *p)
+	return fmt.Sprintf("HostStatus(%+v)", *p)
+}
+
+// Used to store Lookup-like requests.
+//
+// Attributes:
+//  - Context
+//  - Key
+//  - KeyShift
+//  - ImaginaryNode
+//  - Sig
+type LookupRequest struct {
+	Context       *ContextInfo `thrift:"context,1" json:"context"`
+	Key           []byte       `thrift:"key,2" json:"key"`
+	KeyShift      []byte       `thrift:"keyShift,3" json:"keyShift"`
+	ImaginaryNode []byte       `thrift:"imaginaryNode,4" json:"imaginaryNode"`
+	Sig           []byte       `thrift:"sig,5" json:"sig"`
+}
+
+func NewLookupRequest() *LookupRequest {
+	return &LookupRequest{}
+}
+
+var LookupRequest_Context_DEFAULT *ContextInfo
+
+func (p *LookupRequest) GetContext() *ContextInfo {
+	if !p.IsSetContext() {
+		return LookupRequest_Context_DEFAULT
+	}
+	return p.Context
+}
+
+func (p *LookupRequest) GetKey() []byte {
+	return p.Key
+}
+
+func (p *LookupRequest) GetKeyShift() []byte {
+	return p.KeyShift
+}
+
+func (p *LookupRequest) GetImaginaryNode() []byte {
+	return p.ImaginaryNode
+}
+
+func (p *LookupRequest) GetSig() []byte {
+	return p.Sig
+}
+func (p *LookupRequest) IsSetContext() bool {
+	return p.Context != nil
+}
+
+func (p *LookupRequest) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.readField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.readField2(iprot); err != nil {
+				return err
+			}
+		case 3:
+			if err := p.readField3(iprot); err != nil {
+				return err
+			}
+		case 4:
+			if err := p.readField4(iprot); err != nil {
+				return err
+			}
+		case 5:
+			if err := p.readField5(iprot); err != nil {
+				return err
+			}
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *LookupRequest) readField1(iprot thrift.TProtocol) error {
+	p.Context = &ContextInfo{}
+	if err := p.Context.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Context), err)
+	}
+	return nil
+}
+
+func (p *LookupRequest) readField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadBinary(); err != nil {
+		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.Key = v
+	}
+	return nil
+}
+
+func (p *LookupRequest) readField3(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadBinary(); err != nil {
+		return thrift.PrependError("error reading field 3: ", err)
+	} else {
+		p.KeyShift = v
+	}
+	return nil
+}
+
+func (p *LookupRequest) readField4(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadBinary(); err != nil {
+		return thrift.PrependError("error reading field 4: ", err)
+	} else {
+		p.ImaginaryNode = v
+	}
+	return nil
+}
+
+func (p *LookupRequest) readField5(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadBinary(); err != nil {
+		return thrift.PrependError("error reading field 5: ", err)
+	} else {
+		p.Sig = v
+	}
+	return nil
+}
+
+func (p *LookupRequest) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("LookupRequest"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if err := p.writeField1(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField2(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField3(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField4(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField5(oprot); err != nil {
+		return err
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *LookupRequest) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("context", thrift.STRUCT, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:context: ", p), err)
+	}
+	if err := p.Context.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Context), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:context: ", p), err)
+	}
+	return err
+}
+
+func (p *LookupRequest) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("key", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:key: ", p), err)
+	}
+	if err := oprot.WriteBinary(p.Key); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.key (2) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:key: ", p), err)
+	}
+	return err
+}
+
+func (p *LookupRequest) writeField3(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("keyShift", thrift.STRING, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:keyShift: ", p), err)
+	}
+	if err := oprot.WriteBinary(p.KeyShift); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.keyShift (3) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:keyShift: ", p), err)
+	}
+	return err
+}
+
+func (p *LookupRequest) writeField4(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("imaginaryNode", thrift.STRING, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:imaginaryNode: ", p), err)
+	}
+	if err := oprot.WriteBinary(p.ImaginaryNode); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.imaginaryNode (4) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:imaginaryNode: ", p), err)
+	}
+	return err
+}
+
+func (p *LookupRequest) writeField5(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("sig", thrift.STRING, 5); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:sig: ", p), err)
+	}
+	if err := oprot.WriteBinary(p.Sig); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.sig (5) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:sig: ", p), err)
+	}
+	return err
+}
+
+func (p *LookupRequest) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("LookupRequest(%+v)", *p)
 }
 
 // Used to store results when doing Lookup-like requests.
@@ -1804,28 +2045,28 @@ func (p *StatusData) String() string {
 //  - Found
 //  - NodesPath
 //  - HostsRef
-type LookupData struct {
+type LookupResponse struct {
 	Found     bool        `thrift:"found,1" json:"found"`
 	NodesPath []*NodeInfo `thrift:"nodesPath,2" json:"nodesPath"`
 	HostsRef  []*HostInfo `thrift:"hostsRef,3" json:"hostsRef"`
 }
 
-func NewLookupData() *LookupData {
-	return &LookupData{}
+func NewLookupResponse() *LookupResponse {
+	return &LookupResponse{}
 }
 
-func (p *LookupData) GetFound() bool {
+func (p *LookupResponse) GetFound() bool {
 	return p.Found
 }
 
-func (p *LookupData) GetNodesPath() []*NodeInfo {
+func (p *LookupResponse) GetNodesPath() []*NodeInfo {
 	return p.NodesPath
 }
 
-func (p *LookupData) GetHostsRef() []*HostInfo {
+func (p *LookupResponse) GetHostsRef() []*HostInfo {
 	return p.HostsRef
 }
-func (p *LookupData) Read(iprot thrift.TProtocol) error {
+func (p *LookupResponse) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -1866,7 +2107,7 @@ func (p *LookupData) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *LookupData) readField1(iprot thrift.TProtocol) error {
+func (p *LookupResponse) readField1(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadBool(); err != nil {
 		return thrift.PrependError("error reading field 1: ", err)
 	} else {
@@ -1875,7 +2116,7 @@ func (p *LookupData) readField1(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *LookupData) readField2(iprot thrift.TProtocol) error {
+func (p *LookupResponse) readField2(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
@@ -1895,7 +2136,7 @@ func (p *LookupData) readField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *LookupData) readField3(iprot thrift.TProtocol) error {
+func (p *LookupResponse) readField3(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
@@ -1915,8 +2156,8 @@ func (p *LookupData) readField3(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *LookupData) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("LookupData"); err != nil {
+func (p *LookupResponse) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("LookupResponse"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if err := p.writeField1(oprot); err != nil {
@@ -1937,7 +2178,7 @@ func (p *LookupData) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *LookupData) writeField1(oprot thrift.TProtocol) (err error) {
+func (p *LookupResponse) writeField1(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("found", thrift.BOOL, 1); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:found: ", p), err)
 	}
@@ -1950,7 +2191,7 @@ func (p *LookupData) writeField1(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *LookupData) writeField2(oprot thrift.TProtocol) (err error) {
+func (p *LookupResponse) writeField2(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("nodesPath", thrift.LIST, 2); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:nodesPath: ", p), err)
 	}
@@ -1971,7 +2212,7 @@ func (p *LookupData) writeField2(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *LookupData) writeField3(oprot thrift.TProtocol) (err error) {
+func (p *LookupResponse) writeField3(oprot thrift.TProtocol) (err error) {
 	if err := oprot.WriteFieldBegin("hostsRef", thrift.LIST, 3); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:hostsRef: ", p), err)
 	}
@@ -1992,41 +2233,44 @@ func (p *LookupData) writeField3(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *LookupData) String() string {
+func (p *LookupResponse) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("LookupData(%+v)", *p)
+	return fmt.Sprintf("LookupResponse(%+v)", *p)
 }
 
-// Used to store results when doing Sync requests.
+// Used to store  GetSuccessors requests.
 //
 // Attributes:
-//  - Accepted
-//  - SuccessorNodes
-//  - HostsRef
-type SyncData struct {
-	Accepted       bool        `thrift:"accepted,1" json:"accepted"`
-	SuccessorNodes []*NodeInfo `thrift:"successorNodes,2" json:"successorNodes"`
-	HostsRef       []*HostInfo `thrift:"hostsRef,3" json:"hostsRef"`
+//  - Context
+//  - Sig
+type GetSuccessorsRequest struct {
+	Context *ContextInfo `thrift:"context,1" json:"context"`
+	Sig     []byte       `thrift:"sig,2" json:"sig"`
 }
 
-func NewSyncData() *SyncData {
-	return &SyncData{}
+func NewGetSuccessorsRequest() *GetSuccessorsRequest {
+	return &GetSuccessorsRequest{}
 }
 
-func (p *SyncData) GetAccepted() bool {
-	return p.Accepted
+var GetSuccessorsRequest_Context_DEFAULT *ContextInfo
+
+func (p *GetSuccessorsRequest) GetContext() *ContextInfo {
+	if !p.IsSetContext() {
+		return GetSuccessorsRequest_Context_DEFAULT
+	}
+	return p.Context
 }
 
-func (p *SyncData) GetSuccessorNodes() []*NodeInfo {
-	return p.SuccessorNodes
+func (p *GetSuccessorsRequest) GetSig() []byte {
+	return p.Sig
+}
+func (p *GetSuccessorsRequest) IsSetContext() bool {
+	return p.Context != nil
 }
 
-func (p *SyncData) GetHostsRef() []*HostInfo {
-	return p.HostsRef
-}
-func (p *SyncData) Read(iprot thrift.TProtocol) error {
+func (p *GetSuccessorsRequest) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -2048,8 +2292,131 @@ func (p *SyncData) Read(iprot thrift.TProtocol) error {
 			if err := p.readField2(iprot); err != nil {
 				return err
 			}
-		case 3:
-			if err := p.readField3(iprot); err != nil {
+		default:
+			if err := iprot.Skip(fieldTypeId); err != nil {
+				return err
+			}
+		}
+		if err := iprot.ReadFieldEnd(); err != nil {
+			return err
+		}
+	}
+	if err := iprot.ReadStructEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read struct end error: ", p), err)
+	}
+	return nil
+}
+
+func (p *GetSuccessorsRequest) readField1(iprot thrift.TProtocol) error {
+	p.Context = &ContextInfo{}
+	if err := p.Context.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Context), err)
+	}
+	return nil
+}
+
+func (p *GetSuccessorsRequest) readField2(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadBinary(); err != nil {
+		return thrift.PrependError("error reading field 2: ", err)
+	} else {
+		p.Sig = v
+	}
+	return nil
+}
+
+func (p *GetSuccessorsRequest) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("GetSuccessorsRequest"); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
+	}
+	if err := p.writeField1(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField2(oprot); err != nil {
+		return err
+	}
+	if err := oprot.WriteFieldStop(); err != nil {
+		return thrift.PrependError("write field stop error: ", err)
+	}
+	if err := oprot.WriteStructEnd(); err != nil {
+		return thrift.PrependError("write struct stop error: ", err)
+	}
+	return nil
+}
+
+func (p *GetSuccessorsRequest) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("context", thrift.STRUCT, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:context: ", p), err)
+	}
+	if err := p.Context.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Context), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:context: ", p), err)
+	}
+	return err
+}
+
+func (p *GetSuccessorsRequest) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("sig", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:sig: ", p), err)
+	}
+	if err := oprot.WriteBinary(p.Sig); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.sig (2) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:sig: ", p), err)
+	}
+	return err
+}
+
+func (p *GetSuccessorsRequest) String() string {
+	if p == nil {
+		return "<nil>"
+	}
+	return fmt.Sprintf("GetSuccessorsRequest(%+v)", *p)
+}
+
+// Used to store results when doing GetSuccessors requests.
+//
+// Attributes:
+//  - SuccessorNodes
+//  - HostsRef
+type GetSuccessorsResponse struct {
+	SuccessorNodes []*NodeInfo `thrift:"successorNodes,1" json:"successorNodes"`
+	HostsRef       []*HostInfo `thrift:"hostsRef,2" json:"hostsRef"`
+}
+
+func NewGetSuccessorsResponse() *GetSuccessorsResponse {
+	return &GetSuccessorsResponse{}
+}
+
+func (p *GetSuccessorsResponse) GetSuccessorNodes() []*NodeInfo {
+	return p.SuccessorNodes
+}
+
+func (p *GetSuccessorsResponse) GetHostsRef() []*HostInfo {
+	return p.HostsRef
+}
+func (p *GetSuccessorsResponse) Read(iprot thrift.TProtocol) error {
+	if _, err := iprot.ReadStructBegin(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
+	}
+
+	for {
+		_, fieldTypeId, fieldId, err := iprot.ReadFieldBegin()
+		if err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T field %d read error: ", p, fieldId), err)
+		}
+		if fieldTypeId == thrift.STOP {
+			break
+		}
+		switch fieldId {
+		case 1:
+			if err := p.readField1(iprot); err != nil {
+				return err
+			}
+		case 2:
+			if err := p.readField2(iprot); err != nil {
 				return err
 			}
 		default:
@@ -2067,16 +2434,7 @@ func (p *SyncData) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *SyncData) readField1(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadBool(); err != nil {
-		return thrift.PrependError("error reading field 1: ", err)
-	} else {
-		p.Accepted = v
-	}
-	return nil
-}
-
-func (p *SyncData) readField2(iprot thrift.TProtocol) error {
+func (p *GetSuccessorsResponse) readField1(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
@@ -2096,7 +2454,7 @@ func (p *SyncData) readField2(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *SyncData) readField3(iprot thrift.TProtocol) error {
+func (p *GetSuccessorsResponse) readField2(iprot thrift.TProtocol) error {
 	_, size, err := iprot.ReadListBegin()
 	if err != nil {
 		return thrift.PrependError("error reading list begin: ", err)
@@ -2116,17 +2474,14 @@ func (p *SyncData) readField3(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *SyncData) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("SyncData"); err != nil {
+func (p *GetSuccessorsResponse) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("GetSuccessorsResponse"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if err := p.writeField1(oprot); err != nil {
 		return err
 	}
 	if err := p.writeField2(oprot); err != nil {
-		return err
-	}
-	if err := p.writeField3(oprot); err != nil {
 		return err
 	}
 	if err := oprot.WriteFieldStop(); err != nil {
@@ -2138,22 +2493,9 @@ func (p *SyncData) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *SyncData) writeField1(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("accepted", thrift.BOOL, 1); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:accepted: ", p), err)
-	}
-	if err := oprot.WriteBool(bool(p.Accepted)); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.accepted (1) field write error: ", p), err)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:accepted: ", p), err)
-	}
-	return err
-}
-
-func (p *SyncData) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("successorNodes", thrift.LIST, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:successorNodes: ", p), err)
+func (p *GetSuccessorsResponse) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("successorNodes", thrift.LIST, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:successorNodes: ", p), err)
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.SuccessorNodes)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
@@ -2167,14 +2509,14 @@ func (p *SyncData) writeField2(oprot thrift.TProtocol) (err error) {
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:successorNodes: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:successorNodes: ", p), err)
 	}
 	return err
 }
 
-func (p *SyncData) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("hostsRef", thrift.LIST, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:hostsRef: ", p), err)
+func (p *GetSuccessorsResponse) writeField2(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("hostsRef", thrift.LIST, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:hostsRef: ", p), err)
 	}
 	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.HostsRef)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
@@ -2188,14 +2530,14 @@ func (p *SyncData) writeField3(oprot thrift.TProtocol) (err error) {
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:hostsRef: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:hostsRef: ", p), err)
 	}
 	return err
 }
 
-func (p *SyncData) String() string {
+func (p *GetSuccessorsResponse) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("SyncData(%+v)", *p)
+	return fmt.Sprintf("GetSuccessorsResponse(%+v)", *p)
 }

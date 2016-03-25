@@ -22,16 +22,13 @@ type VpP2pApi interface {
 	//VpP2pApi is used to communicate between 2 Vapor nodes
 	//in peer-to-peer mode.
 
-	Status() (r *StatusData, err error)
+	Status() (r *HostStatus, err error)
 	// Parameters:
-	//  - Context
-	Sync(context *ContextInfo) (r *SyncData, err error)
+	//  - Request
+	GetSuccessors(request *GetSuccessorsRequest) (r *GetSuccessorsResponse, err error)
 	// Parameters:
-	//  - Context
-	//  - Key
-	//  - KeyShift
-	//  - ImaginaryNode
-	Lookup(context *ContextInfo, key []byte, keyShift []byte, imaginaryNode []byte) (r *LookupData, err error)
+	//  - Request
+	Lookup(request *LookupRequest) (r *LookupResponse, err error)
 }
 
 //VpP2pApi is used to communicate between 2 Vapor nodes
@@ -48,7 +45,7 @@ func NewVpP2pApiClientProtocol(t thrift.TTransport, iprot thrift.TProtocol, opro
 	return &VpP2pApiClient{VpCommonApiClient: vpcommonapi.NewVpCommonApiClientProtocol(t, iprot, oprot)}
 }
 
-func (p *VpP2pApiClient) Status() (r *StatusData, err error) {
+func (p *VpP2pApiClient) Status() (r *HostStatus, err error) {
 	if err = p.sendStatus(); err != nil {
 		return
 	}
@@ -75,7 +72,7 @@ func (p *VpP2pApiClient) sendStatus() (err error) {
 	return oprot.Flush()
 }
 
-func (p *VpP2pApiClient) recvStatus() (value *StatusData, err error) {
+func (p *VpP2pApiClient) recvStatus() (value *HostStatus, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -122,26 +119,26 @@ func (p *VpP2pApiClient) recvStatus() (value *StatusData, err error) {
 }
 
 // Parameters:
-//  - Context
-func (p *VpP2pApiClient) Sync(context *ContextInfo) (r *SyncData, err error) {
-	if err = p.sendSync(context); err != nil {
+//  - Request
+func (p *VpP2pApiClient) GetSuccessors(request *GetSuccessorsRequest) (r *GetSuccessorsResponse, err error) {
+	if err = p.sendGetSuccessors(request); err != nil {
 		return
 	}
-	return p.recvSync()
+	return p.recvGetSuccessors()
 }
 
-func (p *VpP2pApiClient) sendSync(context *ContextInfo) (err error) {
+func (p *VpP2pApiClient) sendGetSuccessors(request *GetSuccessorsRequest) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
 		p.OutputProtocol = oprot
 	}
 	p.SeqId++
-	if err = oprot.WriteMessageBegin("Sync", thrift.CALL, p.SeqId); err != nil {
+	if err = oprot.WriteMessageBegin("GetSuccessors", thrift.CALL, p.SeqId); err != nil {
 		return
 	}
-	args := VpP2pApiSyncArgs{
-		Context: context,
+	args := VpP2pApiGetSuccessorsArgs{
+		Request: request,
 	}
 	if err = args.Write(oprot); err != nil {
 		return
@@ -152,7 +149,7 @@ func (p *VpP2pApiClient) sendSync(context *ContextInfo) (err error) {
 	return oprot.Flush()
 }
 
-func (p *VpP2pApiClient) recvSync() (value *SyncData, err error) {
+func (p *VpP2pApiClient) recvGetSuccessors() (value *GetSuccessorsResponse, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -162,12 +159,12 @@ func (p *VpP2pApiClient) recvSync() (value *SyncData, err error) {
 	if err != nil {
 		return
 	}
-	if method != "Sync" {
-		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "Sync failed: wrong method name")
+	if method != "GetSuccessors" {
+		err = thrift.NewTApplicationException(thrift.WRONG_METHOD_NAME, "GetSuccessors failed: wrong method name")
 		return
 	}
 	if p.SeqId != seqId {
-		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "Sync failed: out of sequence response")
+		err = thrift.NewTApplicationException(thrift.BAD_SEQUENCE_ID, "GetSuccessors failed: out of sequence response")
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
@@ -184,10 +181,10 @@ func (p *VpP2pApiClient) recvSync() (value *SyncData, err error) {
 		return
 	}
 	if mTypeId != thrift.REPLY {
-		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "Sync failed: invalid message type")
+		err = thrift.NewTApplicationException(thrift.INVALID_MESSAGE_TYPE_EXCEPTION, "GetSuccessors failed: invalid message type")
 		return
 	}
-	result := VpP2pApiSyncResult{}
+	result := VpP2pApiGetSuccessorsResult{}
 	if err = result.Read(iprot); err != nil {
 		return
 	}
@@ -199,18 +196,15 @@ func (p *VpP2pApiClient) recvSync() (value *SyncData, err error) {
 }
 
 // Parameters:
-//  - Context
-//  - Key
-//  - KeyShift
-//  - ImaginaryNode
-func (p *VpP2pApiClient) Lookup(context *ContextInfo, key []byte, keyShift []byte, imaginaryNode []byte) (r *LookupData, err error) {
-	if err = p.sendLookup(context, key, keyShift, imaginaryNode); err != nil {
+//  - Request
+func (p *VpP2pApiClient) Lookup(request *LookupRequest) (r *LookupResponse, err error) {
+	if err = p.sendLookup(request); err != nil {
 		return
 	}
 	return p.recvLookup()
 }
 
-func (p *VpP2pApiClient) sendLookup(context *ContextInfo, key []byte, keyShift []byte, imaginaryNode []byte) (err error) {
+func (p *VpP2pApiClient) sendLookup(request *LookupRequest) (err error) {
 	oprot := p.OutputProtocol
 	if oprot == nil {
 		oprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -221,10 +215,7 @@ func (p *VpP2pApiClient) sendLookup(context *ContextInfo, key []byte, keyShift [
 		return
 	}
 	args := VpP2pApiLookupArgs{
-		Context:       context,
-		Key:           key,
-		KeyShift:      keyShift,
-		ImaginaryNode: imaginaryNode,
+		Request: request,
 	}
 	if err = args.Write(oprot); err != nil {
 		return
@@ -235,7 +226,7 @@ func (p *VpP2pApiClient) sendLookup(context *ContextInfo, key []byte, keyShift [
 	return oprot.Flush()
 }
 
-func (p *VpP2pApiClient) recvLookup() (value *LookupData, err error) {
+func (p *VpP2pApiClient) recvLookup() (value *LookupResponse, err error) {
 	iprot := p.InputProtocol
 	if iprot == nil {
 		iprot = p.ProtocolFactory.GetProtocol(p.Transport)
@@ -288,7 +279,7 @@ type VpP2pApiProcessor struct {
 func NewVpP2pApiProcessor(handler VpP2pApi) *VpP2pApiProcessor {
 	self15 := &VpP2pApiProcessor{vpcommonapi.NewVpCommonApiProcessor(handler)}
 	self15.AddToProcessorMap("Status", &vpP2pApiProcessorStatus{handler: handler})
-	self15.AddToProcessorMap("Sync", &vpP2pApiProcessorSync{handler: handler})
+	self15.AddToProcessorMap("GetSuccessors", &vpP2pApiProcessorGetSuccessors{handler: handler})
 	self15.AddToProcessorMap("Lookup", &vpP2pApiProcessorLookup{handler: handler})
 	return self15
 }
@@ -311,7 +302,7 @@ func (p *vpP2pApiProcessorStatus) Process(seqId int32, iprot, oprot thrift.TProt
 
 	iprot.ReadMessageEnd()
 	result := VpP2pApiStatusResult{}
-	var retval *StatusData
+	var retval *HostStatus
 	var err2 error
 	if retval, err2 = p.handler.Status(); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing Status: "+err2.Error())
@@ -341,16 +332,16 @@ func (p *vpP2pApiProcessorStatus) Process(seqId int32, iprot, oprot thrift.TProt
 	return true, err
 }
 
-type vpP2pApiProcessorSync struct {
+type vpP2pApiProcessorGetSuccessors struct {
 	handler VpP2pApi
 }
 
-func (p *vpP2pApiProcessorSync) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
-	args := VpP2pApiSyncArgs{}
+func (p *vpP2pApiProcessorGetSuccessors) Process(seqId int32, iprot, oprot thrift.TProtocol) (success bool, err thrift.TException) {
+	args := VpP2pApiGetSuccessorsArgs{}
 	if err = args.Read(iprot); err != nil {
 		iprot.ReadMessageEnd()
 		x := thrift.NewTApplicationException(thrift.PROTOCOL_ERROR, err.Error())
-		oprot.WriteMessageBegin("Sync", thrift.EXCEPTION, seqId)
+		oprot.WriteMessageBegin("GetSuccessors", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -358,12 +349,12 @@ func (p *vpP2pApiProcessorSync) Process(seqId int32, iprot, oprot thrift.TProtoc
 	}
 
 	iprot.ReadMessageEnd()
-	result := VpP2pApiSyncResult{}
-	var retval *SyncData
+	result := VpP2pApiGetSuccessorsResult{}
+	var retval *GetSuccessorsResponse
 	var err2 error
-	if retval, err2 = p.handler.Sync(args.Context); err2 != nil {
-		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing Sync: "+err2.Error())
-		oprot.WriteMessageBegin("Sync", thrift.EXCEPTION, seqId)
+	if retval, err2 = p.handler.GetSuccessors(args.Request); err2 != nil {
+		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing GetSuccessors: "+err2.Error())
+		oprot.WriteMessageBegin("GetSuccessors", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
 		oprot.WriteMessageEnd()
 		oprot.Flush()
@@ -371,7 +362,7 @@ func (p *vpP2pApiProcessorSync) Process(seqId int32, iprot, oprot thrift.TProtoc
 	} else {
 		result.Success = retval
 	}
-	if err2 = oprot.WriteMessageBegin("Sync", thrift.REPLY, seqId); err2 != nil {
+	if err2 = oprot.WriteMessageBegin("GetSuccessors", thrift.REPLY, seqId); err2 != nil {
 		err = err2
 	}
 	if err2 = result.Write(oprot); err == nil && err2 != nil {
@@ -407,9 +398,9 @@ func (p *vpP2pApiProcessorLookup) Process(seqId int32, iprot, oprot thrift.TProt
 
 	iprot.ReadMessageEnd()
 	result := VpP2pApiLookupResult{}
-	var retval *LookupData
+	var retval *LookupResponse
 	var err2 error
-	if retval, err2 = p.handler.Lookup(args.Context, args.Key, args.KeyShift, args.ImaginaryNode); err2 != nil {
+	if retval, err2 = p.handler.Lookup(args.Request); err2 != nil {
 		x := thrift.NewTApplicationException(thrift.INTERNAL_ERROR, "Internal error processing Lookup: "+err2.Error())
 		oprot.WriteMessageBegin("Lookup", thrift.EXCEPTION, seqId)
 		x.Write(oprot)
@@ -495,16 +486,16 @@ func (p *VpP2pApiStatusArgs) String() string {
 // Attributes:
 //  - Success
 type VpP2pApiStatusResult struct {
-	Success *StatusData `thrift:"success,0" json:"success,omitempty"`
+	Success *HostStatus `thrift:"success,0" json:"success,omitempty"`
 }
 
 func NewVpP2pApiStatusResult() *VpP2pApiStatusResult {
 	return &VpP2pApiStatusResult{}
 }
 
-var VpP2pApiStatusResult_Success_DEFAULT *StatusData
+var VpP2pApiStatusResult_Success_DEFAULT *HostStatus
 
-func (p *VpP2pApiStatusResult) GetSuccess() *StatusData {
+func (p *VpP2pApiStatusResult) GetSuccess() *HostStatus {
 	if !p.IsSetSuccess() {
 		return VpP2pApiStatusResult_Success_DEFAULT
 	}
@@ -548,7 +539,7 @@ func (p *VpP2pApiStatusResult) Read(iprot thrift.TProtocol) error {
 }
 
 func (p *VpP2pApiStatusResult) readField0(iprot thrift.TProtocol) error {
-	p.Success = &StatusData{}
+	p.Success = &HostStatus{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
 	}
@@ -594,28 +585,28 @@ func (p *VpP2pApiStatusResult) String() string {
 }
 
 // Attributes:
-//  - Context
-type VpP2pApiSyncArgs struct {
-	Context *ContextInfo `thrift:"context,1" json:"context"`
+//  - Request
+type VpP2pApiGetSuccessorsArgs struct {
+	Request *GetSuccessorsRequest `thrift:"request,1" json:"request"`
 }
 
-func NewVpP2pApiSyncArgs() *VpP2pApiSyncArgs {
-	return &VpP2pApiSyncArgs{}
+func NewVpP2pApiGetSuccessorsArgs() *VpP2pApiGetSuccessorsArgs {
+	return &VpP2pApiGetSuccessorsArgs{}
 }
 
-var VpP2pApiSyncArgs_Context_DEFAULT *ContextInfo
+var VpP2pApiGetSuccessorsArgs_Request_DEFAULT *GetSuccessorsRequest
 
-func (p *VpP2pApiSyncArgs) GetContext() *ContextInfo {
-	if !p.IsSetContext() {
-		return VpP2pApiSyncArgs_Context_DEFAULT
+func (p *VpP2pApiGetSuccessorsArgs) GetRequest() *GetSuccessorsRequest {
+	if !p.IsSetRequest() {
+		return VpP2pApiGetSuccessorsArgs_Request_DEFAULT
 	}
-	return p.Context
+	return p.Request
 }
-func (p *VpP2pApiSyncArgs) IsSetContext() bool {
-	return p.Context != nil
+func (p *VpP2pApiGetSuccessorsArgs) IsSetRequest() bool {
+	return p.Request != nil
 }
 
-func (p *VpP2pApiSyncArgs) Read(iprot thrift.TProtocol) error {
+func (p *VpP2pApiGetSuccessorsArgs) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -648,16 +639,16 @@ func (p *VpP2pApiSyncArgs) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *VpP2pApiSyncArgs) readField1(iprot thrift.TProtocol) error {
-	p.Context = &ContextInfo{}
-	if err := p.Context.Read(iprot); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Context), err)
+func (p *VpP2pApiGetSuccessorsArgs) readField1(iprot thrift.TProtocol) error {
+	p.Request = &GetSuccessorsRequest{}
+	if err := p.Request.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Request), err)
 	}
 	return nil
 }
 
-func (p *VpP2pApiSyncArgs) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("Sync_args"); err != nil {
+func (p *VpP2pApiGetSuccessorsArgs) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("GetSuccessors_args"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if err := p.writeField1(oprot); err != nil {
@@ -672,49 +663,49 @@ func (p *VpP2pApiSyncArgs) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *VpP2pApiSyncArgs) writeField1(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("context", thrift.STRUCT, 1); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:context: ", p), err)
+func (p *VpP2pApiGetSuccessorsArgs) writeField1(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("request", thrift.STRUCT, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:request: ", p), err)
 	}
-	if err := p.Context.Write(oprot); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Context), err)
+	if err := p.Request.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Request), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:context: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:request: ", p), err)
 	}
 	return err
 }
 
-func (p *VpP2pApiSyncArgs) String() string {
+func (p *VpP2pApiGetSuccessorsArgs) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("VpP2pApiSyncArgs(%+v)", *p)
+	return fmt.Sprintf("VpP2pApiGetSuccessorsArgs(%+v)", *p)
 }
 
 // Attributes:
 //  - Success
-type VpP2pApiSyncResult struct {
-	Success *SyncData `thrift:"success,0" json:"success,omitempty"`
+type VpP2pApiGetSuccessorsResult struct {
+	Success *GetSuccessorsResponse `thrift:"success,0" json:"success,omitempty"`
 }
 
-func NewVpP2pApiSyncResult() *VpP2pApiSyncResult {
-	return &VpP2pApiSyncResult{}
+func NewVpP2pApiGetSuccessorsResult() *VpP2pApiGetSuccessorsResult {
+	return &VpP2pApiGetSuccessorsResult{}
 }
 
-var VpP2pApiSyncResult_Success_DEFAULT *SyncData
+var VpP2pApiGetSuccessorsResult_Success_DEFAULT *GetSuccessorsResponse
 
-func (p *VpP2pApiSyncResult) GetSuccess() *SyncData {
+func (p *VpP2pApiGetSuccessorsResult) GetSuccess() *GetSuccessorsResponse {
 	if !p.IsSetSuccess() {
-		return VpP2pApiSyncResult_Success_DEFAULT
+		return VpP2pApiGetSuccessorsResult_Success_DEFAULT
 	}
 	return p.Success
 }
-func (p *VpP2pApiSyncResult) IsSetSuccess() bool {
+func (p *VpP2pApiGetSuccessorsResult) IsSetSuccess() bool {
 	return p.Success != nil
 }
 
-func (p *VpP2pApiSyncResult) Read(iprot thrift.TProtocol) error {
+func (p *VpP2pApiGetSuccessorsResult) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
 	}
@@ -747,16 +738,16 @@ func (p *VpP2pApiSyncResult) Read(iprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *VpP2pApiSyncResult) readField0(iprot thrift.TProtocol) error {
-	p.Success = &SyncData{}
+func (p *VpP2pApiGetSuccessorsResult) readField0(iprot thrift.TProtocol) error {
+	p.Success = &GetSuccessorsResponse{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
 	}
 	return nil
 }
 
-func (p *VpP2pApiSyncResult) Write(oprot thrift.TProtocol) error {
-	if err := oprot.WriteStructBegin("Sync_result"); err != nil {
+func (p *VpP2pApiGetSuccessorsResult) Write(oprot thrift.TProtocol) error {
+	if err := oprot.WriteStructBegin("GetSuccessors_result"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if err := p.writeField0(oprot); err != nil {
@@ -771,7 +762,7 @@ func (p *VpP2pApiSyncResult) Write(oprot thrift.TProtocol) error {
 	return nil
 }
 
-func (p *VpP2pApiSyncResult) writeField0(oprot thrift.TProtocol) (err error) {
+func (p *VpP2pApiGetSuccessorsResult) writeField0(oprot thrift.TProtocol) (err error) {
 	if p.IsSetSuccess() {
 		if err := oprot.WriteFieldBegin("success", thrift.STRUCT, 0); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T write field begin error 0:success: ", p), err)
@@ -786,51 +777,33 @@ func (p *VpP2pApiSyncResult) writeField0(oprot thrift.TProtocol) (err error) {
 	return err
 }
 
-func (p *VpP2pApiSyncResult) String() string {
+func (p *VpP2pApiGetSuccessorsResult) String() string {
 	if p == nil {
 		return "<nil>"
 	}
-	return fmt.Sprintf("VpP2pApiSyncResult(%+v)", *p)
+	return fmt.Sprintf("VpP2pApiGetSuccessorsResult(%+v)", *p)
 }
 
 // Attributes:
-//  - Context
-//  - Key
-//  - KeyShift
-//  - ImaginaryNode
+//  - Request
 type VpP2pApiLookupArgs struct {
-	Context       *ContextInfo `thrift:"context,1" json:"context"`
-	Key           []byte       `thrift:"key,2" json:"key"`
-	KeyShift      []byte       `thrift:"keyShift,3" json:"keyShift"`
-	ImaginaryNode []byte       `thrift:"imaginaryNode,4" json:"imaginaryNode"`
+	Request *LookupRequest `thrift:"request,1" json:"request"`
 }
 
 func NewVpP2pApiLookupArgs() *VpP2pApiLookupArgs {
 	return &VpP2pApiLookupArgs{}
 }
 
-var VpP2pApiLookupArgs_Context_DEFAULT *ContextInfo
+var VpP2pApiLookupArgs_Request_DEFAULT *LookupRequest
 
-func (p *VpP2pApiLookupArgs) GetContext() *ContextInfo {
-	if !p.IsSetContext() {
-		return VpP2pApiLookupArgs_Context_DEFAULT
+func (p *VpP2pApiLookupArgs) GetRequest() *LookupRequest {
+	if !p.IsSetRequest() {
+		return VpP2pApiLookupArgs_Request_DEFAULT
 	}
-	return p.Context
+	return p.Request
 }
-
-func (p *VpP2pApiLookupArgs) GetKey() []byte {
-	return p.Key
-}
-
-func (p *VpP2pApiLookupArgs) GetKeyShift() []byte {
-	return p.KeyShift
-}
-
-func (p *VpP2pApiLookupArgs) GetImaginaryNode() []byte {
-	return p.ImaginaryNode
-}
-func (p *VpP2pApiLookupArgs) IsSetContext() bool {
-	return p.Context != nil
+func (p *VpP2pApiLookupArgs) IsSetRequest() bool {
+	return p.Request != nil
 }
 
 func (p *VpP2pApiLookupArgs) Read(iprot thrift.TProtocol) error {
@@ -851,18 +824,6 @@ func (p *VpP2pApiLookupArgs) Read(iprot thrift.TProtocol) error {
 			if err := p.readField1(iprot); err != nil {
 				return err
 			}
-		case 2:
-			if err := p.readField2(iprot); err != nil {
-				return err
-			}
-		case 3:
-			if err := p.readField3(iprot); err != nil {
-				return err
-			}
-		case 4:
-			if err := p.readField4(iprot); err != nil {
-				return err
-			}
 		default:
 			if err := iprot.Skip(fieldTypeId); err != nil {
 				return err
@@ -879,36 +840,9 @@ func (p *VpP2pApiLookupArgs) Read(iprot thrift.TProtocol) error {
 }
 
 func (p *VpP2pApiLookupArgs) readField1(iprot thrift.TProtocol) error {
-	p.Context = &ContextInfo{}
-	if err := p.Context.Read(iprot); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Context), err)
-	}
-	return nil
-}
-
-func (p *VpP2pApiLookupArgs) readField2(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadBinary(); err != nil {
-		return thrift.PrependError("error reading field 2: ", err)
-	} else {
-		p.Key = v
-	}
-	return nil
-}
-
-func (p *VpP2pApiLookupArgs) readField3(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadBinary(); err != nil {
-		return thrift.PrependError("error reading field 3: ", err)
-	} else {
-		p.KeyShift = v
-	}
-	return nil
-}
-
-func (p *VpP2pApiLookupArgs) readField4(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadBinary(); err != nil {
-		return thrift.PrependError("error reading field 4: ", err)
-	} else {
-		p.ImaginaryNode = v
+	p.Request = &LookupRequest{}
+	if err := p.Request.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Request), err)
 	}
 	return nil
 }
@@ -918,15 +852,6 @@ func (p *VpP2pApiLookupArgs) Write(oprot thrift.TProtocol) error {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
 	}
 	if err := p.writeField1(oprot); err != nil {
-		return err
-	}
-	if err := p.writeField2(oprot); err != nil {
-		return err
-	}
-	if err := p.writeField3(oprot); err != nil {
-		return err
-	}
-	if err := p.writeField4(oprot); err != nil {
 		return err
 	}
 	if err := oprot.WriteFieldStop(); err != nil {
@@ -939,53 +864,14 @@ func (p *VpP2pApiLookupArgs) Write(oprot thrift.TProtocol) error {
 }
 
 func (p *VpP2pApiLookupArgs) writeField1(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("context", thrift.STRUCT, 1); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:context: ", p), err)
+	if err := oprot.WriteFieldBegin("request", thrift.STRUCT, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:request: ", p), err)
 	}
-	if err := p.Context.Write(oprot); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Context), err)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:context: ", p), err)
-	}
-	return err
-}
-
-func (p *VpP2pApiLookupArgs) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("key", thrift.STRING, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:key: ", p), err)
-	}
-	if err := oprot.WriteBinary(p.Key); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.key (2) field write error: ", p), err)
+	if err := p.Request.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.Request), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:key: ", p), err)
-	}
-	return err
-}
-
-func (p *VpP2pApiLookupArgs) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("keyShift", thrift.STRING, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:keyShift: ", p), err)
-	}
-	if err := oprot.WriteBinary(p.KeyShift); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.keyShift (3) field write error: ", p), err)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:keyShift: ", p), err)
-	}
-	return err
-}
-
-func (p *VpP2pApiLookupArgs) writeField4(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("imaginaryNode", thrift.STRING, 4); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:imaginaryNode: ", p), err)
-	}
-	if err := oprot.WriteBinary(p.ImaginaryNode); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.imaginaryNode (4) field write error: ", p), err)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:imaginaryNode: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:request: ", p), err)
 	}
 	return err
 }
@@ -1000,16 +886,16 @@ func (p *VpP2pApiLookupArgs) String() string {
 // Attributes:
 //  - Success
 type VpP2pApiLookupResult struct {
-	Success *LookupData `thrift:"success,0" json:"success,omitempty"`
+	Success *LookupResponse `thrift:"success,0" json:"success,omitempty"`
 }
 
 func NewVpP2pApiLookupResult() *VpP2pApiLookupResult {
 	return &VpP2pApiLookupResult{}
 }
 
-var VpP2pApiLookupResult_Success_DEFAULT *LookupData
+var VpP2pApiLookupResult_Success_DEFAULT *LookupResponse
 
-func (p *VpP2pApiLookupResult) GetSuccess() *LookupData {
+func (p *VpP2pApiLookupResult) GetSuccess() *LookupResponse {
 	if !p.IsSetSuccess() {
 		return VpP2pApiLookupResult_Success_DEFAULT
 	}
@@ -1053,7 +939,7 @@ func (p *VpP2pApiLookupResult) Read(iprot thrift.TProtocol) error {
 }
 
 func (p *VpP2pApiLookupResult) readField0(iprot thrift.TProtocol) error {
-	p.Success = &LookupData{}
+	p.Success = &LookupResponse{}
 	if err := p.Success.Read(iprot); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.Success), err)
 	}

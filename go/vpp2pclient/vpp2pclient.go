@@ -20,9 +20,9 @@ func Usage() {
 	fmt.Fprintln(os.Stderr, "Usage of ", os.Args[0], " [-h host:port] [-u url] [-f[ramed]] function [arg1 [arg2...]]:")
 	flag.PrintDefaults()
 	fmt.Fprintln(os.Stderr, "\nFunctions:")
-	fmt.Fprintln(os.Stderr, "  StatusData Status()")
-	fmt.Fprintln(os.Stderr, "  SyncData Sync(ContextInfo context)")
-	fmt.Fprintln(os.Stderr, "  LookupData Lookup(ContextInfo context, string key, string keyShift, string imaginaryNode)")
+	fmt.Fprintln(os.Stderr, "  HostStatus Status()")
+	fmt.Fprintln(os.Stderr, "  GetSuccessorsResponse GetSuccessors(GetSuccessorsRequest request)")
+	fmt.Fprintln(os.Stderr, "  LookupResponse Lookup(LookupRequest request)")
 	fmt.Fprintln(os.Stderr, "  void ping()")
 	fmt.Fprintln(os.Stderr, "  Version getVersion()")
 	fmt.Fprintln(os.Stderr, "  Package getPackage()")
@@ -129,9 +129,9 @@ func main() {
 		fmt.Print(client.Status())
 		fmt.Print("\n")
 		break
-	case "Sync":
+	case "GetSuccessors":
 		if flag.NArg()-1 != 1 {
-			fmt.Fprintln(os.Stderr, "Sync requires 1 args")
+			fmt.Fprintln(os.Stderr, "GetSuccessors requires 1 args")
 			flag.Usage()
 		}
 		arg16 := flag.Arg(1)
@@ -144,19 +144,19 @@ func main() {
 		}
 		factory19 := thrift.NewTSimpleJSONProtocolFactory()
 		jsProt20 := factory19.GetProtocol(mbTrans17)
-		argvalue0 := vpp2papi.NewContextInfo()
+		argvalue0 := vpp2papi.NewGetSuccessorsRequest()
 		err21 := argvalue0.Read(jsProt20)
 		if err21 != nil {
 			Usage()
 			return
 		}
 		value0 := argvalue0
-		fmt.Print(client.Sync(value0))
+		fmt.Print(client.GetSuccessors(value0))
 		fmt.Print("\n")
 		break
 	case "Lookup":
-		if flag.NArg()-1 != 4 {
-			fmt.Fprintln(os.Stderr, "Lookup requires 4 args")
+		if flag.NArg()-1 != 1 {
+			fmt.Fprintln(os.Stderr, "Lookup requires 1 args")
 			flag.Usage()
 		}
 		arg22 := flag.Arg(1)
@@ -169,20 +169,14 @@ func main() {
 		}
 		factory25 := thrift.NewTSimpleJSONProtocolFactory()
 		jsProt26 := factory25.GetProtocol(mbTrans23)
-		argvalue0 := vpp2papi.NewContextInfo()
+		argvalue0 := vpp2papi.NewLookupRequest()
 		err27 := argvalue0.Read(jsProt26)
 		if err27 != nil {
 			Usage()
 			return
 		}
 		value0 := argvalue0
-		argvalue1 := []byte(flag.Arg(2))
-		value1 := argvalue1
-		argvalue2 := []byte(flag.Arg(3))
-		value2 := argvalue2
-		argvalue3 := []byte(flag.Arg(4))
-		value3 := argvalue3
-		fmt.Print(client.Lookup(value0, value1, value2, value3))
+		fmt.Print(client.Lookup(value0))
 		fmt.Print("\n")
 		break
 	case "ping":

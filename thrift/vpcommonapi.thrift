@@ -25,7 +25,7 @@
 
 namespace cpp vpcommonapi
 namespace go vpcommonapi
-namespace php vpcommonapi
+namespace js vpcommonapi
 
 /**
  * Version contains the program version, usefull

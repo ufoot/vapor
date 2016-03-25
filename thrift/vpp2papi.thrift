@@ -27,7 +27,7 @@
 
 namespace cpp vpp2papi
 namespace go vpp2papi
-namespace php vpp2papi
+namespace js vpp2papi
 
 include "vpcommonapi.thrift"
 
@@ -115,21 +115,39 @@ struct HostStatus {
 }
 
 /**
+ * Used to store Lookup-like requests.
+ */
+struct LookupRequest {
+    1:ContextInfo context,
+    2:binary key,
+    3:binary keyShift,
+    4:binary imaginaryNode,
+    5:binary sig,
+}
+
+/**
  * Used to store results when doing Lookup-like requests.
  */
-struct LookupData {
+struct LookupResponse {
   1: bool found,
   2: list<NodeInfo> nodesPath,
   3: list<HostInfo> hostsRef,
 }
 
 /**
- * Used to store results when doing Sync requests.
+ * Used to store  GetSuccessors requests.
  */
-struct SyncData {
-  1: bool accepted,
-  2: list<NodeInfo> successorNodes,
-  3: list<HostInfo> hostsRef,
+struct GetSuccessorsRequest {
+    1:ContextInfo context,
+    2:binary sig,
+}
+
+/**
+ * Used to store results when doing GetSuccessors requests.
+ */
+struct GetSuccessorsResponse {
+  1: list<NodeInfo> successorNodes,
+  2: list<HostInfo> hostsRef,
 }
 
 /**
@@ -140,13 +158,10 @@ service VpP2pApi extends vpcommonapi.VpCommonApi
 {
   HostStatus Status(
   ),
-  SyncData Sync(
-    1:ContextInfo context,
+  GetSuccessorsResponse GetSuccessors(
+    1:GetSuccessorsRequest request,
   ),
-  LookupData Lookup(
-    1:ContextInfo context,
-    2:binary key,
-    3:binary keyShift,
-    4:binary imaginaryNode
+  LookupResponse Lookup(
+    1:LookupRequest request,
   ),
 }
