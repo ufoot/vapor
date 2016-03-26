@@ -51,7 +51,7 @@ func newSource() rand.Source {
 	now = time.Now()
 	atomic.AddInt64(&staticSeed, 1)
 	tmpSeed = vpsum.PseudoRand64(uint64(staticSeed), 0)
-	seed = vpsum.PseudoRand64(tmpSeed^uint64(now.Nanosecond()), 0)
+	seed = vpsum.PseudoRand64(tmpSeed^uint64(now.UnixNano()), 0)
 	source = rand.NewSource(int64(seed))
 
 	return source

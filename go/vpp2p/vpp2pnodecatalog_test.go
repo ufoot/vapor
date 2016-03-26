@@ -24,7 +24,7 @@ import (
 	"testing"
 )
 
-func TestGlobalCatalog(t *testing.T) {
+func TestGlobalNodeCatalog(t *testing.T) {
 	var host *Host
 	var node1, node2 *Node
 	var ring *Ring

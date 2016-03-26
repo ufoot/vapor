@@ -74,7 +74,7 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 			return nil, err
 		}
 	} else {
-		pubKey = vpsum.IntToBuf512(vprand.Rand512(nil, nil))
+		pubKey = vpsum.IntToBuf128(vprand.Rand128(nil, nil))
 		sig = []byte("")
 	}
 

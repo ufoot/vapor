@@ -20,42 +20,61 @@
 package vpp2pdat
 
 const (
-	// NodeIDNbBytes gives the number of bytes for a node ID.
-	NodeIDNbBytes = 32
-	// RingIDNbBytes gives the number of bytes for a ring ID.
-	RingIDNbBytes = 64
+	// HostPubKeyBufNbBytes gives the number of bytes for a host pub key when used as a map key.
+	HostPubKeyBufNbBytes = 16
+	// NodeIDBufNbBytes gives the number of bytes for a node ID when used as a map key.
+	NodeIDBufNbBytes = 32
+	// RingIDBufNbBytes gives the number of bytes for a ring ID when used as a map key.
+	RingIDBufNbBytes = 64
 )
 
-// NodeIDToBuf converts a slice to a fixed-length 32 bytes buffer.
-func NodeIDToBuf(nodeID []byte) [NodeIDNbBytes]byte {
-	var ret [NodeIDNbBytes]byte
+// HostPubKeyToBuf converts a slice to a fixed-length 16 bytes (128 bits) buffer.
+func HostPubKeyToBuf(hostPubKey []byte) [HostPubKeyBufNbBytes]byte {
+	var ret [HostPubKeyBufNbBytes]byte
+
+	if hostPubKey == nil {
+		return ret
+	}
+
+	if len(hostPubKey) < HostPubKeyBufNbBytes {
+		copy(ret[HostPubKeyBufNbBytes-len(hostPubKey):HostPubKeyBufNbBytes], hostPubKey)
+		return ret
+	}
+
+	copy(ret[0:HostPubKeyBufNbBytes], hostPubKey)
+	return ret
+}
+
+// NodeIDToBuf converts a slice to a fixed-length 32 bytes (256 bits) buffer.
+func NodeIDToBuf(nodeID []byte) [NodeIDBufNbBytes]byte {
+	var ret [NodeIDBufNbBytes]byte
 
 	if nodeID == nil {
 		return ret
 	}
 
-	if len(nodeID) < NodeIDNbBytes {
-		copy(ret[NodeIDNbBytes-len(nodeID):NodeIDNbBytes], nodeID)
+	if len(nodeID) < NodeIDBufNbBytes {
+		copy(ret[NodeIDBufNbBytes-len(nodeID):NodeIDBufNbBytes], nodeID)
 		return ret
 	}
 
-	copy(ret[0:NodeIDNbBytes], nodeID)
+	copy(ret[0:NodeIDBufNbBytes], nodeID)
 	return ret
 }
 
-// RingIDToBuf converts a slice to a fixed-length 64 bytes buffer.
-func RingIDToBuf(ringID []byte) [RingIDNbBytes]byte {
-	var ret [RingIDNbBytes]byte
+// RingIDToBuf converts a slice to a fixed-length 64 bytes (512 bits) buffer.
+func RingIDToBuf(ringID []byte) [RingIDBufNbBytes]byte {
+	var ret [RingIDBufNbBytes]byte
 
 	if ringID == nil {
 		return ret
 	}
 
-	if len(ringID) < RingIDNbBytes {
-		copy(ret[RingIDNbBytes-len(ringID):RingIDNbBytes], ringID)
+	if len(ringID) < RingIDBufNbBytes {
+		copy(ret[RingIDBufNbBytes-len(ringID):RingIDBufNbBytes], ringID)
 		return ret
 	}
 
-	copy(ret[0:RingIDNbBytes], ringID)
+	copy(ret[0:RingIDBufNbBytes], ringID)
 	return ret
 }

@@ -141,10 +141,6 @@ func RingFromInfo(ringInfo *vpp2papi.RingInfo, passwordHash []byte) (*Ring, erro
 
 	ret.Info = *ringInfo
 
-	if ret.Info.RingID == nil || len(ret.Info.RingID) != vpp2pdat.RingIDNbBytes {
-		return nil, fmt.Errorf("Ring ID should be %d bytes long", vpp2pdat.RingIDNbBytes)
-	}
-
 	ret.Info.Config = vpp2pdat.DefaultRingConfig()
 	*(ret.Info.Config) = *(ringInfo.Config)
 

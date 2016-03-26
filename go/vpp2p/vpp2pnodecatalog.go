@@ -29,14 +29,14 @@ import (
 // NodeCatalog is structure used to contain locally-known hosts.
 type NodeCatalog struct {
 	access sync.RWMutex
-	nodes  map[[vpp2pdat.NodeIDNbBytes]byte]*Node
+	nodes  map[[vpp2pdat.NodeIDBufNbBytes]byte]*Node
 }
 
 var globalNodeCatalog = NewNodeCatalog()
 
 // NewNodeCatalog creates a new instance of a local node catalog
 func NewNodeCatalog() *NodeCatalog {
-	return &NodeCatalog{nodes: make(map[[vpp2pdat.NodeIDNbBytes]byte]*Node)}
+	return &NodeCatalog{nodes: make(map[[vpp2pdat.NodeIDBufNbBytes]byte]*Node)}
 }
 
 // GlobalNodeCatalog returns a catalog containing all local nodes.
@@ -68,10 +68,11 @@ func (c *NodeCatalog) HasNode(nodeID []byte) bool {
 // GetNode returns a handler which makes possible API calls on it.
 // It's thread-safe.
 func (c *NodeCatalog) GetNode(nodeID []byte) *Node {
+	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
+
 	defer c.access.RUnlock()
 	c.access.RLock()
 
-	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
 	n := c.nodes[nodeIDBuf]
 
 	return n
@@ -80,22 +81,24 @@ func (c *NodeCatalog) GetNode(nodeID []byte) *Node {
 // RegisterNode registers a node within the catalog.
 // It's thread-safe.
 func (c *NodeCatalog) RegisterNode(node *Node) {
+	nodeID := node.Status.Info.NodeID
+	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
+
 	defer c.access.Unlock()
 	c.access.Lock()
 
-	nodeID := node.Status.Info.NodeID
-	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
 	c.nodes[nodeIDBuf] = node
 }
 
 // UnregisterNode unregisters a node within the catalog.
 // It's thread-safe.
 func (c *NodeCatalog) UnregisterNode(node *Node) {
+	nodeID := node.Status.Info.NodeID
+	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
+
 	defer c.access.Unlock()
 	c.access.Lock()
 
-	nodeID := node.Status.Info.NodeID
-	nodeIDBuf := vpp2pdat.NodeIDToBuf(nodeID)
 	delete(c.nodes, nodeIDBuf)
 }
 

@@ -43,7 +43,7 @@ const (
 	// MaxLenURL is the maximum length for URL fields
 	MaxLenURL = 1000
 	// MinLenPubKey is the minimum length for PubKey fields
-	MinLenPubKey = 50
+	MinLenPubKey = 10
 	// MaxLenPubKey is the maximum length for PubKey fields
 	MaxLenPubKey = 5000
 	// MinLenSig is the minimum length for Sig fields
@@ -109,12 +109,12 @@ func CheckID(ID []byte) (bool, error) {
 
 // CheckRingID checks that a Ring ID has the right format.
 func CheckRingID(ID []byte) (bool, error) {
-	return checkLenByte("ID", ID, RingIDNbBytes, RingIDNbBytes)
+	return checkLenByte("ID", ID, RingIDBufNbBytes, RingIDBufNbBytes)
 }
 
 // CheckNodeID checks that an Node ID has the right format.
 func CheckNodeID(ID []byte) (bool, error) {
-	return checkLenByte("ID", ID, NodeIDNbBytes, NodeIDNbBytes)
+	return checkLenByte("ID", ID, NodeIDBufNbBytes, NodeIDBufNbBytes)
 }
 
 // CheckTitle checks that a title is correct
@@ -191,7 +191,7 @@ func IsPubKeyExpectedToSign(pubKey []byte) bool {
 	case 0:
 		// empty -> we can't expect it to sign anything
 		return false
-	case 64:
+	case HostPubKeyBufNbBytes:
 		// 512-bit -> too short to be a valid GnuPG key and exactly
 		// the size of a randomly generated hash -> do not expect
 		// it to sign anything, it's obviously something random
