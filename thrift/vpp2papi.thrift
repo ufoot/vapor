@@ -98,56 +98,56 @@ struct RingInfo {
  * calling a fonction, it gives context.
  */
 struct ContextInfo {
-  1: HostInfo sourceHost,
-  2: RingInfo sourceRing,
-  3: NodeInfo sourceNode,
-  4: binary targetNodeID,
+  1: HostInfo SourceHost,
+  2: RingInfo SourceRing,
+  3: NodeInfo SourceNode,
+  4: binary TargetNodeID,
 }
 
 /**
  * Used to return data when calling status.
  */
 struct HostStatus {
-  1: HostInfo thisHostInfo,
-  2: list<NodeStatus> localNodeStatus,
-  3: list<RingInfo> ringsRef,
-  4: list<HostInfo> hostsRef,
+  1: HostInfo ThisHostInfo,
+  2: list<NodeStatus> LocalNodeStatus,
+  3: list<RingInfo> RingsRef,
+  4: list<HostInfo> HostsRef,
 }
 
 /**
  * Used to store Lookup-like requests.
  */
 struct LookupRequest {
-    1:ContextInfo context,
-    2:binary key,
-    3:binary keyShift,
-    4:binary imaginaryNode,
-    5:binary sig,
+    1:ContextInfo Context,
+    2:binary Key,
+    3:binary KeyShift,
+    4:binary ImaginaryNode,
+    5:binary Sig,
 }
 
 /**
  * Used to store results when doing Lookup-like requests.
  */
 struct LookupResponse {
-  1: bool found,
-  2: list<NodeInfo> nodesPath,
-  3: list<HostInfo> hostsRef,
+  1: bool Found,
+  2: list<NodeInfo> HodesPath,
+  3: list<HostInfo> HostsRef,
 }
 
 /**
  * Used to store  GetSuccessors requests.
  */
 struct GetSuccessorsRequest {
-    1:ContextInfo context,
-    2:binary sig,
+    1:ContextInfo Context,
+    2:binary Sig,
 }
 
 /**
  * Used to store results when doing GetSuccessors requests.
  */
 struct GetSuccessorsResponse {
-  1: list<NodeInfo> successorNodes,
-  2: list<HostInfo> hostsRef,
+  1: list<NodeInfo> SuccessorNodes,
+  2: list<HostInfo> HostsRef,
 }
 
 /**

@@ -20,6 +20,7 @@
 package vpp2p
 
 import (
+	"fmt"
 	"github.com/ufoot/vapor/go/vpapp"
 	"github.com/ufoot/vapor/go/vpcommonapi"
 	"github.com/ufoot/vapor/go/vpcrypto"
@@ -129,9 +130,11 @@ func (host *Host) GetVersion() (*vpcommonapi.Version, error) {
 
 // Status is called to get another host status.
 func (host *Host) Status() (*vpp2papi.HostStatus, error) {
+	ret := vpp2papi.NewHostStatus()
+
 	// todo...
 
-	return nil, nil
+	return ret, nil
 }
 
 // Get is called to synchronise between nodes.
@@ -141,9 +144,16 @@ func (host *Host) GetSuccessors(request *vpp2papi.GetSuccessorsRequest) (*vpp2pa
 		return nil, err
 	}
 
+	node := host.localNodeCatalog.GetNode(request.Context.TargetNodeID)
+	if node == nil {
+		return nil, fmt.Errorf("unable to find node locally")
+	}
+
+	ret := vpp2papi.NewGetSuccessorsResponse()
+
 	// todo...
 
-	return nil, nil
+	return ret, nil
 }
 
 // Lookup searches for a key on a given ring.
@@ -153,7 +163,14 @@ func (host *Host) Lookup(request *vpp2papi.LookupRequest) (*vpp2papi.LookupRespo
 		return nil, err
 	}
 
+	node := host.localNodeCatalog.GetNode(request.Context.TargetNodeID)
+	if node == nil {
+		return nil, fmt.Errorf("unable to find node locally")
+	}
+
+	ret := vpp2papi.NewLookupResponse()
+
 	// todo...
 
-	return nil, nil
+	return ret, nil
 }

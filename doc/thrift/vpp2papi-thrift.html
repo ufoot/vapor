@@ -263,42 +263,42 @@ those it should contact.
 </table><br/>RingInfo contains static informations about a ring.
 <br/></div><div class="definition"><h3 id="Struct_ContextInfo">Struct: ContextInfo</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>sourceHost</td><td><code><a href="#Struct_HostInfo">HostInfo</a></code></td><td></td><td>default</td><td></td></tr>
-<tr><td>2</td><td>sourceRing</td><td><code><a href="#Struct_RingInfo">RingInfo</a></code></td><td></td><td>default</td><td></td></tr>
-<tr><td>3</td><td>sourceNode</td><td><code><a href="#Struct_NodeInfo">NodeInfo</a></code></td><td></td><td>default</td><td></td></tr>
-<tr><td>4</td><td>targetNodeID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>1</td><td>SourceHost</td><td><code><a href="#Struct_HostInfo">HostInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>SourceRing</td><td><code><a href="#Struct_RingInfo">RingInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>SourceNode</td><td><code><a href="#Struct_NodeInfo">NodeInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>TargetNodeID</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>ContextInfo contains static informations about the program
 calling a fonction, it gives context.
 <br/></div><div class="definition"><h3 id="Struct_HostStatus">Struct: HostStatus</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>thisHostInfo</td><td><code><a href="#Struct_HostInfo">HostInfo</a></code></td><td></td><td>default</td><td></td></tr>
-<tr><td>2</td><td>localNodeStatus</td><td><code>list&lt;<code><a href="#Struct_NodeStatus">NodeStatus</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>3</td><td>ringsRef</td><td><code>list&lt;<code><a href="#Struct_RingInfo">RingInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>4</td><td>hostsRef</td><td><code>list&lt;<code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>1</td><td>ThisHostInfo</td><td><code><a href="#Struct_HostInfo">HostInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>LocalNodeStatus</td><td><code>list&lt;<code><a href="#Struct_NodeStatus">NodeStatus</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>RingsRef</td><td><code>list&lt;<code><a href="#Struct_RingInfo">RingInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>HostsRef</td><td><code>list&lt;<code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>Used to return data when calling status.
 <br/></div><div class="definition"><h3 id="Struct_LookupRequest">Struct: LookupRequest</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>context</td><td><code><a href="#Struct_ContextInfo">ContextInfo</a></code></td><td></td><td>default</td><td></td></tr>
-<tr><td>2</td><td>key</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>3</td><td>keyShift</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>4</td><td>imaginaryNode</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>5</td><td>sig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>1</td><td>Context</td><td><code><a href="#Struct_ContextInfo">ContextInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>Key</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>KeyShift</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>ImaginaryNode</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>5</td><td>Sig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>Used to store Lookup-like requests.
 <br/></div><div class="definition"><h3 id="Struct_LookupResponse">Struct: LookupResponse</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>found</td><td><code>bool</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>2</td><td>nodesPath</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>3</td><td>hostsRef</td><td><code>list&lt;<code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>1</td><td>Found</td><td><code>bool</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>HodesPath</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>HostsRef</td><td><code>list&lt;<code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>Used to store results when doing Lookup-like requests.
 <br/></div><div class="definition"><h3 id="Struct_GetSuccessorsRequest">Struct: GetSuccessorsRequest</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>context</td><td><code><a href="#Struct_ContextInfo">ContextInfo</a></code></td><td></td><td>default</td><td></td></tr>
-<tr><td>2</td><td>sig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>1</td><td>Context</td><td><code><a href="#Struct_ContextInfo">ContextInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>Sig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>Used to store  GetSuccessors requests.
 <br/></div><div class="definition"><h3 id="Struct_GetSuccessorsResponse">Struct: GetSuccessorsResponse</h3>
 <table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
-<tr><td>1</td><td>successorNodes</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
-<tr><td>2</td><td>hostsRef</td><td><code>list&lt;<code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>1</td><td>SuccessorNodes</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>HostsRef</td><td><code>list&lt;<code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>Used to store results when doing GetSuccessors requests.
 <br/></div><hr/><h2 id="Services">Services</h2>
 <h3 id="Svc_VpP2pApi">Service: VpP2pApi</h3>

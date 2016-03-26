@@ -340,15 +340,19 @@ func CheckRingInfo(ring *vpp2papi.RingInfo) (bool, error) {
 func CheckContextInfo(context *vpp2papi.ContextInfo) (bool, error) {
 	var err error
 
-	_, err = HostInfoCheckSig(context.SourceHost)
+	_, err = CheckHostInfo(context.SourceHost)
 	if err != nil {
 		return false, err
 	}
-	_, err = RingInfoCheckSig(context.SourceRing)
+	_, err = CheckRingInfo(context.SourceRing)
 	if err != nil {
 		return false, err
 	}
-	_, err = NodeInfoCheckSig(context.SourceNode)
+	_, err = CheckNodeInfo(context.SourceNode)
+	if err != nil {
+		return false, err
+	}
+	_, err = CheckNodeID(context.TargetNodeID)
 	if err != nil {
 		return false, err
 	}
