@@ -25,7 +25,7 @@ Install
 Packages can be installed from [github](https://github.com/ufoot/vapor)
 with a standard `go get` command. For instance:
 
-`go get github.com/ufoot/vapor/vpdemo`
+`go get github.com/ufoot/vapor/go/vpdemo`
 
 Alternatively, on UNIXish platforms, a `./configure` script sets
 up some Makefiles which allow the usual `./configure && make` sequence
@@ -35,7 +35,7 @@ Documentation
 -------------
 
 Source code documentation is browsable online 
-on [godoc.org](http://godoc.org/github.com/ufoot/vapor).
+on [godoc.org](http://godoc.org/github.com/ufoot/vapor/go).
 
 Project status
 --------------
