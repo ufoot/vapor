@@ -80,39 +80,22 @@ func (rsa *ringStuffAppender) Transform(ringID []byte) []byte {
 // NewRing creates a new ring from static data.
 func NewRing(host *Host, ringTitle, ringDescription string, appID []byte, config *vpp2papi.RingConfig, fc vpid.FilterChecker, passwordHash []byte) (*Ring, error) {
 	var ret Ring
-	var ok bool
 	var err error
 	var intRingID *big.Int
 	var sig []byte
 
-	ok, err = vpp2pdat.CheckTitle(ringTitle)
-	if err != nil || !ok {
-		return nil, err
-	}
-	ok, err = vpp2pdat.CheckDescription(ringDescription)
-	if err != nil || !ok {
-		return nil, err
-	}
-	ok, err = vpp2pdat.CheckID(appID)
-	if err != nil || !ok {
-		return nil, err
-	}
 	if config == nil {
 		config = vpp2pdat.DefaultRingConfig()
 	}
+	_, err = vpp2pdat.CheckPasswordHash(passwordHash)
+	if err != nil {
+		return nil, err
+	}
+	hasPassword := (passwordHash != nil) && (len(passwordHash) > 0)
 	ret.walker, err = vpbruijn.BruijnNew(int(config.BruijnM), int(config.BruijnN))
 	if err != nil {
 		return nil, err
 	}
-	ok, err = vpp2pdat.CheckRingConfig(config)
-	if err != nil {
-		return nil, err
-	}
-	if err != nil || !ok {
-		return nil, err
-	}
-
-	hasPassword := (passwordHash != nil) && (len(passwordHash) > 0)
 
 	ret.Info.RingTitle = ringTitle
 	ret.Info.RingDescription = ringDescription
@@ -141,6 +124,10 @@ func NewRing(host *Host, ringTitle, ringDescription string, appID []byte, config
 	copy(ret.Info.HostPubKey, host.Info.HostPubKey)
 	ret.Info.RingSig = sig
 
+	_, err = vpp2pdat.CheckRingInfo(&(ret.Info))
+	if err != nil {
+		return nil, err
+	}
 	ret.localNodes = make([]Node, 0)
 
 	return &ret, nil
@@ -168,20 +155,19 @@ func RingFromInfo(ringInfo *vpp2papi.RingInfo, passwordHash []byte) (*Ring, erro
 		ret.secret.PasswordHash = make([]byte, len(passwordHash))
 		copy(ret.secret.PasswordHash, passwordHash)
 	}
+	_, err = vpp2pdat.CheckPasswordHash(passwordHash)
+	if err != nil {
+		return nil, err
+	}
 	ret.walker, err = vpbruijn.BruijnNew(int(ret.Info.Config.BruijnM), int(ret.Info.Config.BruijnN))
 	if err != nil {
 		return nil, err
 	}
-	_, err = vpp2pdat.CheckRingConfig(ret.Info.Config)
+	_, err = vpp2pdat.CheckRingInfo(&(ret.Info))
 	if err != nil {
 		return nil, err
 	}
 	ret.localNodes = make([]Node, 0)
-
-	_, err = ret.CheckSig()
-	if err != nil {
-		return nil, err
-	}
 
 	return &ret, nil
 }

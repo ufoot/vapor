@@ -50,9 +50,16 @@ const (
 	MinLenSig = 0
 	// MaxLenSig is the maximum length for Sig fields
 	MaxLenSig = 5000
+	// MinLenPasswordHash is the minimum length for PasswordHash fields
+	MinLenPasswordHash = 8
+	// MaxLenPasswordHash is the maximum length for PasswordHash fields
+	MaxLenPasswordHash = 64
 )
 
 func checkLenByte(fieldName string, content []byte, minLen, maxLen int) (bool, error) {
+	if content == nil {
+		return false, fmt.Errorf("%s is nil", fieldName)
+	}
 	l := len(content)
 
 	if l < minLen {
@@ -98,6 +105,16 @@ func checkASCII(fieldName, content string) (bool, error) {
 // CheckID checks that an ID has the right format.
 func CheckID(ID []byte) (bool, error) {
 	return checkLenByte("ID", ID, MinLenID, MaxLenID)
+}
+
+// CheckRingID checks that a Ring ID has the right format.
+func CheckRingID(ID []byte) (bool, error) {
+	return checkLenByte("ID", ID, RingIDNbBytes, RingIDNbBytes)
+}
+
+// CheckNodeID checks that an Node ID has the right format.
+func CheckNodeID(ID []byte) (bool, error) {
+	return checkLenByte("ID", ID, NodeIDNbBytes, NodeIDNbBytes)
 }
 
 // CheckTitle checks that a title is correct
@@ -185,8 +202,22 @@ func IsPubKeyExpectedToSign(pubKey []byte) bool {
 }
 
 // CheckSig checks that a public key is correct
-func CheckSig(pubKey []byte) (bool, error) {
-	b, err := checkLenByte("Sig", pubKey, MinLenSig, MaxLenSig)
+func CheckSig(sig []byte) (bool, error) {
+	b, err := checkLenByte("Sig", sig, MinLenSig, MaxLenSig)
+	if b != true || err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
+// CheckPasswordHash checks that a password hash is correct
+func CheckPasswordHash(passwordHash []byte) (bool, error) {
+	if passwordHash == nil || len(passwordHash) == 0 {
+		// no password is allowed in some cases
+		return true, nil
+	}
+	b, err := checkLenByte("PasswordHash", passwordHash, MinLenPasswordHash, MaxLenPasswordHash)
 	if b != true || err != nil {
 		return false, err
 	}

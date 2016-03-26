@@ -105,6 +105,35 @@ func HostInfoCheckSig(hostInfo *vpp2papi.HostInfo) (bool, error) {
 	return ok, nil
 }
 
+// CheckHostInfo checks that a host info struct is filled with correct data.
+func CheckHostInfo(host *vpp2papi.HostInfo) (bool, error) {
+	var ok bool
+	var err error
+
+	ok, err = CheckTitle(host.HostTitle)
+	if err != nil || !ok {
+		return false, err
+	}
+	ok, err = CheckURL(host.HostURL)
+	if err != nil || !ok {
+		return false, err
+	}
+	ok, err = CheckPubKey(host.HostPubKey)
+	if err != nil {
+		return false, err
+	}
+	ok, err = CheckSig(host.HostSig)
+	if err != nil {
+		return false, err
+	}
+	_, err = HostInfoCheckSig(host)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 // NodeInfoSigBytes returns the byte buffer that needs to be signed.
 func NodeInfoSigBytes(nodeInfo *vpp2papi.NodeInfo) []byte {
 	ret := make([]byte, len(nodeInfo.NodeID)+len(nodeInfo.RingID))
@@ -149,6 +178,35 @@ func NodeInfoCheckSig(nodeInfo *vpp2papi.NodeInfo) (int, error) {
 	z = vpid.ZeroesInBuf(vpsum.Checksum256(nodeInfo.NodeSig))
 
 	return z, nil
+}
+
+// CheckNodeInfo checks that a node info struct is filled with correct data.
+func CheckNodeInfo(node *vpp2papi.NodeInfo) (bool, error) {
+	var ok bool
+	var err error
+
+	ok, err = CheckNodeID(node.NodeID)
+	if err != nil || !ok {
+		return false, err
+	}
+	ok, err = CheckRingID(node.RingID)
+	if err != nil || !ok {
+		return false, err
+	}
+	ok, err = CheckPubKey(node.HostPubKey)
+	if err != nil {
+		return false, err
+	}
+	ok, err = CheckSig(node.NodeSig)
+	if err != nil {
+		return false, err
+	}
+	_, err = NodeInfoCheckSig(node)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 // DefaultRingConfig returns a default ring configuration, with 256-bit keys
@@ -235,6 +293,47 @@ func RingInfoCheckSig(ringInfo *vpp2papi.RingInfo) (int, error) {
 	z = vpid.ZeroesInBuf(vpsum.Checksum512(ringInfo.RingSig))
 
 	return z, nil
+}
+
+// CheckRingInfo checks that a ring info struct is filled with correct data.
+func CheckRingInfo(ring *vpp2papi.RingInfo) (bool, error) {
+	var ok bool
+	var err error
+
+	ok, err = CheckRingID(ring.RingID)
+	if err != nil || !ok {
+		return false, err
+	}
+	ok, err = CheckTitle(ring.RingTitle)
+	if err != nil || !ok {
+		return false, err
+	}
+	ok, err = CheckDescription(ring.RingDescription)
+	if err != nil || !ok {
+		return false, err
+	}
+	ok, err = CheckID(ring.AppID)
+	if err != nil || !ok {
+		return false, err
+	}
+	ok, err = CheckRingConfig(ring.Config)
+	if err != nil {
+		return false, err
+	}
+	ok, err = CheckPubKey(ring.HostPubKey)
+	if err != nil {
+		return false, err
+	}
+	ok, err = CheckSig(ring.RingSig)
+	if err != nil {
+		return false, err
+	}
+	_, err = RingInfoCheckSig(ring)
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
 }
 
 // CheckContextInfo checks wether a contextinfo struct is viable

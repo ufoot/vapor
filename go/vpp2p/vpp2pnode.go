@@ -119,6 +119,11 @@ func NewNode(host *Host, ring *Ring) (*Node, error) {
 	copy(ret.Status.Info.HostPubKey, host.Info.HostPubKey)
 	ret.Status.Info.NodeSig = sig
 
+	_, err = vpp2pdat.CheckNodeInfo(ret.Status.Info)
+	if err != nil {
+		return nil, err
+	}
+
 	return &ret, nil
 }
 
@@ -168,7 +173,7 @@ func (node *Node) Lookup(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeI
 		ret[0] = &(node.Info)
 
 		if node.Successor == nil || len(node.Successor) == 0 || node.D == nil || len(node.D) == 0 || node.PredecessorInfo == nil {
-			// no successor -> we're alone !
+			// no successor -> we're alone!
 			return ret, nil
 		}
 

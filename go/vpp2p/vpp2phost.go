@@ -46,15 +46,8 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 	var ret Host
 	var pubKey []byte
 	var sig []byte
-
-	ok, err := vpp2pdat.CheckTitle(title)
-	if err != nil || !ok {
-		return nil, err
-	}
-	ok, err = vpp2pdat.CheckURL(url)
-	if err != nil || !ok {
-		return nil, err
-	}
+	var err error
+	var ok bool
 
 	ret.Info = vpp2papi.HostInfo{HostTitle: title, HostURL: url, HostPubKey: nil, HostSig: nil}
 
@@ -80,12 +73,17 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 			return nil, err
 		}
 	} else {
-		pubKey = vpsum.IntToBuf512(vprand.Rand512(vprand.NewRand(), nil))
+		pubKey = vpsum.IntToBuf512(vprand.Rand512(nil, nil))
 		sig = []byte("")
 	}
 
 	ret.Info.HostPubKey = pubKey
 	ret.Info.HostSig = sig
+
+	_, err = vpp2pdat.CheckHostInfo(&(ret.Info))
+	if err != nil {
+		return nil, err
+	}
 
 	ret.localNodeCatalog = NewNodeCatalog()
 	ret.startTime = time.Now()
