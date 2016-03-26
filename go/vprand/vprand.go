@@ -23,6 +23,7 @@ import (
 	"github.com/ufoot/vapor/go/vpsum"
 	"math/big"
 	"math/rand"
+	"sync/atomic"
 	"time"
 )
 
@@ -30,6 +31,7 @@ var bigZero *big.Int
 var bigOne512 *big.Int
 var bigOne256 *big.Int
 var bigOne128 *big.Int
+var staticSeed int64
 
 func init() {
 	bigZero = big.NewInt(0)
@@ -40,13 +42,16 @@ func init() {
 	bigOne128 = big.NewInt(1)
 	bigOne128.Lsh(bigOne128, 128)
 }
+
 func newSource() rand.Source {
-	var seed uint64
+	var seed, tmpSeed uint64
 	var source rand.Source
 	var now time.Time
 
 	now = time.Now()
-	seed = vpsum.PseudoRand64(uint64(now.Unix()<<32)^uint64(now.Nanosecond()), 0)
+	atomic.AddInt64(&staticSeed, 1)
+	tmpSeed = vpsum.PseudoRand64(uint64(staticSeed), 0)
+	seed = vpsum.PseudoRand64(tmpSeed^uint64(now.Nanosecond()), 0)
 	source = rand.NewSource(int64(seed))
 
 	return source
