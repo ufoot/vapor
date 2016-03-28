@@ -21,11 +21,15 @@ package vpp2p
 
 import (
 	"fmt"
+	"github.com/ufoot/vapor/go/vpp2papi"
+	"github.com/ufoot/vapor/go/vpp2pdat"
 	"testing"
 )
 
 func TestGlobalHostCatalog(t *testing.T) {
-	var host1, host2 *Host
+	var host1, host2, host3 *Host
+	var ring *Ring
+	var node1, node2, node3 *Node
 	var err error
 
 	host1, err = NewHost(fmt.Sprintf("%s 1", testTitle), fmt.Sprintf("%s1", testURL), false)
@@ -35,6 +39,10 @@ func TestGlobalHostCatalog(t *testing.T) {
 	host2, err = NewHost(fmt.Sprintf("%s 2", testTitle), fmt.Sprintf("%s2", testURL), false)
 	if err != nil {
 		t.Error("unable to create host 2", err)
+	}
+	host3, err = NewHost(fmt.Sprintf("%s 3", testTitle), fmt.Sprintf("%s3", testURL), false)
+	if err != nil {
+		t.Error("unable to create host 3", err)
 	}
 
 	if GlobalHostCatalog().HasHost(host1.Info.HostPubKey) {
@@ -70,4 +78,28 @@ func TestGlobalHostCatalog(t *testing.T) {
 	if len(GlobalHostCatalog().List()) != 1 {
 		t.Error("global catalog length should be 1")
 	}
+	ring, err = NewRing(host1, testTitle, testDescription, testID, vpp2pdat.DefaultRingConfig(), nil, nil)
+	if err != nil {
+		t.Error("unable to create ring", err)
+	}
+	node1, err = NewNode(host1, ring)
+	if err != nil {
+		t.Error("unable to create node1", err)
+	}
+	node2, err = NewNode(host2, ring)
+	if err != nil {
+		t.Error("unable to create node2", err)
+	}
+	node3, err = NewNode(host3, ring)
+	if err != nil {
+		t.Error("unable to create node3", err)
+	}
+	nodesList := make([]*vpp2papi.NodeInfo, 3)
+	nodesList[0] = node1.Status.Info
+	nodesList[1] = node2.Status.Info
+	nodesList[2] = node3.Status.Info
+	ringsList := make([]*vpp2papi.RingInfo, 1)
+	ringsList[0] = &(ring.Info)
+	refs := GlobalHostCatalog().CreateHostsRefs(&(host1.Info), ringsList, nodesList)
+	GlobalHostCatalog().UpdateHostsRefs(refs)
 }

@@ -1540,13 +1540,13 @@ func (p *ContextInfo) String() string {
 // Attributes:
 //  - ThisHostInfo
 //  - LocalNodeStatus
-//  - RingsRef
-//  - HostsRef
+//  - RingsRefs
+//  - HostsRefs
 type HostStatus struct {
 	ThisHostInfo    *HostInfo            `thrift:"ThisHostInfo,1" json:"ThisHostInfo"`
 	LocalNodeStatus []*NodeStatus        `thrift:"LocalNodeStatus,2" json:"LocalNodeStatus"`
-	RingsRef        map[string]*RingInfo `thrift:"RingsRef,3" json:"RingsRef"`
-	HostsRef        map[string]*HostInfo `thrift:"HostsRef,4" json:"HostsRef"`
+	RingsRefs       map[string]*RingInfo `thrift:"RingsRefs,3" json:"RingsRefs"`
+	HostsRefs       map[string]*HostInfo `thrift:"HostsRefs,4" json:"HostsRefs"`
 }
 
 func NewHostStatus() *HostStatus {
@@ -1566,12 +1566,12 @@ func (p *HostStatus) GetLocalNodeStatus() []*NodeStatus {
 	return p.LocalNodeStatus
 }
 
-func (p *HostStatus) GetRingsRef() map[string]*RingInfo {
-	return p.RingsRef
+func (p *HostStatus) GetRingsRefs() map[string]*RingInfo {
+	return p.RingsRefs
 }
 
-func (p *HostStatus) GetHostsRef() map[string]*HostInfo {
-	return p.HostsRef
+func (p *HostStatus) GetHostsRefs() map[string]*HostInfo {
+	return p.HostsRefs
 }
 func (p *HostStatus) IsSetThisHostInfo() bool {
 	return p.ThisHostInfo != nil
@@ -1656,7 +1656,7 @@ func (p *HostStatus) readField3(iprot thrift.TProtocol) error {
 		return thrift.PrependError("error reading map begin: ", err)
 	}
 	tMap := make(map[string]*RingInfo, size)
-	p.RingsRef = tMap
+	p.RingsRefs = tMap
 	for i := 0; i < size; i++ {
 		var _key3 string
 		if v, err := iprot.ReadString(); err != nil {
@@ -1668,7 +1668,7 @@ func (p *HostStatus) readField3(iprot thrift.TProtocol) error {
 		if err := _val4.Read(iprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val4), err)
 		}
-		p.RingsRef[_key3] = _val4
+		p.RingsRefs[_key3] = _val4
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)
@@ -1682,7 +1682,7 @@ func (p *HostStatus) readField4(iprot thrift.TProtocol) error {
 		return thrift.PrependError("error reading map begin: ", err)
 	}
 	tMap := make(map[string]*HostInfo, size)
-	p.HostsRef = tMap
+	p.HostsRefs = tMap
 	for i := 0; i < size; i++ {
 		var _key5 string
 		if v, err := iprot.ReadString(); err != nil {
@@ -1694,7 +1694,7 @@ func (p *HostStatus) readField4(iprot thrift.TProtocol) error {
 		if err := _val6.Read(iprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val6), err)
 		}
-		p.HostsRef[_key5] = _val6
+		p.HostsRefs[_key5] = _val6
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)
@@ -1762,13 +1762,13 @@ func (p *HostStatus) writeField2(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *HostStatus) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("RingsRef", thrift.MAP, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:RingsRef: ", p), err)
+	if err := oprot.WriteFieldBegin("RingsRefs", thrift.MAP, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:RingsRefs: ", p), err)
 	}
-	if err := oprot.WriteMapBegin(thrift.STRING, thrift.STRUCT, len(p.RingsRef)); err != nil {
+	if err := oprot.WriteMapBegin(thrift.STRING, thrift.STRUCT, len(p.RingsRefs)); err != nil {
 		return thrift.PrependError("error writing map begin: ", err)
 	}
-	for k, v := range p.RingsRef {
+	for k, v := range p.RingsRefs {
 		if err := oprot.WriteString(string(k)); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T. (0) field write error: ", p), err)
 		}
@@ -1780,19 +1780,19 @@ func (p *HostStatus) writeField3(oprot thrift.TProtocol) (err error) {
 		return thrift.PrependError("error writing map end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:RingsRef: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:RingsRefs: ", p), err)
 	}
 	return err
 }
 
 func (p *HostStatus) writeField4(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("HostsRef", thrift.MAP, 4); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:HostsRef: ", p), err)
+	if err := oprot.WriteFieldBegin("HostsRefs", thrift.MAP, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:HostsRefs: ", p), err)
 	}
-	if err := oprot.WriteMapBegin(thrift.STRING, thrift.STRUCT, len(p.HostsRef)); err != nil {
+	if err := oprot.WriteMapBegin(thrift.STRING, thrift.STRUCT, len(p.HostsRefs)); err != nil {
 		return thrift.PrependError("error writing map begin: ", err)
 	}
-	for k, v := range p.HostsRef {
+	for k, v := range p.HostsRefs {
 		if err := oprot.WriteString(string(k)); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T. (0) field write error: ", p), err)
 		}
@@ -1804,7 +1804,7 @@ func (p *HostStatus) writeField4(oprot thrift.TProtocol) (err error) {
 		return thrift.PrependError("error writing map end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:HostsRef: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:HostsRefs: ", p), err)
 	}
 	return err
 }
@@ -2062,11 +2062,11 @@ func (p *LookupRequest) String() string {
 // Attributes:
 //  - Found
 //  - HodesPath
-//  - HostsRef
+//  - HostsRefs
 type LookupResponse struct {
 	Found     bool                 `thrift:"Found,1" json:"Found"`
 	HodesPath []*NodeInfo          `thrift:"HodesPath,2" json:"HodesPath"`
-	HostsRef  map[string]*HostInfo `thrift:"HostsRef,3" json:"HostsRef"`
+	HostsRefs map[string]*HostInfo `thrift:"HostsRefs,3" json:"HostsRefs"`
 }
 
 func NewLookupResponse() *LookupResponse {
@@ -2081,8 +2081,8 @@ func (p *LookupResponse) GetHodesPath() []*NodeInfo {
 	return p.HodesPath
 }
 
-func (p *LookupResponse) GetHostsRef() map[string]*HostInfo {
-	return p.HostsRef
+func (p *LookupResponse) GetHostsRefs() map[string]*HostInfo {
+	return p.HostsRefs
 }
 func (p *LookupResponse) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -2160,7 +2160,7 @@ func (p *LookupResponse) readField3(iprot thrift.TProtocol) error {
 		return thrift.PrependError("error reading map begin: ", err)
 	}
 	tMap := make(map[string]*HostInfo, size)
-	p.HostsRef = tMap
+	p.HostsRefs = tMap
 	for i := 0; i < size; i++ {
 		var _key8 string
 		if v, err := iprot.ReadString(); err != nil {
@@ -2172,7 +2172,7 @@ func (p *LookupResponse) readField3(iprot thrift.TProtocol) error {
 		if err := _val9.Read(iprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val9), err)
 		}
-		p.HostsRef[_key8] = _val9
+		p.HostsRefs[_key8] = _val9
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)
@@ -2237,13 +2237,13 @@ func (p *LookupResponse) writeField2(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *LookupResponse) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("HostsRef", thrift.MAP, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:HostsRef: ", p), err)
+	if err := oprot.WriteFieldBegin("HostsRefs", thrift.MAP, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:HostsRefs: ", p), err)
 	}
-	if err := oprot.WriteMapBegin(thrift.STRING, thrift.STRUCT, len(p.HostsRef)); err != nil {
+	if err := oprot.WriteMapBegin(thrift.STRING, thrift.STRUCT, len(p.HostsRefs)); err != nil {
 		return thrift.PrependError("error writing map begin: ", err)
 	}
-	for k, v := range p.HostsRef {
+	for k, v := range p.HostsRefs {
 		if err := oprot.WriteString(string(k)); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T. (0) field write error: ", p), err)
 		}
@@ -2255,7 +2255,7 @@ func (p *LookupResponse) writeField3(oprot thrift.TProtocol) (err error) {
 		return thrift.PrependError("error writing map end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:HostsRef: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:HostsRefs: ", p), err)
 	}
 	return err
 }
@@ -2407,10 +2407,10 @@ func (p *GetSuccessorsRequest) String() string {
 //
 // Attributes:
 //  - SuccessorNodes
-//  - HostsRef
+//  - HostsRefs
 type GetSuccessorsResponse struct {
 	SuccessorNodes []*NodeInfo          `thrift:"SuccessorNodes,1" json:"SuccessorNodes"`
-	HostsRef       map[string]*HostInfo `thrift:"HostsRef,2" json:"HostsRef"`
+	HostsRefs      map[string]*HostInfo `thrift:"HostsRefs,2" json:"HostsRefs"`
 }
 
 func NewGetSuccessorsResponse() *GetSuccessorsResponse {
@@ -2421,8 +2421,8 @@ func (p *GetSuccessorsResponse) GetSuccessorNodes() []*NodeInfo {
 	return p.SuccessorNodes
 }
 
-func (p *GetSuccessorsResponse) GetHostsRef() map[string]*HostInfo {
-	return p.HostsRef
+func (p *GetSuccessorsResponse) GetHostsRefs() map[string]*HostInfo {
+	return p.HostsRefs
 }
 func (p *GetSuccessorsResponse) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -2487,7 +2487,7 @@ func (p *GetSuccessorsResponse) readField2(iprot thrift.TProtocol) error {
 		return thrift.PrependError("error reading map begin: ", err)
 	}
 	tMap := make(map[string]*HostInfo, size)
-	p.HostsRef = tMap
+	p.HostsRefs = tMap
 	for i := 0; i < size; i++ {
 		var _key11 string
 		if v, err := iprot.ReadString(); err != nil {
@@ -2499,7 +2499,7 @@ func (p *GetSuccessorsResponse) readField2(iprot thrift.TProtocol) error {
 		if err := _val12.Read(iprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val12), err)
 		}
-		p.HostsRef[_key11] = _val12
+		p.HostsRefs[_key11] = _val12
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)
@@ -2548,13 +2548,13 @@ func (p *GetSuccessorsResponse) writeField1(oprot thrift.TProtocol) (err error) 
 }
 
 func (p *GetSuccessorsResponse) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("HostsRef", thrift.MAP, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:HostsRef: ", p), err)
+	if err := oprot.WriteFieldBegin("HostsRefs", thrift.MAP, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:HostsRefs: ", p), err)
 	}
-	if err := oprot.WriteMapBegin(thrift.STRING, thrift.STRUCT, len(p.HostsRef)); err != nil {
+	if err := oprot.WriteMapBegin(thrift.STRING, thrift.STRUCT, len(p.HostsRefs)); err != nil {
 		return thrift.PrependError("error writing map begin: ", err)
 	}
-	for k, v := range p.HostsRef {
+	for k, v := range p.HostsRefs {
 		if err := oprot.WriteString(string(k)); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T. (0) field write error: ", p), err)
 		}
@@ -2566,7 +2566,7 @@ func (p *GetSuccessorsResponse) writeField2(oprot thrift.TProtocol) (err error) 
 		return thrift.PrependError("error writing map end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:HostsRef: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:HostsRefs: ", p), err)
 	}
 	return err
 }

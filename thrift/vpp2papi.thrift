@@ -110,8 +110,8 @@ struct ContextInfo {
 struct HostStatus {
   1: HostInfo ThisHostInfo,
   2: list<NodeStatus> LocalNodeStatus,
-  3: map<string,RingInfo> RingsRef,
-  4: map<string,HostInfo> HostsRef,
+  3: map<string,RingInfo> RingsRefs,
+  4: map<string,HostInfo> HostsRefs,
 }
 
 /**
@@ -131,7 +131,7 @@ struct LookupRequest {
 struct LookupResponse {
   1: bool Found,
   2: list<NodeInfo> HodesPath,
-  3: map<string,HostInfo> HostsRef,
+  3: map<string,HostInfo> HostsRefs,
 }
 
 /**
@@ -147,7 +147,7 @@ struct GetSuccessorsRequest {
  */
 struct GetSuccessorsResponse {
   1: list<NodeInfo> SuccessorNodes,
-  2: map<string,HostInfo> HostsRef,
+  2: map<string,HostInfo> HostsRefs,
 }
 
 /**
