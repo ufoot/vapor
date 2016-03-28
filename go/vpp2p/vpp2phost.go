@@ -137,7 +137,7 @@ func (host *Host) Status() (*vpp2papi.HostStatus, error) {
 	return ret, nil
 }
 
-// Get is called to synchronise between nodes.
+// GetSuccessors is called to synchronise between nodes.
 func (host *Host) GetSuccessors(request *vpp2papi.GetSuccessorsRequest) (*vpp2papi.GetSuccessorsResponse, error) {
 	_, err := vpp2pdat.CheckContextInfo(request.Context)
 	if err != nil {

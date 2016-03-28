@@ -63,7 +63,7 @@ func SetupLocal(nbHosts, nbRings, nbNodesPerHostRing int, useSig bool) ([]*vpp2p
 
 	hosts := make([]*vpp2p.Host, nbHosts)
 
-	for i, _ := range hosts {
+	for i := range hosts {
 		hosts[i], err = vpp2p.NewHost(fmt.Sprintf("Host %s/%d", seed, i),
 			fmt.Sprintf("http://localhost:%04d/%s", 8080+i, seed),
 			useSig)
@@ -74,7 +74,7 @@ func SetupLocal(nbHosts, nbRings, nbNodesPerHostRing int, useSig bool) ([]*vpp2p
 
 	rings := make([]*vpp2p.Ring, nbRings)
 
-	for i, _ := range rings {
+	for i := range rings {
 		rings[i], err = vpp2p.NewRing(hosts[0], fmt.Sprintf("Ring %s/%d", seed, i), fmt.Sprintf("Simulation ring %s/%d", seed, i), vpsum.Checksum128([]byte(fmt.Sprintf("%s/%d", seed, i))), vpp2pdat.DefaultRingConfig(), nil, nil)
 		if err != nil {
 			return nil, nil, nil, err
