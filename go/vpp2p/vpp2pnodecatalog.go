@@ -103,7 +103,7 @@ func (c *NodeCatalog) UnregisterNode(node *Node) {
 }
 
 // List returns a list of local nodes. It returns static
-// data about the node, node the nodes themselves.
+// data about the node, not the nodes themselves.
 func (c *NodeCatalog) List() []*vpp2papi.NodeInfo {
 	defer c.access.RUnlock()
 	c.access.RLock()

@@ -91,16 +91,16 @@ func (p *VpP2pApiClient) recvStatus() (value *HostStatus, err error) {
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
-		error9 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-		var error10 error
-		error10, err = error9.Read(iprot)
+		error13 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+		var error14 error
+		error14, err = error13.Read(iprot)
 		if err != nil {
 			return
 		}
 		if err = iprot.ReadMessageEnd(); err != nil {
 			return
 		}
-		err = error10
+		err = error14
 		return
 	}
 	if mTypeId != thrift.REPLY {
@@ -168,16 +168,16 @@ func (p *VpP2pApiClient) recvGetSuccessors() (value *GetSuccessorsResponse, err 
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
-		error11 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-		var error12 error
-		error12, err = error11.Read(iprot)
+		error15 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+		var error16 error
+		error16, err = error15.Read(iprot)
 		if err != nil {
 			return
 		}
 		if err = iprot.ReadMessageEnd(); err != nil {
 			return
 		}
-		err = error12
+		err = error16
 		return
 	}
 	if mTypeId != thrift.REPLY {
@@ -245,16 +245,16 @@ func (p *VpP2pApiClient) recvLookup() (value *LookupResponse, err error) {
 		return
 	}
 	if mTypeId == thrift.EXCEPTION {
-		error13 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
-		var error14 error
-		error14, err = error13.Read(iprot)
+		error17 := thrift.NewTApplicationException(thrift.UNKNOWN_APPLICATION_EXCEPTION, "Unknown Exception")
+		var error18 error
+		error18, err = error17.Read(iprot)
 		if err != nil {
 			return
 		}
 		if err = iprot.ReadMessageEnd(); err != nil {
 			return
 		}
-		err = error14
+		err = error18
 		return
 	}
 	if mTypeId != thrift.REPLY {
@@ -277,11 +277,11 @@ type VpP2pApiProcessor struct {
 }
 
 func NewVpP2pApiProcessor(handler VpP2pApi) *VpP2pApiProcessor {
-	self15 := &VpP2pApiProcessor{vpcommonapi.NewVpCommonApiProcessor(handler)}
-	self15.AddToProcessorMap("Status", &vpP2pApiProcessorStatus{handler: handler})
-	self15.AddToProcessorMap("GetSuccessors", &vpP2pApiProcessorGetSuccessors{handler: handler})
-	self15.AddToProcessorMap("Lookup", &vpP2pApiProcessorLookup{handler: handler})
-	return self15
+	self19 := &VpP2pApiProcessor{vpcommonapi.NewVpCommonApiProcessor(handler)}
+	self19.AddToProcessorMap("Status", &vpP2pApiProcessorStatus{handler: handler})
+	self19.AddToProcessorMap("GetSuccessors", &vpP2pApiProcessorGetSuccessors{handler: handler})
+	self19.AddToProcessorMap("Lookup", &vpP2pApiProcessorLookup{handler: handler})
+	return self19
 }
 
 type vpP2pApiProcessorStatus struct {

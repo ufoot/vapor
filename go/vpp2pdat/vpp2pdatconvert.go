@@ -19,6 +19,10 @@
 
 package vpp2pdat
 
+import (
+	"encoding/base64"
+)
+
 const (
 	// HostPubKeyBufNbBytes gives the number of bytes for a host pub key when used as a map key.
 	HostPubKeyBufNbBytes = 16
@@ -26,6 +30,12 @@ const (
 	NodeIDBufNbBytes = 32
 	// RingIDBufNbBytes gives the number of bytes for a ring ID when used as a map key.
 	RingIDBufNbBytes = 64
+	// HostPubKeyShortStringLen gives the number of bytes for a host pub key when used as a short map key.
+	HostPubKeyShortStringLen = 5
+	// NodeIDShortStringLen gives the number of bytes for a node ID when used as a short map key.
+	NodeIDShortStringLen = 6
+	// RingIDShortStringLen gives the number of bytes for a ring ID when used as a short map key.
+	RingIDShortStringLen = 7
 )
 
 // HostPubKeyToBuf converts a slice to a fixed-length 16 bytes (128 bits) buffer.
@@ -77,4 +87,22 @@ func RingIDToBuf(ringID []byte) [RingIDBufNbBytes]byte {
 
 	copy(ret[0:RingIDBufNbBytes], ringID)
 	return ret
+}
+
+// HostPubKeyToShortString converts a host public key to a short string of 5 chars
+func HostPubKeyToShortString(hostPubKey []byte) string {
+	ret := base64.URLEncoding.EncodeToString(hostPubKey)
+	return ret[0:HostPubKeyShortStringLen]
+}
+
+// NodeIDToShortString converts a a host node id to a short string or 6 chars
+func NodeIDToShortString(nodeID []byte) string {
+	ret := base64.URLEncoding.EncodeToString(nodeID)
+	return ret[0:NodeIDShortStringLen]
+}
+
+// RingIDToShortString converts a ring id to a short string of 7 chars
+func RingIDToShortString(ringID []byte) string {
+	ret := base64.URLEncoding.EncodeToString(ringID)
+	return ret[0:RingIDShortStringLen]
 }
