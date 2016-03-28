@@ -56,7 +56,7 @@ func SetupLocal(nbHosts, nbRings, nbNodesPerHostRing int, useSig bool) ([]*vpp2p
 	if nbNodesPerHostRing < 1 || nbNodesPerHostRing > MaxNbNodesPerHostRing {
 		return nil, nil, nil, fmt.Errorf("Bad nbNodesPerHostRing=%d, range is [1,%d]", nbNodesPerHostRing, MaxNbNodesPerHostRing)
 	}
-	nbNodes := nbHosts * nbRings
+	nbNodes := nbHosts * nbRings * nbNodesPerHostRing
 	if nbNodes < 1 || nbNodes > MaxNbNodes {
 		return nil, nil, nil, fmt.Errorf("Bad nbNodes=%d, range is [1,%d]", nbNodes, MaxNbNodes)
 	}
@@ -83,14 +83,16 @@ func SetupLocal(nbHosts, nbRings, nbNodesPerHostRing int, useSig bool) ([]*vpp2p
 
 	nodes := make([]*vpp2p.Node, nbNodes)
 
-	k := 0
+	i := 0
 	for _, v := range hosts {
 		for _, w := range rings {
-			nodes[k], err = vpp2p.NewNode(v, w)
-			if err != nil {
-				return nil, nil, nil, err
+			for j := 0; j < nbNodesPerHostRing; j++ {
+				nodes[i], err = vpp2p.NewNode(v, w)
+				if err != nil {
+					return nil, nil, nil, err
+				}
 			}
-			k++
+			i++
 		}
 	}
 

@@ -151,7 +151,8 @@ func (host *Host) GetSuccessors(request *vpp2papi.GetSuccessorsRequest) (*vpp2pa
 
 	ret := vpp2papi.NewGetSuccessorsResponse()
 
-	// todo...
+	ret.SuccessorNodes = node.GetSuccessors()
+	ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, ret.SuccessorNodes)
 
 	return ret, nil
 }
@@ -169,8 +170,13 @@ func (host *Host) Lookup(request *vpp2papi.LookupRequest) (*vpp2papi.LookupRespo
 	}
 
 	ret := vpp2papi.NewLookupResponse()
-
-	// todo...
+	ret.Found, ret.NodesPath, err = node.Lookup(request.Key, request.KeyShift, request.ImaginaryNode)
+	if err != nil {
+		return nil, err
+	}
+	if ret.Found && ret.NodesPath != nil && len(ret.NodesPath) > 0 {
+		ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, ret.NodesPath)
+	}
 
 	return ret, nil
 }

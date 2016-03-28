@@ -20,13 +20,12 @@
 package vpp2p
 
 import (
-	"fmt"
 	"github.com/ufoot/vapor/go/vpid"
-	//	"github.com/ufoot/vapor/go/vplog"
 	"github.com/ufoot/vapor/go/vpp2papi"
 	"github.com/ufoot/vapor/go/vpp2pdat"
 	"github.com/ufoot/vapor/go/vpsum"
 	"math/big"
+	"sync"
 )
 
 const (
@@ -49,6 +48,10 @@ type Node struct {
 
 	registerers []NodeRegisterer
 	up          bool
+
+	successorsAccess  sync.RWMutex
+	predecessorAccess sync.RWMutex
+	dAccess           sync.RWMutex
 
 	// Successors is list of successing nodes within the ring,
 	// use 1st elem for direct successor.
@@ -154,6 +157,7 @@ func (node *Node) Up() bool {
 	return node.up
 }
 
+/*
 // Lookup a key and return the path of nodes to this key.
 func (node *Node) Lookup(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeInfo, error) {
 	// pseudo code :
@@ -166,7 +170,6 @@ func (node *Node) Lookup(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeI
 	//   else return (successor.lookup(k,kshift,i))
 	// Note : i can be chosen so that its low bits are top bits of k
 
-	/*
 		walker := node.ringPtr.walker
 
 		ret := make([]*vpp2papi.NodeInfo, 1)
@@ -217,9 +220,9 @@ func (node *Node) Lookup(key, keyShift, imaginaryNode []byte) ([]*vpp2papi.NodeI
 		if upstreamPath != nil {
 			return append(ret, upstreamPath...), nil
 		}
-	*/
 	return nil, fmt.Errorf("unable to Lookup remotes")
 }
+*/
 
 // IsSigned returns true if the node has been signed by corresponding host.
 // It does not check if the signature is valid.
@@ -231,4 +234,24 @@ func (node *Node) IsSigned() bool {
 // If it's OK, returns the number of zeroes in the signature hash.
 func (node *Node) CheckSig() (int, error) {
 	return vpp2pdat.NodeInfoCheckSig(node.Status.Info)
+}
+
+// GetSuccessors returns the successors of a given node
+func (node *Node) GetSuccessors() []*vpp2papi.NodeInfo {
+	defer node.successorsAccess.RUnlock()
+	node.successorsAccess.RLock()
+
+	ret := make([]*vpp2papi.NodeInfo, len(node.Status.Peers.Successors))
+	for i, v := range node.Status.Peers.Successors {
+		ret[i] = v
+	}
+
+	return ret
+}
+
+// Lookup performs a lookup for a given key
+func (node *Node) Lookup(key, keyShift, imaginaryNode []byte) (bool, []*vpp2papi.NodeInfo, error) {
+	// todo
+
+	return false, nil, nil
 }

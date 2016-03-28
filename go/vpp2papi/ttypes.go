@@ -418,19 +418,19 @@ func (p *NodeInfo) String() string {
 // those it should contact.
 //
 // Attributes:
-//  - Successor
+//  - Successors
 //  - D
 type NodePeers struct {
-	Successor []*NodeInfo `thrift:"Successor,1" json:"Successor"`
-	D         []*NodeInfo `thrift:"D,2" json:"D"`
+	Successors []*NodeInfo `thrift:"Successors,1" json:"Successors"`
+	D          []*NodeInfo `thrift:"D,2" json:"D"`
 }
 
 func NewNodePeers() *NodePeers {
 	return &NodePeers{}
 }
 
-func (p *NodePeers) GetSuccessor() []*NodeInfo {
-	return p.Successor
+func (p *NodePeers) GetSuccessors() []*NodeInfo {
+	return p.Successors
 }
 
 func (p *NodePeers) GetD() []*NodeInfo {
@@ -479,13 +479,13 @@ func (p *NodePeers) readField1(iprot thrift.TProtocol) error {
 		return thrift.PrependError("error reading list begin: ", err)
 	}
 	tSlice := make([]*NodeInfo, 0, size)
-	p.Successor = tSlice
+	p.Successors = tSlice
 	for i := 0; i < size; i++ {
 		_elem0 := &NodeInfo{}
 		if err := _elem0.Read(iprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem0), err)
 		}
-		p.Successor = append(p.Successor, _elem0)
+		p.Successors = append(p.Successors, _elem0)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -533,13 +533,13 @@ func (p *NodePeers) Write(oprot thrift.TProtocol) error {
 }
 
 func (p *NodePeers) writeField1(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("Successor", thrift.LIST, 1); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:Successor: ", p), err)
+	if err := oprot.WriteFieldBegin("Successors", thrift.LIST, 1); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 1:Successors: ", p), err)
 	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Successor)); err != nil {
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Successors)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
 	}
-	for _, v := range p.Successor {
+	for _, v := range p.Successors {
 		if err := v.Write(oprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", v), err)
 		}
@@ -548,7 +548,7 @@ func (p *NodePeers) writeField1(oprot thrift.TProtocol) (err error) {
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:Successor: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 1:Successors: ", p), err)
 	}
 	return err
 }
@@ -2061,11 +2061,11 @@ func (p *LookupRequest) String() string {
 //
 // Attributes:
 //  - Found
-//  - HodesPath
+//  - NodesPath
 //  - HostsRefs
 type LookupResponse struct {
 	Found     bool                 `thrift:"Found,1" json:"Found"`
-	HodesPath []*NodeInfo          `thrift:"HodesPath,2" json:"HodesPath"`
+	NodesPath []*NodeInfo          `thrift:"NodesPath,2" json:"NodesPath"`
 	HostsRefs map[string]*HostInfo `thrift:"HostsRefs,3" json:"HostsRefs"`
 }
 
@@ -2077,8 +2077,8 @@ func (p *LookupResponse) GetFound() bool {
 	return p.Found
 }
 
-func (p *LookupResponse) GetHodesPath() []*NodeInfo {
-	return p.HodesPath
+func (p *LookupResponse) GetNodesPath() []*NodeInfo {
+	return p.NodesPath
 }
 
 func (p *LookupResponse) GetHostsRefs() map[string]*HostInfo {
@@ -2140,13 +2140,13 @@ func (p *LookupResponse) readField2(iprot thrift.TProtocol) error {
 		return thrift.PrependError("error reading list begin: ", err)
 	}
 	tSlice := make([]*NodeInfo, 0, size)
-	p.HodesPath = tSlice
+	p.NodesPath = tSlice
 	for i := 0; i < size; i++ {
 		_elem7 := &NodeInfo{}
 		if err := _elem7.Read(iprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem7), err)
 		}
-		p.HodesPath = append(p.HodesPath, _elem7)
+		p.NodesPath = append(p.NodesPath, _elem7)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -2216,13 +2216,13 @@ func (p *LookupResponse) writeField1(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *LookupResponse) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("HodesPath", thrift.LIST, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:HodesPath: ", p), err)
+	if err := oprot.WriteFieldBegin("NodesPath", thrift.LIST, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:NodesPath: ", p), err)
 	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.HodesPath)); err != nil {
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.NodesPath)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
 	}
-	for _, v := range p.HodesPath {
+	for _, v := range p.NodesPath {
 		if err := v.Write(oprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", v), err)
 		}
@@ -2231,7 +2231,7 @@ func (p *LookupResponse) writeField2(oprot thrift.TProtocol) (err error) {
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:HodesPath: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:NodesPath: ", p), err)
 	}
 	return err
 }

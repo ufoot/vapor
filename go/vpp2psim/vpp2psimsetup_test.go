@@ -32,20 +32,8 @@ const (
 	testNbNodesPerHostRingSig   = 2
 )
 
-func TestSetupLocalNoSig(t *testing.T) {
-	hosts, rings, nodes, err := SetupLocal(testNbHostsNoSig, testNbRingsNoSig, testNbNodesPerHostRingNoSig, false)
-
-	if err != nil {
-		t.Error("unable to set up env (nosig)", err)
-	}
-	nbHosts := len(hosts)
-	nbRings := len(rings)
-	nbNodes := len(nodes)
-	t.Logf("set up done (nosig), nbHosts=%d nbRings=%d nbNodes=%d", nbHosts, nbRings, nbNodes)
-}
-
-func TestSetupLocalSig(t *testing.T) {
-	hosts, rings, nodes, err := SetupLocal(testNbHostsSig, testNbRingsSig, testNbNodesPerHostRingSig, true)
+func testSetupLocal(t *testing.T, testNbHosts, testNbRings, testNbNodesPerHostRing int, useSig bool) {
+	hosts, rings, nodes, err := SetupLocal(testNbHosts, testNbRings, testNbNodesPerHostRing, useSig)
 
 	if err != nil {
 		t.Error("unable to set up env (sig)", err)
@@ -53,5 +41,13 @@ func TestSetupLocalSig(t *testing.T) {
 	nbHosts := len(hosts)
 	nbRings := len(rings)
 	nbNodes := len(nodes)
-	t.Logf("set up done (sig), nbHosts=%d nbRings=%d nbNodes=%d", nbHosts, nbRings, nbNodes)
+	t.Logf("set up done (sig), nbHosts=%d nbRings=%d nbNodes=%d useSig=%t", nbHosts, nbRings, nbNodes, useSig)
+}
+
+func TestSetupLocalNoSig(t *testing.T) {
+	testSetupLocal(t, testNbHostsNoSig, testNbRingsNoSig, testNbNodesPerHostRingNoSig, false)
+}
+
+func TestSetupLocalSig(t *testing.T) {
+	//testSetupLocal(t,testNbHostsSig, testNbRingsSig, testNbNodesPerHostRingSig, true)
 }

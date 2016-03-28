@@ -56,7 +56,7 @@ struct NodeInfo {
  * those it should contact.
  */
 struct NodePeers {
-  1: list<NodeInfo> Successor,
+  1: list<NodeInfo> Successors,
   2: list<NodeInfo> D,
 }
 
@@ -130,7 +130,7 @@ struct LookupRequest {
  */
 struct LookupResponse {
   1: bool Found,
-  2: list<NodeInfo> HodesPath,
+  2: list<NodeInfo> NodesPath,
   3: map<string,HostInfo> HostsRefs,
 }
 
