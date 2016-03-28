@@ -196,12 +196,16 @@ code { line-height: 20px; }
 <tr>
 <td>vpp2papi</td><td><a href="#Svc_VpP2pApi">VpP2pApi</a><br/>
 <ul>
+<li><a href="#Fn_VpP2pApi_GetPredecessor">GetPredecessor</a></li>
 <li><a href="#Fn_VpP2pApi_GetSuccessors">GetSuccessors</a></li>
 <li><a href="#Fn_VpP2pApi_Lookup">Lookup</a></li>
 <li><a href="#Fn_VpP2pApi_Status">Status</a></li>
+<li><a href="#Fn_VpP2pApi_Sync">Sync</a></li>
 </ul>
 </td>
 <td><a href="#Struct_ContextInfo">ContextInfo</a><br/>
+<a href="#Struct_GetPredecessorRequest">GetPredecessorRequest</a><br/>
+<a href="#Struct_GetPredecessorResponse">GetPredecessorResponse</a><br/>
 <a href="#Struct_GetSuccessorsRequest">GetSuccessorsRequest</a><br/>
 <a href="#Struct_GetSuccessorsResponse">GetSuccessorsResponse</a><br/>
 <a href="#Struct_HostInfo">HostInfo</a><br/>
@@ -213,6 +217,8 @@ code { line-height: 20px; }
 <a href="#Struct_NodeStatus">NodeStatus</a><br/>
 <a href="#Struct_RingConfig">RingConfig</a><br/>
 <a href="#Struct_RingInfo">RingInfo</a><br/>
+<a href="#Struct_SyncRequest">SyncRequest</a><br/>
+<a href="#Struct_SyncResponse">SyncResponse</a><br/>
 </td>
 <td></code></td>
 </tr></table>
@@ -300,6 +306,32 @@ calling a fonction, it gives context.
 <tr><td>1</td><td>SuccessorNodes</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
 <tr><td>2</td><td>HostsRefs</td><td><code>map&lt;<code>string</code>, <code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
 </table><br/>Used to store results when doing GetSuccessors requests.
+<br/></div><div class="definition"><h3 id="Struct_GetPredecessorRequest">Struct: GetPredecessorRequest</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>Context</td><td><code><a href="#Struct_ContextInfo">ContextInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>Sig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+</table><br/>Used to store  GetPredecessor requests.
+<br/></div><div class="definition"><h3 id="Struct_GetPredecessorResponse">Struct: GetPredecessorResponse</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>PredecessorNode</td><td><code><a href="#Struct_NodeInfo">NodeInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>HostsRefs</td><td><code>map&lt;<code>string</code>, <code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+</table><br/>Used to store results when doing GetPredecessor requests.
+<br/></div><div class="definition"><h3 id="Struct_SyncRequest">Struct: SyncRequest</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>Context</td><td><code><a href="#Struct_ContextInfo">ContextInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>Key</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>KeyShift</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>ImaginaryNode</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>5</td><td>Sig</td><td><code>binary</code></td><td></td><td>default</td><td></td></tr>
+</table><br/>Used to store Sync requests.
+<br/></div><div class="definition"><h3 id="Struct_SyncResponse">Struct: SyncResponse</h3>
+<table class="table-bordered table-striped table-condensed"><thead><th>Key</th><th>Field</th><th>Type</th><th>Description</th><th>Requiredness</th><th>Default value</th></thead>
+<tr><td>1</td><td>Found</td><td><code>bool</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>2</td><td>NodesPath</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>3</td><td>SuccessorNodes</td><td><code>list&lt;<code><a href="#Struct_NodeInfo">NodeInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+<tr><td>4</td><td>PredecessorNode</td><td><code><a href="#Struct_NodeInfo">NodeInfo</a></code></td><td></td><td>default</td><td></td></tr>
+<tr><td>5</td><td>HostsRefs</td><td><code>map&lt;<code>string</code>, <code><a href="#Struct_HostInfo">HostInfo</a></code>&gt;</code></td><td></td><td>default</td><td></td></tr>
+</table><br/>Used to store results when doing Sync requests.
 <br/></div><hr/><h2 id="Services">Services</h2>
 <h3 id="Svc_VpP2pApi">Service: VpP2pApi</h3>
 <div class="extends"><em>extends</em> <code><a href="vpcommonapi.html#Svc_VpCommonApi">vpcommonapi.VpCommonApi</a></code></div>
@@ -307,8 +339,12 @@ VpP2pApi is used to communicate between 2 Vapor nodes
 in peer-to-peer mode.
 <br/><div class="definition"><h4 id="Fn_VpP2pApi_Status">Function: VpP2pApi.Status</h4>
 <pre><code><a href="#Struct_HostStatus">HostStatus</a></code> Status()
-</pre></div><div class="definition"><h4 id="Fn_VpP2pApi_GetSuccessors">Function: VpP2pApi.GetSuccessors</h4>
-<pre><code><a href="#Struct_GetSuccessorsResponse">GetSuccessorsResponse</a></code> GetSuccessors(<code><a href="#Struct_GetSuccessorsRequest">GetSuccessorsRequest</a></code> request)
 </pre></div><div class="definition"><h4 id="Fn_VpP2pApi_Lookup">Function: VpP2pApi.Lookup</h4>
 <pre><code><a href="#Struct_LookupResponse">LookupResponse</a></code> Lookup(<code><a href="#Struct_LookupRequest">LookupRequest</a></code> request)
+</pre></div><div class="definition"><h4 id="Fn_VpP2pApi_GetSuccessors">Function: VpP2pApi.GetSuccessors</h4>
+<pre><code><a href="#Struct_GetSuccessorsResponse">GetSuccessorsResponse</a></code> GetSuccessors(<code><a href="#Struct_GetSuccessorsRequest">GetSuccessorsRequest</a></code> request)
+</pre></div><div class="definition"><h4 id="Fn_VpP2pApi_GetPredecessor">Function: VpP2pApi.GetPredecessor</h4>
+<pre><code><a href="#Struct_GetPredecessorResponse">GetPredecessorResponse</a></code> GetPredecessor(<code><a href="#Struct_GetPredecessorRequest">GetPredecessorRequest</a></code> request)
+</pre></div><div class="definition"><h4 id="Fn_VpP2pApi_Sync">Function: VpP2pApi.Sync</h4>
+<pre><code><a href="#Struct_SyncResponse">SyncResponse</a></code> Sync(<code><a href="#Struct_SyncRequest">SyncRequest</a></code> request)
 </pre></div></div></body></html>

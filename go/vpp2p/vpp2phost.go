@@ -137,7 +137,31 @@ func (host *Host) Status() (*vpp2papi.HostStatus, error) {
 	return ret, nil
 }
 
-// GetSuccessors is called to synchronise between nodes.
+// Lookup searches for a key on a given ring.
+func (host *Host) Lookup(request *vpp2papi.LookupRequest) (*vpp2papi.LookupResponse, error) {
+	_, err := vpp2pdat.CheckContextInfo(request.Context)
+	if err != nil {
+		return nil, err
+	}
+
+	node := host.localNodeCatalog.GetNode(request.Context.TargetNodeID)
+	if node == nil {
+		return nil, fmt.Errorf("unable to find node locally")
+	}
+
+	ret := vpp2papi.NewLookupResponse()
+	ret.Found, ret.NodesPath, err = node.Lookup(request.Key, request.KeyShift, request.ImaginaryNode)
+	if err != nil {
+		return nil, err
+	}
+	if ret.Found && ret.NodesPath != nil {
+		ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, ret.NodesPath)
+	}
+
+	return ret, nil
+}
+
+// GetSuccessors is called to retrieve successors of a node.
 func (host *Host) GetSuccessors(request *vpp2papi.GetSuccessorsRequest) (*vpp2papi.GetSuccessorsResponse, error) {
 	_, err := vpp2pdat.CheckContextInfo(request.Context)
 	if err != nil {
@@ -157,8 +181,10 @@ func (host *Host) GetSuccessors(request *vpp2papi.GetSuccessorsRequest) (*vpp2pa
 	return ret, nil
 }
 
-// Lookup searches for a key on a given ring.
-func (host *Host) Lookup(request *vpp2papi.LookupRequest) (*vpp2papi.LookupResponse, error) {
+// GetPredecessor is called to retrieve the predecessor of a node.
+func (host *Host) GetPredecessor(request *vpp2papi.GetPredecessorRequest) (*vpp2papi.GetPredecessorResponse, error) {
+	var hostsRefs []*vpp2papi.NodeInfo
+
 	_, err := vpp2pdat.CheckContextInfo(request.Context)
 	if err != nil {
 		return nil, err
@@ -169,13 +195,51 @@ func (host *Host) Lookup(request *vpp2papi.LookupRequest) (*vpp2papi.LookupRespo
 		return nil, fmt.Errorf("unable to find node locally")
 	}
 
-	ret := vpp2papi.NewLookupResponse()
-	ret.Found, ret.NodesPath, err = node.Lookup(request.Key, request.KeyShift, request.ImaginaryNode)
+	ret := vpp2papi.NewGetPredecessorResponse()
+
+	ret.PredecessorNode = node.GetPredecessor()
+	if ret.PredecessorNode != nil {
+		hostsRefs := make([]*vpp2papi.NodeInfo, 1)
+		hostsRefs[0] = ret.PredecessorNode
+	}
+
+	ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, hostsRefs)
+
+	return ret, nil
+}
+
+// Sync is called to connect and synchronize on a host. Basically, it does
+// a lookup and returns successors and predecessor.
+func (host *Host) Sync(request *vpp2papi.SyncRequest) (*vpp2papi.SyncResponse, error) {
+	var hostsRefs []*vpp2papi.NodeInfo
+
+	_, err := vpp2pdat.CheckContextInfo(request.Context)
 	if err != nil {
 		return nil, err
 	}
-	if ret.Found && ret.NodesPath != nil && len(ret.NodesPath) > 0 {
-		ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, ret.NodesPath)
+
+	node := host.localNodeCatalog.GetNode(request.Context.TargetNodeID)
+	if node == nil {
+		return nil, fmt.Errorf("unable to find node locally")
+	}
+
+	ret := vpp2papi.NewSyncResponse()
+	ret.Found, ret.NodesPath, ret.SuccessorNodes, ret.PredecessorNode, err = node.Sync(request.Context.SourceNode.NodeID, request.KeyShift, request.ImaginaryNode)
+	if err != nil {
+		return nil, err
+	}
+	if ret.NodesPath != nil && ret.SuccessorNodes != nil && ret.PredecessorNode != nil {
+		hostsRefs = make([]*vpp2papi.NodeInfo, len(ret.NodesPath)+len(ret.SuccessorNodes)+1)
+		for i, v := range ret.NodesPath {
+			hostsRefs[i] = v
+		}
+		for i, v := range ret.SuccessorNodes {
+			hostsRefs[i+len(ret.NodesPath)] = v
+		}
+		hostsRefs[len(ret.NodesPath)+len(ret.SuccessorNodes)] = ret.PredecessorNode
+	}
+	if ret.Found && ret.NodesPath != nil && ret.SuccessorNodes != nil && ret.PredecessorNode != nil {
+		ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, hostsRefs)
 	}
 
 	return ret, nil

@@ -21,8 +21,10 @@ func Usage() {
 	flag.PrintDefaults()
 	fmt.Fprintln(os.Stderr, "\nFunctions:")
 	fmt.Fprintln(os.Stderr, "  HostStatus Status()")
-	fmt.Fprintln(os.Stderr, "  GetSuccessorsResponse GetSuccessors(GetSuccessorsRequest request)")
 	fmt.Fprintln(os.Stderr, "  LookupResponse Lookup(LookupRequest request)")
+	fmt.Fprintln(os.Stderr, "  GetSuccessorsResponse GetSuccessors(GetSuccessorsRequest request)")
+	fmt.Fprintln(os.Stderr, "  GetPredecessorResponse GetPredecessor(GetPredecessorRequest request)")
+	fmt.Fprintln(os.Stderr, "  SyncResponse Sync(SyncRequest request)")
 	fmt.Fprintln(os.Stderr, "  void ping()")
 	fmt.Fprintln(os.Stderr, "  Version getVersion()")
 	fmt.Fprintln(os.Stderr, "  Package getPackage()")
@@ -129,24 +131,49 @@ func main() {
 		fmt.Print(client.Status())
 		fmt.Print("\n")
 		break
+	case "Lookup":
+		if flag.NArg()-1 != 1 {
+			fmt.Fprintln(os.Stderr, "Lookup requires 1 args")
+			flag.Usage()
+		}
+		arg30 := flag.Arg(1)
+		mbTrans31 := thrift.NewTMemoryBufferLen(len(arg30))
+		defer mbTrans31.Close()
+		_, err32 := mbTrans31.WriteString(arg30)
+		if err32 != nil {
+			Usage()
+			return
+		}
+		factory33 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt34 := factory33.GetProtocol(mbTrans31)
+		argvalue0 := vpp2papi.NewLookupRequest()
+		err35 := argvalue0.Read(jsProt34)
+		if err35 != nil {
+			Usage()
+			return
+		}
+		value0 := argvalue0
+		fmt.Print(client.Lookup(value0))
+		fmt.Print("\n")
+		break
 	case "GetSuccessors":
 		if flag.NArg()-1 != 1 {
 			fmt.Fprintln(os.Stderr, "GetSuccessors requires 1 args")
 			flag.Usage()
 		}
-		arg20 := flag.Arg(1)
-		mbTrans21 := thrift.NewTMemoryBufferLen(len(arg20))
-		defer mbTrans21.Close()
-		_, err22 := mbTrans21.WriteString(arg20)
-		if err22 != nil {
+		arg36 := flag.Arg(1)
+		mbTrans37 := thrift.NewTMemoryBufferLen(len(arg36))
+		defer mbTrans37.Close()
+		_, err38 := mbTrans37.WriteString(arg36)
+		if err38 != nil {
 			Usage()
 			return
 		}
-		factory23 := thrift.NewTSimpleJSONProtocolFactory()
-		jsProt24 := factory23.GetProtocol(mbTrans21)
+		factory39 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt40 := factory39.GetProtocol(mbTrans37)
 		argvalue0 := vpp2papi.NewGetSuccessorsRequest()
-		err25 := argvalue0.Read(jsProt24)
-		if err25 != nil {
+		err41 := argvalue0.Read(jsProt40)
+		if err41 != nil {
 			Usage()
 			return
 		}
@@ -154,29 +181,54 @@ func main() {
 		fmt.Print(client.GetSuccessors(value0))
 		fmt.Print("\n")
 		break
-	case "Lookup":
+	case "GetPredecessor":
 		if flag.NArg()-1 != 1 {
-			fmt.Fprintln(os.Stderr, "Lookup requires 1 args")
+			fmt.Fprintln(os.Stderr, "GetPredecessor requires 1 args")
 			flag.Usage()
 		}
-		arg26 := flag.Arg(1)
-		mbTrans27 := thrift.NewTMemoryBufferLen(len(arg26))
-		defer mbTrans27.Close()
-		_, err28 := mbTrans27.WriteString(arg26)
-		if err28 != nil {
+		arg42 := flag.Arg(1)
+		mbTrans43 := thrift.NewTMemoryBufferLen(len(arg42))
+		defer mbTrans43.Close()
+		_, err44 := mbTrans43.WriteString(arg42)
+		if err44 != nil {
 			Usage()
 			return
 		}
-		factory29 := thrift.NewTSimpleJSONProtocolFactory()
-		jsProt30 := factory29.GetProtocol(mbTrans27)
-		argvalue0 := vpp2papi.NewLookupRequest()
-		err31 := argvalue0.Read(jsProt30)
-		if err31 != nil {
+		factory45 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt46 := factory45.GetProtocol(mbTrans43)
+		argvalue0 := vpp2papi.NewGetPredecessorRequest()
+		err47 := argvalue0.Read(jsProt46)
+		if err47 != nil {
 			Usage()
 			return
 		}
 		value0 := argvalue0
-		fmt.Print(client.Lookup(value0))
+		fmt.Print(client.GetPredecessor(value0))
+		fmt.Print("\n")
+		break
+	case "Sync":
+		if flag.NArg()-1 != 1 {
+			fmt.Fprintln(os.Stderr, "Sync requires 1 args")
+			flag.Usage()
+		}
+		arg48 := flag.Arg(1)
+		mbTrans49 := thrift.NewTMemoryBufferLen(len(arg48))
+		defer mbTrans49.Close()
+		_, err50 := mbTrans49.WriteString(arg48)
+		if err50 != nil {
+			Usage()
+			return
+		}
+		factory51 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt52 := factory51.GetProtocol(mbTrans49)
+		argvalue0 := vpp2papi.NewSyncRequest()
+		err53 := argvalue0.Read(jsProt52)
+		if err53 != nil {
+			Usage()
+			return
+		}
+		value0 := argvalue0
+		fmt.Print(client.Sync(value0))
 		fmt.Print("\n")
 		break
 	case "ping":

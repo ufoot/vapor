@@ -151,6 +151,43 @@ struct GetSuccessorsResponse {
 }
 
 /**
+ * Used to store  GetPredecessor requests.
+ */
+struct GetPredecessorRequest {
+    1:ContextInfo Context,
+    2:binary Sig,
+}
+
+/**
+ * Used to store results when doing GetPredecessor requests.
+ */
+struct GetPredecessorResponse {
+  1: NodeInfo PredecessorNode,
+  2: map<string,HostInfo> HostsRefs,
+}
+
+/**
+ * Used to store Sync requests.
+ */
+struct SyncRequest {
+    1:ContextInfo Context,
+    2:binary KeyShift,
+    3:binary ImaginaryNode,
+    4:binary Sig,
+}
+
+/**
+ * Used to store results when doing Sync requests.
+ */
+struct SyncResponse {
+  1: bool Found,
+  2: list<NodeInfo> NodesPath,
+  3: list<NodeInfo> SuccessorNodes,
+  4: NodeInfo PredecessorNode,
+  5: map<string,HostInfo> HostsRefs,
+}
+
+/**
  * VpP2pApi is used to communicate between 2 Vapor nodes
  * in peer-to-peer mode.
  */
@@ -158,10 +195,16 @@ service VpP2pApi extends vpcommonapi.VpCommonApi
 {
   HostStatus Status(
   ),
+  LookupResponse Lookup(
+    1:LookupRequest request,
+  ),
   GetSuccessorsResponse GetSuccessors(
     1:GetSuccessorsRequest request,
   ),
-  LookupResponse Lookup(
-    1:LookupRequest request,
+  GetPredecessorResponse GetPredecessor(
+    1:GetPredecessorRequest request,
+  ),
+  SyncResponse Sync(
+    1:SyncRequest request,
   ),
 }

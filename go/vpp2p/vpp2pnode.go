@@ -236,6 +236,13 @@ func (node *Node) CheckSig() (int, error) {
 	return vpp2pdat.NodeInfoCheckSig(node.Status.Info)
 }
 
+// Lookup performs a lookup for a given key
+func (node *Node) Lookup(key, keyShift, imaginaryNode []byte) (bool, []*vpp2papi.NodeInfo, error) {
+	// todo
+
+	return false, nil, nil
+}
+
 // GetSuccessors returns the successors of a given node
 func (node *Node) GetSuccessors() []*vpp2papi.NodeInfo {
 	defer node.successorsAccess.RUnlock()
@@ -249,9 +256,17 @@ func (node *Node) GetSuccessors() []*vpp2papi.NodeInfo {
 	return ret
 }
 
-// Lookup performs a lookup for a given key
-func (node *Node) Lookup(key, keyShift, imaginaryNode []byte) (bool, []*vpp2papi.NodeInfo, error) {
+// GetPredecessor returns the predecessor of a given node
+func (node *Node) GetPredecessor() *vpp2papi.NodeInfo {
+	defer node.successorsAccess.RUnlock()
+	node.successorsAccess.RLock()
+
+	return node.Status.Predecessor
+}
+
+// Sync performs a lookup for a given key
+func (node *Node) Sync(key, keyShift, imaginaryNode []byte) (bool, []*vpp2papi.NodeInfo, []*vpp2papi.NodeInfo, *vpp2papi.NodeInfo, error) {
 	// todo
 
-	return false, nil, nil
+	return false, nil, nil, nil, nil
 }
