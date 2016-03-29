@@ -45,13 +45,13 @@ const (
 	Ring0Description = "The main Vapor directory, all rings can refer to this one to get the rings list. Think of it as a seed, a bootstrap, you're free to use another one."
 
 	// Ring0Base64RingID contains the ring ID of the default ring0, encoded in base64
-	Ring0Base64RingID = "QF6Xm658lNZhDt3Sev3QJtxYL19Odu0M_R-Gus6X3bLZA27of54Nbo2P-DS85phxWKIweZsoHQZ9w9hJKumEnA=="
+	Ring0Base64RingID = "rBYTLlG4OWNQi9Tedd_q0YnMjteYCsTIz0Y6qBOrH205FoVGCDZo4GGtRTbljbMxycElhsnOMTHnkVXIqlTK_w=="
 	// Ring0Base64AppID contains the application ID of the default ring0, encoded in base64
-	Ring0Base64AppID = "Td5Li6DajQ0VUT9BKyriaA=="
+	Ring0Base64AppID = "K3kU9SU3EAEiqkAgsYo72g=="
 	// Ring0Base64HostPubKey contains the public key of the default ring0, encoded in base64
-	Ring0Base64HostPubKey = "xsBNBFbW8k8BCACyz6zwlgqZK75FKB4Rq1e0lZy3a8T-x4Cm0dusvcHTmFvTtGOd5X7pNw831YbLXNvH2wUnOqieSh3GkabETtFxUAO1dCLIeMO_eZWcby5siHLUsubPUN19DPeTyf1wfFKSRJtVX0Nb7QFwn7q8a_SxQnoDnPrQLdCO63ZPAvEgjRs3yKvVs2IzwJdTMKAHOjl3bpfMuGDt9RW89KN9rrItgKjgDTawa95vvezSoszIajTCbReZEoAK-yVnQS4FqjMe9XqHPKHIjGsYOm3W9eN9KQbSWRJ7RAZJphbCrvwp4233iHDRu_JlivbMv7y-ODi1JF9nDALwlsAUF0kmpuwhABEBAAHNQFZhcG9yIFRvb2xraXQgKGh0dHBzOi8vZ2l0aHViLmNvbS91Zm9vdC92YXBvcikgPHVmb290QHVmb290Lm9yZz7CwGIEEwEIABYFAlbW8k8JEJDu2fRqTYXCAhsDAhkBAABmGggAD-2gLubjL8jCd1oArcpTJJ7Xmv-d8X5wDPR-BfHhs6n2cc--ADg5UdFGXSe_ztMBgYjrlaSFrrzv5bVx2WXt6WqtGWNe7Nx5FD8lCQ3TZt3qkN9a1F7Gv2v5SAfDB6tYjqT0fkIP6Df2ikAbs19f3_At-7NCTQV3Nc46c49F7a1DgupKhtbZxTjr6uD3egU5Su_cDGO2EnD08nYJi5vDPHrwTLDfBVuTU3piSXWrfxeciqK2E8aOhjqEmH71gTmcXD5f0J2VYR4GZKpZrqUr1CT0EMIXC8BgTPTgJEOhhuS1psyNrjVab6r9caS0SfP9fG8eqlLdNVxsXlRjEicZ0s7ATQRW1vJPAQgAzGV7ftrZYtI0iYDJmG_0z_Y9KpOs-qX0QUotlJ8z_G5lD2LiPXksiKMf6LqH1yqopy6pIwyDJDR9dniSID2SrkbqaVof4yDejG7DPyDRDR3qWizMAgpomaW_3r9ho35MnoxPtALu_y2WNpjGt4hjgKM294YxK_QorH3IfYjPWav6dikOVBSOAnyeRGY4F6AqYCa2bhrGiiPUUGsvKiKsVhBukpwyORq8_fKw6ADmjZCY5xDHPWODkoH7i7wEHyJvNoLK8Svtn0Pen2NXq5YwSXtvrdUC5_ilsVKFcw_YJ9IUYcHyCOpOPbIDsxs56hs2GFrfwx5K2XUQ9kWl8wJ4bwARAQABwsBfBBgBCAATBQJW1vJPCRCQ7tn0ak2FwgIbDAAAboEIAESsoVrVimdZF1PwBciGyq7snt1aGz-3asXaA22X_SXM4NIeO8bM8ZP6_cbvX0eZrnduJNJ-KapNCqnjwlker-wfRY6x7U4S2Mcg7wHI3pZtDXj4-4LFEKhf9kvmLD20k7mAgv6CXss8Uyvj5ZiJfbRPnVjqMTiuPo3XRuDHA_qWsye6jd6JMH9CwWsjZ356699YkrvFPE33vVxOt1Yh5dFKPcUPyVJ0dgwf3vJ3y6dluVahrFHYW5BUrtLXfX-dvJ-21srfQWUKii51MeUCOH5nVQVuE-8ViOi44fRJM8YQD60PL9yxFAH4UEq13woF4Myl4kc2YrM8-0okGyWE7j8="
+	Ring0Base64HostPubKey = "xsBNBFb67QwBCADYrYiUK_P1RDTCdewQFtAAAAQ6XQmsvrv8VCkErv-jqyH-6mvzAHJ4OCO6ibMR9QUU7S6D97jmh0YFStt-gdItjVEiLk0RN-yzMXJdR1XLTa9mNVy7ECqP4WHuDpfMhYhX7VVcNXEgDCmOOzaQMZsiL398MlVmyzJqnsD5s1xxm3OXTJa6n1OYXQpZI_w-URP-sCgpXhka5zpk9hQkTz9BjxV-rTEnW7UI67H7f4PGUnL-1qejFJ9Cw3TvMY-cFrhthSRUIZx4VeL-qRVpFQVhph_uKqTWU6O6P7XffO0D7wVIjF7jbmm6RpqpxAJOEkxjkCr2ozD_PoH2D5LHCME5ABEBAAHNQFZhcG9yIFRvb2xraXQgKGh0dHBzOi8vZ2l0aHViLmNvbS91Zm9vdC92YXBvcikgPHVmb290QHVmb290Lm9yZz7CwGIEEwEIABYFAlb67QwJEN79NI3QRWkVAhsDAhkBAABqhwgAzX8jBfuVhlxhqnCHuiD03UjPFKBXffi_YY_WL0tZelQibCVGGk4AAZMRiPUPHfM-3zlKQaQcmt74ZuMgTCwrA8Tj6jbC4VHiBkxBwb47WiBK2tHmgYmA4q_2FixYpMVKrfTpjguB0nJffmGS1QGE0V1rRZYtwaUMI-CaXXiAtDsD5Ax7y_LM0UTlHfMxU9hBYlVVlF6C6q4aE57wtx0OTANpVGOtzpCwpXUCrXYJnsNC2xrA5MxjhRcTBvNJj99eIDwIf2VJ_1eLF7dSrfux_fZJujsUrCottJbBrV7KpwMysYi34jkonwVVcoBgSMYI_pvnkwU2BdV3ufm06XqqXs7ATQRW-u0MAQgAp_isNP7DpuP-hXTuSOG8yLrX9n9wxqoFpBljDGoraw015X-C5zhD7-rsteagShEq3Bg2dtqr2FOe5mkKDUHDLFFDgxxePa0o-Ybr549YeIpETVmL862iPOy9cWlIprTOo0leGspTvmkPG6ot1py4ht21sJrKM6R45s_mzLJPx_6136nIGcFYDZPNLr-qGWQ6-gZ1srSJVS3T1dwPxRHJW9M1R4AG5FZQkwh_MCx_ZYQ_xncTbn1mC9eexqcFSsTSc-9uHqn3_TkX1lKVpwzVnCrw9tk6ose7bx-tY5-X5ZaJ6EHALaXXn-VypgjGIRFFUzEFZDz6K-qxl5OGDS36awARAQABwsBfBBgBCAATBQJW-u0MCRDe_TSN0EVpFQIbDAAAJ50IAEjL793i6asp7zBnYy2gcvlUKkAmH2C5ejln8HoOZIBRertaGjNYZg7DDs1xUrwmrrxemkaKZQFHrFr6956weO8o1fXzWQgHOvF9RP1KP5f3TcBR4wG_Gyj8zHcuqoSZVUVbLH7oGi6fdB20SK9-eKvUC0pcBa3tKsmk9QTMsu7p-rFgAKRdWJJFvKoIWlAe9nkjOLla3rQ_zOptTFJAnmWBtjNVsYwSdJ5uQQsxwjzfds_RAEdcFECAWEDNpZxeGVCIi8nWG6V0_BeiziEi4E4KI1GB7QwKq_Ub5RwLv2J8k-8WGrKb2D1HzvZk_z-YZCZgLgDaNT9K3bvRVGwf0HY="
 	// Ring0Base64RingSig contains the siignature of the default ring0, encoded in base64
-	Ring0Base64RingSig = "wsBcBAABCAAQBQJW1vJkCRCQ7tn0ak2FwgAAtYkIAK6D0IfKGLbPhk02tPeeO_NoWSSiWSeya8GaeCaV770sFZirmSO71ty8SNM839A7vUj7sulQCWePgXbYnljYVKF6ux1bMQpBhzCrAeT59jbNL1GyqRinK7jAbTITBRH1bKS3CSVNVMurWLbChv6C4rGrxjiZAPm4jIGgV4q-N-d02PvzoyLZbC7K0PhbZDLUTIgKLA7Z4lsptVY8sOcAUV2b5bRtmX38WyrI1ZD8taOcds7tdW1uYz6xQMULA-jFCdJbizduZ27v7dfnJIqXXk6L0IoocqDcqhQXyET4-2iuOiBoaZdbj2IcH-IcjxL1TuAD_bodOx4Go5JDI295vLM="
+	Ring0Base64RingSig = "wsBcBAABCAAQBQJW-u0UCRDe_TSN0EVpFQAAMMkIAIbKsbQ4ovvA5wN0s7V3r1-YVyTT0wCDSjAJjy58GG_YN-9iILfCLlmBoutmA_TtQxB3f9AG14oXJTNA9-y0rDMhZzq8cXDteEaNWKQEZOvYe9fjxeoh1lpHwVkXK2CWI5ngn6sD3gX1lNv0LrnDWWy2aLDWxdLqbASJi8L0NkpEXkrlnsQymcHbq68FjxC3P6F9I-oVMJF8TM2F-_h86WeptJ0xZtGEsCe2aApZtptaEatbeFsWiwQAWdu5oDTD1gxUqnZ8glxN1AoY-M5C146wXKPSr1aHYrHahHe1QHhTTI1Da4E-Ld_Iss8QBRCmjn5CcL2FGPT9ZBycrZ_b4HQ="
 
 	// DefaultBruijnM default for the m parameter (base) used for Koorde/Bruijn ops.
 	DefaultBruijnM = 16
@@ -62,6 +62,17 @@ const (
 	// DefaultNbStep default to optimizes Bruijn walk by considering only this number
 	// of steps in the worst case.
 	DefaultNbStep = 8
+	// DefaultCallTimeout is the default delay after which a network call is considered
+	// stall and cancelled.
+	DefaultCallTimeout = 5
+	// DefaultSyncDelay is the default delay between two node synchronizations.
+	DefaultSyncDelay = 15
+	// DefaultDisconnectTimeout is the default delay after which, if a node has been
+	// unreachable, it's considered totally unjoinable.
+	DefaultDisconnectTimeout = 60
+	// DefaultDataLifetime is the amount of time after which keys are automatically deleted
+	// to purge the data store, no matter what. Any update on a key extends this duration.
+	DefaultDataLifetime = 86400
 )
 
 // HostInfoSigBytes returns the byte buffer that needs to be signed.
@@ -211,14 +222,18 @@ func CheckNodeInfo(node *vpp2papi.NodeInfo) (bool, error) {
 
 // DefaultRingConfig returns a default ring configuration, with 256-bit keys
 func DefaultRingConfig() *vpp2papi.RingConfig {
-	return &vpp2papi.RingConfig{BruijnM: DefaultBruijnM, BruijnN: DefaultBruijnN, NbCopy: DefaultNbCopy, NbStep: DefaultNbStep}
+	return &vpp2papi.RingConfig{BruijnM: DefaultBruijnM, BruijnN: DefaultBruijnN, NbCopy: DefaultNbCopy, NbStep: DefaultNbStep, CallTimeout: DefaultCallTimeout, SyncDelay: DefaultSyncDelay, DisconnectTimeout: DefaultDisconnectTimeout, DataLifetime: DefaultDataLifetime}
 }
 
 // RingInfoSigBytes returns the byte buffer that needs to be signed.
 func RingInfoSigBytes(ringInfo *vpp2papi.RingInfo) []byte {
 	bufTitle := []byte(ringInfo.RingTitle)
 	bufDescription := []byte(ringInfo.RingDescription)
-	bufScalar := fmt.Sprintf("(%d,%d,%d,%d,%t)", ringInfo.Config.BruijnM, ringInfo.Config.BruijnN, ringInfo.Config.NbCopy, ringInfo.Config.NbStep, ringInfo.HasPassword)
+	// not using a JSON Marshall since technically, we do not want any
+	// compatible JSON representations (it could differ depending
+	// on spaces and implementation details...) but a unique projection
+	// of the data.
+	bufScalar := fmt.Sprintf("(%d,%d,%d,%d,%d,%d,%d,%d,%t)", ringInfo.Config.BruijnM, ringInfo.Config.BruijnN, ringInfo.Config.NbCopy, ringInfo.Config.NbStep, ringInfo.Config.CallTimeout, ringInfo.Config.SyncDelay, ringInfo.Config.DisconnectTimeout, ringInfo.Config.DataLifetime, ringInfo.HasPassword)
 	ret := make([]byte, len(ringInfo.RingID)+len(bufTitle)+len(bufDescription)+len(ringInfo.AppID)+len(bufScalar))
 	begin := 0
 	end := begin + len(ringInfo.RingID)

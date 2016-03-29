@@ -775,11 +775,19 @@ func (p *NodeStatus) String() string {
 //  - BruijnN
 //  - NbCopy
 //  - NbStep
+//  - CallTimeout
+//  - SyncDelay
+//  - DisconnectTimeout
+//  - DataLifetime
 type RingConfig struct {
-	BruijnM int32 `thrift:"BruijnM,1" json:"BruijnM"`
-	BruijnN int32 `thrift:"BruijnN,2" json:"BruijnN"`
-	NbCopy  int32 `thrift:"NbCopy,3" json:"NbCopy"`
-	NbStep  int32 `thrift:"NbStep,4" json:"NbStep"`
+	BruijnM           int32 `thrift:"BruijnM,1" json:"BruijnM"`
+	BruijnN           int32 `thrift:"BruijnN,2" json:"BruijnN"`
+	NbCopy            int32 `thrift:"NbCopy,3" json:"NbCopy"`
+	NbStep            int32 `thrift:"NbStep,4" json:"NbStep"`
+	CallTimeout       int32 `thrift:"CallTimeout,5" json:"CallTimeout"`
+	SyncDelay         int32 `thrift:"SyncDelay,6" json:"SyncDelay"`
+	DisconnectTimeout int32 `thrift:"DisconnectTimeout,7" json:"DisconnectTimeout"`
+	DataLifetime      int32 `thrift:"DataLifetime,8" json:"DataLifetime"`
 }
 
 func NewRingConfig() *RingConfig {
@@ -800,6 +808,22 @@ func (p *RingConfig) GetNbCopy() int32 {
 
 func (p *RingConfig) GetNbStep() int32 {
 	return p.NbStep
+}
+
+func (p *RingConfig) GetCallTimeout() int32 {
+	return p.CallTimeout
+}
+
+func (p *RingConfig) GetSyncDelay() int32 {
+	return p.SyncDelay
+}
+
+func (p *RingConfig) GetDisconnectTimeout() int32 {
+	return p.DisconnectTimeout
+}
+
+func (p *RingConfig) GetDataLifetime() int32 {
+	return p.DataLifetime
 }
 func (p *RingConfig) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -829,6 +853,22 @@ func (p *RingConfig) Read(iprot thrift.TProtocol) error {
 			}
 		case 4:
 			if err := p.readField4(iprot); err != nil {
+				return err
+			}
+		case 5:
+			if err := p.readField5(iprot); err != nil {
+				return err
+			}
+		case 6:
+			if err := p.readField6(iprot); err != nil {
+				return err
+			}
+		case 7:
+			if err := p.readField7(iprot); err != nil {
+				return err
+			}
+		case 8:
+			if err := p.readField8(iprot); err != nil {
 				return err
 			}
 		default:
@@ -882,6 +922,42 @@ func (p *RingConfig) readField4(iprot thrift.TProtocol) error {
 	return nil
 }
 
+func (p *RingConfig) readField5(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 5: ", err)
+	} else {
+		p.CallTimeout = v
+	}
+	return nil
+}
+
+func (p *RingConfig) readField6(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 6: ", err)
+	} else {
+		p.SyncDelay = v
+	}
+	return nil
+}
+
+func (p *RingConfig) readField7(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 7: ", err)
+	} else {
+		p.DisconnectTimeout = v
+	}
+	return nil
+}
+
+func (p *RingConfig) readField8(iprot thrift.TProtocol) error {
+	if v, err := iprot.ReadI32(); err != nil {
+		return thrift.PrependError("error reading field 8: ", err)
+	} else {
+		p.DataLifetime = v
+	}
+	return nil
+}
+
 func (p *RingConfig) Write(oprot thrift.TProtocol) error {
 	if err := oprot.WriteStructBegin("RingConfig"); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write struct begin error: ", p), err)
@@ -896,6 +972,18 @@ func (p *RingConfig) Write(oprot thrift.TProtocol) error {
 		return err
 	}
 	if err := p.writeField4(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField5(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField6(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField7(oprot); err != nil {
+		return err
+	}
+	if err := p.writeField8(oprot); err != nil {
 		return err
 	}
 	if err := oprot.WriteFieldStop(); err != nil {
@@ -955,6 +1043,58 @@ func (p *RingConfig) writeField4(oprot thrift.TProtocol) (err error) {
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:NbStep: ", p), err)
+	}
+	return err
+}
+
+func (p *RingConfig) writeField5(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("CallTimeout", thrift.I32, 5); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:CallTimeout: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.CallTimeout)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.CallTimeout (5) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:CallTimeout: ", p), err)
+	}
+	return err
+}
+
+func (p *RingConfig) writeField6(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("SyncDelay", thrift.I32, 6); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 6:SyncDelay: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.SyncDelay)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.SyncDelay (6) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 6:SyncDelay: ", p), err)
+	}
+	return err
+}
+
+func (p *RingConfig) writeField7(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("DisconnectTimeout", thrift.I32, 7); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 7:DisconnectTimeout: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.DisconnectTimeout)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.DisconnectTimeout (7) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 7:DisconnectTimeout: ", p), err)
+	}
+	return err
+}
+
+func (p *RingConfig) writeField8(oprot thrift.TProtocol) (err error) {
+	if err := oprot.WriteFieldBegin("DataLifetime", thrift.I32, 8); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 8:DataLifetime: ", p), err)
+	}
+	if err := oprot.WriteI32(int32(p.DataLifetime)); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.DataLifetime (8) field write error: ", p), err)
+	}
+	if err := oprot.WriteFieldEnd(); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 8:DataLifetime: ", p), err)
 	}
 	return err
 }
@@ -2882,16 +3022,14 @@ func (p *GetPredecessorResponse) String() string {
 //
 // Attributes:
 //  - Context
-//  - Key
 //  - KeyShift
 //  - ImaginaryNode
 //  - Sig
 type SyncRequest struct {
 	Context       *ContextInfo `thrift:"Context,1" json:"Context"`
-	Key           []byte       `thrift:"Key,2" json:"Key"`
-	KeyShift      []byte       `thrift:"KeyShift,3" json:"KeyShift"`
-	ImaginaryNode []byte       `thrift:"ImaginaryNode,4" json:"ImaginaryNode"`
-	Sig           []byte       `thrift:"Sig,5" json:"Sig"`
+	KeyShift      []byte       `thrift:"KeyShift,2" json:"KeyShift"`
+	ImaginaryNode []byte       `thrift:"ImaginaryNode,3" json:"ImaginaryNode"`
+	Sig           []byte       `thrift:"Sig,4" json:"Sig"`
 }
 
 func NewSyncRequest() *SyncRequest {
@@ -2905,10 +3043,6 @@ func (p *SyncRequest) GetContext() *ContextInfo {
 		return SyncRequest_Context_DEFAULT
 	}
 	return p.Context
-}
-
-func (p *SyncRequest) GetKey() []byte {
-	return p.Key
 }
 
 func (p *SyncRequest) GetKeyShift() []byte {
@@ -2956,10 +3090,6 @@ func (p *SyncRequest) Read(iprot thrift.TProtocol) error {
 			if err := p.readField4(iprot); err != nil {
 				return err
 			}
-		case 5:
-			if err := p.readField5(iprot); err != nil {
-				return err
-			}
 		default:
 			if err := iprot.Skip(fieldTypeId); err != nil {
 				return err
@@ -2987,7 +3117,7 @@ func (p *SyncRequest) readField2(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadBinary(); err != nil {
 		return thrift.PrependError("error reading field 2: ", err)
 	} else {
-		p.Key = v
+		p.KeyShift = v
 	}
 	return nil
 }
@@ -2996,7 +3126,7 @@ func (p *SyncRequest) readField3(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadBinary(); err != nil {
 		return thrift.PrependError("error reading field 3: ", err)
 	} else {
-		p.KeyShift = v
+		p.ImaginaryNode = v
 	}
 	return nil
 }
@@ -3004,15 +3134,6 @@ func (p *SyncRequest) readField3(iprot thrift.TProtocol) error {
 func (p *SyncRequest) readField4(iprot thrift.TProtocol) error {
 	if v, err := iprot.ReadBinary(); err != nil {
 		return thrift.PrependError("error reading field 4: ", err)
-	} else {
-		p.ImaginaryNode = v
-	}
-	return nil
-}
-
-func (p *SyncRequest) readField5(iprot thrift.TProtocol) error {
-	if v, err := iprot.ReadBinary(); err != nil {
-		return thrift.PrependError("error reading field 5: ", err)
 	} else {
 		p.Sig = v
 	}
@@ -3033,9 +3154,6 @@ func (p *SyncRequest) Write(oprot thrift.TProtocol) error {
 		return err
 	}
 	if err := p.writeField4(oprot); err != nil {
-		return err
-	}
-	if err := p.writeField5(oprot); err != nil {
 		return err
 	}
 	if err := oprot.WriteFieldStop(); err != nil {
@@ -3061,53 +3179,40 @@ func (p *SyncRequest) writeField1(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *SyncRequest) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("Key", thrift.STRING, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:Key: ", p), err)
+	if err := oprot.WriteFieldBegin("KeyShift", thrift.STRING, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:KeyShift: ", p), err)
 	}
-	if err := oprot.WriteBinary(p.Key); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.Key (2) field write error: ", p), err)
+	if err := oprot.WriteBinary(p.KeyShift); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.KeyShift (2) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:Key: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:KeyShift: ", p), err)
 	}
 	return err
 }
 
 func (p *SyncRequest) writeField3(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("KeyShift", thrift.STRING, 3); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:KeyShift: ", p), err)
+	if err := oprot.WriteFieldBegin("ImaginaryNode", thrift.STRING, 3); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 3:ImaginaryNode: ", p), err)
 	}
-	if err := oprot.WriteBinary(p.KeyShift); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.KeyShift (3) field write error: ", p), err)
+	if err := oprot.WriteBinary(p.ImaginaryNode); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T.ImaginaryNode (3) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:KeyShift: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 3:ImaginaryNode: ", p), err)
 	}
 	return err
 }
 
 func (p *SyncRequest) writeField4(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("ImaginaryNode", thrift.STRING, 4); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:ImaginaryNode: ", p), err)
-	}
-	if err := oprot.WriteBinary(p.ImaginaryNode); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.ImaginaryNode (4) field write error: ", p), err)
-	}
-	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:ImaginaryNode: ", p), err)
-	}
-	return err
-}
-
-func (p *SyncRequest) writeField5(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("Sig", thrift.STRING, 5); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 5:Sig: ", p), err)
+	if err := oprot.WriteFieldBegin("Sig", thrift.STRING, 4); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 4:Sig: ", p), err)
 	}
 	if err := oprot.WriteBinary(p.Sig); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T.Sig (5) field write error: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T.Sig (4) field write error: ", p), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 5:Sig: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 4:Sig: ", p), err)
 	}
 	return err
 }

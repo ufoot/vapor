@@ -35,6 +35,6 @@ const PackageLicense = "https://github.com/ufoot/vapor" // PackageLicense set by
 // VersionMajor is the project major version.
 const VersionMajor = 0 // VersionMajor set by stamp.sh
 // VersionMinor is the project minor version.
-const VersionMinor = 6 // VersionMinor set by stamp.sh
+const VersionMinor = 7 // VersionMinor set by stamp.sh
 // VersionStamp is the project stamp, possibly changes for each build.
-const VersionStamp = "1c30e63" // VersionStamp set by stamp.sh
+const VersionStamp = "9b04ef0" // VersionStamp set by stamp.sh

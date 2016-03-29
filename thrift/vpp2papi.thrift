@@ -77,6 +77,10 @@ struct RingConfig {
   2: i32 BruijnN,
   3: i32 NbCopy,
   4: i32 NbStep,
+  5: i32 CallTimeout,
+  6: i32 SyncDelay,
+  7: i32 DisconnectTimeout,
+  8: i32 DataLifetime,
 }
 
 /**
