@@ -21,9 +21,18 @@ package vpp2pdat
 
 import (
 	"bytes"
+	"github.com/ufoot/vapor/go/vprand"
 	"github.com/ufoot/vapor/go/vpsum"
 	"testing"
 )
+
+func TestHostPubKeyToBuf(t *testing.T) {
+	id := vpsum.Checksum128([]byte("foo"))
+	b := HostPubKeyToBuf(id)
+	if bytes.Compare(b[:], id) != 0 {
+		t.Error("id and b differ")
+	}
+}
 
 func TestNodeIDToBuf(t *testing.T) {
 	id := vpsum.Checksum256([]byte("foo"))
@@ -38,5 +47,32 @@ func TestRingIDToBuf(t *testing.T) {
 	b := RingIDToBuf(id)
 	if bytes.Compare(b[:], id) != 0 {
 		t.Error("id and b differ")
+	}
+}
+
+func TestHostPubKeyToShortString(t *testing.T) {
+	id := vpsum.IntToBuf128(vprand.Rand128(nil, nil))
+	s := HostPubKeyToShortString(id)
+	t.Logf("HostPubKey short string: %s", s)
+	if len(s) != HostPubKeyShortStringLen {
+		t.Errorf("bad len %d for HostPubKey short string, should be %d", len(s), HostPubKeyShortStringLen)
+	}
+}
+
+func TestNodeIDToShortString(t *testing.T) {
+	id := vpsum.IntToBuf256(vprand.Rand256(nil, nil))
+	s := NodeIDToShortString(id)
+	t.Logf("NodeID short string: %s", s)
+	if len(s) != NodeIDShortStringLen {
+		t.Errorf("bad len %d for NodeID short string, should be %d", len(s), NodeIDShortStringLen)
+	}
+}
+
+func TestRingIDToShortString(t *testing.T) {
+	id := vpsum.IntToBuf512(vprand.Rand512(nil, nil))
+	s := RingIDToShortString(id)
+	t.Logf("Ring ID short string: %s", s)
+	if len(s) != RingIDShortStringLen {
+		t.Errorf("bad len %d for RingID short string, should be %d", len(s), RingIDShortStringLen)
 	}
 }
