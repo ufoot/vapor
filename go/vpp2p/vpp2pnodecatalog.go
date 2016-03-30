@@ -117,3 +117,19 @@ func (c *NodeCatalog) List() []*vpp2papi.NodeInfo {
 
 	return ret
 }
+
+// ListPtr returns a list of local nodes. It returns static
+// a pointer on nodes themselves.
+func (c *NodeCatalog) ListPtr() []*Node {
+	defer c.access.RUnlock()
+	c.access.RLock()
+
+	i := 0
+	ret := make([]*Node, len(c.nodes))
+	for _, value := range c.nodes {
+		ret[i] = value
+		i++
+	}
+
+	return ret
+}

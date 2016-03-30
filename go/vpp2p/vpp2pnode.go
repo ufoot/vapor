@@ -258,15 +258,52 @@ func (node *Node) GetSuccessors() []*vpp2papi.NodeInfo {
 
 // GetPredecessor returns the predecessor of a given node
 func (node *Node) GetPredecessor() *vpp2papi.NodeInfo {
-	defer node.successorsAccess.RUnlock()
-	node.successorsAccess.RLock()
+	defer node.predecessorAccess.RUnlock()
+	node.predecessorAccess.RLock()
 
 	return node.Status.Predecessor
 }
 
+func (node *Node) isKeyOnNode(key []byte) bool {
+	defer node.predecessorAccess.RUnlock()
+	node.predecessorAccess.RLock()
+
+	if node.ringPtr.walker.GtLe(key, node.Status.Predecessor.NodeID, node.Status.Info.NodeID) {
+		return true
+	}
+
+	return false
+}
+
+func (node *Node) findKeyOnLocalNode(key []byte) *Node {
+	// Check if it's on us
+	if node.isKeyOnNode(key) {
+		return node
+	}
+	// Check if it's on other local nodes, while this is not truely in
+	// the Bruijn walking path, it would be stupid to just ping another
+	// distant node when the information is local. This is typically
+	// optimizing the case when there are many virtual nodes for few
+	// physical hosts.
+	for _, localNode := range node.hostPtr.localNodeCatalog.ListPtr() {
+		if localNode.isKeyOnNode(key) {
+			return localNode
+		}
+	}
+
+	return nil
+}
+
 // Sync performs a lookup for a given key
 func (node *Node) Sync(key, keyShift, imaginaryNode []byte) (bool, []*vpp2papi.NodeInfo, []*vpp2papi.NodeInfo, *vpp2papi.NodeInfo, error) {
-	// todo
+	var found *Node
+
+	found = node.findKeyOnLocalNode(key)
+	if found != nil {
+		nodesPath := make([]*vpp2papi.NodeInfo, 1)
+		nodesPath[0] = found.Status.Info
+		return true, nodesPath, found.GetSuccessors(), found.GetPredecessor(), nil
+	}
 
 	return false, nil, nil, nil, nil
 }
