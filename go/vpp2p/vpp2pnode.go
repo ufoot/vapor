@@ -51,7 +51,7 @@ type Node struct {
 
 	successorsAccess  sync.RWMutex
 	predecessorAccess sync.RWMutex
-	dAccess           sync.RWMutex
+	dsAccess          sync.RWMutex
 
 	// Successors is list of successing nodes within the ring,
 	// use 1st elem for direct successor.
@@ -93,6 +93,12 @@ func NewNode(host *Host, ring *Ring) (*Node, error) {
 	ret.ringPtr = ring
 	ret.Status.Info = &info
 
+	ret.Status.Peers = vpp2papi.NewNodePeers()
+
+	ret.resetSuccessors()
+	ret.resetDs()
+	ret.resetPredecessor()
+
 	// by doing this, nodes will always be (un)registerered within hosts
 	// and the global node register. This is usefull when one wants to
 	// quickly access them by reference.
@@ -128,6 +134,27 @@ func NewNode(host *Host, ring *Ring) (*Node, error) {
 	}
 
 	return &ret, nil
+}
+
+func (node *Node) resetSuccessors() {
+	defer node.successorsAccess.Unlock()
+	node.successorsAccess.Lock()
+
+	node.Status.Peers.Successors = nil
+}
+
+func (node *Node) resetDs() {
+	defer node.dsAccess.Unlock()
+	node.dsAccess.Lock()
+
+	node.Status.Peers.Ds = nil
+}
+
+func (node *Node) resetPredecessor() {
+	defer node.predecessorAccess.Unlock()
+	node.predecessorAccess.Lock()
+
+	node.Status.Predecessor = node.Status.Info
 }
 
 // Start starts the node, that is, makes it available and registers it into

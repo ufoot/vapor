@@ -419,10 +419,10 @@ func (p *NodeInfo) String() string {
 //
 // Attributes:
 //  - Successors
-//  - D
+//  - Ds
 type NodePeers struct {
 	Successors []*NodeInfo `thrift:"Successors,1" json:"Successors"`
-	D          []*NodeInfo `thrift:"D,2" json:"D"`
+	Ds         []*NodeInfo `thrift:"Ds,2" json:"Ds"`
 }
 
 func NewNodePeers() *NodePeers {
@@ -433,8 +433,8 @@ func (p *NodePeers) GetSuccessors() []*NodeInfo {
 	return p.Successors
 }
 
-func (p *NodePeers) GetD() []*NodeInfo {
-	return p.D
+func (p *NodePeers) GetDs() []*NodeInfo {
+	return p.Ds
 }
 func (p *NodePeers) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
@@ -499,13 +499,13 @@ func (p *NodePeers) readField2(iprot thrift.TProtocol) error {
 		return thrift.PrependError("error reading list begin: ", err)
 	}
 	tSlice := make([]*NodeInfo, 0, size)
-	p.D = tSlice
+	p.Ds = tSlice
 	for i := 0; i < size; i++ {
 		_elem1 := &NodeInfo{}
 		if err := _elem1.Read(iprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem1), err)
 		}
-		p.D = append(p.D, _elem1)
+		p.Ds = append(p.Ds, _elem1)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -554,13 +554,13 @@ func (p *NodePeers) writeField1(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *NodePeers) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("D", thrift.LIST, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:D: ", p), err)
+	if err := oprot.WriteFieldBegin("Ds", thrift.LIST, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:Ds: ", p), err)
 	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.D)); err != nil {
+	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Ds)); err != nil {
 		return thrift.PrependError("error writing list begin: ", err)
 	}
-	for _, v := range p.D {
+	for _, v := range p.Ds {
 		if err := v.Write(oprot); err != nil {
 			return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", v), err)
 		}
@@ -569,7 +569,7 @@ func (p *NodePeers) writeField2(oprot thrift.TProtocol) (err error) {
 		return thrift.PrependError("error writing list end: ", err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:D: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:Ds: ", p), err)
 	}
 	return err
 }
