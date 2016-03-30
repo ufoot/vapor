@@ -27,25 +27,27 @@ if [ ! -d utils ] ; then
     exit 1
 fi
 
-export GOPATH=$(pwd)/go
+export GOPATH="$(pwd)/go"
+export PATH="$(pwd)/go/bin:$PATH"
 
 get() {
     echo "go get $1"
     go get -u $1
 }
 
-get github.com/golang/lint/golint
+get github.com/alecthomas/gometalinter
 get github.com/tools/godep
 get github.com/axw/gocov/gocov
 get github.com/AlekSi/gocov-xml
 get github.com/jstemmer/go-junit-report
 get github.com/ryancox/gobench2plot
-
 get golang.org/x/crypto/ripemd160
 get golang.org/x/crypto/openpgp
 get golang.org/x/crypto/openpgp/packet
 get git.apache.org/thrift.git/lib/go/thrift
 get github.com/llgcode/draw2d
+
+gometalinter --install --update
 
 rm -rf go/src/github.com/ufoot/vapor
 install -d go/src/github.com/ufoot/vapor/go

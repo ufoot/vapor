@@ -50,7 +50,10 @@ func TestServer(t *testing.T) {
 
 	if server != nil {
 		t.Log("stopping vpbussrv")
-		server.Stop()
+		err=server.Stop()
+		if err!=nil {
+			t.Error("error stopping server")
+		}
 	} else {
 		t.Error("server not started")
 	}

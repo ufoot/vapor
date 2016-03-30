@@ -55,10 +55,22 @@ func SymEncrypt(content, password []byte) ([]byte, error) {
 		return nil, vperror.Chain(err, "unable to encrypt content")
 	}
 	gzipOutput = gzip.NewWriter(output)
-	gzipOutput.Write(content)
-	gzipOutput.Flush()
-	gzipOutput.Close()
-	output.Close()
+	_,err=gzipOutput.Write(content)
+	if err!=nil {
+		return nil, vperror.Chain(err, "unable to write gzip")
+	}
+	err=gzipOutput.Flush()
+	if err!=nil {
+		return nil, vperror.Chain(err, "unable to flush gzip")
+	}
+	err=gzipOutput.Close()
+	if err!=nil {
+		return nil, vperror.Chain(err, "unable to close gzip")
+	}
+	err=output.Close()
+	if err!=nil {
+		return nil, vperror.Chain(err, "unable to close output")
+	}
 
 	ret = byteWriter.Bytes()
 
@@ -99,7 +111,11 @@ func symDecrypt(content, password []byte) ([]byte, error) {
 		return nil, errors.New("PGP content was not encrypted")
 	}
 	gzipReader, err = gzip.NewReader(messageDetails.UnverifiedBody)
-	defer gzipReader.Close()
+	defer func() {
+		if gzipReader!=nil {
+			_=gzipReader.Close()
+		}
+	}()
 	if err != nil {
 		return nil, vperror.Chain(err, "unable to open GZIP within PGP encrypted content")
 	}

@@ -58,7 +58,7 @@ func TestSym(t *testing.T) {
 			t.Error(err)
 		}
 		t.Log("test used to block here due to my not knowing how to use a prompt func, see https://go-review.googlesource.com/#/c/16865/")
-		decrypted, err = SymDecrypt(encrypted, []byte("this is a wrong password"))
+		_, err = SymDecrypt(encrypted, []byte("this is a wrong password"))
 		if err != nil {
 			t.Log("OK, decrypt is impossible with a bad password")
 		} else {

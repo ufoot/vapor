@@ -6,12 +6,12 @@ config.status
 Makefile
 Makefile.dep
 Makefile.help
+go/src/code.google.com
 go/src/git.apache.org
 go/src/github.com
 go/src/golang.org
-go/src/code.google.com
-go/bin/vp*
-go/bin/go*
+go/src/gopkg.in
+go/bin/*
 go/pkg
 test
 doc/txt

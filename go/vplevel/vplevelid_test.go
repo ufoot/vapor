@@ -62,7 +62,10 @@ func TestNetworkID(t *testing.T) {
 
 	key, err := vpcrypto.NewKey()
 	if err == nil {
-		ni, sig, err := NetworkID(sizes, key)
+		var ni *big.Big
+		var sig []byte
+	
+		ni, sig, err = NetworkID(sizes, key)
 		if err == nil {
 			t.Logf("Network ID generated n=%d sig=%s", ni.Int64(), hex.EncodeToString(sig))
 			if getSize(ni, squareIndex) != sizes.SquareSize {

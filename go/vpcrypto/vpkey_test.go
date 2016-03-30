@@ -157,7 +157,7 @@ func TestEnc(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	decrypted, err = key3.Decrypt(encrypted)
+	_, err = key3.Decrypt(encrypted)
 	if err != nil {
 		t.Log("OK, decrypt is impossible with a bad key")
 	} else {

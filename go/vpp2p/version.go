@@ -30,11 +30,11 @@ const PackageURL = "https://github.com/ufoot/vapor" // PackageURL set by stamp.s
 // PackageCopyright contains a short copyright notice.
 const PackageCopyright = "Copyright (C)  2015, 2016  Christian Mauduit <ufoot@ufoot.org>" // PackageCopyright set by stamp.sh
 // PackageLicense contains a short license information.
-const PackageLicense = "https://github.com/ufoot/vapor" // PackageLicense set by stamp.sh
+const PackageLicense = "GNU GPL v3" // PackageLicense set by stamp.sh
 
 // VersionMajor is the project major version.
 const VersionMajor = 0 // VersionMajor set by stamp.sh
 // VersionMinor is the project minor version.
-const VersionMinor = 13 // VersionMinor set by stamp.sh
+const VersionMinor = 14 // VersionMinor set by stamp.sh
 // VersionStamp is the project stamp, possibly changes for each build.
-const VersionStamp = "bb03f9a" // VersionStamp set by stamp.sh
+const VersionStamp = "b29aa7a" // VersionStamp set by stamp.sh

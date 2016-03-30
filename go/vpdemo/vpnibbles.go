@@ -30,7 +30,7 @@ import (
 // NibblesState stores the game state.
 type NibblesState struct {
 	start time.Time
-	level [][]int
+	// level [][]int
 }
 
 // Duration returns the duration of an iteration, time between two Do calls.
@@ -108,7 +108,7 @@ func (server NibblesServer) Do(timestamp time.Time, iteration int64, quit chan<-
 func (server NibblesServer) Quit(timestamp time.Time) {
 	vplog.LogNoticef("game server quit")
 	if server.server != nil {
-		server.server.Stop()
+		_=server.server.Stop()
 	}
 	server.server = nil
 }

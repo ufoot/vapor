@@ -100,7 +100,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo >> ../Makefile.dep
     echo ".PHONY: lint-$i" >> ../Makefile.dep
     echo "lint-$i: $k" >> ../Makefile.dep
-    printf "\texport GOPATH=\$(VP_TOPSRCDIR)/go && go vet $j && \$(VP_TOPSRCDIR)/go/bin/golint $j\n" >> ../Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR)/go && (export PATH=go/bin:\$\$PATH && gometalinter --dupl-threshold=1000 --cyclo-over=20 go/src/$j || true)\n" >> ../Makefile.dep
     echo >> ../Makefile.dep
     echo ".PHONY: devel-$i" >> ../Makefile.dep
     echo "devel-$i: $k" >> ../Makefile.dep

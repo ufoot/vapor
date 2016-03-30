@@ -114,6 +114,7 @@ patch_go () {
         sed -i "s/const.*\/\/.*PackageEmail.*stamp.sh/const PackageEmail = \"${PACKAGE_EMAIL}\" \/\/ PackageEmail set by stamp.sh/g" ${VERSION_GO}
         sed -i "s/const.*\/\/.*PackageURL.*stamp.sh/const PackageURL = \"${PACKAGE_URL}\" \/\/ PackageURL set by stamp.sh/g" ${VERSION_GO}
         sed -i "s/const.*\/\/.*PackageCopyright.*stamp.sh/const PackageCopyright = \"${PACKAGE_COPYRIGHT}\" \/\/ PackageCopyright set by stamp.sh/g" ${VERSION_GO}
+        sed -i "s/const.*\/\/.*PackageLicense.*stamp.sh/const PackageLicense = \"${PACKAGE_LICENSE}\" \/\/ PackageLicense set by stamp.sh/g" ${VERSION_GO}
         sed -i "s/const.*\/\/.*VersionMajor.*stamp.sh/const VersionMajor = ${VERSION_MAJOR} \/\/ VersionMajor set by stamp.sh/g" ${VERSION_GO}
         sed -i "s/const.*\/\/.*VersionMinor.*stamp.sh/const VersionMinor = ${VERSION_MINOR} \/\/ VersionMinor set by stamp.sh/g" ${VERSION_GO}
         sed -i "s/const.*\/\/.*VersionStamp.*stamp.sh/const VersionStamp = \"${VERSION_STAMP}\" \/\/ VersionStamp set by stamp.sh/g" ${VERSION_GO}
