@@ -87,7 +87,7 @@ func SetupLocal(nbHosts, nbRings, nbNodesPerHostRing int, useSig bool) ([]*vpp2p
 	for _, v := range hosts {
 		for _, w := range rings {
 			for j := 0; j < nbNodesPerHostRing; j++ {
-				nodes[i], err = vpp2p.NewNode(v, w)
+				nodes[i], err = vpp2p.NewNode(v, w, nil)
 				if err != nil {
 					return nil, nil, nil, err
 				}
