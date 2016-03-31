@@ -173,17 +173,17 @@ func (key Key) Encrypt(content []byte) ([]byte, error) {
 		return nil, vperror.Chain(err, "unable to encrypt content")
 	}
 	gzipOutput = gzip.NewWriter(output)
-	_,err=gzipOutput.Write(content)
-	if err!=nil {
-		return nil,vperror.Chain(err, "unable to write gzip")
+	_, err = gzipOutput.Write(content)
+	if err != nil {
+		return nil, vperror.Chain(err, "unable to write gzip")
 	}
-	err=gzipOutput.Close()
-	if err!=nil {
-		return nil,vperror.Chain(err, "unablen to close gzip")
+	err = gzipOutput.Close()
+	if err != nil {
+		return nil, vperror.Chain(err, "unablen to close gzip")
 	}
-	err=output.Close()
-	if err!=nil {
-		return nil,vperror.Chain(err, "unablen to close output")
+	err = output.Close()
+	if err != nil {
+		return nil, vperror.Chain(err, "unablen to close output")
 	}
 
 	ret = byteWriter.Bytes()
@@ -223,10 +223,10 @@ func (key Key) decrypt(content []byte) ([]byte, error) {
 	}
 	gzipReader, err = gzip.NewReader(messageDetails.UnverifiedBody)
 	defer func() {
-		if gzipReader!=nil {
-		_=gzipReader.Close()
+		if gzipReader != nil {
+			_ = gzipReader.Close()
 		}
-	} ()
+	}()
 	if err != nil {
 		return nil, vperror.Chain(err, "unable to open GZIP within PGP encrypted content")
 	}

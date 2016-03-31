@@ -55,20 +55,20 @@ func SymEncrypt(content, password []byte) ([]byte, error) {
 		return nil, vperror.Chain(err, "unable to encrypt content")
 	}
 	gzipOutput = gzip.NewWriter(output)
-	_,err=gzipOutput.Write(content)
-	if err!=nil {
+	_, err = gzipOutput.Write(content)
+	if err != nil {
 		return nil, vperror.Chain(err, "unable to write gzip")
 	}
-	err=gzipOutput.Flush()
-	if err!=nil {
+	err = gzipOutput.Flush()
+	if err != nil {
 		return nil, vperror.Chain(err, "unable to flush gzip")
 	}
-	err=gzipOutput.Close()
-	if err!=nil {
+	err = gzipOutput.Close()
+	if err != nil {
 		return nil, vperror.Chain(err, "unable to close gzip")
 	}
-	err=output.Close()
-	if err!=nil {
+	err = output.Close()
+	if err != nil {
 		return nil, vperror.Chain(err, "unable to close output")
 	}
 
@@ -112,8 +112,8 @@ func symDecrypt(content, password []byte) ([]byte, error) {
 	}
 	gzipReader, err = gzip.NewReader(messageDetails.UnverifiedBody)
 	defer func() {
-		if gzipReader!=nil {
-			_=gzipReader.Close()
+		if gzipReader != nil {
+			_ = gzipReader.Close()
 		}
 	}()
 	if err != nil {

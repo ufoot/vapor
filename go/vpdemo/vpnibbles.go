@@ -108,7 +108,7 @@ func (server NibblesServer) Do(timestamp time.Time, iteration int64, quit chan<-
 func (server NibblesServer) Quit(timestamp time.Time) {
 	vplog.LogNoticef("game server quit")
 	if server.server != nil {
-		_=server.server.Stop()
+		_ = server.server.Stop()
 	}
 	server.server = nil
 }

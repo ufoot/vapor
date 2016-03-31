@@ -22,18 +22,18 @@ package main
 import (
 	"flag"
 	"fmt"
-	"os"
 	"github.com/ufoot/vapor/go/vplog"
 	"github.com/ufoot/vapor/go/vploop"
+	"os"
 )
 
-var showHelp=false
-var showPackage=false
-var showVersion=false
+var showHelp = false
+var showPackage = false
+var showVersion = false
 
 func usage() {
-	if len(os.Args)>0 {
-		fmt.Printf("usage: %s <options>\n\n",os.Args[0])
+	if len(os.Args) > 0 {
+		fmt.Printf("usage: %s <options>\n\n", os.Args[0])
 	}
 	flag.PrintDefaults()
 }
@@ -52,13 +52,13 @@ func main() {
 		return
 	}
 	if showVersion {
-		fmt.Printf("%d.%d.%s\n",VersionMajor,VersionMinor,VersionStamp)
+		fmt.Printf("%d.%d.%s\n", VersionMajor, VersionMinor, VersionStamp)
 		return
 	}
 	if showPackage {
-		fmt.Printf("%s-%d.%d.%s (%s %d.%d.%s)\n",PackageTarname,VersionMajor,VersionMinor,VersionStamp,PackageName,VersionMajor,VersionMinor,VersionStamp)
-		fmt.Printf("%s - %s\n",PackageURL,PackageEmail)
-		fmt.Printf("%s (%s)\n",PackageCopyright,PackageLicense)
+		fmt.Printf("%s-%d.%d.%s (%s %d.%d.%s)\n", PackageTarname, VersionMajor, VersionMinor, VersionStamp, PackageName, VersionMajor, VersionMinor, VersionStamp)
+		fmt.Printf("%s - %s\n", PackageURL, PackageEmail)
+		fmt.Printf("%s (%s)\n", PackageCopyright, PackageLicense)
 		return
 	}
 
