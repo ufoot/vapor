@@ -188,9 +188,35 @@ func (node *Node) Stop() {
 	node.up = false
 }
 
-// Up tells wether the node is up or not
+// Up tells wether the node is up or not.
 func (node *Node) Up() bool {
 	return node.up
+}
+
+// GetImaginaryNode returns the ID of the imaginary node
+// for a lookup. This is to be used for the first lookup
+// step. Technically you could use any number but choosing
+// it properly makes search faster. Note that keyShift is
+// just key on the first iteration.
+func (node *Node) GetImaginaryNode(key []byte) []byte {
+	walker := node.ringPtr.walker
+
+	zeroID := walker.Zero()
+
+	// shift stuff to the right, pad with zeroes
+	nodePart := walker.BackwardElem(node.Status.Info.NodeID, zeroID, walker.N()-int(node.ringPtr.Info.Config.NbStep))
+	// incr by one to make sure it's *after* us, regardless
+	// of the fact what we're going to add might be smaller
+	// than what we substract by putting zeroes
+	nodePart = walker.Incr(nodePart)
+	// shift stuff to the left, pad with zeroes
+	nodePart = walker.ForwardElem(nodePart, zeroID, walker.N()-int(node.ringPtr.Info.Config.NbStep))
+	// make sure the right part of the imaginary part
+	// or the topmost bits of k, to stumble magically on k
+	// faster than expected in a fully dense network
+	keyPart := walker.BackwardElem(key, zeroID, int(node.ringPtr.Info.Config.NbStep))
+
+	return walker.Add(nodePart, keyPart)
 }
 
 /*

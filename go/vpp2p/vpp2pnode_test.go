@@ -20,6 +20,7 @@
 package vpp2p
 
 import (
+	"encoding/hex"
 	"github.com/ufoot/vapor/go/vpid"
 	"github.com/ufoot/vapor/go/vpp2pdat"
 	"github.com/ufoot/vapor/go/vpsum"
@@ -34,6 +35,25 @@ func init() {
 	testID = []byte("1234567890abcdef")
 }
 
+func setupHostRing(t *testing.T, useSig bool) (*Host, *Ring, error) {
+	var host *Host
+	var ring *Ring
+	var err error
+
+	host, err = NewHost(testTitle, testURL, useSig)
+	if err != nil {
+		t.Error("unable to create host", t, err)
+		return nil, nil, err
+	}
+	ring, err = NewRing(host, testTitle, testDescription, testID, vpp2pdat.DefaultRingConfig(), nil, nil)
+	if err != nil {
+		t.Error("unable to create ring", t, err)
+		return nil, nil, err
+	}
+
+	return host, ring, nil
+}
+
 func TestNewNode(t *testing.T) {
 	var host *Host
 	var ring *Ring
@@ -41,14 +61,7 @@ func TestNewNode(t *testing.T) {
 	var err error
 	var zeroes, zeroes2 int
 
-	host, err = NewHost(testTitle, testURL, true)
-	if err != nil {
-		t.Error("unable to create host with a valid pubKey", err)
-	}
-	ring, err = NewRing(host, testTitle, testDescription, testID, vpp2pdat.DefaultRingConfig(), nil, nil)
-	if err != nil {
-		t.Error("unable to create ring with a valid pubKey", err)
-	}
+	host, ring, err = setupHostRing(t, true)
 	node, err = NewNode(host, ring, nil)
 	if err != nil {
 		t.Error("unable to create node with a valid pubKey", err)
@@ -74,14 +87,7 @@ func TestNewNode(t *testing.T) {
 		t.Error("failed to report a broken sig", err)
 	}
 
-	host, err = NewHost(testTitle, testURL, false)
-	if err != nil {
-		t.Error("unable to create host", err)
-	}
-	ring, err = NewRing(host, testTitle, testDescription, testID, vpp2pdat.DefaultRingConfig(), nil, nil)
-	if err != nil {
-		t.Error("unable to create ring", err)
-	}
+	host, ring, err = setupHostRing(t, false)
 	node, err = NewNode(host, ring, nil)
 	if err != nil {
 		t.Error("unable to create node", err)
@@ -95,6 +101,27 @@ func TestNewNode(t *testing.T) {
 	if err != nil {
 		t.Error("sig reported as wrong when it's legal to have an empty sig")
 	}
+}
+
+func TestGetImaginaryNode(t *testing.T) {
+	var host *Host
+	var ring *Ring
+	var node1, node2 *Node
+	var err error
+
+	host, ring, err = setupHostRing(t, false)
+	node1, err = NewNode(host, ring)
+	if err != nil {
+		t.Error("unable to create node", err)
+	}
+	node2, err = NewNode(host, ring)
+	if err != nil {
+		t.Error("unable to create node", err)
+	}
+	imaginaryNode := node1.GetImaginaryNode(node2.Status.Info.NodeID)
+	t.Logf("node = %s", hex.EncodeToString(node1.Status.Info.NodeID))
+	t.Logf("key =  %s", hex.EncodeToString(node2.Status.Info.NodeID))
+	t.Logf("img =  %s", hex.EncodeToString(imaginaryNode))
 }
 
 /*
