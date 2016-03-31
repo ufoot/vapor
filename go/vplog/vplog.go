@@ -71,7 +71,8 @@ func newLog(program string, writer io.Writer) *Log {
 	logger.stderrLogger = log.New(logger.stderrBuffer, prefix, log.Ltime)
 	logger.syslogLogger, err = syslog.NewLogger(syslog.Priority(int(syslogPriority))|syslog.LOG_SYSLOG, log.Lshortfile)
 	if err != nil {
-		panic(err)
+		logger.syslogLogger = nil
+		LoggerWarning(&logger, "no syslog support, using STDERR only")
 	}
 
 	logger.Flush()
@@ -91,14 +92,14 @@ func (l *Log) output(p Priority, ps, ms string) {
 	for _, line = range strings.Split(ms, "\n") {
 		if len(line) > 0 {
 			line = sepHeaderContent + " " + line
-			if p <= stderrPriority {
+			if p <= stderrPriority && l.stderrLogger != nil {
 				if p <= problemPriority {
 					l.stderrLogger.Output(outputCalldepth, ps+line)
 				} else {
 					l.stderrLogger.Output(outputCalldepth, line)
 				}
 			}
-			if p <= syslogPriority {
+			if p <= syslogPriority && l.syslogLogger != nil {
 				l.syslogLogger.Output(outputCalldepth, ps+line)
 			}
 			if p <= flushPriority {
