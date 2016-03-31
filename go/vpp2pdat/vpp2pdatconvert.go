@@ -31,9 +31,9 @@ const (
 	// RingIDBufNbBytes gives the number of bytes for a ring ID when used as a map key.
 	RingIDBufNbBytes = 64
 	// HostPubKeyShortStringLen gives the number of bytes for a host pub key when used as a short map key.
-	HostPubKeyShortStringLen = 7
+	HostPubKeyShortStringLen = 5
 	// NodeIDShortStringLen gives the number of bytes for a node ID when used as a short map key.
-	NodeIDShortStringLen = 8
+	NodeIDShortStringLen = 7
 	// RingIDShortStringLen gives the number of bytes for a ring ID when used as a short map key.
 	RingIDShortStringLen = 9
 )

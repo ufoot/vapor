@@ -110,11 +110,11 @@ func TestGetImaginaryNode(t *testing.T) {
 	var err error
 
 	host, ring, err = setupHostRing(t, false)
-	node1, err = NewNode(host, ring)
+	node1, err = NewNode(host, ring, nil)
 	if err != nil {
 		t.Error("unable to create node", err)
 	}
-	node2, err = NewNode(host, ring)
+	node2, err = NewNode(host, ring, nil)
 	if err != nil {
 		t.Error("unable to create node", err)
 	}
