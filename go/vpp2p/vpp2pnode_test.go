@@ -49,7 +49,7 @@ func TestNewNode(t *testing.T) {
 	if err != nil {
 		t.Error("unable to create ring with a valid pubKey", err)
 	}
-	node, err = NewNode(host, ring)
+	node, err = NewNode(host, ring, nil)
 	if err != nil {
 		t.Error("unable to create node with a valid pubKey", err)
 	}
@@ -82,7 +82,7 @@ func TestNewNode(t *testing.T) {
 	if err != nil {
 		t.Error("unable to create ring", err)
 	}
-	node, err = NewNode(host, ring)
+	node, err = NewNode(host, ring, nil)
 	if err != nil {
 		t.Error("unable to create node", err)
 	}

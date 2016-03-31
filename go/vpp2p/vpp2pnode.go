@@ -81,12 +81,12 @@ func (ria *ringIDAppender) Transform(nodeID []byte) []byte {
 	return vpp2pdat.NodeInfoSigBytes(ni)
 }
 
-// NewNode builds a new node object.
-func NewNode(host *Host, ring *Ring) (*Node, error) {
+// NewNode builds a new node object. Host and Ring are required,
+// nodeID is optional, by default a new nodeID is provided.
+func NewNode(host *Host, ring *Ring, nodeID []byte) (*Node, error) {
 	var ret Node
 	var info vpp2papi.NodeInfo
 	var err error
-	var intNodeID *big.Int
 	var sig []byte
 
 	ret.hostPtr = host
@@ -110,21 +110,30 @@ func NewNode(host *Host, ring *Ring) (*Node, error) {
 	copy(ret.Status.Info.RingID, ring.Info.RingID)
 	ret.Status.Info.HostPubKey = make([]byte, len(host.Info.HostPubKey))
 
-	ria := ringIDAppender{ringID: ring.Info.RingID}
-	if host.CanSign() {
-		intNodeID, sig, _, err = vpid.GenerateID256(host.key, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
-		if err != nil {
-			return nil, err
+	if nodeID != nil && len(nodeID) == vpp2pdat.NodeIDBufNbBytes {
+		ret.Status.Info.NodeID = make([]byte, vpp2pdat.NodeIDBufNbBytes)
+		for i, v := range nodeID {
+			ret.Status.Info.NodeID[i] = v
 		}
 	} else {
-		intNodeID, _, _, err = vpid.GenerateID256(nil, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
-		if err != nil {
-			return nil, err
+		var intNodeID *big.Int
+
+		ria := ringIDAppender{ringID: ring.Info.RingID}
+		if host.CanSign() {
+			intNodeID, sig, _, err = vpid.GenerateID256(host.key, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
+			if err != nil {
+				return nil, err
+			}
+		} else {
+			intNodeID, _, _, err = vpid.GenerateID256(nil, nil, &ria, NodeKeySeconds, NodeKeyZeroes)
+			if err != nil {
+				return nil, err
+			}
+			sig = []byte("")
 		}
-		sig = []byte("")
+		ret.Status.Info.NodeID = vpsum.IntToBuf256(intNodeID)
 	}
 
-	ret.Status.Info.NodeID = vpsum.IntToBuf256(intNodeID)
 	copy(ret.Status.Info.HostPubKey, host.Info.HostPubKey)
 	ret.Status.Info.NodeSig = sig
 

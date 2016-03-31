@@ -38,11 +38,11 @@ func TestGlobalNodeCatalog(t *testing.T) {
 	if err != nil {
 		t.Error("unable to create ring", err)
 	}
-	node1, err = NewNode(host, ring)
+	node1, err = NewNode(host, ring, nil)
 	if err != nil {
 		t.Error("unable to create node1", err)
 	}
-	node2, err = NewNode(host, ring)
+	node2, err = NewNode(host, ring, nil)
 	if err != nil {
 		t.Error("unable to create node2", err)
 	}
