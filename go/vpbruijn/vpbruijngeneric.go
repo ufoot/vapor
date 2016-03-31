@@ -21,6 +21,7 @@ package vpbruijn
 
 import (
 	"math/big"
+	"math/rand"
 )
 
 const (
@@ -227,6 +228,17 @@ func (b *bruijnGeneric) Filter(x []byte) []byte {
 	bigRet := b.filterX(bytesToBig(x, b.bigMax))
 
 	return bigToBytes(bigRet, b.nbBytes)
+}
+
+func (b *bruijnGeneric) Rand(r *rand.Rand) []byte {
+	var bigRet big.Int
+	bigRet.Rand(r, b.bigMax)
+
+	return bigToBytes(&bigRet, b.nbBytes)
+}
+
+func (b *bruijnGeneric) Zero() []byte {
+	return make([]byte, b.nbBytes)
 }
 
 func (b *bruijnGeneric) Add(x, y []byte) []byte {

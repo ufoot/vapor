@@ -27,6 +27,7 @@ package vpbruijn
 
 import (
 	"encoding/hex"
+	"math/rand"
 )
 
 const (
@@ -252,6 +253,14 @@ func (b *bruijn16x64) Filter(x []byte) []byte {
 	}
 
 	return append(make([]byte, nbBytes-l), x...)
+}
+
+func (b *bruijn16x64) Rand(r *rand.Rand) []byte {
+	return b.implGeneric.Rand(r)
+}
+
+func (b *bruijn16x64) Zero() []byte {
+	return b.implGeneric.Zero()
 }
 
 func (b *bruijn16x64) Add(x, y []byte) []byte {

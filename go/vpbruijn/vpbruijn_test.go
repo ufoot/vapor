@@ -21,6 +21,7 @@ package vpbruijn
 
 import (
 	"encoding/hex"
+	"math/rand"
 	"testing"
 )
 
@@ -113,6 +114,30 @@ func TestBruijnBackward(t *testing.T) {
 				}
 				copy(lastV, v)
 			}
+		}
+	}
+}
+
+func TestBruijnMath(t *testing.T) {
+	r := rand.New(rand.NewSource(0))
+	for _, m := range mList {
+		for _, n := range nList {
+			walker, err := BruijnNew(m, n)
+			if err != nil {
+				t.Error("unable to create walker", err)
+			}
+			randKey := walker.Rand(r)
+			t.Logf("random key for m,n=%d,%d: %s", m, n, hex.EncodeToString(randKey))
+			zeroKey := walker.Zero()
+			t.Logf("zero key for m,n=%d,%d: %s", m, n, hex.EncodeToString(zeroKey))
+			oneKey := walker.Incr(zeroKey)
+			t.Logf("one key for m,n=%d,%d: %s", m, n, hex.EncodeToString(oneKey))
+			zeroCheckKey := walker.Decr(oneKey)
+			if walker.Cmp(zeroKey, zeroCheckKey) != 0 {
+				t.Errorf("zero (check) key for m,n=%d,%d: %s but it should be zero", m, n, hex.EncodeToString(zeroCheckKey))
+			}
+			maxKey := walker.Decr(zeroKey)
+			t.Logf("max key for m,n=%d,%d: %s", m, n, hex.EncodeToString(maxKey))
 		}
 	}
 }

@@ -25,6 +25,7 @@ package vpbruijn
 
 import (
 	"fmt"
+	"math/rand"
 )
 
 // BruijnWalker allows walking along a Bruijn graph, going forward, backward,
@@ -82,6 +83,10 @@ type BruijnWalker interface {
 	// be called with a hash value, the hast having a greater range than the key
 	// ring used.
 	Filter(x []byte) []byte
+	// Rand returns a random valid key.
+	Rand(r *rand.Rand) []byte
+	// Zero returns the zero key.
+	Zero() []byte
 	// Add 2 keys, if result is too big, will loop with Mod() and keep it
 	// within the allowed key range.
 	Add(x, y []byte) []byte
