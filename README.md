@@ -28,8 +28,11 @@ with a standard `go get` command. For instance:
 `go get github.com/ufoot/vapor/go/vpdemo`
 
 Alternatively, on UNIXish platforms, a `./configure` script sets
-up some Makefiles which allow the usual `./configure && make` sequence
-to work. Use `make help` to discover standard targets.
+up some Makefiles which allow a quite usual `./boostrap && ./configure && make`
+sequence to work. 
+
+Project is build automatically on 
+[Travis](https://travis-ci.org/ufoot/vapor).
 
 Documentation
 -------------
