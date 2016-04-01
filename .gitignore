@@ -11,6 +11,7 @@ go/src/git.apache.org
 go/src/github.com
 go/src/golang.org
 go/src/gopkg.in
+go/src/honnef.co
 go/bin/*
 go/pkg
 test
@@ -20,6 +21,8 @@ doc/cover
 thrift/gen-*
 utils/env.sh
 go/vpwire/*.png
+vapor-*.tar.gz
+docker/Dockerfile-build
 *~
 *#*
 .*.swp

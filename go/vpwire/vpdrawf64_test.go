@@ -30,21 +30,20 @@ const x0 float64 = 10
 const x1 float64 = 100
 const y0 float64 = -100
 const y1 float64 = -10
-const z0 float64 = 90
-const z1 float64 = 180
+const z float64 = 90
 
 func TestF64Square(t *testing.T) {
 	var square vpline3.F64
 	const pngName string = "square.png"
 
-	square = append(square, *vpvec3.F64New(x0, y0, z0))
-	square = append(square, *vpvec3.F64New(x0, y1, z0))
-	square = append(square, *vpvec3.F64New(x0, y1, z0))
-	square = append(square, *vpvec3.F64New(x1, y1, z0))
-	square = append(square, *vpvec3.F64New(x1, y1, z0))
-	square = append(square, *vpvec3.F64New(x1, y0, z0))
-	square = append(square, *vpvec3.F64New(x1, y0, z0))
-	square = append(square, *vpvec3.F64New(x0, y0, z0))
+	square = append(square, *vpvec3.F64New(x0, y0, z))
+	square = append(square, *vpvec3.F64New(x0, y1, z))
+	square = append(square, *vpvec3.F64New(x0, y1, z))
+	square = append(square, *vpvec3.F64New(x1, y1, z))
+	square = append(square, *vpvec3.F64New(x1, y1, z))
+	square = append(square, *vpvec3.F64New(x1, y0, z))
+	square = append(square, *vpvec3.F64New(x1, y0, z))
+	square = append(square, *vpvec3.F64New(x0, y0, z))
 
 	img := F64Demo(&square)
 	err := draw2dimg.SaveToPngFile(pngName, img)

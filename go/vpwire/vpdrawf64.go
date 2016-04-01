@@ -28,6 +28,7 @@ import (
 	"github.com/ufoot/vapor/go/vpvec3"
 	"image"
 	"image/color"
+	"image/draw"
 )
 
 func f64ProjCenterAndScale(line *vpline3.F64) *vpmat4x4.F64 {
@@ -113,7 +114,7 @@ func F64Proj(line *vpline3.F64, img *image.RGBA, dir *vpvec3.F64) *vpmat4x4.F64 
 
 // F64Draw draws a line on an image, the image is modified in-place, and
 // returned modified.
-func F64Draw(img *image.RGBA, line *vpline3.F64, proj *vpmat4x4.F64, mode DrawMode, col color.Color) *image.RGBA {
+func F64Draw(img draw.Image, line *vpline3.F64, proj *vpmat4x4.F64, mode DrawMode, col color.Color) draw.Image {
 	gc := draw2dimg.NewGraphicContext(img)
 	gc.SetStrokeColor(col)
 
@@ -146,7 +147,7 @@ func F64Draw(img *image.RGBA, line *vpline3.F64, proj *vpmat4x4.F64, mode DrawMo
 // with default point-of-view, perspective and other parameters, can typically
 // be used for testing, not testing this package, but possibly testing out
 // point transformations functions (Bezier curves is an example).
-func F64Demo(line *vpline3.F64) *image.RGBA {
+func F64Demo(line *vpline3.F64) draw.Image {
 	rect := image.Rect(0, 0, DemoWidth, DemoHeight)
 	ret := image.NewRGBA(rect)
 	bg := color.RGBA{0xff, 0xff, 0xff, 0xff}

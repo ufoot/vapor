@@ -26,30 +26,17 @@ if [ ! -d utils ] ; then
     echo "$0 should be run in srcdir"
     exit 1
 fi
+if [ ! -x utils/env.sh ] || [ ! -f docker/Dockerfile-build ] || [ ! -f docker/Dockerfile-vpdemo ] ; then
+    echo "run ./configure to generate ./utils/env.sh"
+    exit 1
+fi
 
-export GOPATH="$(pwd)/go"
-export PATH="$(pwd)/go/bin:$PATH"
+. utils/env.sh
 
-get() {
-    echo "go get $1"
-    go get -u $1
-}
-
-get github.com/alecthomas/gometalinter
-get github.com/tools/godep
-get github.com/axw/gocov/gocov
-get github.com/AlekSi/gocov-xml
-get github.com/jstemmer/go-junit-report
-get github.com/ryancox/gobench2plot
-get golang.org/x/crypto/ripemd160
-get golang.org/x/crypto/openpgp
-get golang.org/x/crypto/openpgp/packet
-get git.apache.org/thrift.git/lib/go/thrift
-get github.com/llgcode/draw2d
-
-gometalinter --install --update
-
-rm -rf go/src/github.com/ufoot/vapor
-install -d go/src/github.com/ufoot/vapor/go
-for i in go/vp*; do ln -s $(pwd)/$i go/src/github.com/ufoot/vapor/$i ; done
+make vapor-${PACKAGE_VERSION}.tar.gz && cp -f vapor-${PACKAGE_VERSION}.tar.gz docker/
+for i in build vpdemo ; do
+    cd docker && docker build -f Dockerfile-$i -t ufoot/vapor-$i:${PACKAGE_VERSION} . && cd ..
+    cd docker && docker build -f Dockerfile-$i -t ufoot/vapor-$i:latest . && cd ..
+done
+rm -f docker/vapor-${PACKAGE_VERSION}.tar.gz
 

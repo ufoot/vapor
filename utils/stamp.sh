@@ -19,7 +19,7 @@
 # Vapor homepage: http://www.ufoot.org/liquidwar/v7/vapor
 # Contact author: ufoot@ufoot.org
 
-if [ -d ../utils ] ; then
+if [ -d ../utils ] && [ ! -d utils ] ; then
     cd ..
 fi
 if [ ! -d utils ] ; then
@@ -67,7 +67,7 @@ find_version_go () {
 }
 
 git_check () {
-    if git status > /dev/null 2>&1 ; then
+    if [ -d .git ] && git status > /dev/null 2>&1 ; then
         true
     else
         echo "this is not a git repo, $0 won't do anything"
