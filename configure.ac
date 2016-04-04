@@ -48,6 +48,9 @@ VP_TOPSRCDIR=$(readlink -f $(dirname $0) 2> /dev/null || readlink $(dirname $0) 
 AC_SUBST(VP_TOPBUILDDIR)
 AC_SUBST(VP_TOPSRCDIR)
 
+PREFIX="${prefix}"
+AC_SUBST(PREFIX)
+
 AC_SUBST(PACKAGE_NAME)
 AC_SUBST(PACKAGE_TARNAME)
 AC_SUBST(PACKAGE_VERSION)
@@ -58,6 +61,7 @@ AC_SUBST(PACKAGE_URL)
 AC_CONFIG_FILES([Makefile
 	utils/env.sh
 	docker/Dockerfile-build
+	docker/Dockerfile-vpdemo
 ])
 
 AC_OUTPUT
