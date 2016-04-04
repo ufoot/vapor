@@ -57,10 +57,10 @@ devel: indent dep stamp devel-vp
 doc: indent dep stamp doc-vp
 
 install:
-	install -d @PREFIX@/bin && for i in vpdemo vpcommonclient vpbusclient vpp2pclient ; do cp go/bin/$$i @PREFIX@/bin/ ; done
+	install -d @prefix@/bin && for i in vpdemo vpcommonclient vpbusclient vpp2pclient ; do cp go/bin/$$i @prefix@/bin/ ; done
 
 uninstall:
-	for i in vpdemo vpcommonclient vpbusclient vpp2pclient ; do rm -f @PREFIX@/bin/$$i ; done
+	for i in vpdemo vpcommonclient vpbusclient vpp2pclient ; do rm -f @prefix@/bin/$$i ; done
 
 clean:
 	rm -rf go/bin/vp* go/pkg test/* doc/txt/*.txt doc/html/*.html doc/cover/*.html thrift/gen-* vpwire/*.png vapor-@PACKAGE_VERSION@*
