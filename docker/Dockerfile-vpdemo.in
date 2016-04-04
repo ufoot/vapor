@@ -25,7 +25,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN (apt-get update && apt-get upgrade -y -q && apt-get dist-upgrade -y -q && apt-get -y -q autoclean && apt-get -y -q autoremove)
 
 # build requirements
-RUN apt-get install -y -q golang-go golang-go.tools golang-doc git git2cl
+RUN apt-get install -y -q golang-go golang-go.tools golang-doc git git2cl make
 RUN apt-get clean
 
 # our build

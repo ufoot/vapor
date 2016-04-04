@@ -25,7 +25,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN (apt-get update && apt-get upgrade -y -q && apt-get dist-upgrade -y -q && apt-get -y -q autoclean && apt-get -y -q autoremove)
 
 # complete build requirements
-RUN apt-get install -y -q golang-go golang-go.tools golang-doc git git2cl vim vim-syntax-go emacs golang-mode
+RUN apt-get install -y -q golang-go golang-go.tools golang-doc git git2cl make vim vim-syntax-go emacs golang-mode
 RUN apt-get clean
 
 # our build
