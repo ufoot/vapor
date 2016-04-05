@@ -23,7 +23,7 @@ utils/env.sh
 go/vpwire/*.png
 vapor-*.tar.gz
 docker/Dockerfile-build
-docker/Dockerfile-vpdemo
+docker/Dockerfile-demo
 *~
 *#*
 .*.swp
