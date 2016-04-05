@@ -26,7 +26,7 @@ if [ ! -d utils ] ; then
     echo "$0 should be run in srcdir"
     exit 1
 fi
-if [ ! -f utils/env.sh ] || [ ! -f docker/Dockerfile-build ] || [ ! -f docker/Dockerfile-vpdemo ] ; then
+if [ ! -f utils/env.sh ] || [ ! -f docker/Dockerfile-build ] || [ ! -f docker/Dockerfile-demo ] ; then
     echo "run ./configure to generate ./utils/env.sh"
     exit 1
 fi
