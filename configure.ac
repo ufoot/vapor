@@ -58,7 +58,7 @@ AC_SUBST(PACKAGE_URL)
 AC_CONFIG_FILES([Makefile
 	utils/env.sh
 	docker/Dockerfile-build
-	docker/Dockerfile-vpdemo
+	docker/Dockerfile-demo
 ])
 
 AC_OUTPUT
