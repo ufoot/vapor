@@ -34,9 +34,10 @@ fi
 . utils/env.sh
 
 make vapor-${PACKAGE_VERSION}.tar.gz && cp -f vapor-${PACKAGE_VERSION}.tar.gz docker/
-for i in build vpdemo ; do
-    cd docker && docker build -f Dockerfile-$i -t ufoot/vapor-$i:${PACKAGE_VERSION} . && cd ..
-    cd docker && docker build -f Dockerfile-$i -t ufoot/vapor-$i:latest . && cd ..
+for i in build demo ; do
+    for j in ${PACKAGE_VERSION} latest ; do
+        cd docker && docker build -f Dockerfile-$i -t ufoot/vapor-$i:$j . && cd ..
+    done
 done
 rm -f docker/vapor-${PACKAGE_VERSION}.tar.gz
 
