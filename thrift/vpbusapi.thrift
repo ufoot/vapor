@@ -30,6 +30,11 @@ namespace js vpbusapi
 include "vpcommonapi.thrift"
 
 /**
+ * DefaultPort is the TCP port the service listens to, by default.
+ */
+const i32 DefaultPort = 7888;
+
+/**
  * VpBusApi is used to communicate between Vapor and Fumes.
  * Vapor is the Golang server and Fumes the C++ client.
  */

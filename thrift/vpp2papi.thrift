@@ -32,6 +32,11 @@ namespace js vpp2papi
 include "vpcommonapi.thrift"
 
 /**
+ * DefaultPort is the TCP port the service listens to, by default.
+ */
+const i32 DefaultPort = 8777;
+
+/**
  * HostInfo contains static informations about a host.
  */
 struct HostInfo {

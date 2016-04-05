@@ -17,5 +17,7 @@ var _ = bytes.Equal
 
 var _ = vpcommonapi.GoUnusedProtection__
 
+const DefaultPort = 7888
+
 func init() {
 }
