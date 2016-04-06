@@ -224,7 +224,7 @@ func (host *Host) Sync(request *vpp2papi.SyncRequest) (*vpp2papi.SyncResponse, e
 	}
 
 	ret := vpp2papi.NewSyncResponse()
-	ret.Found, ret.NodesPath, ret.SuccessorNodes, ret.PredecessorNode, err = node.Sync(request.Context.SourceNode.NodeID, request.KeyShift, request.ImaginaryNode)
+	ret.Found, ret.NodesPath, ret.SuccessorNodes, ret.PredecessorNode, err = node.Sync(request.Context.SourceNode, request.Context.SourceNode.NodeID, request.KeyShift, request.ImaginaryNode)
 	if err != nil {
 		return nil, err
 	}

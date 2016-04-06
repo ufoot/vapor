@@ -23,7 +23,7 @@ import (
 	"bytes"
 	"encoding/hex"
 	"github.com/ufoot/vapor/go/vpid"
-	//	"github.com/ufoot/vapor/go/vpp2papi"
+	"github.com/ufoot/vapor/go/vpp2papi"
 	"github.com/ufoot/vapor/go/vpp2pdat"
 	"github.com/ufoot/vapor/go/vpsum"
 	"strconv"
@@ -151,7 +151,6 @@ func TestGetImaginaryNode(t *testing.T) {
 	}
 }
 
-/*
 func TestGetSync(t *testing.T) {
 	var host *Host
 	var ring *Ring
@@ -176,21 +175,29 @@ func TestGetSync(t *testing.T) {
 	var path []*vpp2papi.NodeInfo
 	var successors []*vpp2papi.NodeInfo
 	var predecessor *vpp2papi.NodeInfo
-	found,path,successors,predecessor,err=node1.Sync(node2.Status.Info.NodeID,node2.Status.Info.NodeID,imaginaryNode)
-	if found!=true {
+	found, path, successors, predecessor, err = node1.Sync(node2.Status.Info, node2.Status.Info.NodeID, node2.Status.Info.NodeID, imaginaryNode)
+	if found != true {
 		t.Error("unable to sync with self")
 	}
-	if path==nil {
+	if path == nil {
 		t.Error("path is nil for self")
 	}
-	if successors==nil {
+	if successors == nil {
 		t.Error("successors is nil for self")
 	}
-	if predecessor==nil {
+	if predecessor == nil {
 		t.Error("predecessor is nil for self")
 	}
+	if len(path) != 1 {
+		t.Fatal("bad path len", len(path))
+	}
+	if len(successors) != 0 {
+		t.Fatal("bad path len", len(successors))
+	}
+	if bytes.Compare(node2.Status.Info.NodeID, predecessor.NodeID) != 0 {
+		t.Fatal("bad predecessor")
+	}
 }
-*/
 
 /*
 func TestLookup(t *testing.T) {

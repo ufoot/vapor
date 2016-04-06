@@ -21,6 +21,7 @@ package vpbruijn
 
 import (
 	"encoding/hex"
+	"fmt"
 	"math/rand"
 	"testing"
 )
@@ -138,6 +139,62 @@ func TestBruijnMath(t *testing.T) {
 			}
 			maxKey := walker.Decr(zeroKey)
 			t.Logf("max key for m,n=%d,%d: %s", m, n, hex.EncodeToString(maxKey))
+		}
+	}
+}
+
+func TestBruijnCmp(t *testing.T) {
+	r := rand.New(rand.NewSource(0))
+	for _, m := range mList {
+		for _, n := range nList {
+			walker, err := BruijnNew(m, n)
+			if err != nil {
+				t.Error("unable to create walker", err)
+			}
+			tf := func(key1 []byte) {
+				key2 := walker.Incr(key1)
+				key3 := walker.Incr(key2)
+				reportKeys := fmt.Sprintf("key1=%s,key2=%s,key3=%s", hex.EncodeToString(key1), hex.EncodeToString(key2), hex.EncodeToString(key3))
+
+				if !walker.GtLe(key2, key1, key3) {
+					t.Errorf("key1<key2<=key3 reported as false (%s)", reportKeys)
+				}
+				if !walker.GeLt(key2, key1, key3) {
+					t.Errorf("key1<=key2<key3 reported as false (%s)", reportKeys)
+				}
+
+				if walker.GtLe(key2, key3, key1) {
+					t.Errorf("key3<key2<=key1 reported as true (%s)", reportKeys)
+				}
+				if walker.GeLt(key2, key3, key1) {
+					t.Errorf("key3<=key2<key1 reported as true (%s)", reportKeys)
+				}
+
+				if !walker.GtLe(key2, key1, key2) {
+					t.Errorf("key1<key2<=key2 reported as false (%s)", reportKeys)
+				}
+				if !walker.GeLt(key1, key1, key2) {
+					t.Errorf("key1<=key1<key2 reported as false (%s)", reportKeys)
+				}
+
+				if walker.GtLe(key1, key1, key2) {
+					t.Errorf("key1<key1<=key2 reported as true (%s)", reportKeys)
+				}
+				if walker.GeLt(key2, key1, key2) {
+					t.Errorf("key1<=key1<key2 reported as true (%s)", reportKeys)
+				}
+
+				if walker.GtLe(key1, key1, key1) {
+					t.Errorf("key1<key1<=key1 reported as true (%s)", reportKeys)
+				}
+				if walker.GeLt(key1, key1, key1) {
+					t.Errorf("key1<=key1<key1 reported as true (%s)", reportKeys)
+				}
+			}
+			tf(walker.Rand(r))
+			tf(walker.Zero())
+			tf(walker.Decr(walker.Zero()))
+			tf(walker.Decr(walker.Decr(walker.Zero())))
 		}
 	}
 }

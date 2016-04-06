@@ -326,11 +326,31 @@ func (node *Node) GetPredecessor() *vpp2papi.NodeInfo {
 	return node.Status.Predecessor
 }
 
+// setPredecessor returns the predecessor of a given node
+func (node *Node) setPredecessor(nodeInfo *vpp2papi.NodeInfo) {
+	defer node.predecessorAccess.Unlock()
+	node.predecessorAccess.Lock()
+
+	node.Status.Predecessor = nodeInfo
+}
+
 func (node *Node) isKeyOnNode(key []byte) bool {
 	defer node.predecessorAccess.RUnlock()
 	node.predecessorAccess.RLock()
 
-	if node.ringPtr.walker.GtLe(key, node.Status.Predecessor.NodeID, node.Status.Info.NodeID) {
+	walker := node.ringPtr.walker
+
+	if walker.Cmp(node.Status.Predecessor.NodeID, node.Status.Info.NodeID) == 0 {
+		// special case, if predecessor is self, we cover the whole ring,
+		// it does not appear sensible to have GtLe return true if they
+		// are the same because, factually, it's not between X and X. One
+		// could consider between X and X, there's the complete ring, but
+		// one could expect other quirks when we would really test a
+		// narrow ring.
+		return true
+	}
+
+	if walker.GtLe(key, node.Status.Predecessor.NodeID, node.Status.Info.NodeID) {
 		return true
 	}
 
@@ -357,11 +377,14 @@ func (node *Node) findKeyOnLocalNode(key []byte) *Node {
 }
 
 // Sync performs a lookup for a given key
-func (node *Node) Sync(key, keyShift, imaginaryNode []byte) (bool, []*vpp2papi.NodeInfo, []*vpp2papi.NodeInfo, *vpp2papi.NodeInfo, error) {
+func (node *Node) Sync(source *vpp2papi.NodeInfo, key, keyShift, imaginaryNode []byte) (bool, []*vpp2papi.NodeInfo, []*vpp2papi.NodeInfo, *vpp2papi.NodeInfo, error) {
 	var found *Node
 
 	found = node.findKeyOnLocalNode(key)
 	if found != nil {
+		// not sure this should be performed in every case...
+		found.setPredecessor(source)
+
 		nodesPath := make([]*vpp2papi.NodeInfo, 1)
 		nodesPath[0] = found.Status.Info
 		return true, nodesPath, found.GetSuccessors(), found.GetPredecessor(), nil
