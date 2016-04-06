@@ -20,10 +20,13 @@
 package vpp2p
 
 import (
+	"bytes"
 	"encoding/hex"
 	"github.com/ufoot/vapor/go/vpid"
+	//	"github.com/ufoot/vapor/go/vpp2papi"
 	"github.com/ufoot/vapor/go/vpp2pdat"
 	"github.com/ufoot/vapor/go/vpsum"
+	"strconv"
 	"testing"
 )
 
@@ -122,7 +125,72 @@ func TestGetImaginaryNode(t *testing.T) {
 	t.Logf("node = %s", hex.EncodeToString(node1.Status.Info.NodeID))
 	t.Logf("key =  %s", hex.EncodeToString(node2.Status.Info.NodeID))
 	t.Logf("img =  %s", hex.EncodeToString(imaginaryNode))
+
+	leftNode1 := node1.Status.Info.NodeID[0 : node1.ringPtr.Info.Config.NbStep/2]
+	var leftNode1Int64 int64
+	leftNode1Int64, err = strconv.ParseInt(hex.EncodeToString(leftNode1), 16, 64)
+	if err != nil {
+		t.Error("unable to parse int", leftNode1Int64, err)
+	}
+
+	leftImaginaryNode := imaginaryNode[0 : node1.ringPtr.Info.Config.NbStep/2]
+	var leftImaginaryNodeInt64 int64
+	leftImaginaryNodeInt64, err = strconv.ParseInt(hex.EncodeToString(leftImaginaryNode), 16, 64)
+	if err != nil {
+		t.Error("unable to parse int", leftImaginaryNode, err)
+	}
+
+	if leftImaginaryNodeInt64-leftNode1Int64 != 1 {
+		t.Errorf("imaginaryNode=%x... not close enough to node1=%x...", leftImaginaryNodeInt64, leftNode1Int64)
+	}
+
+	leftNode2 := node2.Status.Info.NodeID[0 : 32-node1.ringPtr.Info.Config.NbStep/2]
+	rightImaginaryNode := imaginaryNode[node1.ringPtr.Info.Config.NbStep/2 : 32]
+	if bytes.Compare(leftNode2, rightImaginaryNode) != 0 {
+		t.Errorf("imaginaryNode=...%s not matching to node2=%s...", hex.EncodeToString(rightImaginaryNode), hex.EncodeToString(leftNode2))
+	}
 }
+
+/*
+func TestGetSync(t *testing.T) {
+	var host *Host
+	var ring *Ring
+	var node1, node2 *Node
+	var err error
+
+	host, ring, err = setupHostRing(t, false)
+	node1, err = NewNode(host, ring, nil)
+	if err != nil {
+		t.Error("unable to create node", err)
+	}
+	node2, err = NewNode(host, ring, nil)
+	if err != nil {
+		t.Error("unable to create node", err)
+	}
+	imaginaryNode := node1.GetImaginaryNode(node2.Status.Info.NodeID)
+	t.Logf("node = %s", hex.EncodeToString(node1.Status.Info.NodeID))
+	t.Logf("key =  %s", hex.EncodeToString(node2.Status.Info.NodeID))
+	t.Logf("img =  %s", hex.EncodeToString(imaginaryNode))
+
+	var found bool
+	var path []*vpp2papi.NodeInfo
+	var successors []*vpp2papi.NodeInfo
+	var predecessor *vpp2papi.NodeInfo
+	found,path,successors,predecessor,err=node1.Sync(node2.Status.Info.NodeID,node2.Status.Info.NodeID,imaginaryNode)
+	if found!=true {
+		t.Error("unable to sync with self")
+	}
+	if path==nil {
+		t.Error("path is nil for self")
+	}
+	if successors==nil {
+		t.Error("successors is nil for self")
+	}
+	if predecessor==nil {
+		t.Error("predecessor is nil for self")
+	}
+}
+*/
 
 /*
 func TestLookup(t *testing.T) {
