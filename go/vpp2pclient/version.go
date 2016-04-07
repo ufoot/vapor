@@ -37,4 +37,4 @@ const VersionMajor = 0 // VersionMajor set by stamp.sh
 // VersionMinor is the project minor version.
 const VersionMinor = 6 // VersionMinor set by stamp.sh
 // VersionStamp is the project stamp, possibly changes for each build.
-const VersionStamp = "b27b500" // VersionStamp set by stamp.sh
+const VersionStamp = "fa11d6e" // VersionStamp set by stamp.sh
