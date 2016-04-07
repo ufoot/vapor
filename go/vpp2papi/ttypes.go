@@ -419,10 +419,10 @@ func (p *NodeInfo) String() string {
 //
 // Attributes:
 //  - Successors
-//  - Ds
+//  - D
 type NodePeers struct {
 	Successors []*NodeInfo `thrift:"Successors,1" json:"Successors"`
-	Ds         []*NodeInfo `thrift:"Ds,2" json:"Ds"`
+	D          *NodeInfo   `thrift:"D,2" json:"D"`
 }
 
 func NewNodePeers() *NodePeers {
@@ -433,9 +433,18 @@ func (p *NodePeers) GetSuccessors() []*NodeInfo {
 	return p.Successors
 }
 
-func (p *NodePeers) GetDs() []*NodeInfo {
-	return p.Ds
+var NodePeers_D_DEFAULT *NodeInfo
+
+func (p *NodePeers) GetD() *NodeInfo {
+	if !p.IsSetD() {
+		return NodePeers_D_DEFAULT
+	}
+	return p.D
 }
+func (p *NodePeers) IsSetD() bool {
+	return p.D != nil
+}
+
 func (p *NodePeers) Read(iprot thrift.TProtocol) error {
 	if _, err := iprot.ReadStructBegin(); err != nil {
 		return thrift.PrependError(fmt.Sprintf("%T read error: ", p), err)
@@ -494,21 +503,9 @@ func (p *NodePeers) readField1(iprot thrift.TProtocol) error {
 }
 
 func (p *NodePeers) readField2(iprot thrift.TProtocol) error {
-	_, size, err := iprot.ReadListBegin()
-	if err != nil {
-		return thrift.PrependError("error reading list begin: ", err)
-	}
-	tSlice := make([]*NodeInfo, 0, size)
-	p.Ds = tSlice
-	for i := 0; i < size; i++ {
-		_elem1 := &NodeInfo{}
-		if err := _elem1.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem1), err)
-		}
-		p.Ds = append(p.Ds, _elem1)
-	}
-	if err := iprot.ReadListEnd(); err != nil {
-		return thrift.PrependError("error reading list end: ", err)
+	p.D = &NodeInfo{}
+	if err := p.D.Read(iprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", p.D), err)
 	}
 	return nil
 }
@@ -554,22 +551,14 @@ func (p *NodePeers) writeField1(oprot thrift.TProtocol) (err error) {
 }
 
 func (p *NodePeers) writeField2(oprot thrift.TProtocol) (err error) {
-	if err := oprot.WriteFieldBegin("Ds", thrift.LIST, 2); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:Ds: ", p), err)
+	if err := oprot.WriteFieldBegin("D", thrift.STRUCT, 2); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T write field begin error 2:D: ", p), err)
 	}
-	if err := oprot.WriteListBegin(thrift.STRUCT, len(p.Ds)); err != nil {
-		return thrift.PrependError("error writing list begin: ", err)
-	}
-	for _, v := range p.Ds {
-		if err := v.Write(oprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", v), err)
-		}
-	}
-	if err := oprot.WriteListEnd(); err != nil {
-		return thrift.PrependError("error writing list end: ", err)
+	if err := p.D.Write(oprot); err != nil {
+		return thrift.PrependError(fmt.Sprintf("%T error writing struct: ", p.D), err)
 	}
 	if err := oprot.WriteFieldEnd(); err != nil {
-		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:Ds: ", p), err)
+		return thrift.PrependError(fmt.Sprintf("%T write field end error 2:D: ", p), err)
 	}
 	return err
 }
@@ -1778,11 +1767,11 @@ func (p *HostStatus) readField2(iprot thrift.TProtocol) error {
 	tSlice := make([]*NodeStatus, 0, size)
 	p.LocalNodeStatus = tSlice
 	for i := 0; i < size; i++ {
-		_elem2 := &NodeStatus{}
-		if err := _elem2.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem2), err)
+		_elem1 := &NodeStatus{}
+		if err := _elem1.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem1), err)
 		}
-		p.LocalNodeStatus = append(p.LocalNodeStatus, _elem2)
+		p.LocalNodeStatus = append(p.LocalNodeStatus, _elem1)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -1798,17 +1787,17 @@ func (p *HostStatus) readField3(iprot thrift.TProtocol) error {
 	tMap := make(map[string]*RingInfo, size)
 	p.RingsRefs = tMap
 	for i := 0; i < size; i++ {
-		var _key3 string
+		var _key2 string
 		if v, err := iprot.ReadString(); err != nil {
 			return thrift.PrependError("error reading field 0: ", err)
 		} else {
-			_key3 = v
+			_key2 = v
 		}
-		_val4 := &RingInfo{}
-		if err := _val4.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val4), err)
+		_val3 := &RingInfo{}
+		if err := _val3.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val3), err)
 		}
-		p.RingsRefs[_key3] = _val4
+		p.RingsRefs[_key2] = _val3
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)
@@ -1824,17 +1813,17 @@ func (p *HostStatus) readField4(iprot thrift.TProtocol) error {
 	tMap := make(map[string]*HostInfo, size)
 	p.HostsRefs = tMap
 	for i := 0; i < size; i++ {
-		var _key5 string
+		var _key4 string
 		if v, err := iprot.ReadString(); err != nil {
 			return thrift.PrependError("error reading field 0: ", err)
 		} else {
-			_key5 = v
+			_key4 = v
 		}
-		_val6 := &HostInfo{}
-		if err := _val6.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val6), err)
+		_val5 := &HostInfo{}
+		if err := _val5.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val5), err)
 		}
-		p.HostsRefs[_key5] = _val6
+		p.HostsRefs[_key4] = _val5
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)
@@ -2282,11 +2271,11 @@ func (p *LookupResponse) readField2(iprot thrift.TProtocol) error {
 	tSlice := make([]*NodeInfo, 0, size)
 	p.NodesPath = tSlice
 	for i := 0; i < size; i++ {
-		_elem7 := &NodeInfo{}
-		if err := _elem7.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem7), err)
+		_elem6 := &NodeInfo{}
+		if err := _elem6.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem6), err)
 		}
-		p.NodesPath = append(p.NodesPath, _elem7)
+		p.NodesPath = append(p.NodesPath, _elem6)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -2302,17 +2291,17 @@ func (p *LookupResponse) readField3(iprot thrift.TProtocol) error {
 	tMap := make(map[string]*HostInfo, size)
 	p.HostsRefs = tMap
 	for i := 0; i < size; i++ {
-		var _key8 string
+		var _key7 string
 		if v, err := iprot.ReadString(); err != nil {
 			return thrift.PrependError("error reading field 0: ", err)
 		} else {
-			_key8 = v
+			_key7 = v
 		}
-		_val9 := &HostInfo{}
-		if err := _val9.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val9), err)
+		_val8 := &HostInfo{}
+		if err := _val8.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val8), err)
 		}
-		p.HostsRefs[_key8] = _val9
+		p.HostsRefs[_key7] = _val8
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)
@@ -2609,11 +2598,11 @@ func (p *GetSuccessorsResponse) readField1(iprot thrift.TProtocol) error {
 	tSlice := make([]*NodeInfo, 0, size)
 	p.SuccessorNodes = tSlice
 	for i := 0; i < size; i++ {
-		_elem10 := &NodeInfo{}
-		if err := _elem10.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem10), err)
+		_elem9 := &NodeInfo{}
+		if err := _elem9.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem9), err)
 		}
-		p.SuccessorNodes = append(p.SuccessorNodes, _elem10)
+		p.SuccessorNodes = append(p.SuccessorNodes, _elem9)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -2629,17 +2618,17 @@ func (p *GetSuccessorsResponse) readField2(iprot thrift.TProtocol) error {
 	tMap := make(map[string]*HostInfo, size)
 	p.HostsRefs = tMap
 	for i := 0; i < size; i++ {
-		var _key11 string
+		var _key10 string
 		if v, err := iprot.ReadString(); err != nil {
 			return thrift.PrependError("error reading field 0: ", err)
 		} else {
-			_key11 = v
+			_key10 = v
 		}
-		_val12 := &HostInfo{}
-		if err := _val12.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val12), err)
+		_val11 := &HostInfo{}
+		if err := _val11.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val11), err)
 		}
-		p.HostsRefs[_key11] = _val12
+		p.HostsRefs[_key10] = _val11
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)
@@ -2937,17 +2926,17 @@ func (p *GetPredecessorResponse) readField2(iprot thrift.TProtocol) error {
 	tMap := make(map[string]*HostInfo, size)
 	p.HostsRefs = tMap
 	for i := 0; i < size; i++ {
-		var _key13 string
+		var _key12 string
 		if v, err := iprot.ReadString(); err != nil {
 			return thrift.PrependError("error reading field 0: ", err)
 		} else {
-			_key13 = v
+			_key12 = v
 		}
-		_val14 := &HostInfo{}
-		if err := _val14.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val14), err)
+		_val13 := &HostInfo{}
+		if err := _val13.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val13), err)
 		}
-		p.HostsRefs[_key13] = _val14
+		p.HostsRefs[_key12] = _val13
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)
@@ -3338,11 +3327,11 @@ func (p *SyncResponse) readField2(iprot thrift.TProtocol) error {
 	tSlice := make([]*NodeInfo, 0, size)
 	p.NodesPath = tSlice
 	for i := 0; i < size; i++ {
-		_elem15 := &NodeInfo{}
-		if err := _elem15.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem15), err)
+		_elem14 := &NodeInfo{}
+		if err := _elem14.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem14), err)
 		}
-		p.NodesPath = append(p.NodesPath, _elem15)
+		p.NodesPath = append(p.NodesPath, _elem14)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -3358,11 +3347,11 @@ func (p *SyncResponse) readField3(iprot thrift.TProtocol) error {
 	tSlice := make([]*NodeInfo, 0, size)
 	p.SuccessorNodes = tSlice
 	for i := 0; i < size; i++ {
-		_elem16 := &NodeInfo{}
-		if err := _elem16.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem16), err)
+		_elem15 := &NodeInfo{}
+		if err := _elem15.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _elem15), err)
 		}
-		p.SuccessorNodes = append(p.SuccessorNodes, _elem16)
+		p.SuccessorNodes = append(p.SuccessorNodes, _elem15)
 	}
 	if err := iprot.ReadListEnd(); err != nil {
 		return thrift.PrependError("error reading list end: ", err)
@@ -3386,17 +3375,17 @@ func (p *SyncResponse) readField5(iprot thrift.TProtocol) error {
 	tMap := make(map[string]*HostInfo, size)
 	p.HostsRefs = tMap
 	for i := 0; i < size; i++ {
-		var _key17 string
+		var _key16 string
 		if v, err := iprot.ReadString(); err != nil {
 			return thrift.PrependError("error reading field 0: ", err)
 		} else {
-			_key17 = v
+			_key16 = v
 		}
-		_val18 := &HostInfo{}
-		if err := _val18.Read(iprot); err != nil {
-			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val18), err)
+		_val17 := &HostInfo{}
+		if err := _val17.Read(iprot); err != nil {
+			return thrift.PrependError(fmt.Sprintf("%T error reading struct: ", _val17), err)
 		}
-		p.HostsRefs[_key17] = _val18
+		p.HostsRefs[_key16] = _val17
 	}
 	if err := iprot.ReadMapEnd(); err != nil {
 		return thrift.PrependError("error reading map end: ", err)

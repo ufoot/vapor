@@ -21,6 +21,7 @@ package vpp2p
 
 import (
 	"github.com/ufoot/vapor/go/vpid"
+	"github.com/ufoot/vapor/go/vplog"
 	"github.com/ufoot/vapor/go/vpp2papi"
 	"github.com/ufoot/vapor/go/vpp2pdat"
 	"github.com/ufoot/vapor/go/vpsum"
@@ -51,7 +52,7 @@ type Node struct {
 
 	successorsAccess  sync.RWMutex
 	predecessorAccess sync.RWMutex
-	dsAccess          sync.RWMutex
+	dAccess           sync.RWMutex
 
 	// Successors is list of successing nodes within the ring,
 	// use 1st elem for direct successor.
@@ -96,7 +97,7 @@ func NewNode(host *Host, ring *Ring, nodeID []byte) (*Node, error) {
 	ret.Status.Peers = vpp2papi.NewNodePeers()
 
 	ret.resetSuccessors()
-	ret.resetDs()
+	ret.resetD()
 	ret.resetPredecessor()
 
 	// by doing this, nodes will always be (un)registerered within hosts
@@ -152,11 +153,11 @@ func (node *Node) resetSuccessors() {
 	node.Status.Peers.Successors = nil
 }
 
-func (node *Node) resetDs() {
-	defer node.dsAccess.Unlock()
-	node.dsAccess.Lock()
+func (node *Node) resetD() {
+	defer node.dAccess.Unlock()
+	node.dAccess.Lock()
 
-	node.Status.Peers.Ds = nil
+	node.Status.Peers.D = nil
 }
 
 func (node *Node) resetPredecessor() {
@@ -318,6 +319,14 @@ func (node *Node) GetSuccessors() []*vpp2papi.NodeInfo {
 	return ret
 }
 
+// GetD returns the d of a given node
+func (node *Node) GetD() *vpp2papi.NodeInfo {
+	defer node.dAccess.RUnlock()
+	node.dAccess.RLock()
+
+	return node.Status.Peers.D
+}
+
 // GetPredecessor returns the predecessor of a given node
 func (node *Node) GetPredecessor() *vpp2papi.NodeInfo {
 	defer node.predecessorAccess.RUnlock()
@@ -380,17 +389,22 @@ func (node *Node) findKeyOnLocalNode(key []byte) *Node {
 func (node *Node) Sync(source *vpp2papi.NodeInfo, key, keyShift, imaginaryNode []byte) (bool, []*vpp2papi.NodeInfo, []*vpp2papi.NodeInfo, *vpp2papi.NodeInfo, error) {
 	var found *Node
 	var err error
+	var ok bool
 
 	found = node.findKeyOnLocalNode(key)
 	if found != nil {
 		var status *vpp2papi.HostStatus
+		// todo, fix this, and get the *source* status
 		status, err = node.hostPtr.Status()
 		if err != nil {
 			vplog.LogDebug("unable to join host requiring Sync")
 		} else {
-			if status == nil || status.ThisNodeInfo == nil || status.ThisNodeInfo.NodeID == nil {
+			if status != nil && status.ThisHostInfo != nil {
+				ok, err = vpp2pdat.CheckHostInfo(status.ThisHostInfo)
+				if ok && err == nil {
+					found.setPredecessor(source)
+				}
 			}
-			found.setPredecessor(source)
 		}
 
 		nodesPath := make([]*vpp2papi.NodeInfo, 1)

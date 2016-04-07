@@ -62,7 +62,7 @@ struct NodeInfo {
  */
 struct NodePeers {
   1: list<NodeInfo> Successors,
-  2: list<NodeInfo> Ds,
+  2: NodeInfo D,
 }
 
 /**

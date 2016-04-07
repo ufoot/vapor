@@ -136,19 +136,19 @@ func main() {
 			fmt.Fprintln(os.Stderr, "Lookup requires 1 args")
 			flag.Usage()
 		}
-		arg30 := flag.Arg(1)
-		mbTrans31 := thrift.NewTMemoryBufferLen(len(arg30))
-		defer mbTrans31.Close()
-		_, err32 := mbTrans31.WriteString(arg30)
-		if err32 != nil {
+		arg29 := flag.Arg(1)
+		mbTrans30 := thrift.NewTMemoryBufferLen(len(arg29))
+		defer mbTrans30.Close()
+		_, err31 := mbTrans30.WriteString(arg29)
+		if err31 != nil {
 			Usage()
 			return
 		}
-		factory33 := thrift.NewTSimpleJSONProtocolFactory()
-		jsProt34 := factory33.GetProtocol(mbTrans31)
+		factory32 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt33 := factory32.GetProtocol(mbTrans30)
 		argvalue0 := vpp2papi.NewLookupRequest()
-		err35 := argvalue0.Read(jsProt34)
-		if err35 != nil {
+		err34 := argvalue0.Read(jsProt33)
+		if err34 != nil {
 			Usage()
 			return
 		}
@@ -161,19 +161,19 @@ func main() {
 			fmt.Fprintln(os.Stderr, "GetSuccessors requires 1 args")
 			flag.Usage()
 		}
-		arg36 := flag.Arg(1)
-		mbTrans37 := thrift.NewTMemoryBufferLen(len(arg36))
-		defer mbTrans37.Close()
-		_, err38 := mbTrans37.WriteString(arg36)
-		if err38 != nil {
+		arg35 := flag.Arg(1)
+		mbTrans36 := thrift.NewTMemoryBufferLen(len(arg35))
+		defer mbTrans36.Close()
+		_, err37 := mbTrans36.WriteString(arg35)
+		if err37 != nil {
 			Usage()
 			return
 		}
-		factory39 := thrift.NewTSimpleJSONProtocolFactory()
-		jsProt40 := factory39.GetProtocol(mbTrans37)
+		factory38 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt39 := factory38.GetProtocol(mbTrans36)
 		argvalue0 := vpp2papi.NewGetSuccessorsRequest()
-		err41 := argvalue0.Read(jsProt40)
-		if err41 != nil {
+		err40 := argvalue0.Read(jsProt39)
+		if err40 != nil {
 			Usage()
 			return
 		}
@@ -186,19 +186,19 @@ func main() {
 			fmt.Fprintln(os.Stderr, "GetPredecessor requires 1 args")
 			flag.Usage()
 		}
-		arg42 := flag.Arg(1)
-		mbTrans43 := thrift.NewTMemoryBufferLen(len(arg42))
-		defer mbTrans43.Close()
-		_, err44 := mbTrans43.WriteString(arg42)
-		if err44 != nil {
+		arg41 := flag.Arg(1)
+		mbTrans42 := thrift.NewTMemoryBufferLen(len(arg41))
+		defer mbTrans42.Close()
+		_, err43 := mbTrans42.WriteString(arg41)
+		if err43 != nil {
 			Usage()
 			return
 		}
-		factory45 := thrift.NewTSimpleJSONProtocolFactory()
-		jsProt46 := factory45.GetProtocol(mbTrans43)
+		factory44 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt45 := factory44.GetProtocol(mbTrans42)
 		argvalue0 := vpp2papi.NewGetPredecessorRequest()
-		err47 := argvalue0.Read(jsProt46)
-		if err47 != nil {
+		err46 := argvalue0.Read(jsProt45)
+		if err46 != nil {
 			Usage()
 			return
 		}
@@ -211,19 +211,19 @@ func main() {
 			fmt.Fprintln(os.Stderr, "Sync requires 1 args")
 			flag.Usage()
 		}
-		arg48 := flag.Arg(1)
-		mbTrans49 := thrift.NewTMemoryBufferLen(len(arg48))
-		defer mbTrans49.Close()
-		_, err50 := mbTrans49.WriteString(arg48)
-		if err50 != nil {
+		arg47 := flag.Arg(1)
+		mbTrans48 := thrift.NewTMemoryBufferLen(len(arg47))
+		defer mbTrans48.Close()
+		_, err49 := mbTrans48.WriteString(arg47)
+		if err49 != nil {
 			Usage()
 			return
 		}
-		factory51 := thrift.NewTSimpleJSONProtocolFactory()
-		jsProt52 := factory51.GetProtocol(mbTrans49)
+		factory50 := thrift.NewTSimpleJSONProtocolFactory()
+		jsProt51 := factory50.GetProtocol(mbTrans48)
 		argvalue0 := vpp2papi.NewSyncRequest()
-		err53 := argvalue0.Read(jsProt52)
-		if err53 != nil {
+		err52 := argvalue0.Read(jsProt51)
+		if err52 != nil {
 			Usage()
 			return
 		}

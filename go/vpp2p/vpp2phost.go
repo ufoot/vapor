@@ -128,22 +128,18 @@ func (host *Host) GetVersion() (*vpcommonapi.Version, error) {
 	return vpapp.DefaultVersion(), nil
 }
 
-func (host *Host) localNodeStatus() []*vpp2papi.NodeStatus{
-	ret := vpp2papi.NewNodeStatus()
-	
-	localNodes:=host.localNodeCatalog.ListPtr()
+func (host *Host) localNodeStatus() []*vpp2papi.NodeStatus {
+	localNodes := host.localNodeCatalog.ListPtr()
 
-	ret.LocalNodeStatus:=make([]*vpp2papi.NodeStatus, len(localNodes))
-	for i,v:=range localNodes {
-		ret[i].NodeInfo=v.NodeInfo
-		ret[i].Peers=vpp2papi.NewNodePeers()
-		ret[i].Peers.Successors=v.GetSuccessors()
-		ret[i].Peers.Ds=v.GetDs()
-		ret[i].Predecessor=v.GetPredecessor()
+	ret := make([]*vpp2papi.NodeStatus, len(localNodes))
+	for i, v := range localNodes {
+		ret[i].Info = v.Status.Info
+		ret[i].Peers = vpp2papi.NewNodePeers()
+		ret[i].Peers.Successors = v.GetSuccessors()
+		ret[i].Peers.D = v.GetD()
+		ret[i].Predecessor = v.GetPredecessor()
 	}
 
-	ret.HostsRefs=CreateHostsRefs(host.Status.Info,nil,nodesList))
-	
 	return ret
 }
 
@@ -151,9 +147,20 @@ func (host *Host) localNodeStatus() []*vpp2papi.NodeStatus{
 func (host *Host) Status() (*vpp2papi.HostStatus, error) {
 	ret := vpp2papi.NewHostStatus()
 
-	ret.ThisHostInfo=host.Info
-	ret.LocalNodeStatus=host.localNodeStatus()
-	
+	ret.ThisHostInfo = &(host.Info)
+	ret.LocalNodeStatus = host.localNodeStatus()
+
+	nodesList := make([]*vpp2papi.NodeInfo, 0)
+	for _, localNode := range ret.LocalNodeStatus {
+		nodesList = append(nodesList, localNode.Info)
+		for _, successor := range localNode.Peers.Successors {
+			nodesList = append(nodesList, successor)
+		}
+		nodesList = append(nodesList, localNode.Peers.D)
+		nodesList = append(nodesList, localNode.Predecessor)
+	}
+	ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, nodesList)
+
 	return ret, nil
 }
 
