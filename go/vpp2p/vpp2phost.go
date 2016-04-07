@@ -128,12 +128,32 @@ func (host *Host) GetVersion() (*vpcommonapi.Version, error) {
 	return vpapp.DefaultVersion(), nil
 }
 
+func (host *Host) localNodeStatus() []*vpp2papi.NodeStatus{
+	ret := vpp2papi.NewNodeStatus()
+	
+	localNodes:=host.localNodeCatalog.ListPtr()
+
+	ret.LocalNodeStatus:=make([]*vpp2papi.NodeStatus, len(localNodes))
+	for i,v:=range localNodes {
+		ret[i].NodeInfo=v.NodeInfo
+		ret[i].Peers=vpp2papi.NewNodePeers()
+		ret[i].Peers.Successors=v.GetSuccessors()
+		ret[i].Peers.Ds=v.GetDs()
+		ret[i].Predecessor=v.GetPredecessor()
+	}
+
+	ret.HostsRefs=CreateHostsRefs(host.Status.Info,nil,nodesList))
+	
+	return ret
+}
+
 // Status is called to get another host status.
 func (host *Host) Status() (*vpp2papi.HostStatus, error) {
 	ret := vpp2papi.NewHostStatus()
 
-	// todo...
-
+	ret.ThisHostInfo=host.Info
+	ret.LocalNodeStatus=host.localNodeStatus()
+	
 	return ret, nil
 }
 

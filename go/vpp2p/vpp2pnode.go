@@ -379,11 +379,19 @@ func (node *Node) findKeyOnLocalNode(key []byte) *Node {
 // Sync performs a lookup for a given key
 func (node *Node) Sync(source *vpp2papi.NodeInfo, key, keyShift, imaginaryNode []byte) (bool, []*vpp2papi.NodeInfo, []*vpp2papi.NodeInfo, *vpp2papi.NodeInfo, error) {
 	var found *Node
+	var err error
 
 	found = node.findKeyOnLocalNode(key)
 	if found != nil {
-		// not sure this should be performed in every case...
-		found.setPredecessor(source)
+		var status *vpp2papi.HostStatus
+		status, err = node.hostPtr.Status()
+		if err != nil {
+			vplog.LogDebug("unable to join host requiring Sync")
+		} else {
+			if status == nil || status.ThisNodeInfo == nil || status.ThisNodeInfo.NodeID == nil {
+			}
+			found.setPredecessor(source)
+		}
 
 		nodesPath := make([]*vpp2papi.NodeInfo, 1)
 		nodesPath[0] = found.Status.Info
