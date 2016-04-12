@@ -31,7 +31,7 @@ func TestNewRing(t *testing.T) {
 	var err error
 	var zeroes, zeroes2 int
 
-	host, err = NewHost(testTitle, testURL, true)
+	host, err = NewHost(testTitle, testURL, true, GlobalHostInfoCatalog())
 	if err != nil {
 		t.Error("unable to create host with a valid pubKey", err)
 	}
@@ -60,7 +60,7 @@ func TestNewRing(t *testing.T) {
 		t.Error("failed to report a broken sig", err)
 	}
 
-	host, err = NewHost(testTitle, testURL, false)
+	host, err = NewHost(testTitle, testURL, false, GlobalHostInfoCatalog())
 	if err != nil {
 		t.Error("unable to create host with a valid pubKey", err)
 	}

@@ -174,7 +174,7 @@ func NewRing0() (*Ring, error) {
 	var ring0 *Ring
 	var err error
 
-	host0, err = NewHost(vpp2pdat.Host0Title, vpp2pdat.Host0URL, true)
+	host0, err = NewHost(vpp2pdat.Host0Title, vpp2pdat.Host0URL, true, GlobalHostInfoCatalog())
 	if err != nil {
 		return nil, err
 	}

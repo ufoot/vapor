@@ -35,6 +35,6 @@ const PackageLicense = "GNU GPL v3" // PackageLicense set by stamp.sh
 // VersionMajor is the project major version.
 const VersionMajor = 0 // VersionMajor set by stamp.sh
 // VersionMinor is the project minor version.
-const VersionMinor = 21 // VersionMinor set by stamp.sh
+const VersionMinor = 20 // VersionMinor set by stamp.sh
 // VersionStamp is the project stamp, possibly changes for each build.
 const VersionStamp = "fa11d6e" // VersionStamp set by stamp.sh

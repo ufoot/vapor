@@ -43,7 +43,7 @@ func setupHostRing(t *testing.T, useSig bool) (*Host, *Ring, error) {
 	var ring *Ring
 	var err error
 
-	host, err = NewHost(testTitle, testURL, useSig)
+	host, err = NewHost(testTitle, testURL, useSig, GlobalHostInfoCatalog())
 	if err != nil {
 		t.Error("unable to create host", t, err)
 		return nil, nil, err
@@ -65,7 +65,7 @@ func TestNewNode(t *testing.T) {
 	var zeroes, zeroes2 int
 
 	host, ring, err = setupHostRing(t, true)
-	node, err = NewNode(host, ring, nil)
+	node, err = NewNode(host, ring, nil, GlobalNodeCatalog())
 	if err != nil {
 		t.Error("unable to create node with a valid pubKey", err)
 	}
@@ -91,7 +91,7 @@ func TestNewNode(t *testing.T) {
 	}
 
 	host, ring, err = setupHostRing(t, false)
-	node, err = NewNode(host, ring, nil)
+	node, err = NewNode(host, ring, nil, GlobalNodeCatalog())
 	if err != nil {
 		t.Error("unable to create node", err)
 	}
@@ -113,11 +113,11 @@ func TestGetImaginaryNode(t *testing.T) {
 	var err error
 
 	host, ring, err = setupHostRing(t, false)
-	node1, err = NewNode(host, ring, nil)
+	node1, err = NewNode(host, ring, nil, GlobalNodeCatalog())
 	if err != nil {
 		t.Error("unable to create node", err)
 	}
-	node2, err = NewNode(host, ring, nil)
+	node2, err = NewNode(host, ring, nil, GlobalNodeCatalog())
 	if err != nil {
 		t.Error("unable to create node", err)
 	}
@@ -158,11 +158,11 @@ func TestGetSync(t *testing.T) {
 	var err error
 
 	host, ring, err = setupHostRing(t, false)
-	node1, err = NewNode(host, ring, nil)
+	node1, err = NewNode(host, ring, nil, GlobalNodeCatalog())
 	if err != nil {
 		t.Error("unable to create node", err)
 	}
-	node2, err = NewNode(host, ring, nil)
+	node2, err = NewNode(host, ring, nil, GlobalNodeCatalog())
 	if err != nil {
 		t.Error("unable to create node", err)
 	}

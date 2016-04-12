@@ -84,7 +84,7 @@ func (ria *ringIDAppender) Transform(nodeID []byte) []byte {
 
 // NewNode builds a new node object. Host and Ring are required,
 // nodeID is optional, by default a new nodeID is provided.
-func NewNode(host *Host, ring *Ring, nodeID []byte) (*Node, error) {
+func NewNode(host *Host, ring *Ring, nodeID []byte, registerer NodeRegisterer) (*Node, error) {
 	var ret Node
 	var info vpp2papi.NodeInfo
 	var err error
@@ -103,9 +103,11 @@ func NewNode(host *Host, ring *Ring, nodeID []byte) (*Node, error) {
 	// by doing this, nodes will always be (un)registerered within hosts
 	// and the global node register. This is usefull when one wants to
 	// quickly access them by reference.
-	ret.registerers = make([]NodeRegisterer, 2)
-	ret.registerers[0] = GlobalNodeCatalog()
-	ret.registerers[1] = host.localNodeCatalog
+	ret.registerers = make([]NodeRegisterer, 1)
+	ret.registerers[0] = host.localNodeCatalog
+	if registerer != nil {
+		ret.registerers = append(ret.registerers, registerer)
+	}
 
 	ret.Status.Info.RingID = make([]byte, len(ring.Info.RingID))
 	copy(ret.Status.Info.RingID, ring.Info.RingID)

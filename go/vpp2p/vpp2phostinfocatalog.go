@@ -25,33 +25,37 @@ import (
 	"sync"
 )
 
-// HostCatalog is structure used to contain locally-known hosts.
-type HostCatalog struct {
+// HostInfoCatalog is structure used to contain locally-known hosts.
+type HostInfoCatalog struct {
 	access sync.RWMutex
 	hosts  map[[vpp2pdat.HostPubKeyBufNbBytes]byte]*vpp2papi.HostInfo
 }
 
-var globalHostCatalog = NewHostCatalog()
-
-// NewHostCatalog creates a new instance of a local host catalog
-func NewHostCatalog() *HostCatalog {
-	return &HostCatalog{hosts: make(map[[vpp2pdat.HostPubKeyBufNbBytes]byte]*vpp2papi.HostInfo)}
+type HostsRefsCreator interface {
+	CreateHostsRefs(locallHost *vpp2papi.HostInfo, rings []*vpp2papi.RingInfo, nodes []*vpp2papi.NodeInfo) map[string]*vpp2papi.HostInfo
 }
 
-// GlobalHostCatalog returns a catalog containing all local hosts.
-func GlobalHostCatalog() *HostCatalog {
-	return globalHostCatalog
+var globalHostInfoCatalog = NewHostInfoCatalog()
+
+// NewHostInfoCatalog creates a new instance of a local host catalog
+func NewHostInfoCatalog() *HostInfoCatalog {
+	return &HostInfoCatalog{hosts: make(map[[vpp2pdat.HostPubKeyBufNbBytes]byte]*vpp2papi.HostInfo)}
+}
+
+// GlobalHostInfoCatalog returns a catalog containing all local hosts.
+func GlobalHostInfoCatalog() *HostInfoCatalog {
+	return globalHostInfoCatalog
 }
 
 // HasHost returns true if the host exists in the catalog.
 // It's thread-safe.
-func (c *HostCatalog) HasHost(hostPubKey []byte) bool {
+func (c *HostInfoCatalog) HasHost(hostPubKey []byte) bool {
 	return (c.GetHost(hostPubKey) != nil)
 }
 
 // GetHost returns a handler which makes possible API calls on it.
 // It's thread-safe.
-func (c *HostCatalog) GetHost(hostPubKey []byte) *vpp2papi.HostInfo {
+func (c *HostInfoCatalog) GetHost(hostPubKey []byte) *vpp2papi.HostInfo {
 	hostPubKeyBuf := vpp2pdat.HostPubKeyToBuf(hostPubKey)
 
 	defer c.access.RUnlock()
@@ -64,7 +68,7 @@ func (c *HostCatalog) GetHost(hostPubKey []byte) *vpp2papi.HostInfo {
 
 // RegisterHost registers a host within the catalog.
 // It's thread-safe.
-func (c *HostCatalog) RegisterHost(host *vpp2papi.HostInfo) {
+func (c *HostInfoCatalog) RegisterHost(host *vpp2papi.HostInfo) {
 	hostIDBuf := vpp2pdat.HostPubKeyToBuf(host.HostPubKey)
 
 	defer c.access.Unlock()
@@ -75,7 +79,7 @@ func (c *HostCatalog) RegisterHost(host *vpp2papi.HostInfo) {
 
 // UnregisterHost unregisters a host within the catalog.
 // It's thread-safe.
-func (c *HostCatalog) UnregisterHost(host *vpp2papi.HostInfo) {
+func (c *HostInfoCatalog) UnregisterHost(host *vpp2papi.HostInfo) {
 	hostIDBuf := vpp2pdat.HostPubKeyToBuf(host.HostPubKey)
 
 	defer c.access.Unlock()
@@ -88,7 +92,7 @@ func (c *HostCatalog) UnregisterHost(host *vpp2papi.HostInfo) {
 // of nodes and rings. The key index is the short string,
 // there might be collisions but this should not be a
 // major problem as internally, full keys are used.
-func (c *HostCatalog) CreateHostsRefs(localHost *vpp2papi.HostInfo, rings []*vpp2papi.RingInfo, nodes []*vpp2papi.NodeInfo) map[string]*vpp2papi.HostInfo {
+func (c *HostInfoCatalog) CreateHostsRefs(localHost *vpp2papi.HostInfo, rings []*vpp2papi.RingInfo, nodes []*vpp2papi.NodeInfo) map[string]*vpp2papi.HostInfo {
 	ret := make(map[string]*vpp2papi.HostInfo)
 
 	defer c.access.RUnlock()
@@ -122,7 +126,7 @@ func (c *HostCatalog) CreateHostsRefs(localHost *vpp2papi.HostInfo, rings []*vpp
 }
 
 // HasAllHostsRefs returns true if all the refs given are already known
-func (c *HostCatalog) HasAllHostsRefs(refs map[string]*vpp2papi.HostInfo) bool {
+func (c *HostInfoCatalog) HasAllHostsRefs(refs map[string]*vpp2papi.HostInfo) bool {
 	ret := true
 
 	defer c.access.RUnlock()
@@ -138,7 +142,7 @@ func (c *HostCatalog) HasAllHostsRefs(refs map[string]*vpp2papi.HostInfo) bool {
 }
 
 // UpdateHostsRefs updates the host catalog according to a set of refs.
-func (c *HostCatalog) UpdateHostsRefs(refs map[string]*vpp2papi.HostInfo) {
+func (c *HostInfoCatalog) UpdateHostsRefs(refs map[string]*vpp2papi.HostInfo) {
 	if c.HasAllHostsRefs(refs) {
 		return
 	}
@@ -153,7 +157,7 @@ func (c *HostCatalog) UpdateHostsRefs(refs map[string]*vpp2papi.HostInfo) {
 
 // List returns a list of known hosts. It returns static
 // data about the host, not the hosts themselves.
-func (c *HostCatalog) List() []*vpp2papi.HostInfo {
+func (c *HostInfoCatalog) List() []*vpp2papi.HostInfo {
 	defer c.access.RUnlock()
 	c.access.RLock()
 

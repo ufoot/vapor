@@ -37,13 +37,15 @@ type Host struct {
 	// Info about the host
 	Info vpp2papi.HostInfo
 
+	creator HostsRefsCreator
+
 	key              *vpcrypto.Key
 	localNodeCatalog *NodeCatalog
 	startTime        time.Time
 }
 
 // NewHost returns a new host object
-func NewHost(title, url string, useSig bool) (*Host, error) {
+func NewHost(title, url string, useSig bool, creator HostsRefsCreator) (*Host, error) {
 	var ret Host
 	var pubKey []byte
 	var sig []byte
@@ -86,6 +88,7 @@ func NewHost(title, url string, useSig bool) (*Host, error) {
 		return nil, err
 	}
 
+	ret.creator = creator
 	ret.localNodeCatalog = NewNodeCatalog()
 	ret.startTime = time.Now()
 
@@ -159,7 +162,11 @@ func (host *Host) Status() (*vpp2papi.HostStatus, error) {
 		nodesList = append(nodesList, localNode.Peers.D)
 		nodesList = append(nodesList, localNode.Predecessor)
 	}
-	ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, nodesList)
+	if host.creator != nil {
+		ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, nodesList)
+	} else {
+		ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+	}
 
 	return ret, nil
 }
@@ -182,7 +189,11 @@ func (host *Host) Lookup(request *vpp2papi.LookupRequest) (*vpp2papi.LookupRespo
 		return nil, err
 	}
 	if ret.Found && ret.NodesPath != nil {
-		ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, ret.NodesPath)
+		if host.creator != nil {
+			ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, ret.NodesPath)
+		} else {
+			ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+		}
 	}
 
 	return ret, nil
@@ -203,7 +214,11 @@ func (host *Host) GetSuccessors(request *vpp2papi.GetSuccessorsRequest) (*vpp2pa
 	ret := vpp2papi.NewGetSuccessorsResponse()
 
 	ret.SuccessorNodes = node.GetSuccessors()
-	ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, ret.SuccessorNodes)
+	if host.creator != nil {
+		ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, ret.SuccessorNodes)
+	} else {
+		ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+	}
 
 	return ret, nil
 }
@@ -230,7 +245,11 @@ func (host *Host) GetPredecessor(request *vpp2papi.GetPredecessorRequest) (*vpp2
 		hostsRefs[0] = ret.PredecessorNode
 	}
 
-	ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, hostsRefs)
+	if host.creator != nil {
+		ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, hostsRefs)
+	} else {
+		ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+	}
 
 	return ret, nil
 }
@@ -266,7 +285,11 @@ func (host *Host) Sync(request *vpp2papi.SyncRequest) (*vpp2papi.SyncResponse, e
 		hostsRefs[len(ret.NodesPath)+len(ret.SuccessorNodes)] = ret.PredecessorNode
 	}
 	if ret.Found && ret.NodesPath != nil && ret.SuccessorNodes != nil && ret.PredecessorNode != nil {
-		ret.HostsRefs = GlobalHostCatalog().CreateHostsRefs(&(host.Info), nil, hostsRefs)
+		if host.creator != nil {
+			ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, hostsRefs)
+		} else {
+			ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+		}
 	}
 
 	return ret, nil

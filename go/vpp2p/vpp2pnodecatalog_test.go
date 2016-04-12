@@ -30,7 +30,7 @@ func TestGlobalNodeCatalog(t *testing.T) {
 	var ring *Ring
 	var err error
 
-	host, err = NewHost(testTitle, testURL, false)
+	host, err = NewHost(testTitle, testURL, false, GlobalHostInfoCatalog())
 	if err != nil {
 		t.Error("unable to create host", err)
 	}
@@ -38,11 +38,11 @@ func TestGlobalNodeCatalog(t *testing.T) {
 	if err != nil {
 		t.Error("unable to create ring", err)
 	}
-	node1, err = NewNode(host, ring, nil)
+	node1, err = NewNode(host, ring, nil, GlobalNodeCatalog())
 	if err != nil {
 		t.Error("unable to create node1", err)
 	}
-	node2, err = NewNode(host, ring, nil)
+	node2, err = NewNode(host, ring, nil, GlobalNodeCatalog())
 	if err != nil {
 		t.Error("unable to create node2", err)
 	}
