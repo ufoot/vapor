@@ -100,19 +100,23 @@ func (c *HostInfoCatalog) CreateHostsRefs(localHost *vpp2papi.HostInfo, rings []
 
 	if nodes != nil {
 		for _, value := range nodes {
-			hostPubKeyBuf := vpp2pdat.HostPubKeyToBuf(value.HostPubKey)
-			host := c.hosts[hostPubKeyBuf]
-			if host != nil {
-				ret[vpp2pdat.HostPubKeyToShortString(value.HostPubKey)] = host
+			if value != nil && value.HostPubKey != nil {
+				hostPubKeyBuf := vpp2pdat.HostPubKeyToBuf(value.HostPubKey)
+				host := c.hosts[hostPubKeyBuf]
+				if host != nil {
+					ret[vpp2pdat.HostPubKeyToShortString(value.HostPubKey)] = host
+				}
 			}
 		}
 	}
 	if rings != nil {
 		for _, value := range rings {
-			hostPubKeyBuf := vpp2pdat.HostPubKeyToBuf(value.HostPubKey)
-			host := c.hosts[hostPubKeyBuf]
-			if host != nil {
-				ret[vpp2pdat.HostPubKeyToShortString(value.HostPubKey)] = host
+			if value != nil && value.HostPubKey != nil {
+				hostPubKeyBuf := vpp2pdat.HostPubKeyToBuf(value.HostPubKey)
+				host := c.hosts[hostPubKeyBuf]
+				if host != nil {
+					ret[vpp2pdat.HostPubKeyToShortString(value.HostPubKey)] = host
+				}
 			}
 		}
 	}

@@ -136,6 +136,7 @@ func (host *Host) localNodeStatus() []*vpp2papi.NodeStatus {
 
 	ret := make([]*vpp2papi.NodeStatus, len(localNodes))
 	for i, v := range localNodes {
+		ret[i] = vpp2papi.NewNodeStatus()
 		ret[i].Info = v.Status.Info
 		ret[i].Peers = vpp2papi.NewNodePeers()
 		ret[i].Peers.Successors = v.GetSuccessors()

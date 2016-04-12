@@ -167,9 +167,14 @@ func TestGetSync(t *testing.T) {
 		t.Error("unable to create node", err)
 	}
 	imaginaryNode := node1.GetImaginaryNode(node2.Status.Info.NodeID)
-	t.Logf("node = %s", hex.EncodeToString(node1.Status.Info.NodeID))
-	t.Logf("key =  %s", hex.EncodeToString(node2.Status.Info.NodeID))
+	t.Logf("node = %s (node1)", hex.EncodeToString(node1.Status.Info.NodeID))
+	t.Logf("key =  %s (node2)", hex.EncodeToString(node2.Status.Info.NodeID))
 	t.Logf("img =  %s", hex.EncodeToString(imaginaryNode))
+
+	defer node1.Stop()
+	node1.Start()
+	defer node2.Stop()
+	node2.Start()
 
 	var found bool
 	var path []*vpp2papi.NodeInfo
@@ -195,7 +200,7 @@ func TestGetSync(t *testing.T) {
 		t.Fatal("bad path len", len(successors))
 	}
 	if bytes.Compare(node2.Status.Info.NodeID, predecessor.NodeID) != 0 {
-		t.Fatal("bad predecessor")
+		t.Fatalf("bad predecessor %s %s", hex.EncodeToString(node2.Status.Info.NodeID), hex.EncodeToString(predecessor.NodeID))
 	}
 }
 

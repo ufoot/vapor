@@ -394,21 +394,31 @@ func (node *Node) Sync(source *vpp2papi.NodeInfo, key, keyShift, imaginaryNode [
 	var ok bool
 
 	found = node.findKeyOnLocalNode(key)
-	if found != nil {
-		var status *vpp2papi.HostStatus
-		// todo, fix this, and get the *source* status
-		status, err = node.hostPtr.Status()
+	if found == nil {
+		vplog.LogDebug("key is not on local node")
+	} else {
+		var sourceApi vpp2papi.VpP2pApi
+		sourceApi, err = GlobalNodeCatalog().ConnectToNode(source.NodeID)
 		if err != nil {
-			vplog.LogDebug("unable to join host requiring Sync")
-		} else {
-			if status != nil && status.ThisHostInfo != nil {
-				ok, err = vpp2pdat.CheckHostInfo(status.ThisHostInfo)
-				if ok && err == nil {
-					found.setPredecessor(source)
+			vplog.LogDebugf("node can't be found in catalog %v", err)
+		}
+
+		if sourceApi != nil {
+			var status *vpp2papi.HostStatus
+			status, err = sourceApi.Status()
+			if err != nil {
+				vplog.LogDebug("unable to join host requiring Sync")
+			} else {
+				if status == nil || status.ThisHostInfo == nil {
+					vplog.LogDebug("nil or invalid status")
+				} else {
+					ok, err = vpp2pdat.CheckHostInfo(status.ThisHostInfo)
+					if ok && err == nil {
+						found.setPredecessor(source)
+					}
 				}
 			}
 		}
-
 		nodesPath := make([]*vpp2papi.NodeInfo, 1)
 		nodesPath[0] = found.Status.Info
 		return true, nodesPath, found.GetSuccessors(), found.GetPredecessor(), nil
