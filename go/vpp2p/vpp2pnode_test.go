@@ -154,7 +154,7 @@ func TestGetImaginaryNode(t *testing.T) {
 func TestGetSync(t *testing.T) {
 	var host *Host
 	var ring *Ring
-	var node1, node2 *Node
+	var node1, node2, node3 *Node
 	var err error
 
 	host, ring, err = setupHostRing(t, false)
@@ -163,6 +163,10 @@ func TestGetSync(t *testing.T) {
 		t.Error("unable to create node", err)
 	}
 	node2, err = NewNode(host, ring, nil, GlobalNodeCatalog())
+	if err != nil {
+		t.Error("unable to create node", err)
+	}
+	node3, err = NewNode(host, ring, nil, GlobalNodeCatalog())
 	if err != nil {
 		t.Error("unable to create node", err)
 	}
@@ -175,6 +179,8 @@ func TestGetSync(t *testing.T) {
 	node1.Start()
 	defer node2.Stop()
 	node2.Start()
+	defer node3.Stop()
+	node3.Start()
 
 	var found bool
 	var path []*vpp2papi.NodeInfo

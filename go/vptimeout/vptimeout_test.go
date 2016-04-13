@@ -17,6 +17,45 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpp2p implements the top-level host, node and ring objects,
-// required for the P2P system.
-package vpp2p
+package vptimeout
+
+import (
+	"fmt"
+	"testing"
+	"time"
+)
+
+const (
+	baseDuration = 1500 * time.Millisecond
+)
+
+func TestRun(t *testing.T) {
+	okF := func() error {
+		t.Logf("inside okF")
+		return nil
+	}
+	errF := func() error {
+		t.Logf("inside errF")
+		return fmt.Errorf("this is an error")
+	}
+	timeoutF := func() error {
+		t.Logf("inside timeoutF (begin)")
+		time.Sleep(2 * baseDuration)
+		t.Logf("inside timeoutF (end)")
+		return nil
+	}
+	var err error
+
+	err = Run(okF, baseDuration)
+	if err != nil {
+		t.Errorf("error running okF within %s", baseDuration.String())
+	}
+	err = Run(errF, baseDuration)
+	if err == nil {
+		t.Errorf("no error (?) running errF within %s", baseDuration.String())
+	}
+	err = Run(timeoutF, baseDuration)
+	if err == nil {
+		t.Errorf("no error (?) running timeoutF within %s", baseDuration.String())
+	}
+}

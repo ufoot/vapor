@@ -17,6 +17,6 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpp2p implements the top-level host, node and ring objects,
-// required for the P2P system.
-package vpp2p
+// Package vptimeout implements utilities to handle timeout of
+// functions, typically usefull when using 3rd party blocking funcs.
+package vptimeout

@@ -17,6 +17,33 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-// Package vpp2p implements the top-level host, node and ring objects,
-// required for the P2P system.
-package vpp2p
+package vptimeout
+
+import (
+	"fmt"
+	"time"
+)
+
+// Run runs the function f, but will stop everyting if timeout
+// is reached. If f takes longer than timeout, a timeout error
+// will be returned, and the goroutine might keep going until
+// it's done, but the result will be ignored.
+func Run(f func() error, d time.Duration) error {
+	t := time.NewTimer(d)
+	var err error
+	done := make(chan bool, 1)
+
+	go func() {
+		err = f()
+		done <- true
+	}()
+
+	for {
+		select {
+		case <-t.C:
+			return fmt.Errorf("timeout after %s", d.String())
+		case <-done:
+			return err
+		}
+	}
+}
