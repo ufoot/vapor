@@ -28,6 +28,7 @@ import (
 	"github.com/ufoot/vapor/go/vpp2pdat"
 	"github.com/ufoot/vapor/go/vprand"
 	"github.com/ufoot/vapor/go/vpsum"
+	"github.com/ufoot/vapor/go/vptimeout"
 	"time"
 )
 
@@ -154,19 +155,28 @@ func (host *Host) Status() (*vpp2papi.HostStatus, error) {
 	ret.ThisHostInfo = &(host.Info)
 	ret.LocalNodeStatus = host.localNodeStatus()
 
-	nodesList := make([]*vpp2papi.NodeInfo, 0)
-	for _, localNode := range ret.LocalNodeStatus {
-		nodesList = append(nodesList, localNode.Info)
-		for _, successor := range localNode.Peers.Successors {
-			nodesList = append(nodesList, successor)
+	f := func() error {
+		nodesList := make([]*vpp2papi.NodeInfo, 0)
+		for _, localNode := range ret.LocalNodeStatus {
+			nodesList = append(nodesList, localNode.Info)
+			for _, successor := range localNode.Peers.Successors {
+				nodesList = append(nodesList, successor)
+			}
+			nodesList = append(nodesList, localNode.Peers.D)
+			nodesList = append(nodesList, localNode.Predecessor)
 		}
-		nodesList = append(nodesList, localNode.Peers.D)
-		nodesList = append(nodesList, localNode.Predecessor)
+		if host.creator != nil {
+			ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, nodesList)
+		} else {
+			ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+		}
+		return nil
 	}
-	if host.creator != nil {
-		ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, nodesList)
-	} else {
-		ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+
+	err := vptimeout.Run(f, time.Duration(vpp2pdat.DefaultCallTimeout)*time.Second)
+
+	if err != nil {
+		return nil, err
 	}
 
 	return ret, nil
@@ -174,6 +184,8 @@ func (host *Host) Status() (*vpp2papi.HostStatus, error) {
 
 // Lookup searches for a key on a given ring.
 func (host *Host) Lookup(request *vpp2papi.LookupRequest) (*vpp2papi.LookupResponse, error) {
+	var ret *vpp2papi.LookupResponse
+
 	_, err := vpp2pdat.CheckContextInfo(request.Context)
 	if err != nil {
 		return nil, err
@@ -181,20 +193,31 @@ func (host *Host) Lookup(request *vpp2papi.LookupRequest) (*vpp2papi.LookupRespo
 
 	node := host.localNodeCatalog.GetNode(request.Context.TargetNodeID)
 	if node == nil {
-		return nil, fmt.Errorf("unable to find node locally")
+		return nil, fmt.Errorf("unable to find target node locally")
 	}
 
-	ret := vpp2papi.NewLookupResponse()
-	ret.Found, ret.NodesPath, err = node.Lookup(request.Key, request.KeyShift, request.ImaginaryNode)
+	f := func() error {
+		var errF error
+
+		ret = vpp2papi.NewLookupResponse()
+		ret.Found, ret.NodesPath, errF = node.Lookup(request.Key, request.KeyShift, request.ImaginaryNode)
+		if errF != nil {
+			return errF
+		}
+		if ret.Found && ret.NodesPath != nil {
+			if host.creator != nil {
+				ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, ret.NodesPath)
+			} else {
+				ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+			}
+		}
+		return nil
+	}
+
+	err = vptimeout.Run(f, node.ringPtr.callTimeout)
+
 	if err != nil {
 		return nil, err
-	}
-	if ret.Found && ret.NodesPath != nil {
-		if host.creator != nil {
-			ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, ret.NodesPath)
-		} else {
-			ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
-		}
 	}
 
 	return ret, nil
@@ -202,6 +225,8 @@ func (host *Host) Lookup(request *vpp2papi.LookupRequest) (*vpp2papi.LookupRespo
 
 // GetSuccessors is called to retrieve successors of a node.
 func (host *Host) GetSuccessors(request *vpp2papi.GetSuccessorsRequest) (*vpp2papi.GetSuccessorsResponse, error) {
+	var ret *vpp2papi.GetSuccessorsResponse
+
 	_, err := vpp2pdat.CheckContextInfo(request.Context)
 	if err != nil {
 		return nil, err
@@ -209,16 +234,25 @@ func (host *Host) GetSuccessors(request *vpp2papi.GetSuccessorsRequest) (*vpp2pa
 
 	node := host.localNodeCatalog.GetNode(request.Context.TargetNodeID)
 	if node == nil {
-		return nil, fmt.Errorf("unable to find node locally")
+		return nil, fmt.Errorf("unable to find target node locally")
 	}
 
-	ret := vpp2papi.NewGetSuccessorsResponse()
+	f := func() error {
+		ret = vpp2papi.NewGetSuccessorsResponse()
 
-	ret.SuccessorNodes = node.GetSuccessors()
-	if host.creator != nil {
-		ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, ret.SuccessorNodes)
-	} else {
-		ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+		ret.SuccessorNodes = node.GetSuccessors()
+		if host.creator != nil {
+			ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, ret.SuccessorNodes)
+		} else {
+			ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+		}
+		return nil
+	}
+
+	err = vptimeout.Run(f, node.ringPtr.callTimeout)
+
+	if err != nil {
+		return nil, err
 	}
 
 	return ret, nil
@@ -226,6 +260,7 @@ func (host *Host) GetSuccessors(request *vpp2papi.GetSuccessorsRequest) (*vpp2pa
 
 // GetPredecessor is called to retrieve the predecessor of a node.
 func (host *Host) GetPredecessor(request *vpp2papi.GetPredecessorRequest) (*vpp2papi.GetPredecessorResponse, error) {
+	var ret *vpp2papi.GetPredecessorResponse
 	var hostsRefs []*vpp2papi.NodeInfo
 
 	_, err := vpp2pdat.CheckContextInfo(request.Context)
@@ -238,18 +273,27 @@ func (host *Host) GetPredecessor(request *vpp2papi.GetPredecessorRequest) (*vpp2
 		return nil, fmt.Errorf("unable to find node locally")
 	}
 
-	ret := vpp2papi.NewGetPredecessorResponse()
+	f := func() error {
+		ret = vpp2papi.NewGetPredecessorResponse()
 
-	ret.PredecessorNode = node.GetPredecessor()
-	if ret.PredecessorNode != nil {
-		hostsRefs := make([]*vpp2papi.NodeInfo, 1)
-		hostsRefs[0] = ret.PredecessorNode
+		ret.PredecessorNode = node.GetPredecessor()
+		if ret.PredecessorNode != nil {
+			hostsRefs := make([]*vpp2papi.NodeInfo, 1)
+			hostsRefs[0] = ret.PredecessorNode
+		}
+
+		if host.creator != nil {
+			ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, hostsRefs)
+		} else {
+			ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+		}
+		return nil
 	}
 
-	if host.creator != nil {
-		ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, hostsRefs)
-	} else {
-		ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+	err = vptimeout.Run(f, node.ringPtr.callTimeout)
+
+	if err != nil {
+		return nil, err
 	}
 
 	return ret, nil
@@ -258,6 +302,7 @@ func (host *Host) GetPredecessor(request *vpp2papi.GetPredecessorRequest) (*vpp2
 // Sync is called to connect and synchronize on a host. Basically, it does
 // a lookup and returns successors and predecessor.
 func (host *Host) Sync(request *vpp2papi.SyncRequest) (*vpp2papi.SyncResponse, error) {
+	var ret *vpp2papi.SyncResponse
 	var hostsRefs []*vpp2papi.NodeInfo
 
 	_, err := vpp2pdat.CheckContextInfo(request.Context)
@@ -270,27 +315,36 @@ func (host *Host) Sync(request *vpp2papi.SyncRequest) (*vpp2papi.SyncResponse, e
 		return nil, fmt.Errorf("unable to find node locally")
 	}
 
-	ret := vpp2papi.NewSyncResponse()
-	ret.Found, ret.NodesPath, ret.SuccessorNodes, ret.PredecessorNode, err = node.Sync(request.Context.SourceNode, request.Context.SourceNode.NodeID, request.KeyShift, request.ImaginaryNode)
+	f := func() error {
+		ret = vpp2papi.NewSyncResponse()
+		ret.Found, ret.NodesPath, ret.SuccessorNodes, ret.PredecessorNode, err = node.Sync(request.Context.SourceNode, request.Context.SourceNode.NodeID, request.KeyShift, request.ImaginaryNode)
+		if err != nil {
+			return err
+		}
+		if ret.NodesPath != nil && ret.SuccessorNodes != nil && ret.PredecessorNode != nil {
+			hostsRefs = make([]*vpp2papi.NodeInfo, len(ret.NodesPath)+len(ret.SuccessorNodes)+1)
+			for i, v := range ret.NodesPath {
+				hostsRefs[i] = v
+			}
+			for i, v := range ret.SuccessorNodes {
+				hostsRefs[i+len(ret.NodesPath)] = v
+			}
+			hostsRefs[len(ret.NodesPath)+len(ret.SuccessorNodes)] = ret.PredecessorNode
+		}
+		if ret.Found && ret.NodesPath != nil && ret.SuccessorNodes != nil && ret.PredecessorNode != nil {
+			if host.creator != nil {
+				ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, hostsRefs)
+			} else {
+				ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
+			}
+		}
+		return nil
+	}
+
+	err = vptimeout.Run(f, node.ringPtr.callTimeout)
+
 	if err != nil {
 		return nil, err
-	}
-	if ret.NodesPath != nil && ret.SuccessorNodes != nil && ret.PredecessorNode != nil {
-		hostsRefs = make([]*vpp2papi.NodeInfo, len(ret.NodesPath)+len(ret.SuccessorNodes)+1)
-		for i, v := range ret.NodesPath {
-			hostsRefs[i] = v
-		}
-		for i, v := range ret.SuccessorNodes {
-			hostsRefs[i+len(ret.NodesPath)] = v
-		}
-		hostsRefs[len(ret.NodesPath)+len(ret.SuccessorNodes)] = ret.PredecessorNode
-	}
-	if ret.Found && ret.NodesPath != nil && ret.SuccessorNodes != nil && ret.PredecessorNode != nil {
-		if host.creator != nil {
-			ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, hostsRefs)
-		} else {
-			ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
-		}
 	}
 
 	return ret, nil

@@ -29,6 +29,7 @@ import (
 	"github.com/ufoot/vapor/go/vpp2pdat"
 	"github.com/ufoot/vapor/go/vpsum"
 	"math/big"
+	"time"
 )
 
 const (
@@ -54,8 +55,10 @@ type Ring struct {
 	Info   vpp2papi.RingInfo
 	secret RingSecret
 
-	walker     vpbruijn.BruijnWalker
-	localNodes []Node
+	walker            vpbruijn.BruijnWalker
+	localNodes        []Node
+	callTimeout       time.Duration
+	disconnectTimeout time.Duration
 }
 
 type ringStuffAppender struct {
@@ -129,6 +132,8 @@ func NewRing(host *Host, ringTitle, ringDescription string, appID []byte, config
 		return nil, err
 	}
 	ret.localNodes = make([]Node, 0)
+	ret.callTimeout = time.Second * time.Duration(ret.Info.Config.CallTimeout)
+	ret.disconnectTimeout = time.Second * time.Duration(ret.Info.Config.DisconnectTimeout)
 
 	return &ret, nil
 }
@@ -164,6 +169,8 @@ func RingFromInfo(ringInfo *vpp2papi.RingInfo, passwordHash []byte) (*Ring, erro
 		return nil, err
 	}
 	ret.localNodes = make([]Node, 0)
+	ret.callTimeout = time.Second * time.Duration(ret.Info.Config.CallTimeout)
+	ret.disconnectTimeout = time.Second * time.Duration(ret.Info.Config.DisconnectTimeout)
 
 	return &ret, nil
 }
