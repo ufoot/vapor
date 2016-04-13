@@ -155,28 +155,19 @@ func (host *Host) Status() (*vpp2papi.HostStatus, error) {
 	ret.ThisHostInfo = &(host.Info)
 	ret.LocalNodeStatus = host.localNodeStatus()
 
-	f := func() error {
-		nodesList := make([]*vpp2papi.NodeInfo, 0)
-		for _, localNode := range ret.LocalNodeStatus {
-			nodesList = append(nodesList, localNode.Info)
-			for _, successor := range localNode.Peers.Successors {
-				nodesList = append(nodesList, successor)
-			}
-			nodesList = append(nodesList, localNode.Peers.D)
-			nodesList = append(nodesList, localNode.Predecessor)
+	nodesList := make([]*vpp2papi.NodeInfo, 0)
+	for _, localNode := range ret.LocalNodeStatus {
+		nodesList = append(nodesList, localNode.Info)
+		for _, successor := range localNode.Peers.Successors {
+			nodesList = append(nodesList, successor)
 		}
-		if host.creator != nil {
-			ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, nodesList)
-		} else {
-			ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
-		}
-		return nil
+		nodesList = append(nodesList, localNode.Peers.D)
+		nodesList = append(nodesList, localNode.Predecessor)
 	}
-
-	err := vptimeout.Run(f, time.Duration(vpp2pdat.DefaultCallTimeout)*time.Second)
-
-	if err != nil {
-		return nil, err
+	if host.creator != nil {
+		ret.HostsRefs = host.creator.CreateHostsRefs(&(host.Info), nil, nodesList)
+	} else {
+		ret.HostsRefs = make(map[string]*vpp2papi.HostInfo)
 	}
 
 	return ret, nil
