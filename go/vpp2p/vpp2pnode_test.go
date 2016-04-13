@@ -162,17 +162,16 @@ func TestGetSync(t *testing.T) {
 	if err != nil {
 		t.Error("unable to create node", err)
 	}
-	node2, err = NewNode(host, ring, nil, GlobalNodeCatalog())
-	if err != nil {
-		t.Error("unable to create node", err)
+	for ; !(err == nil && node3 != nil && ring.walker.Cmp(node1.Status.Info.NodeID, node3.Status.Info.NodeID) < 0); node3, err = NewNode(host, ring, nil, GlobalNodeCatalog()) {
 	}
-	node3, err = NewNode(host, ring, nil, GlobalNodeCatalog())
-	if err != nil {
-		t.Error("unable to create node", err)
+	for ; !(err == nil && node2 != nil && ring.walker.GtLe(node2.Status.Info.NodeID, node1.Status.Info.NodeID, node3.Status.Info.NodeID)); node2, err = NewNode(host, ring, nil, GlobalNodeCatalog()) {
 	}
+
+	t.Logf("node1 = %s", hex.EncodeToString(node1.Status.Info.NodeID))
+	t.Logf("node2 = %s", hex.EncodeToString(node2.Status.Info.NodeID))
+	t.Logf("node3 = %s", hex.EncodeToString(node3.Status.Info.NodeID))
+
 	imaginaryNode := node1.GetImaginaryNode(node2.Status.Info.NodeID)
-	t.Logf("node = %s (node1)", hex.EncodeToString(node1.Status.Info.NodeID))
-	t.Logf("key =  %s (node2)", hex.EncodeToString(node2.Status.Info.NodeID))
 	t.Logf("img =  %s", hex.EncodeToString(imaginaryNode))
 
 	defer node1.Stop()
