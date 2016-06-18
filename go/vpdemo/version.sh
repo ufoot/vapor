@@ -24,11 +24,11 @@ cd $d
 cp version.go.in version.go
 if which sed > /dev/null ; then
     if which git > /dev/null ; then
-	ncommits=$(git log --oneline -- *.go | wc -l)
-	shortref=$(git rev-parse --short HEAD)
-	echo "$0: ncommits=$ncommits shortref=$shortref"
-	if [ x$ncommits != x ] ; then
-	    sed -i "s/VersionMinor = .*/VersionMinor = \"$ncommits\" \/\/ VersionMinor set by version.sh/g" version.go
+	nbcommits=$(git log --oneline -- . | wc -l)
+	shortref=$(git log --oneline -- . | head -n 1 | awk '{print $1}')
+	echo "$0: nbcommits=$nbcommits shortref=$shortref"
+	if [ x$nbcommits != x ] ; then
+	    sed -i "s/VersionMinor = .*/VersionMinor = \"$nbcommits\" \/\/ VersionMinor set by version.sh/g" version.go
 	fi
 	if [ x$shortref != x ] ; then
 	    sed -i "s/VersionStamp = .*/VersionStamp = \"$shortref\" \/\/ VersionStamp set by version.sh/g" version.go
