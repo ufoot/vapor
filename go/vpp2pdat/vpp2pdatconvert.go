@@ -20,7 +20,9 @@
 package vpp2pdat
 
 import (
-	"encoding/base64"
+	"fmt"
+	"github.com/dineshappavoo/basex"
+	"math/big"
 )
 
 const (
@@ -89,20 +91,33 @@ func RingIDToBuf(ringID []byte) [RingIDBufNbBytes]byte {
 	return ret
 }
 
+// since short strings are likely to be shown, we prefer a 62 character
+// encoding instead of standard base64 with its infamous 2 "extra" chars
+func bytesToBasex(buf []byte, n int) string {
+	var i big.Int
+	i.SetBytes(buf)
+	s, err := basex.EncodeInt(&i)
+	if err != nil {
+		// in case of error, well, we're gonna return zeroes
+		s = ""
+	}
+	for len(s) < n {
+		s = fmt.Sprintf("0%s", s)
+	}
+	return s[0:n]
+}
+
 // HostPubKeyToShortString converts a host public key to a short string of 7 chars
 func HostPubKeyToShortString(hostPubKey []byte) string {
-	ret := base64.URLEncoding.EncodeToString(hostPubKey)
-	return ret[0:HostPubKeyShortStringLen]
+	return bytesToBasex(hostPubKey, HostPubKeyShortStringLen)
 }
 
 // NodeIDToShortString converts a a host node id to a short string or 8 chars
 func NodeIDToShortString(nodeID []byte) string {
-	ret := base64.URLEncoding.EncodeToString(nodeID)
-	return ret[0:NodeIDShortStringLen]
+	return bytesToBasex(nodeID, NodeIDShortStringLen)
 }
 
 // RingIDToShortString converts a ring id to a short string of 9 chars
 func RingIDToShortString(ringID []byte) string {
-	ret := base64.URLEncoding.EncodeToString(ringID)
-	return ret[0:RingIDShortStringLen]
+	return bytesToBasex(ringID, RingIDShortStringLen)
 }

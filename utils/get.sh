@@ -41,6 +41,7 @@ get github.com/axw/gocov/gocov
 get github.com/AlekSi/gocov-xml
 get github.com/jstemmer/go-junit-report
 get github.com/ryancox/gobench2plot
+get github.com/dineshappavoo/basex
 get golang.org/x/crypto/ripemd160
 get golang.org/x/crypto/openpgp
 get golang.org/x/crypto/openpgp/packet
