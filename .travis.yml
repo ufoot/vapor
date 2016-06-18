@@ -27,7 +27,7 @@ go:
   - 1.5.1
   - release
 
-install: ./boostrap && ./configure
+install: ./bootstrap && ./configure
 
 script: make && make check
 
