@@ -25,6 +25,7 @@ VP_TOPSRCDIR = @VP_TOPSRCDIR@
 
 .PHONY: all
 .PHONY: vp
+.PHONY: generate
 .PHONY: check
 .PHONY: bench
 .PHONY: lint
@@ -44,6 +45,8 @@ VP_TOPSRCDIR = @VP_TOPSRCDIR@
 .PHONY: docker
 
 all: configure.ac vp
+
+generate: dep stamp generate-vp
 
 check: dep stamp check-vp
 

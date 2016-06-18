@@ -38,31 +38,43 @@ VERSION_MAJOR=0
 
 find_configure_ac () {
     if [ -f configure.ac ] ; then
-	    CONFIGURE_AC="configure.ac"
-	    if [ -f ${CONFIGURE_AC} ] ; then
+	CONFIGURE_AC="configure.ac"
+	if [ -f ${CONFIGURE_AC} ] ; then
             true
-	    else
+	else
             echo "unable to open ${CONFIGURE_AC}"
             exit 2
-	    fi
+	fi
     else
-	    echo "unable to find configure.ac"
-	    exit 1
+	echo "unable to find configure.ac"
+	exit 1
     fi
 }
 
 find_version_go () {
-    if [ -f $1/version.go ] ; then
-	    VERSION_GO="$1/version.go"
-	    if [ -f ${VERSION_GO} ] ; then
-            true
-	    else
+    if [ -f $1/version.go.in ] ; then
+	VERSION_GO="$1/version.go.in"
+	if [ -f ${VERSION_GO} ] ; then
+	    true
+	else
             echo "unable to open ${VERSION_GO}"
             exit 2
-	    fi
+	fi
     else
-	    echo "unable to find version.go"
-	    exit 1
+	if [ -f $1/version.go ] ; then
+	    VERSION_GO="$1/version.go"
+	    if [ -f ${VERSION_GO} ] ; then
+		true
+	    else
+		echo "unable to open ${VERSION_GO}"
+		exit 2
+	    fi
+	else
+	    echo "unable to find version.go in $1"
+	    if [ x$1 != xgo ] ; then
+		exit 1
+	    fi
+	fi
     fi
 }
 
@@ -84,12 +96,12 @@ git_changelog () {
 
 calc_minor () {
     export VERSION_MINOR=$(git log --oneline --color=never -- $(find $1 -name "vp*.go" | grep -v version | sort) | wc -l)
-    export VERSION_GO="$1/version.go"
+    find_version_go $1
 }
 
 calc_stamp () {
     export VERSION_STAMP=$(git log --oneline --color=never -- $(find $1 -name "vp*.go" | grep -v version | sort) | head -n 1 | awk '{print $1}')
-    export VERSION_GO="$1/version.go"
+    find_version_go $1
 }
 
 patch_autotools () {
@@ -106,20 +118,20 @@ patch_autotools () {
 }
 
 patch_go () {
-	find_version_go $1
-	calc_minor $1
-	calc_stamp $1
-        sed -i "s/const.*\/\/.*PackageTarname.*stamp.sh/const PackageTarname = \"${PACKAGE_TARNAME}\" \/\/ PackageTarname set by stamp.sh/g" ${VERSION_GO}
-        sed -i "s/const.*\/\/.*PackageName.*stamp.sh/const PackageName = \"${PACKAGE_NAME}\" \/\/ PackageName set by stamp.sh/g" ${VERSION_GO}
-        sed -i "s/const.*\/\/.*PackageEmail.*stamp.sh/const PackageEmail = \"${PACKAGE_EMAIL}\" \/\/ PackageEmail set by stamp.sh/g" ${VERSION_GO}
-        sed -i "s/const.*\/\/.*PackageURL.*stamp.sh/const PackageURL = \"${PACKAGE_URL}\" \/\/ PackageURL set by stamp.sh/g" ${VERSION_GO}
-        sed -i "s/const.*\/\/.*PackageCopyright.*stamp.sh/const PackageCopyright = \"${PACKAGE_COPYRIGHT}\" \/\/ PackageCopyright set by stamp.sh/g" ${VERSION_GO}
-        sed -i "s/const.*\/\/.*PackageLicense.*stamp.sh/const PackageLicense = \"${PACKAGE_LICENSE}\" \/\/ PackageLicense set by stamp.sh/g" ${VERSION_GO}
-        sed -i "s/const.*\/\/.*VersionMajor.*stamp.sh/const VersionMajor = ${VERSION_MAJOR} \/\/ VersionMajor set by stamp.sh/g" ${VERSION_GO}
-        sed -i "s/const.*\/\/.*VersionMinor.*stamp.sh/const VersionMinor = ${VERSION_MINOR} \/\/ VersionMinor set by stamp.sh/g" ${VERSION_GO}
-        sed -i "s/const.*\/\/.*VersionStamp.*stamp.sh/const VersionStamp = \"${VERSION_STAMP}\" \/\/ VersionStamp set by stamp.sh/g" ${VERSION_GO}
-        go vet ${VERSION_GO}
-        go fmt ${VERSION_GO}
+    find_version_go $1
+    calc_minor $1
+    calc_stamp $1
+    sed -i "s/const.*\/\/.*PackageTarname.*stamp.sh/const PackageTarname = \"${PACKAGE_TARNAME}\" \/\/ PackageTarname set by stamp.sh/g" ${VERSION_GO}
+    sed -i "s/const.*\/\/.*PackageName.*stamp.sh/const PackageName = \"${PACKAGE_NAME}\" \/\/ PackageName set by stamp.sh/g" ${VERSION_GO}
+    sed -i "s/const.*\/\/.*PackageEmail.*stamp.sh/const PackageEmail = \"${PACKAGE_EMAIL}\" \/\/ PackageEmail set by stamp.sh/g" ${VERSION_GO}
+    sed -i "s/const.*\/\/.*PackageURL.*stamp.sh/const PackageURL = \"${PACKAGE_URL}\" \/\/ PackageURL set by stamp.sh/g" ${VERSION_GO}
+    sed -i "s/const.*\/\/.*PackageCopyright.*stamp.sh/const PackageCopyright = \"${PACKAGE_COPYRIGHT}\" \/\/ PackageCopyright set by stamp.sh/g" ${VERSION_GO}
+    sed -i "s/const.*\/\/.*PackageLicense.*stamp.sh/const PackageLicense = \"${PACKAGE_LICENSE}\" \/\/ PackageLicense set by stamp.sh/g" ${VERSION_GO}
+    sed -i "s/const.*\/\/.*VersionMajor.*stamp.sh/const VersionMajor = ${VERSION_MAJOR} \/\/ VersionMajor set by stamp.sh/g" ${VERSION_GO}
+    sed -i "s/const.*\/\/.*VersionMinor.*stamp.sh/const VersionMinor = ${VERSION_MINOR} \/\/ VersionMinor set by stamp.sh/g" ${VERSION_GO}
+    sed -i "s/const.*\/\/.*VersionStamp.*stamp.sh/const VersionStamp = \"${VERSION_STAMP}\" \/\/ VersionStamp set by stamp.sh/g" ${VERSION_GO}
+    #go vet ${VERSION_GO}
+    #go fmt ${VERSION_GO}
 }
 
 find_configure_ac
@@ -127,6 +139,6 @@ git_check
 git_changelog
 patch_autotools
 for i in go/vp* ; do
-	patch_go $i
+    patch_go $i
 done
 

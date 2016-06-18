@@ -34,6 +34,7 @@ done
 echo >> Makefile.help
 echo "Below are listed global Makefile targets:" >> Makefile.help
 echo "vp: builds all binaries (alias for all)." >> Makefile.help
+echo "generate: process .go.in files with go generate." >> Makefile.help
 echo "check: runs test suite." >> Makefile.help
 echo "bench: runs test suite in bench mode." >> Makefile.help
 echo "lint: lints (cleanup & check) source code." >> Makefile.help
@@ -51,7 +52,7 @@ echo "Below are listed per-package Makefile targets:" >> Makefile.help
 
 cd go || exit 1
 
-for t in "" "check-" "bench-" "lint-" "devel-" "doc-" ; do
+for t in "" "generate-" "check-" "bench-" "lint-" "devel-" "doc-" ; do
     echo ".PHONY: ${t}vp" >> ../Makefile.dep
     echo -n "${t}vp:" >> ../Makefile.dep
     for i in vp* ; do
@@ -87,8 +88,12 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
         fi
     done
     echo ".PHONY: $i" >> ../Makefile.dep
-    echo "$i: $k # $m" >> ../Makefile.dep
+    echo "$i: $k generate-$i # $m" >> ../Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR)/go && go install $j\n" >> ../Makefile.dep
+    echo >> ../Makefile.dep
+    echo ".PHONY: generate-$i" >> ../Makefile.dep
+    echo "generate-$i: $k" >> ../Makefile.dep
+    printf "\texport GOPATH=\$(VP_TOPSRCDIR)/go && go generate $j\n" >> ../Makefile.dep
     echo >> ../Makefile.dep
     echo ".PHONY: check-$i" >> ../Makefile.dep
     echo "check-$i: $k" >> ../Makefile.dep

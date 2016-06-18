@@ -19,6 +19,8 @@
 
 package main
 
+//go:generate bash ./version.sh
+
 import (
 	"flag"
 	"fmt"
