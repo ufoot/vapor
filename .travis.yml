@@ -26,5 +26,9 @@ go:
   - 1.4.2
   - 1.5.1
   - release
+
+before_install:
+  - go generate
+
 script: ./bootstrap && ./configure && make && make check
 
