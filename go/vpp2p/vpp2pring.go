@@ -19,8 +19,6 @@
 
 package vpp2p
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"encoding/base64"
 	"fmt"

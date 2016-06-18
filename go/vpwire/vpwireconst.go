@@ -19,8 +19,6 @@
 
 package vpwire
 
-//go:generate bash ./stamp.sh
-	
 // DrawMode defines how to draw stuff, including lines.
 // Inspired from OpenGL GL_POINTS, GL_LINES or GL_TRIANGLES.
 type DrawMode int

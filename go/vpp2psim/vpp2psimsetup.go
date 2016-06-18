@@ -19,8 +19,6 @@
 
 package vpp2psim
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"fmt"
 	"github.com/ufoot/vapor/go/vpp2p"

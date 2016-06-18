@@ -19,8 +19,6 @@
 
 package vpnumber
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/go/vperror"

@@ -19,8 +19,6 @@
 
 package vpbruijn
 
-//go:generate bash ./stamp.sh
-	
 // Read https://en.wikipedia.org/wiki/De_Bruijn_graph for theory
 // This is an interface over implementation of De Bruijn graphs.
 

@@ -19,8 +19,6 @@
 
 package vpid
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"math/big"
 )

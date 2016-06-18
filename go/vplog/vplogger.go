@@ -19,8 +19,6 @@
 
 package vplog
 
-//go:generate bash ./stamp.sh
-
 import (
 	"log/syslog"
 )

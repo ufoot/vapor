@@ -19,8 +19,6 @@
 
 package vpsum
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"crypto/md5"
 	"crypto/sha1"

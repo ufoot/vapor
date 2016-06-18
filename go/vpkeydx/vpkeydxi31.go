@@ -19,8 +19,6 @@
 
 package vpkeydx
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"fmt"
 	"math/big"

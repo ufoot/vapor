@@ -19,8 +19,6 @@
 
 package vpbezier
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"github.com/ufoot/vapor/go/vpnumber"
 	"github.com/ufoot/vapor/go/vpvec2"

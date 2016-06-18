@@ -19,8 +19,6 @@
 
 package vpp2pdat
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"fmt"
 	"net/url"

@@ -19,8 +19,6 @@
 
 package vpmath
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"github.com/ufoot/vapor/go/vpnumber"
 	"math"

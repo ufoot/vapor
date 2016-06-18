@@ -19,8 +19,6 @@
 
 package vpvec2
 
-//go:generate bash ./stamp.sh
-	
 const (
 	// X is the index of the x coordinate within a vector.
 	X = iota

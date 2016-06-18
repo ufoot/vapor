@@ -19,8 +19,6 @@
 
 package vpapp
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"fmt"
 	"github.com/ufoot/vapor/go/vpcommonapi"

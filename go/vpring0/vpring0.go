@@ -19,8 +19,6 @@
 
 package main
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"encoding/base64"
 	"github.com/ufoot/vapor/go/vpp2p"

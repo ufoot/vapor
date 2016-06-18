@@ -3,8 +3,6 @@
 
 package vpbusapi
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"bytes"
 	"fmt"

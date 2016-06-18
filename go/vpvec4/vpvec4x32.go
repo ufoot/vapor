@@ -19,8 +19,6 @@
 
 package vpvec4
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/go/vpmath"

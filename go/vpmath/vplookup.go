@@ -19,8 +19,6 @@
 
 package vpmath
 
-//go:generate bash ./stamp.sh
-	
 // LookupSplit builds an array of integers containing indices
 // for a given lookup table. The idea is to consider the id is a
 // sequence number within a N-dimension space. It arranges the

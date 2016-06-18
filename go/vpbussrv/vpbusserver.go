@@ -19,8 +19,6 @@
 
 package vpbussrv
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"git.apache.org/thrift.git/lib/go/thrift"
 	"github.com/ufoot/vapor/go/vpbus"

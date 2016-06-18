@@ -19,8 +19,6 @@
 
 package vpline3
 
-//go:generate bash ./stamp.sh
-	
 const (
 	// A is the index of the 1st point in a line.
 	A = iota

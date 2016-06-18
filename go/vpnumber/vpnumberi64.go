@@ -19,8 +19,6 @@
 
 package vpnumber
 
-//go:generate bash ./stamp.sh
-	
 // I64Const0 contains 0 as an int64.
 const I64Const0 int64 = 0
 

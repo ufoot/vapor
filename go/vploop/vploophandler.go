@@ -19,8 +19,6 @@
 
 package vploop
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"time"
 )

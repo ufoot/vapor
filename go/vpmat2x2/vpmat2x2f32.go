@@ -19,8 +19,6 @@
 
 package vpmat2x2
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/go/vperror"

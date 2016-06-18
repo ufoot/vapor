@@ -19,8 +19,6 @@
 
 package vpnumber
 
-//go:generate bash ./stamp.sh
-	
 // I32Const0 contains 0 as an int32.
 const I32Const0 int32 = 0
 

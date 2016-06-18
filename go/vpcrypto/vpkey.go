@@ -19,8 +19,6 @@
 
 package vpcrypto
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"bytes"
 	"compress/gzip"

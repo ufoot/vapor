@@ -19,8 +19,6 @@
 
 package vptypes
 
-//go:generate bash ./stamp.sh
-	
 import (
 	"encoding/json"
 	"errors"
