@@ -25,6 +25,8 @@ VP_TOPSRCDIR = @VP_TOPSRCDIR@
 
 .PHONY: all
 .PHONY: vp
+.PHONY: version
+.PHONY: stamp
 .PHONY: generate
 .PHONY: check
 .PHONY: bench
@@ -39,12 +41,16 @@ VP_TOPSRCDIR = @VP_TOPSRCDIR@
 .PHONY: get
 .PHONY: dep
 .PHONY: help
-.PHONY: stamp
 .PHONY: indent
 .PHONY: thrift
 .PHONY: docker
 
-all: configure.ac vp
+all: vp
+
+version: dep
+	utils/version.sh
+
+stamp: dep version stamp-vp
 
 generate: dep stamp generate-vp
 
@@ -85,9 +91,6 @@ dep:
 
 help:
 	cat Makefile.help
-
-stamp:
-	./utils/stamp.sh
 
 indent:
 	./utils/indent.sh

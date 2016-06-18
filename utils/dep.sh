@@ -34,6 +34,8 @@ done
 echo >> Makefile.help
 echo "Below are listed global Makefile targets:" >> Makefile.help
 echo "vp: builds all binaries (alias for all)." >> Makefile.help
+echo "version: patch autoconf and go source files with current version." >> Makefile.help
+echo "stamp: copy stamp.sh to all go package directories." >> Makefile.help
 echo "generate: process .go.in files with go generate." >> Makefile.help
 echo "check: runs test suite." >> Makefile.help
 echo "bench: runs test suite in bench mode." >> Makefile.help
@@ -45,7 +47,6 @@ echo "distclean: cleans up build, removing even more files." >> Makefile.help
 echo "get: get go libraries from github.com or golang.org." >> Makefile.help
 echo "dep: generate dependencies."  >> Makefile.help
 echo "help: display help about Makefile targets." >> Makefile.help
-echo "stamp: update build stamp." >> Makefile.help
 echo "indent: automatically indent code." >> Makefile.help
 echo >> Makefile.help
 echo "Below are listed per-package Makefile targets:" >> Makefile.help
@@ -70,7 +71,7 @@ done
 
 cd ..
 echo "configure.ac: $(ls go/vp*/*.go | sort -u | tr "\n" " ")" >> Makefile.dep
-printf "\tcd \$(VP_TOPSRCDIR) && ./utils/dep.sh && ./utils/stamp.sh\n" >> Makefile.dep
+printf "\tcd \$(VP_TOPSRCDIR) && ./utils/dep.sh && ./utils/version.sh\n" >> Makefile.dep
 echo >> Makefile.dep
 cd go
 
@@ -91,8 +92,14 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo "$i: $k generate-$i # $m" >> ../Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR)/go && go install $j\n" >> ../Makefile.dep
     echo >> ../Makefile.dep
+    echo ".PHONY: stamp-$i" >> ../Makefile.dep
+    echo "stamp-$i: go/$i/stamp.sh" >> ../Makefile.dep
+    echo >> ../Makefile.dep
+    echo "go/$i/stamp.sh: utils/stamp.sh" >> ../Makefile.dep
+    printf "\tcp $< $@\n" >> ../Makefile.dep
+    echo >> ../Makefile.dep
     echo ".PHONY: generate-$i" >> ../Makefile.dep
-    echo "generate-$i: $k" >> ../Makefile.dep
+    echo "generate-$i: $k go/$i/stamp.sh" >> ../Makefile.dep
     printf "\texport GOPATH=\$(VP_TOPSRCDIR)/go && go generate $j\n" >> ../Makefile.dep
     echo >> ../Makefile.dep
     echo ".PHONY: check-$i" >> ../Makefile.dep

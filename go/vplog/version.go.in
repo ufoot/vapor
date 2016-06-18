@@ -17,7 +17,7 @@
 // Vapor homepage: https://github.com/ufoot/vapor
 // Contact author: ufoot@ufoot.org
 
-package main
+package vplog
 
 // PackageTarname contains a short name of the package, suitable for a filename.
 const PackageTarname = "vapor" // PackageTarname set by version.sh
