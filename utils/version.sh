@@ -36,13 +36,14 @@ PACKAGE_LICENSE="GNU GPL v3"
 
 VERSION_MAJOR=0
 
-find_configure_ac () {
-    if [ -f configure.ac ] ; then
-	CONFIGURE_AC="configure.ac"
-	if [ -f ${CONFIGURE_AC} ] ; then
+find_configure_ac_in () {
+    if [ -f configure.ac.in ] ; then
+	CONFIGURE_AC_IN="configure.ac.in"
+	if [ -f ${CONFIGURE_AC_IN} ] ; then
+	    CONFIGURE_AC="configure.ac"
             true
 	else
-            echo "unable to open ${CONFIGURE_AC}"
+            echo "unable to open ${CONFIGURE_AC_IN}"
             exit 2
 	fi
     else
@@ -92,11 +93,20 @@ calc_stamp () {
 }
 
 patch_autotools () {
+    VERSION_DOT=${VERSION_MAJOR}.0.0000000
+    if grep -q ${VERSION_DOT} ${CONFIGURE_AC_IN} ; then
+        echo "current version of ${CONFIGURE_AC_IN} is ${VERSION_DOT}"
+        touch ${CONFIGURE_AC_IN}
+    else
+        echo "patching ${CONFIGURE_AC_IN} with version ${VERSION_DOT}"
+        sed -i "s/^AC_INIT.*/AC_INIT([${PACKAGE_NAME}],[${VERSION_DOT}],[${PACKAGE_EMAIL}],[${PACKAGE_TARNAME}],[${PACKAGE_URL}])/g" ${CONFIGURE_AC_IN}
+    fi
+    cp ${CONFIGURE_AC_IN} ${CONFIGURE_AC}
     calc_minor go
     calc_stamp go
     VERSION_DOT=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_STAMP}
     if grep -q ${VERSION_DOT} ${CONFIGURE_AC} ; then
-        echo "current version is ${VERSION_DOT}"
+        echo "current version of ${CONFIGURE_AC} is ${VERSION_DOT}"
         touch ${CONFIGURE_AC}
     else
         echo "patching ${CONFIGURE_AC} with version ${VERSION_DOT}"
@@ -122,7 +132,7 @@ patch_go () {
     go fmt ${VERSION_GO}
 }
 
-find_configure_ac
+find_configure_ac_in
 git_check
 git_changelog
 patch_autotools

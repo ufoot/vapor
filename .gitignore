@@ -1,6 +1,7 @@
 autom4te.cache
 ChangeLog
 configure
+configure.ac
 config.log
 config.status
 Makefile

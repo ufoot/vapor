@@ -26,4 +26,4 @@ else
     exit 1
 fi
 
-autoreconf && utils/get.sh
+utils/version.sh && autoreconf && utils/get.sh
