@@ -20,4 +20,3 @@
 package vplog
 
 //go:generate bash ./stamp.sh
-

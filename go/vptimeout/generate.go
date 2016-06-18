@@ -20,4 +20,3 @@
 package vptimeout
 
 //go:generate bash ./stamp.sh
-

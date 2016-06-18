@@ -20,4 +20,3 @@
 package vpkeydx
 
 //go:generate bash ./stamp.sh
-

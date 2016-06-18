@@ -20,4 +20,3 @@
 package vpmat3x2
 
 //go:generate bash ./stamp.sh
-

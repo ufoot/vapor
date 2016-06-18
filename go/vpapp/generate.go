@@ -20,4 +20,3 @@
 package vpapp
 
 //go:generate bash ./stamp.sh
-

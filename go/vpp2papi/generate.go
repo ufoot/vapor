@@ -20,4 +20,3 @@
 package vpp2papi
 
 //go:generate bash ./stamp.sh
-

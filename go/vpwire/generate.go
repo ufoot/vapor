@@ -20,4 +20,3 @@
 package vpwire
 
 //go:generate bash ./stamp.sh
-

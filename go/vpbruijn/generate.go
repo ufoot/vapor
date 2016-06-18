@@ -20,4 +20,3 @@
 package vpbruijn
 
 //go:generate bash ./stamp.sh
-

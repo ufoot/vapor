@@ -20,4 +20,3 @@
 package vptypes
 
 //go:generate bash ./stamp.sh
-

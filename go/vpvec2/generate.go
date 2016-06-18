@@ -20,4 +20,3 @@
 package vpvec2
 
 //go:generate bash ./stamp.sh
-

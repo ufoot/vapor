@@ -20,4 +20,3 @@
 package vpp2pdat
 
 //go:generate bash ./stamp.sh
-

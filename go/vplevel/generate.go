@@ -20,4 +20,3 @@
 package vplevel
 
 //go:generate bash ./stamp.sh
-

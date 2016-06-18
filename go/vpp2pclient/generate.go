@@ -20,4 +20,3 @@
 package main
 
 //go:generate bash ./stamp.sh
-

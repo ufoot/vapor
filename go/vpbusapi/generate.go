@@ -20,4 +20,3 @@
 package vpbusapi
 
 //go:generate bash ./stamp.sh
-

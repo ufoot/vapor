@@ -20,4 +20,3 @@
 package vpbezier
 
 //go:generate bash ./stamp.sh
-

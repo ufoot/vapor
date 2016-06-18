@@ -20,4 +20,3 @@
 package vperror
 
 //go:generate bash ./stamp.sh
-

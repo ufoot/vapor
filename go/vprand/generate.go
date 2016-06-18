@@ -20,4 +20,3 @@
 package vprand
 
 //go:generate bash ./stamp.sh
-

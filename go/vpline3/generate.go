@@ -20,4 +20,3 @@
 package vpline3
 
 //go:generate bash ./stamp.sh
-

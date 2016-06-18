@@ -20,4 +20,3 @@
 package vpsum
 
 //go:generate bash ./stamp.sh
-

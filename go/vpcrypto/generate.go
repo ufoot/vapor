@@ -20,4 +20,3 @@
 package vpcrypto
 
 //go:generate bash ./stamp.sh
-

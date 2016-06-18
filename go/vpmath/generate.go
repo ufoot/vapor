@@ -20,4 +20,3 @@
 package vpmath
 
 //go:generate bash ./stamp.sh
-

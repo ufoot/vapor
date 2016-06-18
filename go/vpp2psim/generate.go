@@ -20,4 +20,3 @@
 package vpp2psim
 
 //go:generate bash ./stamp.sh
-
