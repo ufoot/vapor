@@ -55,6 +55,7 @@ find_version_go_in () {
     if [ -f $1/version.go.in ] ; then
 	VERSION_GO_IN="$1/version.go.in"
 	if [ -f ${VERSION_GO_IN} ] ; then
+	    VERSION_GO="$1/version.go"
 	    true
 	else
             echo "unable to open ${VERSION_GO_IN}"
@@ -116,8 +117,9 @@ patch_go () {
     sed -i "s/const.*\/\/.*VersionMajor.*sh/const VersionMajor = ${VERSION_MAJOR} \/\/ VersionMajor set by version.sh/g" ${VERSION_GO_IN}
     sed -i "s/const.*\/\/.*VersionMinor.*sh/const VersionMinor = 0 \/\/ VersionMinor set by version.sh/g" ${VERSION_GO_IN}
     sed -i "s/const.*\/\/.*VersionStamp.*sh/const VersionStamp = \"0000000\" \/\/ VersionStamp set by version.sh/g" ${VERSION_GO_IN}
-    #go vet ${VERSION_GO_IN}
-    #go fmt ${VERSION_GO_IN}
+    cp ${VERSION_GO_IN} ${VERSION_GO}
+    go vet ${VERSION_GO}
+    go fmt ${VERSION_GO}
 }
 
 find_configure_ac
