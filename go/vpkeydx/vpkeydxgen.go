@@ -19,6 +19,8 @@
 
 package vpkeydx
 
+//go:generate bash ./stamp.sh
+	
 import (
 	"fmt"
 	"github.com/ufoot/vapor/go/vperror"

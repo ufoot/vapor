@@ -29,7 +29,7 @@ if which sed > /dev/null ; then
 	shortref=$(git log --oneline -- . | head -n 1 | awk '{print $1}')
 	echo "$0: nbcommits=$nbcommits shortref=$shortref ($(pwd))"
 	if [ x$nbcommits != x ] ; then
-	    sed -i "s/VersionMinor = .*/VersionMinor = \"$nbcommits\" \/\/ VersionMinor set by stamp.sh/g" version.go
+	    sed -i "s/VersionMinor = .*/VersionMinor = $nbcommits \/\/ VersionMinor set by stamp.sh/g" version.go
 	fi
 	if [ x$shortref != x ] ; then
 	    sed -i "s/VersionStamp = .*/VersionStamp = \"$shortref\" \/\/ VersionStamp set by stamp.sh/g" version.go

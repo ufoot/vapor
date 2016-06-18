@@ -19,6 +19,8 @@
 
 package vpmat2x1
 
+//go:generate bash ./stamp.sh
+	
 const (
 	// Col0Row0 is the index of column 0 row 0 in a 2x1 column-major matrix.
 	Col0Row0 = iota

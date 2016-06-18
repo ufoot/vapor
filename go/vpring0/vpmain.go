@@ -19,6 +19,8 @@
 
 package main
 
+//go:generate bash ./stamp.sh
+	
 import (
 	"fmt"
 	"github.com/ufoot/vapor/go/vplog"

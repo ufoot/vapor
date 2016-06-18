@@ -24,6 +24,7 @@ go/vpwire/*.png
 vapor-*.tar.gz
 docker/Dockerfile-build
 docker/Dockerfile-demo
+version.go
 *~
 *#*
 .*.swp

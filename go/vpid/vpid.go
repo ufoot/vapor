@@ -19,6 +19,8 @@
 
 package vpid
 
+//go:generate bash ./stamp.sh
+	
 import (
 	"github.com/ufoot/vapor/go/vpcrypto"
 	"github.com/ufoot/vapor/go/vperror"

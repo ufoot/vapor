@@ -19,6 +19,8 @@
 
 package vpmat4x3
 
+//go:generate bash ./stamp.sh
+	
 import (
 	"encoding/json"
 	"github.com/ufoot/vapor/go/vperror"

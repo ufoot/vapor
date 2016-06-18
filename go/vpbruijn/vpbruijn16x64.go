@@ -19,6 +19,8 @@
 
 package vpbruijn
 
+//go:generate bash ./stamp.sh
+	
 // Read https://en.wikipedia.org/wiki/De_Bruijn_graph for theory
 
 // This is a limited implementation which supposes m=16 and n=64.

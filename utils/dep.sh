@@ -53,7 +53,7 @@ echo "Below are listed per-package Makefile targets:" >> Makefile.help
 
 cd go || exit 1
 
-for t in "" "generate-" "check-" "bench-" "lint-" "devel-" "doc-" ; do
+for t in "" "stamp-" "generate-" "check-" "bench-" "lint-" "devel-" "doc-" ; do
     echo ".PHONY: ${t}vp" >> ../Makefile.dep
     echo -n "${t}vp:" >> ../Makefile.dep
     for i in vp* ; do
@@ -96,7 +96,7 @@ for i in $(ls -d vp* | sort -u | tr "\n" " ") ; do
     echo "stamp-$i: go/$i/stamp.sh" >> ../Makefile.dep
     echo >> ../Makefile.dep
     echo "go/$i/stamp.sh: utils/stamp.sh" >> ../Makefile.dep
-    printf "\tcp $< $@\n" >> ../Makefile.dep
+    printf "\tcp utils/stamp.sh go/$i/stamp.sh\n" >> ../Makefile.dep
     echo >> ../Makefile.dep
     echo ".PHONY: generate-$i" >> ../Makefile.dep
     echo "generate-$i: $k go/$i/stamp.sh" >> ../Makefile.dep

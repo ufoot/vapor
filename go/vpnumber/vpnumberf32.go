@@ -19,6 +19,8 @@
 
 package vpnumber
 
+//go:generate bash ./stamp.sh
+	
 import (
 	"math"
 )

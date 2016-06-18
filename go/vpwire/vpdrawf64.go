@@ -19,6 +19,8 @@
 
 package vpwire
 
+//go:generate bash ./stamp.sh
+	
 import (
 	"github.com/llgcode/draw2d/draw2dimg"
 	"github.com/ufoot/vapor/go/vpline3"

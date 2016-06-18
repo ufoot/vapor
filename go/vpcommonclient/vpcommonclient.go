@@ -3,6 +3,8 @@
 
 package main
 
+//go:generate bash ./stamp.sh
+	
 import (
 	"flag"
 	"fmt"

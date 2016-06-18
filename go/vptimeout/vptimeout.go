@@ -19,6 +19,8 @@
 
 package vptimeout
 
+//go:generate bash ./stamp.sh
+	
 import (
 	"fmt"
 	"time"

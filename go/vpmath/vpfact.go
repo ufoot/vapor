@@ -19,6 +19,8 @@
 
 package vpmath
 
+//go:generate bash ./stamp.sh
+	
 const factCacheSize = 12
 
 var factCache [factCacheSize]int

@@ -19,6 +19,8 @@
 
 package vpmath
 
+//go:generate bash ./stamp.sh
+	
 const binomialCacheSize = 5
 
 var binomialCache [binomialCacheSize][binomialCacheSize]int

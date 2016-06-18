@@ -19,6 +19,8 @@
 
 package vpbruijn
 
+//go:generate bash ./stamp.sh
+	
 import (
 	"math/big"
 	"math/rand"

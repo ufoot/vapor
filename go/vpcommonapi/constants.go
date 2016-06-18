@@ -3,6 +3,8 @@
 
 package vpcommonapi
 
+//go:generate bash ./stamp.sh
+	
 import (
 	"bytes"
 	"fmt"
