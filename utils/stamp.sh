@@ -25,8 +25,8 @@ if [ -f version.go.in ] ; then
 cp version.go.in version.go
 if which sed > /dev/null ; then
     if which git > /dev/null ; then
-	nbcommits=$(git log --oneline -- . | wc -l)
-	shortref=$(git log --oneline -- . | head -n 1 | awk '{print $1}')
+	nbcommits=$(git log --oneline -- vp*.go | wc -l)
+	shortref=$(git log --oneline -- vp*.go | head -n 1 | awk '{print $1}')
 	echo "$0: nbcommits=$nbcommits shortref=$shortref ($(pwd))"
 	if [ x$nbcommits != x ] ; then
 	    sed -i "s/VersionMinor = .*/VersionMinor = $nbcommits \/\/ VersionMinor set by stamp.sh/g" version.go

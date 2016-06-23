@@ -79,7 +79,7 @@ git_check () {
 
 git_changelog () {
     if which git2cl > /dev/null ; then
-        GIT_FILES=$(ls -d * | grep -v "ChangeLog" | sort | tr "\n" " ")
+        GIT_FILES=$(ls -d * | grep -v "ChangeLog" | grep -v configure.ac | grep -v version.go | sort | tr "\n" " ")
         git log --pretty --numstat --summary -- $GIT_FILES | git2cl > ChangeLog
     fi
 }
@@ -101,14 +101,14 @@ patch_autotools () {
         echo "patching ${CONFIGURE_AC_IN} with version ${VERSION_DOT}"
         sed -i "s/^AC_INIT.*/AC_INIT([${PACKAGE_NAME}],[${VERSION_DOT}],[${PACKAGE_EMAIL}],[${PACKAGE_TARNAME}],[${PACKAGE_URL}])/g" ${CONFIGURE_AC_IN}
     fi
-    cp ${CONFIGURE_AC_IN} ${CONFIGURE_AC}
     calc_minor go
     calc_stamp go
     VERSION_DOT=${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_STAMP}
-    if grep -q ${VERSION_DOT} ${CONFIGURE_AC} ; then
+    if [ -f ${CONFIGURE_AC} ] && grep -q ${VERSION_DOT} ${CONFIGURE_AC} ; then
         echo "current version of ${CONFIGURE_AC} is ${VERSION_DOT}"
         touch ${CONFIGURE_AC}
     else
+        cp ${CONFIGURE_AC_IN} ${CONFIGURE_AC}
         echo "patching ${CONFIGURE_AC} with version ${VERSION_DOT}"
         sed -i "s/^AC_INIT.*/AC_INIT([${PACKAGE_NAME}],[${VERSION_DOT}],[${PACKAGE_EMAIL}],[${PACKAGE_TARNAME}],[${PACKAGE_URL}])/g" ${CONFIGURE_AC}
     fi
@@ -116,8 +116,8 @@ patch_autotools () {
 
 patch_go () {
     find_version_go_in $1
-    calc_minor $1
-    calc_stamp $1
+    calc_minor $1/vp*.go
+    calc_stamp $1/vp*.go
     sed -i "s/const.*\/\/.*PackageTarname.*sh/const PackageTarname = \"${PACKAGE_TARNAME}\" \/\/ PackageTarname set by version.sh/g" ${VERSION_GO_IN}
     sed -i "s/const.*\/\/.*PackageName.*sh/const PackageName = \"${PACKAGE_NAME}\" \/\/ PackageName set by version.sh/g" ${VERSION_GO_IN}
     sed -i "s/const.*\/\/.*PackageEmail.*sh/const PackageEmail = \"${PACKAGE_EMAIL}\" \/\/ PackageEmail set by version.sh/g" ${VERSION_GO_IN}
@@ -128,6 +128,8 @@ patch_go () {
     sed -i "s/const.*\/\/.*VersionMinor.*sh/const VersionMinor = 0 \/\/ VersionMinor set by version.sh/g" ${VERSION_GO_IN}
     sed -i "s/const.*\/\/.*VersionStamp.*sh/const VersionStamp = \"0000000\" \/\/ VersionStamp set by version.sh/g" ${VERSION_GO_IN}
     cp ${VERSION_GO_IN} ${VERSION_GO}
+    sed -i "s/const.*\/\/.*VersionMinor.*sh/const VersionMinor = ${VERSION_MINOR} \/\/ VersionMinor set by version.sh/g" ${VERSION_GO}
+    sed -i "s/const.*\/\/.*VersionStamp.*sh/const VersionStamp = \"${VERSION_STAMP}\" \/\/ VersionStamp set by version.sh/g" ${VERSION_GO}
     go vet ${VERSION_GO}
     go fmt ${VERSION_GO}
 }
