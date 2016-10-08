@@ -31,9 +31,6 @@ Alternatively, on UNIXish platforms, a `./configure` script sets
 up some Makefiles which allow a quite usual `./boostrap && ./configure && make`
 sequence to work. 
 
-Project is build automatically on 
-[Travis](https://travis-ci.org/ufoot/vapor).
-
 Documentation
 -------------
 
@@ -45,7 +42,7 @@ Project status
 
 Experimental. Unstable. Under heavy work. Use at your own risks. Period.
 
-[![Build Status](https://travis-ci.org/ufoot/vapor.svg?branch=master)](https://travis-ci.org/ufoot/vapor)
+[![Build Status](https://travis-ci.org/ufoot/vapor.svg?branch=master)](https://travis-ci.org/ufoot/vapor/branches)
 
 Why is it named Vapor?
 ----------------------
