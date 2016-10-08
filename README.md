@@ -45,6 +45,8 @@ Project status
 
 Experimental. Unstable. Under heavy work. Use at your own risks. Period.
 
+[![Build Status](https://travis-ci.org/ufoot/vapor.svg?branch=master)](https://travis-ci.org/ufoot/vapor)
+
 Why is it named Vapor?
 ----------------------
 
