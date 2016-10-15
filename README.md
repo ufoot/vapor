@@ -67,7 +67,7 @@ Authors
 
 * All Liquid War 3, Liquid War 5 and Liquid War 6 contributors have
   indirectly helped for this project to exist. No real code snippets,
-  but ideas where reused whenever possible.
+  but ideas were reused whenever possible.
 
 License
 =======
