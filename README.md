@@ -67,7 +67,7 @@ Authors
 
 * All Liquid War 3, Liquid War 5 and Liquid War 6 contributors have
   indirectly helped for this project to exist. No real code snippets,
-  but ideas where reused whenever possible.
+  but ideas were reused whenever possible.
 
 License
 =======
@@ -79,7 +79,7 @@ it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-This program is distributed in the hope that it wil/l be useful,
+This program is distributed in the hope that it will be useful, 
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
